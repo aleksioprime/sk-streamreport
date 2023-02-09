@@ -2,7 +2,7 @@ version: "3.6"
 services:
   frontend:
     container_name: igskolkovo-frontend
-    image: index.docker.io/aleksioprime/igskolkovo-frontend
+    build: ./docker/frontend
     depends_on:
       - backend
     ports:
@@ -11,7 +11,7 @@ services:
       - main
   backend:
     container_name: igskolkovo-backend
-    image: index.docker.io/aleksioprime/igskolkovo-backend
+    build: ./docker/backend
     command: python manage.py runserver 0.0.0.0:8000
     environment:
       - POSTGRES_DB=igskolkovo
@@ -38,11 +38,6 @@ services:
       - "5432:5432"
     networks:
       - main
-  watchtower:
-    image: containrrr/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 30
 volumes:
   postgres_data:
 networks:
