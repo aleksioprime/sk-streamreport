@@ -12,7 +12,7 @@ services:
   backend:
     container_name: igskolkovo-backend
     build: ./docker/backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: /start.sh
     environment:
       - POSTGRES_DB=igskolkovo
       - POSTGRES_USER=igadmin
