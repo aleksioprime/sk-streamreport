@@ -10,7 +10,7 @@
             <button class="nav-link active" id="pills-myp-tab" data-bs-toggle="pill" data-bs-target="#pills-myp" type="button" role="tab" aria-controls="pills-myp" aria-selected="true">Программа средней школы (MYP)</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-dp-tab" data-bs-toggle="pill" data-bs-target="#pills-dp" type="button" role="tab" aria-controls="pills-dp" aria-selected="false">Программа средней школы (DP)</button>
+            <button class="nav-link" id="pills-dp-tab" data-bs-toggle="pill" data-bs-target="#pills-dp" type="button" role="tab" aria-controls="pills-dp" aria-selected="false">Программа старшей школы (DP)</button>
           </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
