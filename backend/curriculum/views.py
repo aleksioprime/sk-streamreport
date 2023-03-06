@@ -7,14 +7,12 @@ from curriculum.serializers import UnitMYPSerializerViewEdit, UnitMYPSerializerL
     ATLMappingMYPSerializer, ReflectionMYPSerializer, StrandSerializer, LevelSerializer, UnitPlannerMYPIDSerializer, SubjectLevelMYPSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
-from docxtpl import DocxTemplate, RichText
+from docxtpl import DocxTemplate
 from rest_framework.views import APIView
 from django.conf import settings
 from django.http import HttpResponse
 
 import os
-# from io import BytesIO
-# import pypandoc
 from htmldocx import HtmlToDocx
 from docx import Document
 import tempfile
