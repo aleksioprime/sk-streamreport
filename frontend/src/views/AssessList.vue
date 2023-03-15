@@ -7,8 +7,6 @@
           Cоздать итоговую работу
         </button>
     </div>
-    
-
 </template>
 
 <script>
