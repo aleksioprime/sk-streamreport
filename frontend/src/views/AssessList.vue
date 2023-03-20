@@ -14,7 +14,7 @@ export default {
     name: 'Assessment',
     data() {
         return {
-            
+
         }
     },
     methods: {
