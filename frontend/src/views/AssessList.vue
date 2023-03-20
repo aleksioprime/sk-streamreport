@@ -4,7 +4,7 @@
             <template v-slot:header>Итоговые работы</template>
         </base-header>
         <button type="button" class="btn btn-primary ms-auto mb-2 w-100" @click="showSumAssess">
-          Cоздать итоговую работу
+          Cоздать итоговую работку
         </button>
     </div>
 </template>
