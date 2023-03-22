@@ -21,11 +21,18 @@
 <script>
 import { Modal } from 'bootstrap';
 import AssessForm from "@/components/AssessForm.vue";
+import { getSumWork } from "@/hooks/assess/getSumWorkData";
 
 export default {
   name: 'Assessment',
   components: {
     AssessForm,
+  },
+  setup(props) {
+    const { sumWorks, getSumWorkData } = getSumWork()
+    return {
+      sumWorks, getSumWorkData
+    }
   },
   data() {
     return {
@@ -44,20 +51,34 @@ export default {
       this.modalAssess.hide();
     },
     showAssessModalAdd() {
-      this.modalTitle = 'Создание пользователя';
+      this.modalTitle = 'Создание итоговой работы';
       this.modalAssess.show();
       this.flagAssess.add = true;
     },
     showAssessModalEdit() {
-
+      this.modalTitle = 'Редактирование итоговой работы';
+      this.modalAssess.show();
+      this.flagAssess.edit = true;
     },
     showAssessModalDelete() {
-
+      this.modalTitle = 'Удаление итоговой работы';
+      this.modalAssess.show();
+      this.flagAssess.delete = true;
     },
+    assessCreate() {
+      console.log("Запрос на создание итоговой работы");
+    },
+    assessEdit() {
+      console.log("Запрос на изменение итоговой работы");
+    },
+    assessDelete() {
+      console.log("Запрос на удаление итоговой работы");
+    }
   },
   mounted() {
     // Инициализация объекта модального окна
     this.modalAssess = new Modal('#modalAssess', { backdrop: 'static' });
+    this.getSumWorkData();
   },
 }
 </script>
