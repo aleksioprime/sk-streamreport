@@ -88,7 +88,8 @@ export function getPeriods() {
 				// console.log(currentDate, startDate, endDate);
 				return currentDate > startDate && currentDate < endDate;
 			  })
-			  console.log("Текущие период: ", currentPeriod.value)
+			if (!currentPeriod.value) {currentPeriod.value = periods.value.slice(-1)}
+			console.log("Текущие период: ", currentPeriod.value)
 		});
 	};
 	return {
@@ -106,11 +107,10 @@ export function getStudyYears() {
 			currentStudyYear.value = studyYears.value.find((item) => {
 				const currentDate = new Date();
 				const startDate = new Date(item.date_start);
-				const endDate = new Date(item.date_end);
-				// console.log(new Date(), item.date_start, item.date_end);
-				return currentDate > startDate && currentDate < endDate;
+				// console.log(new Date(), item.date_start);
+				return currentDate > startDate
 			  })
-			  console.log("Текущий год: ", currentStudyYear.value)
+			console.log("Текущий год: ", currentStudyYear.value)
 		});
 	};
 	return {

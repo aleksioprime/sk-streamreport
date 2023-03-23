@@ -7,7 +7,7 @@
         <div class="btn delete" @click="$emit('deleteWork', sumwork)"></div>
       </div>
     </div>
-    <div class="unit">Юнит: {{ sumwork.unit.title }}</div>
+    <div class="unit">Юнит:&nbsp;<a :href="`/unit/${sumwork.unit.id}`">{{ sumwork.unit.title }}</a></div>
     <div class="assessment">
       <div class="criteria">
         <div class="criteria-title">Критерии оценки:</div>
@@ -16,7 +16,7 @@
       <div v-if="sumwork.groups.length">
         <div class="groups" v-for="gr in sumwork.groups" :key="gr.id">
           <div class="group-title">Журнал оценок:</div>
-          <div class="group">
+          <div class="group" @click="$router.push(`/assessment/sumwork/${sumwork.id}`)">
             <div class="group-name">{{ gr.group.class_year }}{{ gr.group.letter }} класс</div>
             <div class="group-date">{{ new Date(gr.date).toLocaleDateString() }}</div>
           </div>
@@ -88,7 +88,7 @@ export default {
 .sumworks-item .criteria {
   display: flex;
   flex-wrap: wrap;
-  max-width: 150px;
+  width: 170px;
 }
 .sumworks-item .criteria-item {
   margin-right: 10px;
@@ -129,7 +129,6 @@ export default {
 }
 .sumworks-item .group-name {
   font-weight: 700;
-  
 }
 .sumworks-empty 
 {

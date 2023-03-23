@@ -23,7 +23,7 @@
             <router-link to="/unit" class="nav-link" aria-current="page">Юниты</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/assess" class="nav-link">Оценки</router-link>
+            <router-link to="/assessment" class="nav-link">Оценки</router-link>
           </li>
         </ul>
       </div>

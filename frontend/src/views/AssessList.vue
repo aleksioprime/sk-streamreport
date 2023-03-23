@@ -16,7 +16,7 @@
       </button>
     </div>
     <!-- Модальное окно добавления/редактирования/удаления итоговой работы -->
-    <modal-assess :modalTitle="modalTitle" @cancel="hideAssessModal">
+    <modal-assess :modalTitle="modalTitle" @cancel="hideSumWorkModal">
       <template v-slot:body>
         <!-- Форма добавления/редактирования итоговой работы -->
         <assess-form v-model="currentAssess" v-if="flagAssess.add || flagAssess.edit"/>
@@ -43,7 +43,7 @@
           <div class="sumworks-grouped">
             <div class="sumworks-year">
               <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} классы</div>
-              <div class="sumassess">Итоговые оценки</div>
+              <div class="sumassess"><a :href="`/assessment/period/${currentPeriod.id}/subject/${subject}/class/${year}`">Итоговые оценки</a></div>
             </div>
             <assess-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit" @deleteWork="showSumWorkModalDelete"/>
           </div>
@@ -92,7 +92,7 @@ export default {
     }
   },
   methods: {
-    hideAssessModal() {
+    hideSumWorkModal() {
       this.modalAssess.hide();
       this.flagAssess = {}
     },
