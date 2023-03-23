@@ -11,11 +11,10 @@
           </option>
         </select>
       </div>
-      <button type="button" class="btn btn-primary ms-auto mb-2 w-100" @click="showAssessModalAdd">
+      <button type="button" class="btn btn-primary ms-auto mb-2 w-100" @click="showSumWorkModalAdd">
         Cоздать итоговую работку
       </button>
     </div>
-    
     <!-- Модальное окно добавления/редактирования/удаления итоговой работы -->
     <modal-assess :modalTitle="modalTitle" @cancel="hideAssessModal">
       <template v-slot:body>
@@ -37,28 +36,17 @@
       </div>
     </div>
     <!-- Вывод итоговых работ учителя, сгруппированных по предметам -->
-    <div v-if="Object.keys(groupedSumWorks).length !== 0" class="sumworks">
-      <div v-for="(sumworks, subject) in groupedSumWorks" :key="subject">
+    <div v-if="Object.keys(groupedSumWorks(sumWorks, ['subject'])).length !== 0" class="sumworks">
+      <div v-for="(worksBySubject, subject) in groupedSumWorks(sumWorks, ['subject'])" :key="subject">
         <div class="sumworks-subject" v-if="getSubject(subject)">{{ getSubject(subject).name_rus }}</div>
-        <div class="sumworks-item" v-for="sw in sumworks" :key="sw.id">
-          <div class="title">
-            <div class="text">{{ sw.title }}</div>
-            <div class="tools">
-              <div class="btn edit"></div>
-              <div class="btn delete"></div>
+        <div v-for="(worksByYear, year) in groupedSumWorks(worksBySubject, ['unit', 'class_year'])" :key="year">
+          <div class="sumworks-grouped">
+            <div class="sumworks-year">
+              <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} классы</div>
+              <div class="sumassess">Итоговые оценки</div>
             </div>
+            <assess-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit" @deleteWork="showSumWorkModalDelete"/>
           </div>
-          <div class="unit">Юнит: {{ sw.unit.title }}</div>
-          <div class="assessment">
-            <div class="text">Оценки:</div>
-            <div v-if="sw.groups.length">
-              <div class="groups" v-for="gr in sw.groups" :key="gr.id">
-                <div class="group">{{ gr }}</div>
-              </div>
-            </div>
-            <div v-else>Не выбраны классы</div>
-          </div>
-          
         </div>
       </div>
     </div>
@@ -71,12 +59,13 @@
 <script>
 import { Modal } from 'bootstrap';
 import AssessForm from "@/components/AssessForm.vue";
+import AssessItem from "@/components/AssessItem.vue";
 import { getSumWork, getTeachers, getGrades, getSubjects, getPeriods, getStudyYears } from "@/hooks/assess/getSumWorkData";
 
 export default {
   name: 'Assessment',
   components: {
-    AssessForm,
+    AssessForm, AssessItem
   },
   setup(props) {
     const { sumWorks, getSumWorkData } = getSumWork()
@@ -98,44 +87,60 @@ export default {
     return {
       modalAssess: {},
       modalTitle: '',
-      flagAssess: {
-        add: false,
-        edit: false,
-        delete: false,
-      },
+      flagAssess: {},
       currentAssess: {},
     }
   },
   methods: {
     hideAssessModal() {
       this.modalAssess.hide();
+      this.flagAssess = {}
     },
-    showAssessModalAdd() {
+    showSumWorkModalAdd() {
       this.modalTitle = 'Создание итоговой работы';
       this.modalAssess.show();
       this.flagAssess.add = true;
     },
-    showAssessModalEdit() {
+    showSumWorkModalEdit(sumwork) {
       this.modalTitle = 'Редактирование итоговой работы';
       this.modalAssess.show();
       this.flagAssess.edit = true;
     },
-    showAssessModalDelete() {
+    showSumWorkModalDelete(sumwork) {
       this.modalTitle = 'Удаление итоговой работы';
       this.modalAssess.show();
       this.flagAssess.delete = true;
     },
-    assessCreate() {
+    sumWorkCreate() {
       console.log("Запрос на создание итоговой работы");
     },
-    assessEdit() {
+    sumWorkEdit(sumwork) {
       console.log("Запрос на изменение итоговой работы");
     },
-    assessDelete() {
+    sumWorkDelete(sumwork) {
       console.log("Запрос на удаление итоговой работы");
     },
+    // преобраование массива итоговых работ в группированный по предмету объект массивов
+    groupedSumWorks(array, fields) {
+      let groupedObject = array.reduce((acc, obj) => {
+        let objField = obj
+        for (const field of fields) {
+          objField = objField[field];
+        }
+        const property = objField.id;
+        acc[property] = acc[property] || [];
+        acc[property].push(obj);
+        return acc;
+      }, {});
+      return groupedObject;
+    },
+    // Нахождение предмета по его ID
     getSubject(id) {
       return this.subjects.find(item => item.id == id); 
+    },
+    // Нахождение года обучения по его ID
+    getGrade(id) {
+      return this.grades.find(item => item.id == id); 
     },
     // Обновление итоговых работ при выборе периода
     refreshSumWorkBySubject(pr) {
@@ -148,20 +153,12 @@ export default {
     this.modalAssess = new Modal('#modalAssess', { backdrop: 'static' });
     this.getStudyYearsData();
     this.getSubjectsData();
+    this.getGradesData();
     this.getPeriodsData(this.currentStudyYear);
     this.getSumWorkData({period: this.currentStudyYear.id});
   },
   computed: {
-    // преобраование массива итоговых работ в группированный по предмету объект массивов
-    groupedSumWorks() {
-      let groupedObject = this.sumWorks.reduce((acc, obj) => {
-        const property = obj.subject.id;
-        acc[property] = acc[property] || [];
-        acc[property].push(obj);
-        return acc;
-      }, {});
-      return groupedObject;
-    },
+    
   }
 }
 </script>
@@ -203,56 +200,25 @@ export default {
   padding: 10px;
 }
 .sumworks-subject {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ffbf40;
+}
+.sumworks-subject .title {
   font-weight: 700;
-  padding: 10px;
-  background: #b9c7c7;
+  text-transform: uppercase;
 }
-.sumworks-item {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #33cccc;
-}
-.sumworks-item .title {
+.sumworks-year {
   display: flex;
 }
-.sumworks-item .title .text {
-  color: #1e7979;
+.sumworks-year .title{
   font-weight: 700;
 }
-.sumworks-item .tools {
-  display: flex;
+.sumworks-year .sumassess {
   margin-left: auto;
 }
-.sumworks-item .tools .btn {
-  border: none;
-  min-width: 25px;
-  min-height: 25px;
-  cursor: pointer;
-}
-.btn.edit {
-  background: url('@/assets/img/item-edit.png') no-repeat 50% / 90%;
-  margin-right: 5px;
-}
-.btn.delete {
-  background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
-}
-.sumworks-item .unit {
-  display: flex;
-}
-.sumworks-item .assessment {
-  display: flex;
-}
-.sumworks-item .assessment .text {
-  margin-right: 5px;
-}
-.sumworks-item .assessment .groups {
-  display: flex;
-}
-.sumworks-empty 
-{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 30vh;
+.sumworks-grouped {
+  border: 1px solid #33cccc;
+  margin: 10px 0;
+  padding: 10px;
 }
 </style>

@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark
-from curriculum.serializers import SubjectSerializer, ClassYearSerializer, UnitMYPSerializerListCreate
+from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkGroupDate, WorkAssessment, WorkCriteriaMark
+from curriculum.serializers import SubjectSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.models import ProfileTeacher, User
         
 class UserSerializer(serializers.ModelSerializer):
@@ -24,6 +24,12 @@ class ClassGroupSerializer(serializers.ModelSerializer):
         model = ClassGroup
         fields = '__all__'
 
+class WorkGroupDateSerializer(serializers.ModelSerializer):
+    group = ClassGroupSerializer()
+    class Meta:
+        model = WorkGroupDate
+        fields = '__all__'
+
 class StudyPeriodSerializer(serializers.ModelSerializer):
     study_year = StudyYearSerializer()
     class_year = ClassYearSerializer(many=True)
@@ -35,6 +41,8 @@ class SummativeWorkSerializer(serializers.ModelSerializer):
     teacher = ProfileTeacherSerializer()
     subject = SubjectSerializer()
     unit = UnitMYPSerializerListCreate()
+    criteria = CriterionSerializer(many=True)
+    groups = WorkGroupDateSerializer(many=True, source='workgroup', required=False)
     class Meta:
         model = SummativeWork
         fields = '__all__'
