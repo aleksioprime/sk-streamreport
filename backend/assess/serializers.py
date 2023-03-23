@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark
+from curriculum.serializers import SubjectSerializer, ClassYearSerializer, UnitMYPSerializerListCreate
 from member.models import ProfileTeacher, User
         
 class UserSerializer(serializers.ModelSerializer):
@@ -24,11 +25,16 @@ class ClassGroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StudyPeriodSerializer(serializers.ModelSerializer):
+    study_year = StudyYearSerializer()
+    class_year = ClassYearSerializer(many=True)
     class Meta:
         model = StudyPeriod
         fields = '__all__'
 
 class SummativeWorkSerializer(serializers.ModelSerializer):
+    teacher = ProfileTeacherSerializer()
+    subject = SubjectSerializer()
+    unit = UnitMYPSerializerListCreate()
     class Meta:
         model = SummativeWork
         fields = '__all__'

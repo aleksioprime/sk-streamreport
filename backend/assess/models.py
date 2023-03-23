@@ -40,6 +40,7 @@ class StudyPeriod(models.Model):
     date_start = models.DateField(verbose_name=_("Дата начала"))
     date_end = models.DateField(verbose_name=_("Дата окончания"))
     id_dnevnik = models.CharField(max_length=255, verbose_name=_('ID системы Дневник.РУ'), blank=True, null=True)
+    class_year = models.ManyToManyField('curriculum.ClassYear', verbose_name=_("Год обучения"), blank=True, related_name="period")
     @property
     def days(self):
         days = abs((self.date_end - self.date_start).days)

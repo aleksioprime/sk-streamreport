@@ -5,25 +5,51 @@ from assess.serializers import StudyYearSerializer, ClassGroupSerializer, StudyP
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark
 from member.models import ProfileTeacher, ProfileStudent, User
 
+
 class StudyYearViewSet(viewsets.ModelViewSet):
     queryset = StudyYear.objects.all()
     serializer_class = StudyYearSerializer
-    
+
+
 class ClassGroupViewSet(viewsets.ModelViewSet):
     queryset = ClassGroup.objects.all()
     serializer_class = ClassGroupSerializer
+
 
 class StudyPeriodViewSet(viewsets.ModelViewSet):
     queryset = StudyPeriod.objects.all()
     serializer_class = StudyPeriodSerializer
 
+    def get_queryset(self):
+        study_period = StudyPeriod.objects.all()
+        study_year = self.request.query_params.get("study_year", None)
+        if study_year:
+            study_period = study_period.filter(study_year=study_year)
+        return study_period
+
+
 class SummativeWorkViewSet(viewsets.ModelViewSet):
     queryset = SummativeWork.objects.all()
     serializer_class = SummativeWorkSerializer
 
+    def get_queryset(self):
+        summative_work = SummativeWork.objects.all()
+        period = self.request.query_params.get("period", None)
+        teacher = self.request.query_params.get("teacher", None)
+        if period:
+            print(f"Get-запрос period: {period}")
+            summative_work = summative_work.filter(period=period)
+        if teacher:
+            print(f"Get-запрос period: {teacher}")
+            summative_work = summative_work.filter(teacher=teacher)
+        print(f"Ответ от сервера: {summative_work}")
+        return summative_work
+
+
 class WorkAssessmentViewSet(viewsets.ModelViewSet):
     queryset = WorkAssessment.objects.all()
     serializer_class = WorkAssessmentSerializer
+
 
 class WorkCriteriaMarkViewSet(viewsets.ModelViewSet):
     queryset = WorkCriteriaMark.objects.all()
