@@ -56,10 +56,14 @@ class SummativeWorkSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class WorkCriteriaMarkSerializer(serializers.ModelSerializer):
-    criterion = CriterionSerializer()
+    criterion = CriterionSerializer(read_only=True)
     class Meta:
         model = WorkCriteriaMark
-        fields = '__all__'
+        fields = ['id', 'criterion', 'mark', 'criterion_id']
+        extra_kwargs = {
+            'criterion_id': {'source': 'criterion', 'write_only': True},
+        }
+
 
 class WorkAssessmentSerializer(serializers.ModelSerializer):
     work = SummativeWorkSerializer(required=False)
@@ -71,10 +75,11 @@ class WorkAssessmentSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
         if 'work_criteria_mark' in validated_data.keys():
-            instance_criterion = WorkCriteriaMark.objects.filter(work_assess=instance)
-            list_criterion = [x.get('criterion') for x in validated_data['work_criteria_mark']]
-            print(list_criterion)
-            print(instance_criterion)
+            assess = validated_data['work_criteria_mark'][0]
+            if not WorkCriteriaMark.objects.filter(work_assess=instance, criterion=assess.get('criterion')).count():
+                WorkCriteriaMark.objects.create(work_assess=instance, criterion=assess.get('criterion'), mark=assess.get('mark'))
+            else: 
+                WorkCriteriaMark.objects.filter(work_assess=instance, criterion=assess.get('criterion')).update(mark=assess.get('mark'))
             validated_data.pop('work_criteria_mark', None)
         return super().update(instance, validated_data)
 

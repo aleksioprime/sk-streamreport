@@ -33,7 +33,7 @@
           <td class="text-center">{{ index + 1 }}</td>
           <td>{{ assess.student.user.last_name }} {{ assess.student.user.first_name }}</td>
           <td v-for="cr in sumWork.criteria" :key="cr.id" class="criterion">
-            <input type="number" class="input-table" v-model="markCriterion.mark">
+            <input type="text" class="input-table" v-model="markCriterion.mark">
             <div @click="(event) => setEditField(event, assess, cr)">{{ getMarkForStudent(cr.id, assess.criteria_marks) }}</div>
           </td>
           <td class="text-center">
@@ -41,7 +41,7 @@
           </td>
           <td class="text-center">{{ calcStudentMarks(assess.criteria_marks, assess.work.criteria) }}</td>
           <td class="text-center grade">
-            <input type="number" class="input-table" v-model="currentWorkAssess.grade">
+            <input type="text" class="input-table" v-model="currentWorkAssess.grade">
             <div class="text-table" @click="(event) => setEditField(event, assess)">{{ assess.grade || "-" }}</div>
           </td>
         </tr>
@@ -79,7 +79,7 @@ export default {
     return {
       modalClass: {},
       currentWorkAssess: {},
-      markCriterion: { criterion: null },
+      markCriterion: {},
     }
   },
   methods: {
@@ -146,6 +146,11 @@ export default {
     }, 
     setStudentGrade(assess) {
       if (Object.keys(this.currentWorkAssess).length) {
+        if (this.currentWorkAssess.grade > 5) {
+          this.currentWorkAssess.grade = 5
+        } else if (this.currentWorkAssess.grade < 0) {
+          this.currentWorkAssess.grade = 0
+        }
         console.log("Запрос на изменение данных: ", this.currentWorkAssess);
         this.axios.put(`/assessment/workassess/${assess.id}`, this.currentWorkAssess).then((response) => {
           this.getWorkAssessData({class: this.$route.params.id_class});
@@ -157,8 +162,14 @@ export default {
     },
     setStudentCriteriaMark(assess, criterion) {
       if (Object.keys(this.markCriterion).length) {
-        this.markCriterion.criterion = criterion;
-        this.markCriterion.id = assess.criteria_marks.find(item => item.criterion.id == criterion.id).id
+        this.markCriterion.criterion_id = criterion.id;
+        const assessMark = assess.criteria_marks.find(item => item.criterion.id == criterion.id);
+        if (assessMark) { this.markCriterion.id = assessMark.id }
+        if (this.markCriterion.mark > 8) {
+          this.markCriterion.mark = 8
+        } else if (this.markCriterion.mark < 0) {
+          this.markCriterion.mark = 0
+        }
         const dataMarkCriterion = {
           "criteria_marks": [ this.markCriterion ],
         }
@@ -183,6 +194,8 @@ export default {
     currentClass() {
       return this.sumWork.groups.find(item => item.group.id == this.$route.params.id_class)
     }
+  },
+  watch: {
   }
 }
 </script>
