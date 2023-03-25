@@ -40,12 +40,12 @@ const routes = [
     component: AssessList,
   },
   {
-    path: '/assessment/sumwork/:id',
+    path: '/assessment/sumwork/:id_sumwork/class/:id_class',
     name: 'assessworkview',
     component: AssessWorkView,
   },
   {
-    path: '/assessment/period/:id/subject/:id/class/:id',
+    path: '/assessment/period/:id_period/subject/:id_subject/class/:id_class',
     name: 'assessperiodview',
     component: AssessPeriodView,
   },

@@ -16,7 +16,7 @@
       <div v-if="sumwork.groups.length">
         <div class="groups" v-for="gr in sumwork.groups" :key="gr.id">
           <div class="group-title">Журнал оценок:</div>
-          <div class="group" @click="$router.push(`/assessment/sumwork/${sumwork.id}`)">
+          <div class="group" @click="$router.push(`/assessment/sumwork/${sumwork.id}/class/${gr.group.id}`)">
             <div class="group-name">{{ gr.group.class_year }}{{ gr.group.letter }} класс</div>
             <div class="group-date">{{ new Date(gr.date).toLocaleDateString() }}</div>
           </div>

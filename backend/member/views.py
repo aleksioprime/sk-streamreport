@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import routers, viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
-from member.serializers import UserSerializer, DepartmentSerializer, RoleSerializer, ClassGroupSerializer, UserImportSerializer
+from member.serializers import UserSerializer, DepartmentSerializer, RoleSerializer, ClassGroupSerializer, UserImportSerializer, ProfileStudentSerializer
 from member.models import User, Department, RoleUser, ProfileStudent, ProfileTeacher
 from assess.models import ClassGroup
 from rest_framework.exceptions import AuthenticationFailed
@@ -79,6 +79,19 @@ class UserViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None, *args, **kwargs):
         print('Переданные данные для удаления: ', pk)
         return super().destroy(request, pk=None, *args, **kwargs)
+
+# Набор CRUD-методов для работы с моделью Студенты
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = ProfileStudent.objects.all()
+    serializer_class = ProfileStudentSerializer
+    def get_queryset(self):
+        group = self.request.query_params.get("class", None)
+        students = ProfileStudent.objects.all()
+        if group:
+            print(f"Get-запрос class: {group}")
+            students = students.filter(group=group)
+        print(f"Ответ от сервера: {students}")
+        return students
 
 # # Разлогинивание пользователя и удаление токенов
 # class Logout(APIView):

@@ -7,6 +7,8 @@ urlpatterns = [
     path('assessment/group', ClassGroupViewSet.as_view({'get': 'list'})),
     path('assessment/period', StudyPeriodViewSet.as_view({'get': 'list'})),
     path('assessment/sumwork', SummativeWorkViewSet.as_view({'get': 'list'})),
-    path('assessment/workassess', WorkAssessmentViewSet.as_view({'get': 'list'})),
+    path('assessment/sumwork/<int:pk>', SummativeWorkViewSet.as_view({'get': 'retrieve'})),
+    path('assessment/workassess', WorkAssessmentViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('assessment/workassess/<int:pk>', WorkAssessmentViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('assessment/workcriteriamark', WorkCriteriaMarkViewSet.as_view({'get': 'list'})),
 ]

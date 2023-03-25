@@ -1,5 +1,6 @@
 import ModalUser from "@/components/UI/ModalUser";
 import ModalAssess from "@/components/UI/ModalAssess";
+import ModalClass from "@/components/UI/ModalClass";
 import ModalUnit from "@/components/UI/ModalUnit";
 import ModalDelete from "@/components/UI/ModalDelete";
 import UnitField from "@/components/UI/UnitField";
@@ -15,5 +16,5 @@ import BaseHeader from "@/components/UI/BaseHeader";
 export default [
     ModalUser, ModalUnit, UnitField, FieldTextEdit, FieldSelectEdit,
     FieldTextAreaEdit, FieldCheckboxEdit, FieldListView, FieldRadioEdit,
-    ModalDelete, BaseHeader, ModalAssess
+    ModalDelete, BaseHeader, ModalAssess, ModalClass
 ];

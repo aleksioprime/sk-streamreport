@@ -37,18 +37,30 @@ class SummativeWorkViewSet(viewsets.ModelViewSet):
         period = self.request.query_params.get("period", None)
         teacher = self.request.query_params.get("teacher", None)
         if period:
-            print(f"Get-запрос period: {period}")
+            print(f"[SummativeWork] Get-запрос period: {period}")
             summative_work = summative_work.filter(period=period)
         if teacher:
-            print(f"Get-запрос period: {teacher}")
+            print(f"[SummativeWork] Get-запрос period: {teacher}")
             summative_work = summative_work.filter(teacher=teacher)
-        print(f"Ответ от сервера: {summative_work}")
+        print(f"[SummativeWork] Ответ от сервера: {summative_work}")
         return summative_work
 
 
 class WorkAssessmentViewSet(viewsets.ModelViewSet):
     queryset = WorkAssessment.objects.all()
     serializer_class = WorkAssessmentSerializer
+    
+    def get_queryset(self):
+        work_assessment = WorkAssessment.objects.all()
+        group = self.request.query_params.get("class", None)
+        if group:
+            # print(f"[WorkAssessment] Get-запрос period: {group}")
+            work_assessment = work_assessment.filter(student__group=group)
+        # print(f"[WorkAssessment] Ответ от сервера: {work_assessment}")
+        return work_assessment
+    def update(self, request, pk=None, *args, **kwargs):
+        print('Переданные данные: ', request.data)
+        return super().update(request, pk=None, *args, **kwargs)
 
 
 class WorkCriteriaMarkViewSet(viewsets.ModelViewSet):

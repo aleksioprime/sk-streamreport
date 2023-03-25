@@ -89,7 +89,7 @@ class WorkGroupDate(models.Model):
     
 class WorkAssessment(models.Model):
     """ Журналы оценок по итоговым работам """
-    work = models.ForeignKey('assess.SummativeWork', verbose_name=_("Юнит"), on_delete=models.CASCADE, null=True, related_name="workassess")
+    work = models.ForeignKey('assess.SummativeWork', verbose_name=_("Итоговая работа"), on_delete=models.CASCADE, null=True, related_name="workassess")
     student = models.ForeignKey('member.ProfileStudent', verbose_name=_("Студент"), on_delete=models.SET_NULL, null=True, related_name="workassess")
     criteria_marks = models.ManyToManyField('curriculum.Criterion', through='assess.WorkCriteriaMark', blank=True, related_name="workassess")
     grade = models.SmallIntegerField(verbose_name=_("Оценка"), default=0)
