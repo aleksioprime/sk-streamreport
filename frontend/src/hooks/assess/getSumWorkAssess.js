@@ -3,7 +3,8 @@ import { axiosAPI } from '@/axios'
 
 export function getSumWork() {
 	const sumWork = ref({
-		criteria: []
+		criteria: [],
+		assessment: []
 	});
 	const getSumWorkData = async (id_sumwork, callback) => {
 		await axiosAPI.get(`/assessment/sumwork/${id_sumwork}`).then((response) => {

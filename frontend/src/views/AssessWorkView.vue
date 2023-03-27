@@ -12,45 +12,47 @@
       <div v-if="sumWork.unit">{{ sumWork.unit.title }}</div>
       <div v-if="sumWork.groups">{{ currentClass.group.class_year }}{{ currentClass.group.letter }} класс</div>
     </div>
-    <button class="btn btn-primary mt-2" @click="showClassModal">Добавить</button>
+    <button class="btn btn-primary mt-2" @click="showClassModal">Редактирование списка студентов</button>
     <div class="tools" ref="activeInput">
 
     </div>
-    <!-- Таблица оценок выбранного итоговой работы и класса -->
-    <table class="table table-sm table-bordered mt-3 mark-table">
-      <thead class="align-middle text-center">
-        <tr>
-          <td rowspan="2">№</td>
-          <td rowspan="2">ФИО студента</td>
-          <td :colspan="sumWork.criteria.length">Баллы по критериям</td>
-          <td rowspan="2">Сумма</td>
-          <td rowspan="2">Расчёт</td>
-          <td rowspan="2">Оценка</td>
-        </tr>
-        <tr>
-          <td v-for="cr in sumWork.criteria" :key="cr.id">{{ cr.letter }}</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(assess, index) in sumWork.assessment" :key="assess.id">
-          <td class="text-center">{{ index + 1 }}</td>
-          <td>{{ assess.student.user.last_name }} {{ assess.student.user.first_name }}</td>
-          <td v-for="cr in sumWork.criteria" :key="cr.id" class="criterion">
-            <input type="text" class="input-table" v-model="markCriterion.mark">
-            <div @click="(event) => setEditField(event, assess, cr)">{{ getMarkForStudent(cr.id, assess.criteria_marks) }}</div>
-          </td>
-          <td class="text-center">
-            <b>{{ calcSumStudentMarks(assess.criteria_marks) }}</b>/{{ calcMaxStudentMarks(assess.work.criteria) }}
-          </td>
-          <td class="text-center">{{ calcStudentMarks(assess.criteria_marks, assess.work.criteria) }}</td>
-          <td class="text-center grade">
-            <input type="text" class="input-table" v-model="currentWorkAssess.grade">
-            <div class="text-table" @click="(event) => setEditField(event, assess)">{{ assess.grade || "-" }}</div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="alert alert-danger mt-3" role="alert">
+    <div v-if="sumWork.assessment.length">
+      <!-- Таблица оценок выбранного итоговой работы и класса -->
+      <table class="table table-sm table-bordered mt-3 mark-table">
+        <thead class="align-middle text-center">
+          <tr>
+            <td rowspan="2">№</td>
+            <td rowspan="2">ФИО студента</td>
+            <td :colspan="sumWork.criteria.length">Баллы по критериям</td>
+            <td rowspan="2">Сумма</td>
+            <td rowspan="2">Расчёт</td>
+            <td rowspan="2">Оценка</td>
+          </tr>
+          <tr>
+            <td v-for="cr in sumWork.criteria" :key="cr.id">{{ cr.letter }}</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(assess, index) in sumWork.assessment" :key="assess.id">
+            <td class="text-center">{{ index + 1 }}</td>
+            <td>{{ assess.student.user.last_name }} {{ assess.student.user.first_name }}</td>
+            <td v-for="cr in sumWork.criteria" :key="cr.id" class="criterion">
+              <input type="text" class="input-table" v-model="markCriterion.mark">
+              <div @click="(event) => setEditField(event, assess, cr)">{{ getMarkForStudent(cr.id, assess.criteria_marks) }}</div>
+            </td>
+            <td class="text-center">
+              <b>{{ calcSumStudentMarks(assess.criteria_marks) }}</b>/{{ calcMaxStudentMarks(assess.work.criteria) }}
+            </td>
+            <td class="text-center">{{ calcStudentMarks(assess.criteria_marks, assess.work.criteria) }}</td>
+            <td class="text-center grade">
+              <input type="text" class="input-table" v-model="currentWorkAssess.grade">
+              <div class="text-table" @click="(event) => setEditField(event, assess)">{{ assess.grade || "-" }}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else class="alert alert-danger mt-3" role="alert">
         В этом классе пока нет студентов для оценки!
     </div>
   </div>
@@ -97,6 +99,7 @@ export default {
       console.log('Отправка запроса на добавление студентов в журнал: ', dataStudentsWork);
       this.axios.put(`/assessment/sumwork/${this.$route.params.id_sumwork}`, dataStudentsWork).then((response) => {
           console.log('Список студентов успешно изменён');
+          this.getSumWorkData(this.$route.params.id_sumwork, this.getStudentsWork);
         }).finally(() => {
           console.log('Запрос завершён');
         });
