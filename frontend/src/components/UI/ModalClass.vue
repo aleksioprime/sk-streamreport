@@ -9,11 +9,11 @@
           <button type="button" class="btn-close" @click="$emit('cancel')" aria-label="Закрыть"></button>
         </div>
         <div class="modal-body">
-          <slot name="body"></slot>
+          <slot></slot>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" @click="$emit('cancel')">Отмена</button>
-          <button v-if="modeModal.edit" type="button" class="btn btn-primary" @click="$emit('save')">Сохранить</button>
+          <button type="button" class="btn btn-primary" @click="$emit('save')">Сохранить</button>
         </div>
       </div>
     </div>
@@ -28,14 +28,6 @@ export default {
       type: String,
       default: 'Заголовок окна'
     },
-    modeModal: {
-      type: Object,
-      default: {
-        add: false,
-        edit: false,
-        delete: false,
-      }
-    }
   },
   data() {
     return {

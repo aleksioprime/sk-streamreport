@@ -67,6 +67,8 @@ class SummativeWork(models.Model):
                                           blank=True, related_name="sumwork")
     criteria = models.ManyToManyField('curriculum.Criterion', verbose_name=_("Критерии оценки"),
                                       blank=True, related_name="sumwork")
+    assessment = models.ManyToManyField('member.ProfileStudent', verbose_name=_("Оценки студентов"), through='assess.WorkAssessment',
+                                          blank=True, related_name="sumwork")
     class Meta:
         verbose_name = 'Итоговая работ'
         verbose_name_plural = 'Итоговые работы'

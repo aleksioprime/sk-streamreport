@@ -80,19 +80,6 @@ class UserViewSet(viewsets.ModelViewSet):
         print('Переданные данные для удаления: ', pk)
         return super().destroy(request, pk=None, *args, **kwargs)
 
-# Набор CRUD-методов для работы с моделью Студенты
-class StudentViewSet(viewsets.ModelViewSet):
-    queryset = ProfileStudent.objects.all()
-    serializer_class = ProfileStudentSerializer
-    def get_queryset(self):
-        group = self.request.query_params.get("class", None)
-        students = ProfileStudent.objects.all()
-        if group:
-            print(f"Get-запрос class: {group}")
-            students = students.filter(group=group)
-        print(f"Ответ от сервера: {students}")
-        return students
-
 # # Разлогинивание пользователя и удаление токенов
 # class Logout(APIView):
 #     def post(self, request):

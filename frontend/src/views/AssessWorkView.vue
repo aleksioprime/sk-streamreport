@@ -4,12 +4,15 @@
       <template v-slot:link><a href="/assessment">Вернуться к списку итоговых работ</a></template>
       <template v-slot:header>Журнал оценок за итоговую работу</template>
     </base-header>
-    <modal-class></modal-class>
+    <modal-class @save="saveClassModal" @cancel="hideClassModal" :modalTitle="modalTitleClass">
+      <assess-work-form v-if="Object.keys(this.sumWork).length" v-model:studentsWork="studentsWork"/>
+    </modal-class>
     <div class="info">
       <div>{{ sumWork.title }}</div>
       <div v-if="sumWork.unit">{{ sumWork.unit.title }}</div>
       <div v-if="sumWork.groups">{{ currentClass.group.class_year }}{{ currentClass.group.letter }} класс</div>
     </div>
+    <button class="btn btn-primary mt-2" @click="showClassModal">Добавить</button>
     <div class="tools" ref="activeInput">
 
     </div>
@@ -29,7 +32,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(assess, index) in workAssess" :key="assess.id">
+        <tr v-for="(assess, index) in sumWork.assessment" :key="assess.id">
           <td class="text-center">{{ index + 1 }}</td>
           <td>{{ assess.student.user.last_name }} {{ assess.student.user.first_name }}</td>
           <td v-for="cr in sumWork.criteria" :key="cr.id" class="criterion">
@@ -55,24 +58,22 @@
 
 <script>
 import { Modal } from 'bootstrap';
-import { getSumWork, getStudents, getWorkAssess } from "@/hooks/assess/getSumWorkAssess"
+import AssessWorkForm from "@/components/AssessWorkForm.vue"
+import { getSumWork, getWorkAssess } from "@/hooks/assess/getSumWorkAssess"
 
 export default {
   name: 'AssessWorkView',
   components: {
-    
+    AssessWorkForm,
   },
   setup(props) {
     // Получение функции запроса данных итоговой работы
     const { sumWork, getSumWorkData } = getSumWork();
-    // Получение функции запроса списка студентов
-    const { students, getStudentsData } = getStudents();
     // Получение функции запроса списка оценок студентов
-    const { workAssess, getWorkAssessData } = getWorkAssess();
+    // const { workAssess, getWorkAssessData } = getWorkAssess();
     return {
       sumWork, getSumWorkData,
-      students, getStudentsData,
-      workAssess, getWorkAssessData,
+      // workAssess, getWorkAssessData,
     }
   },
   data() {
@@ -80,9 +81,30 @@ export default {
       modalClass: {},
       currentWorkAssess: {},
       markCriterion: {},
+      modalTitleClass: null,
+      studentsWork: [],
     }
   },
   methods: {
+    showClassModal() {
+      this.modalTitleClass = "Добавление студентов";
+      this.modalClass.show();
+    },
+    saveClassModal() {
+      const dataStudentsWork = {
+        "assessment": this.studentsWork.map(item => { return {'student_id': item.id} }),
+      }
+      console.log('Отправка запроса на добавление студентов в журнал: ', dataStudentsWork);
+      this.axios.put(`/assessment/sumwork/${this.$route.params.id_sumwork}`, dataStudentsWork).then((response) => {
+          console.log('Список студентов успешно изменён');
+        }).finally(() => {
+          console.log('Запрос завершён');
+        });
+      this.hideClassModal();
+    },
+    hideClassModal() {
+      this.modalClass.hide();
+    },
     getMarkForStudent(criterion, marks) {
       const criterionMark = marks.find(item => item.criterion.id == criterion)
       if (criterionMark) {
@@ -153,7 +175,7 @@ export default {
         }
         console.log("Запрос на изменение данных: ", this.currentWorkAssess);
         this.axios.put(`/assessment/workassess/${assess.id}`, this.currentWorkAssess).then((response) => {
-          this.getWorkAssessData({class: this.$route.params.id_class});
+          this.getSumWorkData(this.$route.params.id_sumwork, this.getStudentsWork);
           console.log('Оценка успешно обновлена');
         }).finally(() => {
           this.currentWorkAssess = {};
@@ -175,25 +197,26 @@ export default {
         }
         console.log("Запрос на изменение данных: ", dataMarkCriterion);
         this.axios.put(`/assessment/workassess/${assess.id}`, dataMarkCriterion).then((response) => {
-          this.getWorkAssessData({class: this.$route.params.id_class});
+          this.getSumWorkData(this.$route.params.id_sumwork, this.getStudentsWork);
           console.log('Оценка успешно обновлена');
         }).finally(() => {
           this.markCriterion = {};
         });
       }
-    }
+    },
+    getStudentsWork() {
+      this.studentsWork = this.sumWork.assessment.map(item => item.student)
+    },
   },
   mounted() {
+    this.getSumWorkData(this.$route.params.id_sumwork, this.getStudentsWork);
     this.modalClass = new Modal(`#modalClass`, { backdrop: 'static' });
-    console.log(this.$route.params.id_sumwork, this.$route.params.id_class)
-    this.getSumWorkData(this.$route.params.id_sumwork);
-    this.getStudentsData({class: this.$route.params.id_class});
-    this.getWorkAssessData({class: this.$route.params.id_class});
+
   },
   computed: {
     currentClass() {
       return this.sumWork.groups.find(item => item.group.id == this.$route.params.id_class)
-    }
+    },
   },
   watch: {
   }

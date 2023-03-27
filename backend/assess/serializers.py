@@ -16,8 +16,8 @@ class ProfileTeacherSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProfileStudentSerializer(serializers.ModelSerializer):
-    group = ClassGroupSerializer(read_only=True)
-    user = UserSerializer(read_only=True)
+    group = ClassGroupSerializer(required=False)
+    user = UserSerializer(required=False)
     class Meta:
         model = ProfileStudent
         fields = '__all__'
@@ -45,7 +45,7 @@ class StudyPeriodSerializer(serializers.ModelSerializer):
         model = StudyPeriod
         fields = '__all__'
 
-class SummativeWorkSerializer(serializers.ModelSerializer):
+class SummativeWorkListSerializer(serializers.ModelSerializer):
     teacher = ProfileTeacherSerializer()
     subject = SubjectSerializer()
     unit = UnitMYPSerializerListCreate()
@@ -64,14 +64,16 @@ class WorkCriteriaMarkSerializer(serializers.ModelSerializer):
             'criterion_id': {'source': 'criterion', 'write_only': True},
         }
 
-
 class WorkAssessmentSerializer(serializers.ModelSerializer):
-    work = SummativeWorkSerializer(required=False)
+    work = SummativeWorkListSerializer(required=False)
     student = ProfileStudentSerializer(required=False)
     criteria_marks = WorkCriteriaMarkSerializer(many=True, source='work_criteria_mark', required=False)
     class Meta:
         model = WorkAssessment
-        fields = '__all__'
+        fields = ['id', 'work', 'student', 'criteria_marks', 'grade', 'student_id']
+        extra_kwargs = {
+            'student_id': {'source': 'student', 'write_only': True},
+        }
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
         if 'work_criteria_mark' in validated_data.keys():
@@ -81,6 +83,42 @@ class WorkAssessmentSerializer(serializers.ModelSerializer):
             else: 
                 WorkCriteriaMark.objects.filter(work_assess=instance, criterion=assess.get('criterion')).update(mark=assess.get('mark'))
             validated_data.pop('work_criteria_mark', None)
+        return super().update(instance, validated_data)
+    def create(self, validated_data):
+        print('Валидированные данные: ', validated_data)
+        return super().create(validated_data)
+
+
+class SummativeWorkItemSerializer(serializers.ModelSerializer):
+    teacher = ProfileTeacherSerializer(required=False)
+    subject = SubjectSerializer(required=False)
+    unit = UnitMYPSerializerListCreate(required=False)
+    criteria = CriterionSerializer(many=True, required=False)
+    groups = WorkGroupDateSerializer(many=True, source='workgroup', required=False)
+    assessment = WorkAssessmentSerializer(many=True, source='workassess', required=False)
+    class Meta:
+        model = SummativeWork
+        fields = '__all__'
+        extra_kwargs = {
+            'title': {'required': False},
+        }
+    def update(self, instance, validated_data):
+        print('Валидированные данные: ', validated_data)
+        if 'workassess' in validated_data.keys():
+            new_students_works = []
+            list_student_id = [x.get('student').id for x in validated_data['workassess']]
+            print(list_student_id)
+            for data in WorkAssessment.objects.filter(work=instance).values():
+                if data['student_id'] not in list_student_id:
+                    print("Удалён студент")
+                    WorkAssessment.objects.filter(id=data['id']).delete()
+            for data in validated_data['workassess']:
+                count_students = WorkAssessment.objects.filter(work=instance, student=data.get('student')).count()
+                if not count_students:
+                    print("Добавлен студент")
+                    new_students_works.append(WorkAssessment(work=instance, student=data.get('student')))
+            WorkAssessment.objects.bulk_create(new_students_works)
+            validated_data.pop('workassess', None)
         return super().update(instance, validated_data)
 
 class WorkCriteriaMarkSerializer(serializers.ModelSerializer):

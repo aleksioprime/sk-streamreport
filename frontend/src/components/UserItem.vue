@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      backend: 'localhost:8000/'
+      
     }
   },
   methods: {
