@@ -117,3 +117,37 @@ export function getStudyYears() {
 		studyYears, currentStudyYear, getStudyYearsData
 	}
 }
+
+export function getUnitsMYP() {
+	const unitsMYP = ref([]);
+	const getUnitsMYPData = async (subject) => {
+		const config = {
+			params: {
+				subject: subject,
+			}
+		}
+		await axiosAPI.get('/unitplans/myp', config).then((response) => {
+			unitsMYP.value = response.data;
+		});
+	};
+	return {
+		unitsMYP, getUnitsMYPData
+	}
+}
+
+export function getCriteriaMYP() {
+  const criteriaMYP = ref([]);
+  const getCriteriaData = async (subjects) => {
+    const config = {
+			params: {
+				subjects: subjects,
+			}
+		}
+    await axiosAPI.get('/criteria', config).then((response) => {
+      criteriaMYP.value = response.data;
+    });
+  };
+  return {
+    criteriaMYP, getCriteriaData
+  }
+}

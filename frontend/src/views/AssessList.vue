@@ -19,7 +19,7 @@
     <modal-assess :modalTitle="modalTitle" @cancel="hideSumWorkModal">
       <template v-slot:body>
         <!-- Форма добавления/редактирования итоговой работы -->
-        <assess-form v-model="currentAssess" v-if="flagAssess.add || flagAssess.edit"/>
+        <assess-form v-model:summativeWork="currentAssess" v-if="flagAssess.add || flagAssess.edit" :teachers="teachers" :subjects="subjects" :periods="periods"/>
         <!-- Текст удаления итоговой работы -->
         <div v-if="flagAssess.delete">Вы действительно хотите удалить эту итоговую работу?</div>
       </template>
@@ -88,7 +88,12 @@ export default {
       modalAssess: {},
       modalTitle: '',
       flagAssess: {},
-      currentAssess: {},
+      currentAssess: {
+        teachers_ids: [],
+        subject_id: null,
+        unit_id: null,
+        period_id: null,
+      },
     }
   },
   methods: {
@@ -151,8 +156,9 @@ export default {
   mounted() {
     // Инициализация объекта модального окна
     this.modalAssess = new Modal('#modalAssess', { backdrop: 'static' });
+    this.getTeachersData();
     this.getStudyYearsData();
-    this.getSubjectsData();
+    this.getSubjectsData('ooo', 'base');
     this.getGradesData();
     this.getPeriodsData(this.currentStudyYear);
     this.getSumWorkData({period: this.currentStudyYear.id});
