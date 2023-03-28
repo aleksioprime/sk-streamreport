@@ -61,7 +61,7 @@
 <script>
 import { Modal } from 'bootstrap';
 import AssessWorkForm from "@/components/AssessWorkForm.vue"
-import { getSumWork, getWorkAssess } from "@/hooks/assess/getSumWorkAssess"
+import { getSumWork } from "@/hooks/assess/getSumWorkAssess"
 
 export default {
   name: 'AssessWorkView',
@@ -230,10 +230,15 @@ export default {
 .mark-table .criterion{
   text-align: center;
   max-width: 20px;
+  background: #cec4a5;
 }
 .mark-table .grade{
   text-align: center;
   max-width: 20px;
+  background: #cec4a5;
+}
+.mark-table .cell-edit {
+  background: #000;
 }
 .input-table {
   width: 100%;
