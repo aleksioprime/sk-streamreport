@@ -54,7 +54,7 @@
     <div class="self">
       <label class="form-label">Юнит</label>
       <div v-if="unitsMYP.length">
-        <select id="unit" class="form-select" v-model="summativeWork.unit_id">
+        <select id="unit" class="form-select" v-model="summativeWork.unit_id" @change="changeUnit">
           <option :value="null">Выберите юнит</option>
           <option v-for="unit in unitsMYP" :key="unit.id" :value="unit.id">
             <span>{{ unit.title }} ({{ unit.class_year.year_rus }} класс)</span>
@@ -70,47 +70,43 @@
     <div class="self">
       <div>Даты итоговых работ</div>
       <div v-if="summativeWork.unit_id">
-        <table>
-        <tr>
-          <th class="text-center" style="width: 30%">Класс</th>
-          <th class="text-center" style="width: 40%">Дата</th>
-          <th class="text-center" style="width: 20%">Номер урока</th>
-          <th class="text-center" style="width: 10%"></th>
-        </tr>
-        <tr>
-          <td class="text-center">пока ничего</td>
-          <td class="text-center">пока ничего</td>
-          <td class="text-center">пока ничего</td>
-          <td class="text-center"></td>
-        </tr>
-        <tr>
-          <td>
-            <div class="col-md">
-              <select class="form-select">
-                <option selected>Выберите класс</option>
-                <option value="1">1 </option>
-                <option value="2">2 </option>
-                <option value="3">3 </option>
-              </select>
-            </div>
-          </td>
-          <td>
-            <div class="col-md">
-              <input type="date" id="date" class="form-control">
-            </div>
-          </td>
-          <td>
-            <div class="col-md">
-              <input type="text" class="form-control">
-            </div>
-          </td>
-          <td>
-            <div class="col-md">
-              <button class="img-btn-add ms-auto" @click="addSubjectLevel"></button>
-            </div>
-          </td>
-        </tr>
-      </table>
+        <div class="my-2" v-if="summativeWork.groups.length">
+          <table class="table border mb-0">
+            <tr>
+              <th class="text-center" style="width: 30%">Класс</th>
+              <th class="text-center" style="width: 40%">Дата</th>
+              <th class="text-center" style="width: 20%">Урок</th>
+              <th class="text-center" style="width: 10%"></th>
+            </tr>
+            <tr v-for="(gr, i) in summativeWork.groups" :key="gr.id">
+              <td class="p-2">{{ gr.class_year }}{{ gr.letter }} класс</td>
+              <td></td>
+              <td>
+                <button class="btn-table edit my-1" @click="editWorkGroupDate(gr.id)"></button>
+                <button class="btn-table delete my-1" @click="deleteWorkGroupDate(gr.id)"></button>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <select id="level" class="form-select" v-model="choisenWorkGroupDate.group">
+              <option :value="null">Класс</option>
+              <option v-for="gr in groups" :key="gr.id" :value="gr.id">
+                {{ gr.class_year }}{{ gr.letter }} класс
+              </option>
+            </select>
+          </div>
+          <div class="col-sm-4">
+            <input type="date" id="date" class="form-control" v-model="choisenWorkGroupDate.date">
+          </div>
+          <div class="col-sm-2">
+            <input type="text" id="lesson" class="form-control" v-model="choisenWorkGroupDate.lesson">
+          </div>
+          <div class="col-sm-1 d-flex align-items-center me-3">
+            <button class="img-btn-add ms-auto" @click="addWorkGroupDate" :disabled="!choisenWorkGroupDate.date || !choisenWorkGroupDate.lesson|| choisenWorkGroupDate.group"></button>
+          </div>
+        </div>          
       </div>
       <div v-else>
         Выберите юнит
@@ -134,19 +130,12 @@
         <small ref="criteria_alert" class="alert-text"></small>
       </div>
     </div>
-
-
-
-
-
-
-
   </form>
 </template>
 
 <script>
 import { toRefs } from 'vue';
-import { getUnitsMYP, getCriteriaMYP } from "@/hooks/assess/getSumWorkData";
+import { getUnitsMYP, getCriteriaMYP, getGroups } from "@/hooks/assess/getSumWorkData";
 
 export default {
   props: {
@@ -158,14 +147,17 @@ export default {
   setup(props) {
     const { unitsMYP, getUnitsMYPData } = getUnitsMYP();
     const { criteriaMYP, getCriteriaData } = getCriteriaMYP();
+    const { groups, getGroupsData } = getGroups();
     return {
       unitsMYP, getUnitsMYPData,
       criteriaMYP, getCriteriaData,
+      groups, getGroupsData,
     }
   },
   data() {
     return {
       searchTeachers: null,
+      choisenWorkGroupDate: { group: null },
     }
   },
   methods: {
@@ -173,7 +165,21 @@ export default {
       console.log('Предмет выбран: ', event.target.value);
       this.getUnitsMYPData(event.target.value);
       this.getCriteriaData(event.target.value);
-    }
+    },
+    changeUnit(event) {
+      console.log(event.target.value)
+      let currentUnit = this.unitsMYP.find(item => item.id == event.target.value)
+      this.getGroupsData(currentUnit.class_year.year_rus);
+    },
+    addWorkGroupDate() {
+
+    },
+    editWorkGroupDate() {
+
+    },
+    deleteWorkGroupDate() {
+
+    },
   },
   mounted() {
 
@@ -207,5 +213,18 @@ export default {
 .self {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+.btn-table {
+  border: none;
+  min-width: 25px;
+  min-height: 25px;
+  cursor: pointer;
+}
+.btn-table.edit {
+  background: url('@/assets/img/item-edit.png') no-repeat 50% / 90%;
+  margin-right: 5px;
+}
+.btn-table.delete {
+  background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
 }
 </style>

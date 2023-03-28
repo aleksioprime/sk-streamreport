@@ -14,6 +14,14 @@ class StudyYearViewSet(viewsets.ModelViewSet):
 class ClassGroupViewSet(viewsets.ModelViewSet):
     queryset = ClassGroup.objects.all()
     serializer_class = ClassGroupSerializer
+    def get_queryset(self):
+        grade = self.request.query_params.get("grade", None)
+        groups = ClassGroup.objects.all()
+        if grade:
+            print(f"Get-запрос grade: {grade}")
+            groups = groups.filter(class_year=grade)
+        print(f"Ответ от сервера: {groups}")
+        return groups
 
 # Набор CRUD-методов для работы с моделью Студенты
 class StudentViewSet(viewsets.ModelViewSet):

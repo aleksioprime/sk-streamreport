@@ -151,3 +151,20 @@ export function getCriteriaMYP() {
     criteriaMYP, getCriteriaData
   }
 }
+
+export function getGroups() {
+	const groups = ref([]);
+	const getGroupsData= async (grade) => {
+    const config = {
+			params: {
+				grade: grade,
+			}
+		}
+		await axiosAPI.get('/assessment/group', config).then((response) => {
+			groups.value = response.data;
+		});
+	};
+	return {
+		groups, getGroupsData
+	}
+}

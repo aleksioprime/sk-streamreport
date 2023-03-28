@@ -93,6 +93,7 @@ export default {
         subject_id: null,
         unit_id: null,
         period_id: null,
+        groups: [],
       },
     }
   },
