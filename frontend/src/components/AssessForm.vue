@@ -79,20 +79,23 @@
               <th class="text-center" style="width: 10%"></th>
             </tr>
             <tr v-for="(gr, i) in summativeWork.groups" :key="gr.id">
-              <td class="p-2">{{ gr.class_year }}{{ gr.letter }} класс</td>
-              <td></td>
+              <td class="p-2">{{ gr.group.class_year }}{{ gr.group.letter }} класс</td>
+              <td>{{ new Date(gr.date).toLocaleDateString() }}</td>
+              <td>{{ gr.lesson }}</td>
               <td>
-                <button class="btn-table edit my-1" @click="editWorkGroupDate(gr.id)"></button>
                 <button class="btn-table delete my-1" @click="deleteWorkGroupDate(gr.id)"></button>
               </td>
             </tr>
           </table>
         </div>
+        <div v-else>
+          Пока список пустой
+        </div>
         <div class="row">
           <div class="col-sm">
             <select id="level" class="form-select" v-model="choisenWorkGroupDate.group">
               <option :value="null">Класс</option>
-              <option v-for="gr in groups" :key="gr.id" :value="gr.id">
+              <option v-for="gr in groups" :key="gr.id" :value="gr">
                 {{ gr.class_year }}{{ gr.letter }} класс
               </option>
             </select>
@@ -104,7 +107,7 @@
             <input type="text" id="lesson" class="form-control" v-model="choisenWorkGroupDate.lesson">
           </div>
           <div class="col-sm-1 d-flex align-items-center me-3">
-            <button class="img-btn-add ms-auto" @click="addWorkGroupDate" :disabled="!choisenWorkGroupDate.date || !choisenWorkGroupDate.lesson|| choisenWorkGroupDate.group"></button>
+            <button class="img-btn-add ms-auto" @click="addWorkGroupDate" :disabled="!choisenWorkGroupDate.date || !choisenWorkGroupDate.lesson || !choisenWorkGroupDate.group"></button>
           </div>
         </div>          
       </div>
@@ -171,14 +174,15 @@ export default {
       let currentUnit = this.unitsMYP.find(item => item.id == event.target.value)
       this.getGroupsData(currentUnit.class_year.year_rus);
     },
-    addWorkGroupDate() {
-
+    addWorkGroupDate(event) {
+      event.preventDefault();
+      this.summativeWork.groups.push(this.choisenWorkGroupDate);
     },
     editWorkGroupDate() {
 
     },
-    deleteWorkGroupDate() {
-
+    deleteWorkGroupDate(i) {
+      this.summativeWork.groups.splice(i, 1);
     },
   },
   mounted() {
