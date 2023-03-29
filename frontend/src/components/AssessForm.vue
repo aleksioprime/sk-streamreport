@@ -18,15 +18,15 @@
         </div>
         <div v-for="teacher in filteredTeachers" :key="teacher.id">
           <div class="form-check">
-            <input ref="teacher" class="form-check-input" type="checkbox" :value="teacher.id"
-              :id="'teacher-' + teacher.id" v-model="summativeWork.teachers_ids">
+            <input class="form-check-input" type="radio" :value="teacher.id"
+              :id="'teacher-' + teacher.id" v-model="summativeWork.teacher_id">
             <label class="form-check-label" :for="'teacher-' + teacher.id">
               {{ teacher.user.first_name }} {{ teacher.user.middle_name }} {{ teacher.user.last_name }}
             </label>
           </div>
         </div>
       </div>
-      <small ref="teachers_alert" class="alert-text"></small>
+      <small ref="teacher_alert" class="alert-text"></small>
     </div>
     <!-- Выбор периода -->
     <div class="self">
@@ -70,50 +70,66 @@
     <div class="self">
       <div>Даты итоговых работ</div>
       <div v-if="summativeWork.unit_id">
-        <div class="my-2" v-if="summativeWork.groups.length">
-          <table class="table border mb-0">
+        <div class="my-2 border p-2">
+          <table class="table mb-0" v-if="summativeWork.groups.length">
             <tr>
-              <th class="text-center" style="width: 30%">Класс</th>
-              <th class="text-center" style="width: 40%">Дата</th>
-              <th class="text-center" style="width: 20%">Урок</th>
-              <th class="text-center" style="width: 10%"></th>
+              <th class="ps-2" style="width: 30%">Класс</th>
+              <th style="width: 40%">Дата</th>
+              <th style="width: 20%">Урок</th>
+              <th style="width: 10%"></th>
             </tr>
             <tr v-for="(gr, i) in summativeWork.groups" :key="gr.id">
-              <td class="p-2">{{ gr.group.class_year }}{{ gr.group.letter }} класс</td>
+              <td>
+                <span v-if="findGroup(gr.group_id)">{{ findGroup(gr.group_id).class_year }}{{ findGroup(gr.group_id).letter }} класс</span>
+              </td>
               <td>{{ new Date(gr.date).toLocaleDateString() }}</td>
               <td>{{ gr.lesson }}</td>
               <td>
-                <button class="btn-table delete my-1" @click="deleteWorkGroupDate(gr.id)"></button>
+                <div class="d-flex">
+                  <div class="btn-table edit my-1" @click="editWorkGroupDate(gr.id)"></div>
+                  <div class="btn-table delete my-1" @click="deleteWorkGroupDate(gr.id)"></div>
+                </div>
               </td>
             </tr>
           </table>
+          <div v-else>
+            Пока список пустой
+          </div>
         </div>
-        <div v-else>
-          Пока список пустой
+        <div class="mb-1">
+          <span v-if="editDateGroup">Редактировать выбранную дату</span>
+          <span v-else>Добавить новую дату</span>
         </div>
-        <div class="row">
-          <div class="col-sm">
-            <select id="level" class="form-select" v-model="choisenWorkGroupDate.group">
-              <option :value="null">Класс</option>
-              <option v-for="gr in groups" :key="gr.id" :value="gr">
-                {{ gr.class_year }}{{ gr.letter }} класс
-              </option>
-            </select>
-          </div>
-          <div class="col-sm-4">
-            <input type="date" id="date" class="form-control" v-model="choisenWorkGroupDate.date">
-          </div>
-          <div class="col-sm-2">
-            <input type="text" id="lesson" class="form-control" v-model="choisenWorkGroupDate.lesson">
-          </div>
-          <div class="col-sm-1 d-flex align-items-center me-3">
-            <button class="img-btn-add ms-auto" @click="addWorkGroupDate" :disabled="!choisenWorkGroupDate.date || !choisenWorkGroupDate.lesson || !choisenWorkGroupDate.group"></button>
-          </div>
-        </div>          
-      </div>
+        <div class="border p-2">
+          <div class="row">
+            <div class="col-sm my-1">
+              <select id="level" class="form-select" v-model="choisenWorkGroupDate.group_id">
+                <option :value="null">Класс</option>
+                <option v-for="gr in groups" :key="gr.id" :value="gr.id">
+                  {{ gr.class_year }}{{ gr.letter }} класс
+                </option>
+              </select>
+            </div>
+            <div class="col-4 my-1">
+              <input type="date" id="date" class="form-control" v-model="choisenWorkGroupDate.date">
+            </div>
+            <div class="col-2 my-1">
+              <input type="text" id="lesson" class="form-control" v-model="choisenWorkGroupDate.lesson">
+            </div>
+            <div class="col-2 d-flex align-items-center me-3">
+              <div v-if="editDateGroup" class="d-flex">
+                <button class="btn-table apply ms-auto" @click="applyWorkGroupDate"></button>
+                <button class="btn-table cancel ms-auto" @click="cancelWorkGroupDate"></button>
+              </div>
+              <button v-else class="img-btn-add ms-auto" @click="addWorkGroupDate" :disabled="!choisenWorkGroupDate.date || !choisenWorkGroupDate.lesson || !choisenWorkGroupDate.group_id"></button>
+            </div>
+          </div> 
+        </div>         
+        </div>
       <div v-else>
         Выберите юнит
       </div>
+      <small ref="groups_alert" class="alert-text"></small>
     </div>
     <!-- Выбор критериев оценки -->
     <div class="row my-2">
@@ -122,7 +138,7 @@
         <div v-if="criteriaMYP.length > 0 ">
           <div v-for="cr in criteriaMYP" :key="cr.id">
             <div class="form-check">
-              <input ref="criteria" class="form-check-input" type="checkbox" :value="cr.id" :id="'criterion-' + cr.id" v-model="summativeWork.criteria_ids">
+              <input name="criteria" class="form-check-input" type="checkbox" :value="cr.id" :id="'criterion-' + cr.id" v-model="summativeWork.criteria_ids">
               <label class="form-check-label" :for="'criterion-' + cr.id">
                 <b>{{ cr.letter }}:</b> {{ cr.name_eng }}
               </label>
@@ -146,6 +162,7 @@ export default {
     teachers: { type: Array },
     subjects: { type: Array },
     periods: { type: Array },
+    editMode: { type: Boolean },
   },
   setup(props) {
     const { unitsMYP, getUnitsMYPData } = getUnitsMYP();
@@ -160,48 +177,106 @@ export default {
   data() {
     return {
       searchTeachers: null,
-      choisenWorkGroupDate: { group: null },
+      choisenWorkGroupDate: { group_id: null },
+      errorField: {},
+      textAlert: {
+        title: 'Введите название итоговой работы',
+        teacher: 'Выберите учителя',
+        period: 'Выберите учебный период',
+        subject: 'Выберите предмет',
+        unit: 'Выберите юнит',
+        groups: 'Добавьте группы и даты итоговых работ',
+        criteria: 'Выберите критерии оценки',
+      },
+      editDateGroup: false,
     }
   },
   methods: {
     changeSubject(event) {
-      console.log('Предмет выбран: ', event.target.value);
       this.getUnitsMYPData(event.target.value);
       this.getCriteriaData(event.target.value);
     },
     changeUnit(event) {
-      console.log(event.target.value)
       let currentUnit = this.unitsMYP.find(item => item.id == event.target.value)
       this.getGroupsData(currentUnit.class_year.year_rus);
     },
     addWorkGroupDate(event) {
       event.preventDefault();
       this.summativeWork.groups.push(this.choisenWorkGroupDate);
+      this.choisenWorkGroupDate = { group_id: null };
     },
-    editWorkGroupDate() {
-
+    editWorkGroupDate(id) {
+      this.choisenWorkGroupDate = { ...this.summativeWork.groups.find(item => id == item.id) }
+      this.editDateGroup = true;
     },
-    deleteWorkGroupDate(i) {
-      this.summativeWork.groups.splice(i, 1);
+    deleteWorkGroupDate(id) {
+      this.summativeWork.groups.splice(id, 1);
+      this.choisenWorkGroupDate = { group_id: null };
+    },
+    applyWorkGroupDate() {
+      this.summativeWork.groups = this.summativeWork.groups.map(item => {
+        if (this.choisenWorkGroupDate.id == item.id) {
+          return this.choisenWorkGroupDate
+        }
+        return item
+      });
+      this.editDateGroup = false;
+      this.choisenWorkGroupDate = { group_id: null };
+    },
+    cancelWorkGroupDate() {
+      this.editDateGroup = false;
+      this.choisenWorkGroupDate = { group_id: null };
+    },
+    findGroup(id) {
+      return this.groups.find(item => id == item.id)
+    },
+    // Проверка каждого поля формы на правильность введённых данных
+    checkFieldsValidate() {
+      this.summativeWork.title ? this.errorField.title = false : this.errorField.title = true;
+      this.summativeWork.period_id ? this.errorField.period = false : this.errorField.period = true;
+      this.summativeWork.subject_id ? this.errorField.subject = false : this.errorField.subject = true;
+      this.summativeWork.teacher_id ? this.errorField.teacher = false : this.errorField.teacher = true;
+      this.summativeWork.unit_id ? this.errorField.unit = false : this.errorField.unit = true;
+      this.summativeWork.groups.length ? this.errorField.groups = false : this.errorField.groups = true;
+      this.summativeWork.criteria_ids.length ? this.errorField.criteria = false : this.errorField.criteria = true;
+      const validate = Object.values(this.errorField).every(item => item == false)
+      this.$emit('validForm', validate);
+      this.validateForm();
+    },
+    // Валидация формы - проверка ошибок полей формы и вывод их в виде текста на форму
+    validateForm() {
+      for (let key in this.errorField) {
+        if (this.$refs[`${key}_alert`]) {
+          if (this.errorField[key]) {
+            this.$refs[`${key}_alert`].innerText = this.textAlert[key];
+          } else {
+            this.$refs[`${key}_alert`].innerText = "";
+          }
+        }
+      }
     },
   },
   mounted() {
-
+    if (this.editMode) {
+      console.log('Открытие формы в режиме редктирования');
+      this.getUnitsMYPData(this.summativeWork.subject_id);
+      this.getCriteriaData(this.summativeWork.subject_id);
+      this.getGroupsData(this.summativeWork.unit.class_year.id);
+    }
   },
   watch: {
-
   },
   computed: {
     // Переменная с данными отфильтрованных учителей по значению поля поиска по фамилии (searchteachers)
     filteredTeachers() {
       if (!this.searchTeachers) {
-        return this.teachers.filter(teacher => this.summativeWork.teachers_ids.includes(teacher.id))
+        return this.teachers.filter(teacher => this.summativeWork.teacher_id == teacher.id)
       }
       return this.teachers.filter((teacher) => {
         if (teacher.user) {
-          return teacher.user.last_name.toLowerCase().includes(this.searchTeachers.toLowerCase()) || this.summativeWork.teachers_ids.includes(teacher.id)
+          return teacher.user.last_name.toLowerCase().includes(this.searchTeachers.toLowerCase()) || this.summativeWork.teacher_id == teacher.id
         } else {
-          return this.summativeWork.teachers_ids.includes(teacher.id)
+          return this.summativeWork.teacher_id == teacher.id
         }
       })
     },
@@ -231,4 +306,15 @@ export default {
 .btn-table.delete {
   background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
 }
+.btn-table.apply {
+  background: url('@/assets/img/btn-apply.png') no-repeat 50% / 90%;
+  margin-right: 5px;
+}
+.btn-table.cancel {
+  background: url('@/assets/img/btn-cancel.png') no-repeat 50% / 90%;
+  margin-right: 5px;
+}
+.alert-text {
+    color: red;
+  }
 </style>

@@ -13,9 +13,9 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" @click="$emit('cancel')">Отмена</button>
-          <button v-if="flagAssess.addAssess" type="button" class="btn btn-primary" @click="$emit('create')">Добавить</button>
-          <button v-if="flagAssess.editAssess" type="button" class="btn btn-primary" @click="$emit('update')">Сохранить</button>
-          <button v-if="flagAssess.deleteAssess" type="button" class="btn btn-primary" @click="$emit('delete')">Удалить</button>
+          <button v-if="flagAssess.add" type="button" class="btn btn-primary" @click="$emit('create')">Добавить</button>
+          <button v-if="flagAssess.edit" type="button" class="btn btn-primary" @click="$emit('update')">Сохранить</button>
+          <button v-if="flagAssess.delete" type="button" class="btn btn-primary" @click="$emit('delete')">Удалить</button>
         </div>
       </div>
     </div>
@@ -33,9 +33,9 @@ export default {
     flagAssess: {
       type: Object,
       default: {
-        addAssess: false,
-        editAssess: false,
-        deleteAssess: false,
+        add: false,
+        edit: false,
+        delete: false,
       }
     }
   },
