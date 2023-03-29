@@ -25,7 +25,7 @@ class WorkGroupDateAdmin(ImportExportModelAdmin):
 
 @admin.register(WorkAssessment)
 class WorkAssessmentAdmin(ImportExportModelAdmin):
-    list_display = ("work", "student", "grade")
+    list_display = ("work_date", "student", "grade")
 
 @admin.register(WorkCriteriaMark)
 class WorkCriteriaMarkAdmin(ImportExportModelAdmin):

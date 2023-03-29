@@ -23,7 +23,10 @@
         <assess-form v-model:summativeWork="currentAssess" v-if="flagAssess.add || flagAssess.edit" :teachers="teachers"
           :subjects="subjects" :periods="periods" @validForm="validFormResult" ref="assessmentForm" :editMode="formEditMode"/>
         <!-- Текст удаления итоговой работы -->
-        <div v-if="flagAssess.delete">Вы действительно хотите удалить эту итоговую работу?</div>
+        <div v-if="flagAssess.delete">
+          Вы действительно хотите удалить эту итоговую работу?
+          {{ currentAssess.title }}
+        </div>
       </template>
     </modal-assess>
     <!-- Выбор периодов обучения -->
@@ -47,7 +50,7 @@
               <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} классы</div>
               <div class="sumassess"><a :href="`/assessment/period/${currentPeriod.id}/subject/${subject}/class/${year}`">Итоговые оценки</a></div>
             </div>
-            <assess-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit(sumwork.id)" @deleteWork="showSumWorkModalDelete"/>
+            <assess-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit(sumwork.id)" @deleteWork="showSumWorkModalDelete(sumwork.id)"/>
           </div>
         </div>
       </div>
@@ -60,6 +63,7 @@
 
 <script>
 import { Modal } from 'bootstrap';
+import { mapGetters } from 'vuex';
 import AssessForm from "@/components/AssessForm.vue";
 import AssessItem from "@/components/AssessItem.vue";
 import { getSumWork, getTeachers, getGrades, getSubjects, getPeriods, getStudyYears } from "@/hooks/assess/getSumWorkData";
@@ -117,9 +121,11 @@ export default {
     },
     showSumWorkModalAdd() {
       this.modalTitle = 'Создание итоговой работы';
+      this.formEditMode = false;
+      this.currentAssess.teacher_id = this.authUser.teacher.id;
+      this.currentAssess.period_id = this.currentPeriod.id;
       this.modalAssess.show();
       this.flagAssess.add = true;
-      this.formEditMode = false;
     },
     showSumWorkModalEdit(id) {
       this.modalTitle = 'Редактирование итоговой работы';
@@ -132,18 +138,19 @@ export default {
       this.currentAssess.criteria_ids = this.currentAssess.criteria.map(item => item.id);
       this.currentAssess.groups = this.currentAssess.groups.map(item => {
         return {
+          id: item.id,
           group_id: item.group.id,
           date: item.date,
           lesson: item.lesson,
         }
       })
-      console.log(this.currentAssess)
       this.modalAssess.show();
       this.flagAssess.edit = true;
       
     },
-    showSumWorkModalDelete(sumwork) {
+    showSumWorkModalDelete(id) {
       this.modalTitle = 'Удаление итоговой работы';
+      this.currentAssess = { ...this.sumWorks.find(item => item.id == id) };
       this.modalAssess.show();
       this.flagAssess.delete = true;
     },
@@ -153,24 +160,41 @@ export default {
     },
     sumWorkCreate() {
       this.$refs.assessmentForm.checkFieldsValidate();
+      this.validForm = true
       if (this.validForm) {
         console.log("Запрос на создание итоговой работы: ", this.currentAssess);
-        this.hideSumWorkModal();
+        this.axios.post('assessment/sumwork', this.currentAssess).then((response) => {
+        }).finally(() => {
+          this.currentAssess = {};
+          this.getSumWorkData({period: this.currentPeriod.id});
+          this.hideSumWorkModal();
+        });
       } else {
         console.log('Валидация неуспешна', this.currentAssess)
       }
     },
-    sumWorkEdit(id) {
+    sumWorkEdit() {
       this.$refs.assessmentForm.checkFieldsValidate();
       if (this.validForm) {
         console.log("Запрос на изменение итоговой работы: ", this.currentAssess);
-        this.hideSumWorkModal();
+        this.axios.put(`assessment/sumwork/${this.currentAssess.id}`, this.currentAssess).then((response) => {
+          }).finally(() => {
+            this.currentAssess = {};
+            this.getSumWorkData({period: this.currentPeriod.id});
+            this.hideSumWorkModal();
+          });
       } else {
         console.log('Валидация неуспешна', this.currentAssess)
       }
     },
-    sumWorkDelete(sumwork) {
+    sumWorkDelete() {
       console.log("Запрос на удаление итоговой работы");
+      this.axios.delete(`assessment/sumwork/${this.currentAssess.id}`).then((response) => {
+        }).finally(() => {
+          this.currentAssess = {};
+          this.getSumWorkData({period: this.currentStudyYear.id});
+          this.hideSumWorkModal();
+        });
     },
     // преобраование массива итоговых работ в группированный по предмету объект массивов
     groupedSumWorks(array, fields) {
@@ -207,11 +231,13 @@ export default {
     this.getStudyYearsData();
     this.getSubjectsData('ooo', 'base');
     this.getGradesData();
-    this.getPeriodsData(this.currentStudyYear);
-    this.getSumWorkData({period: this.currentStudyYear.id});
+    this.getPeriodsData(this.currentStudyYear).finally(() => {
+      this.getSumWorkData({period: this.currentPeriod.id, teacher: this.authUser.teacher.id});
+    });
   },
   computed: {
-    
+    // подключение переменной авторизированного пользователя из store
+    ...mapGetters(['authUser']),
   }
 }
 </script>

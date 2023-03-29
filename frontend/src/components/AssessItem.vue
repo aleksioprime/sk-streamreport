@@ -14,9 +14,9 @@
         <div class="criteria-item" v-for="cr in sumwork.criteria" :key="cr.id">{{ cr.letter }}</div>
       </div>
       <div v-if="sumwork.groups.length">
-        <div class="groups" v-for="gr in sumwork.groups" :key="gr.id">
-          <div class="group-title">Журнал оценок:</div>
-          <div class="group" @click="$router.push(`/assessment/sumwork/${sumwork.id}/class/${gr.group.id}`)">
+        <div class="group-title">Журнал оценок:</div>
+        <div class="groups">
+          <div class="group" v-for="gr in sumwork.groups" :key="gr.id" @click="$router.push(`/assessment/sumwork/${sumwork.id}/class/${gr.group.id}`)">
             <div class="group-name">{{ gr.group.class_year }}{{ gr.group.letter }} класс</div>
             <div class="group-date">{{ new Date(gr.date).toLocaleDateString() }}</div>
           </div>
@@ -117,6 +117,9 @@ export default {
   text-align: center;
   border-radius: 10px;
   cursor: pointer;
+}
+.sumworks-item .assessment .group:not(:last-of-type) {
+  margin-right: 10px
 }
 .sumworks-item .assessment .group:hover {
   background: #33cccc;

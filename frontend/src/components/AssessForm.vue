@@ -53,7 +53,7 @@
     <!-- Выбор юнита -->
     <div class="self">
       <label class="form-label">Юнит</label>
-      <div v-if="unitsMYP.length">
+      <div v-if="summativeWork.subject_id">
         <select id="unit" class="form-select" v-model="summativeWork.unit_id" @change="changeUnit">
           <option :value="null">Выберите юнит</option>
           <option v-for="unit in unitsMYP" :key="unit.id" :value="unit.id">
@@ -68,69 +68,69 @@
     </div>
     <!-- Выбор классов и даты итоговой работы -->
     <div class="self">
-      <div>Даты итоговых работ</div>
-      <div v-if="summativeWork.unit_id">
-        <div class="my-2 border p-2">
-          <table class="table mb-0" v-if="summativeWork.groups.length">
-            <tr>
-              <th class="ps-2" style="width: 30%">Класс</th>
-              <th style="width: 40%">Дата</th>
-              <th style="width: 20%">Урок</th>
-              <th style="width: 10%"></th>
-            </tr>
-            <tr v-for="(gr, i) in summativeWork.groups" :key="gr.id">
-              <td>
-                <span v-if="findGroup(gr.group_id)">{{ findGroup(gr.group_id).class_year }}{{ findGroup(gr.group_id).letter }} класс</span>
-              </td>
-              <td>{{ new Date(gr.date).toLocaleDateString() }}</td>
-              <td>{{ gr.lesson }}</td>
-              <td>
-                <div class="d-flex">
-                  <div class="btn-table edit my-1" @click="editWorkGroupDate(gr.id)"></div>
-                  <div class="btn-table delete my-1" @click="deleteWorkGroupDate(gr.id)"></div>
-                </div>
-              </td>
-            </tr>
-          </table>
-          <div v-else>
-            Пока список пустой
-          </div>
-        </div>
-        <div class="mb-1">
-          <span v-if="editDateGroup">Редактировать выбранную дату</span>
-          <span v-else>Добавить новую дату</span>
-        </div>
-        <div class="border p-2">
-          <div class="row">
-            <div class="col-sm my-1">
-              <select id="level" class="form-select" v-model="choisenWorkGroupDate.group_id">
-                <option :value="null">Класс</option>
-                <option v-for="gr in groups" :key="gr.id" :value="gr.id">
-                  {{ gr.class_year }}{{ gr.letter }} класс
-                </option>
-              </select>
+        <div>Даты итоговых работ</div>
+        <div v-if="summativeWork.unit_id">
+          <div class="my-2 border p-2">
+            <table class="table mb-0" v-if="summativeWork.groups.length">
+              <tr>
+                <th class="ps-2" style="width: 30%">Класс</th>
+                <th style="width: 40%">Дата</th>
+                <th style="width: 20%">Урок</th>
+                <th style="width: 10%"></th>
+              </tr>
+              <tr v-for="(gr, i) in summativeWork.groups" :key="gr.id">
+                <td>
+                  <span v-if="findGroup(gr.group_id)">{{ findGroup(gr.group_id).class_year }}{{ findGroup(gr.group_id).letter }} класс</span>
+                </td>
+                <td>{{ new Date(gr.date).toLocaleDateString() }}</td>
+                <td>{{ gr.lesson }}</td>
+                <td>
+                  <div class="d-flex">
+                    <div class="btn-table edit my-1" @click="editWorkGroupDate(gr.id)"></div>
+                    <div class="btn-table delete my-1" @click="deleteWorkGroupDate(gr.id)"></div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <div v-else class="my-2 fst-italic">
+              Пока список пустой
             </div>
-            <div class="col-4 my-1">
-              <input type="date" id="date" class="form-control" v-model="choisenWorkGroupDate.date">
+            <div class="border p-2">
+            <div class="mb-1">
+              <span v-if="editDateGroup">Редактировать выбранную дату</span>
+              <span v-else>Добавить новую дату</span>
             </div>
-            <div class="col-2 my-1">
-              <input type="text" id="lesson" class="form-control" v-model="choisenWorkGroupDate.lesson">
-            </div>
-            <div class="col-2 d-flex align-items-center me-3">
-              <div v-if="editDateGroup" class="d-flex">
-                <button class="btn-table apply ms-auto" @click="applyWorkGroupDate"></button>
-                <button class="btn-table cancel ms-auto" @click="cancelWorkGroupDate"></button>
+            <div class="row">
+              <div class="col-sm my-1">
+                <select id="level" class="form-select" v-model="choisenWorkGroupDate.group_id">
+                  <option :value="null">Класс</option>
+                  <option v-for="gr in filteredGroups" :key="gr.id" :value="gr.id">
+                    {{ gr.class_year }}{{ gr.letter }} класс
+                  </option>
+                </select>
               </div>
-              <button v-else class="img-btn-add ms-auto" @click="addWorkGroupDate" :disabled="!choisenWorkGroupDate.date || !choisenWorkGroupDate.lesson || !choisenWorkGroupDate.group_id"></button>
-            </div>
+              <div class="col my-1">
+                <input type="date" id="date" class="form-control" v-model="choisenWorkGroupDate.date">
+              </div>
+              <div class="col-2 my-1">
+                <input type="text" id="lesson" class="form-control" v-model="choisenWorkGroupDate.lesson">
+              </div>
+              <div class="col-2 d-flex align-items-center me-3">
+                <div v-if="editDateGroup" class="d-flex">
+                  <button class="btn-table apply ms-auto" @click="applyWorkGroupDate"></button>
+                  <button class="btn-table cancel ms-auto" @click="cancelWorkGroupDate"></button>
+                </div>
+                <button v-else class="img-btn-add ms-auto" @click="addWorkGroupDate" :disabled="!choisenWorkGroupDate.date || !choisenWorkGroupDate.lesson || !choisenWorkGroupDate.group_id"></button>
+              </div>
+            </div> 
           </div> 
-        </div>         
+          </div>    
+          </div>
+        <div v-else>
+          Выберите юнит
         </div>
-      <div v-else>
-        Выберите юнит
+        <small ref="groups_alert" class="alert-text"></small>
       </div>
-      <small ref="groups_alert" class="alert-text"></small>
-    </div>
     <!-- Выбор критериев оценки -->
     <div class="row my-2">
       <div class="col">
@@ -210,7 +210,7 @@ export default {
       this.editDateGroup = true;
     },
     deleteWorkGroupDate(id) {
-      this.summativeWork.groups.splice(id, 1);
+      this.summativeWork.groups = this.summativeWork.groups.filter(item => item.id != id);
       this.choisenWorkGroupDate = { group_id: null };
     },
     applyWorkGroupDate() {
@@ -259,9 +259,11 @@ export default {
   mounted() {
     if (this.editMode) {
       console.log('Открытие формы в режиме редктирования');
-      this.getUnitsMYPData(this.summativeWork.subject_id);
+      this.getUnitsMYPData(this.summativeWork.subject_id).finally(() =>{
+        const currentUnit = this.unitsMYP.find(item => item.id == this.summativeWork.unit_id);
+        this.getGroupsData(currentUnit.class_year.id);
+      });
       this.getCriteriaData(this.summativeWork.subject_id);
-      this.getGroupsData(this.summativeWork.unit.class_year.id);
     }
   },
   watch: {
@@ -280,6 +282,13 @@ export default {
         }
       })
     },
+    filteredGroups() {
+      if (!this.editDateGroup) {
+        return this.groups.filter(item => !this.summativeWork.groups.map(gr => gr.group_id).includes(item.id))
+      } else {
+        return this.groups
+      }
+    }
   }
 }
 </script>
