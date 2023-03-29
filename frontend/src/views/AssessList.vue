@@ -12,14 +12,16 @@
         </select>
       </div>
       <button type="button" class="btn btn-primary ms-auto mb-2 w-100" @click="showSumWorkModalAdd">
-        Cоздать итоговую работку
+        Cоздать итоговую работу
       </button>
     </div>
     <!-- Модальное окно добавления/редактирования/удаления итоговой работы -->
-    <modal-assess :modalTitle="modalTitle" @cancel="hideSumWorkModal">
+    <modal-assess :modalTitle="modalTitle" :flagAssess="flagAssess" 
+      @create="sumWorkCreate" @delete="sumWorkDelete" @update="sumWorkEdit" @cancel="hideSumWorkModal">
       <template v-slot:body>
         <!-- Форма добавления/редактирования итоговой работы -->
-        <assess-form v-model:summativeWork="currentAssess" v-if="flagAssess.add || flagAssess.edit" :teachers="teachers" :subjects="subjects" :periods="periods"/>
+        <assess-form v-model:summativeWork="currentAssess" v-if="flagAssess.add || flagAssess.edit" :teachers="teachers"
+          :subjects="subjects" :periods="periods" @validForm="validFormResult" ref="assessmentForm" :editMode="formEditMode"/>
         <!-- Текст удаления итоговой работы -->
         <div v-if="flagAssess.delete">Вы действительно хотите удалить эту итоговую работу?</div>
       </template>
@@ -45,7 +47,7 @@
               <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} классы</div>
               <div class="sumassess"><a :href="`/assessment/period/${currentPeriod.id}/subject/${subject}/class/${year}`">Итоговые оценки</a></div>
             </div>
-            <assess-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit" @deleteWork="showSumWorkModalDelete"/>
+            <assess-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit(sumwork.id)" @deleteWork="showSumWorkModalDelete"/>
           </div>
         </div>
       </div>
@@ -89,39 +91,82 @@ export default {
       modalTitle: '',
       flagAssess: {},
       currentAssess: {
-        teachers_ids: [],
+        teacher_id: null,
+        criteria_ids: [],
+        groups: [],
         subject_id: null,
         unit_id: null,
         period_id: null,
-        groups: [],
       },
+      validForm: false,
+      formEditMode: false,
     }
   },
   methods: {
     hideSumWorkModal() {
       this.modalAssess.hide();
       this.flagAssess = {}
+      this.currentAssess = {
+          teacher_id: null,
+          criteria_ids: [],
+          groups: [],
+          subject_id: null,
+          unit_id: null,
+          period_id: null,
+        };
     },
     showSumWorkModalAdd() {
       this.modalTitle = 'Создание итоговой работы';
       this.modalAssess.show();
       this.flagAssess.add = true;
     },
-    showSumWorkModalEdit(sumwork) {
+    showSumWorkModalEdit(id) {
       this.modalTitle = 'Редактирование итоговой работы';
+      this.formEditMode = true;
+      this.currentAssess = { ...this.sumWorks.find(item => item.id == id) };
+      this.currentAssess.teacher_id = this.currentAssess.teacher.id;
+      this.currentAssess.subject_id = this.currentAssess.subject.id;
+      this.currentAssess.unit_id = this.currentAssess.unit.id;
+      this.currentAssess.period_id = this.currentAssess.period;
+      this.currentAssess.criteria_ids = this.currentAssess.criteria.map(item => item.id);
+      this.currentAssess.groups = this.currentAssess.groups.map(item => {
+        return {
+          group_id: item.group.id,
+          date: item.date,
+          lesson: item.lesson,
+        }
+      })
+      console.log(this.currentAssess)
       this.modalAssess.show();
       this.flagAssess.edit = true;
+      
     },
     showSumWorkModalDelete(sumwork) {
       this.modalTitle = 'Удаление итоговой работы';
       this.modalAssess.show();
       this.flagAssess.delete = true;
     },
-    sumWorkCreate() {
-      console.log("Запрос на создание итоговой работы");
+    // Получение результатов валидации из компонента с формой
+    validFormResult(value) {
+      this.validForm = value;
     },
-    sumWorkEdit(sumwork) {
-      console.log("Запрос на изменение итоговой работы");
+    sumWorkCreate() {
+      this.$refs.assessmentForm.checkFieldsValidate();
+      if (this.validForm) {
+        console.log("Запрос на создание итоговой работы: ", this.currentAssess);
+        this.hideSumWorkModal();
+      } else {
+        console.log('Валидация неуспешна', this.currentAssess)
+      }
+    },
+    sumWorkEdit(id) {
+      this.$refs.assessmentForm.checkFieldsValidate();
+      if (this.validForm) {
+        console.log("Запрос на изменение итоговой работы: ", this.currentAssess);
+        this.hideSumWorkModal();
+      } else {
+        console.log('Валидация неуспешна', this.currentAssess)
+      }
     },
     sumWorkDelete(sumwork) {
       console.log("Запрос на удаление итоговой работы");

@@ -318,6 +318,7 @@
               <template v-slot:read="data"><div v-html="unit[data.field]"></div></template>
               <template v-slot:edit="data"><field-textarea-edit v-model="editUnit[data.field]" /></template>
             </unit-field>
+            <!-- Исследовательские вопросы -->
             <div>Исследовательские вопросы</div>
             <unit-myp-view-question :unit="unit" @update="getUnitData($route.params.id)" />
           </div>
