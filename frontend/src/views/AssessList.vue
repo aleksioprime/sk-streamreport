@@ -119,6 +119,7 @@ export default {
       this.modalTitle = 'Создание итоговой работы';
       this.modalAssess.show();
       this.flagAssess.add = true;
+      this.formEditMode = false;
     },
     showSumWorkModalEdit(id) {
       this.modalTitle = 'Редактирование итоговой работы';

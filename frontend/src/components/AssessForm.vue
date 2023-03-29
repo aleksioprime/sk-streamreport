@@ -211,6 +211,7 @@ export default {
     },
     deleteWorkGroupDate(id) {
       this.summativeWork.groups.splice(id, 1);
+      this.choisenWorkGroupDate = { group_id: null };
     },
     applyWorkGroupDate() {
       this.summativeWork.groups = this.summativeWork.groups.map(item => {
