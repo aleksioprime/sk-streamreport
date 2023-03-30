@@ -66,12 +66,32 @@
       </div>
       <small ref="unit_alert" class="alert-text"></small>
     </div>
+
+ <!-- Выбор критериев оценки -->
+ <div class="row my-2">
+      <div class="col">
+        <div class="mb-2">Критерии оценки: </div>
+        <div v-if="criteriaMYP.length > 0 ">
+          <div v-for="cr in criteriaMYP" :key="cr.id">
+            <div class="form-check">
+              <input name="criteria" class="form-check-input" type="checkbox" :value="cr.id" :id="'criterion-' + cr.id" v-model="summativeWork.criteria_ids">
+              <label class="form-check-label" :for="'criterion-' + cr.id">
+                <b>{{ cr.letter }}:</b> {{ cr.name_eng }}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div v-else>Для выбора критериев оценки укажите дисциплину</div>  
+        <small ref="criteria_alert" class="alert-text"></small>
+      </div>
+    </div>
+
     <!-- Выбор классов и даты итоговой работы -->
     <div class="self">
         <div>Даты итоговых работ</div>
         <div v-if="summativeWork.unit_id">
           <div class="my-2 border p-2">
-            <table class="table mb-0" v-if="summativeWork.groups.length">
+            <table class="table mb-0 text-table" v-if="summativeWork.groups.length">
               <tr>
                 <th class="ps-2" style="width: 30%">Класс</th>
                 <th style="width: 40%">Дата</th>
@@ -98,7 +118,7 @@
             <div class="border p-2">
             <div class="mb-1">
               <span v-if="editDateGroup">Редактировать выбранную дату</span>
-              <span v-else>Добавить новую дату</span>
+              
             </div>
             <div class="row">
               <div class="col-sm my-1">
@@ -113,7 +133,7 @@
                 <input type="date" id="date" class="form-control" v-model="choisenWorkGroupDate.date">
               </div>
               <div class="col-2 my-1">
-                <input type="text" id="lesson" class="form-control" v-model="choisenWorkGroupDate.lesson">
+                <input type="text" id="lesson" class="form-control" placeholder=" № " v-model="choisenWorkGroupDate.lesson">
               </div>
               <div class="col-2 d-flex align-items-center me-3">
                 <div v-if="editDateGroup" class="d-flex">
@@ -131,24 +151,7 @@
         </div>
         <small ref="groups_alert" class="alert-text"></small>
       </div>
-    <!-- Выбор критериев оценки -->
-    <div class="row my-2">
-      <div class="col">
-        <div class="mb-2">Критерии оценки: </div>
-        <div v-if="criteriaMYP.length > 0 ">
-          <div v-for="cr in criteriaMYP" :key="cr.id">
-            <div class="form-check">
-              <input name="criteria" class="form-check-input" type="checkbox" :value="cr.id" :id="'criterion-' + cr.id" v-model="summativeWork.criteria_ids">
-              <label class="form-check-label" :for="'criterion-' + cr.id">
-                <b>{{ cr.letter }}:</b> {{ cr.name_eng }}
-              </label>
-            </div>
-          </div>
-        </div>
-        <div v-else>Для выбора критериев оценки укажите дисциплину</div>  
-        <small ref="criteria_alert" class="alert-text"></small>
-      </div>
-    </div>
+   
   </form>
 </template>
 
@@ -325,5 +328,9 @@ export default {
 }
 .alert-text {
     color: red;
+  }
+  .text-table {
+  vertical-align: center;
+  text-align: center;
   }
 </style>
