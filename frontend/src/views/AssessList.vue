@@ -166,7 +166,7 @@ export default {
         this.axios.post('assessment/sumwork', this.currentAssess).then((response) => {
         }).finally(() => {
           this.currentAssess = {};
-          this.getSumWorkData({period: this.currentPeriod.id});
+          this.getSumWorkData({period: this.currentPeriod.id, teacher: this.authUser.teacher.id});
           this.hideSumWorkModal();
         });
       } else {
@@ -180,7 +180,7 @@ export default {
         this.axios.put(`assessment/sumwork/${this.currentAssess.id}`, this.currentAssess).then((response) => {
           }).finally(() => {
             this.currentAssess = {};
-            this.getSumWorkData({period: this.currentPeriod.id});
+            this.getSumWorkData({period: this.currentPeriod.id, teacher: this.authUser.teacher.id});
             this.hideSumWorkModal();
           });
       } else {
@@ -192,7 +192,7 @@ export default {
       this.axios.delete(`assessment/sumwork/${this.currentAssess.id}`).then((response) => {
         }).finally(() => {
           this.currentAssess = {};
-          this.getSumWorkData({period: this.currentStudyYear.id});
+          this.getSumWorkData({period: this.currentPeriod.id, teacher: this.authUser.teacher.id});
           this.hideSumWorkModal();
         });
     },
