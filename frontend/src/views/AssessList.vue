@@ -23,9 +23,13 @@
         <assess-form v-model:summativeWork="currentAssess" v-if="flagAssess.add || flagAssess.edit" :teachers="teachers"
           :subjects="subjects" :periods="periods" @validForm="validFormResult" ref="assessmentForm" :editMode="formEditMode"/>
         <!-- Текст удаления итоговой работы -->
-        <div v-if="flagAssess.delete">
-          Вы действительно хотите удалить эту итоговую работу?
-          {{ currentAssess.title }}
+        <div v-if="flagAssess.delete" >
+          <div class="mb-2">Вы действительно хотите удалить эту итоговую работу?</div>
+          <div class="border p-2">
+            <b>{{ currentAssess.title }}</b><br>
+            <div>{{ currentAssess.unit.title }}</div>
+            <div v-for="gr in currentAssess.groups" :key="gr.id">{{ gr.group.class_year }}{{ gr.group.letter }} класс - {{ new Date(gr.date).toLocaleDateString() }}</div>
+          </div>
         </div>
       </template>
     </modal-assess>
@@ -279,6 +283,7 @@ export default {
   padding: 10px;
 }
 .sumworks-subject {
+  font-size: 2em;
   padding-bottom: 5px;
   border-bottom: 1px solid #ffbf40;
 }
@@ -293,8 +298,9 @@ export default {
   padding: 10px;
 }
 .sumworks-year .title{
+  color: #fff;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 .sumworks-year .sumassess {
   margin-left: auto;

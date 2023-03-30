@@ -7,7 +7,18 @@
         <div class="btn delete" @click="$emit('deleteWork', sumwork)"></div>
       </div>
     </div>
-    <div class="unit">Юнит:&nbsp;<a :href="`/unit/${sumwork.unit.id}`">{{ sumwork.unit.title }}</a></div>
+    <div class="teacher">Учитель:&nbsp;{{ sumwork.teacher.user.last_name }} {{ sumwork.teacher.user.first_name }} {{ sumwork.teacher.user.middle_name }}</div>
+    <div class="unit">
+      <div>Юнит:&nbsp;
+        <a :href="`/unit/${sumwork.unit.id}`">{{ sumwork.unit.title }}</a> 
+        <span v-if="sumwork.unit.checkInterdisciplinary" class="badge rounded-pill text-bg-primary me-1">МДП<br></span>
+      </div>
+      <div>
+        Предметы: 
+        <span v-for="(sb, i) in sumwork.unit.subjects" :key="i">{{ sb.subject.name_rus }}<span v-if="i + 1 != sumwork.unit.subjects.length">, </span></span>
+      </div>
+    </div>
+    
     <div class="assessment">
       <div class="criteria">
         <div class="criteria-title">Критерии оценки:</div>
@@ -77,7 +88,6 @@ export default {
   background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
 }
 .sumworks-item .unit {
-  display: flex;
   margin-bottom: 10px;
 }
 
