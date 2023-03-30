@@ -19,17 +19,17 @@
     <div v-if="workGroup.students.length">
       <!-- Таблица оценок выбранного итоговой работы и класса -->
       <table class="table table-sm table-bordered mt-3 mark-table">
-        <thead class="align-middle text-center">
+        <thead class="thead-dark text-center">
           <tr>
-            <td rowspan="2" style="width: 30px">№</td>
-            <td rowspan="2">ФИО студента</td>
-            <td :colspan="workGroup.work.criteria.length">Баллы по критериям</td>
-            <td rowspan="2" style="width: 80px">Сумма</td>
-            <td rowspan="2" style="width: 80px">Расчёт</td>
-            <td rowspan="2" style="width: 70px">Оценка</td>
+            <th rowspan="2" style="width: 5%">№</th>
+            <th rowspan="2" style="width: 50%">ФИО студента</th>
+            <th :colspan="workGroup.work.criteria.length">Баллы по критериям</th>
+            <th rowspan="2" style="width: 10%">Сумма</th>
+            <th rowspan="2" style="width: 10%">Расчёт</th>
+            <th rowspan="2" style="width: 10%">Оценка</th>
           </tr>
           <tr>
-            <td style="width: 80px;" v-for="cr in workGroup.work.criteria" :key="cr.id">{{ cr.letter }}</td>
+            <th style="width: 5%" v-for="cr in workGroup.work.criteria" :key="cr.id">{{ cr.letter }}</th>
           </tr>
         </thead>
         <tbody>
@@ -230,12 +230,13 @@ export default {
 .mark-table .criterion{
   text-align: center;
   max-width: 20px;
-  background: #cec4a5;
+  background: #d7f1f1;
+  
 }
 .mark-table .grade{
   text-align: center;
   max-width: 20px;
-  background: #cec4a5;
+  background: #d7f1f1;
 }
 .mark-table .cell-edit {
   background: #000;
@@ -248,4 +249,5 @@ export default {
 .text-table {
   cursor: pointer;
 }
+
 </style>

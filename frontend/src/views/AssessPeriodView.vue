@@ -47,31 +47,18 @@
           <th scope="row">1</th>
           <td></td>
           <td>
-            1
-            2
-            3
-            Средняя:
+          
             <input type="text" class="form-control">
           </td>
           <td>
-            1
-            2
-            3
-            Средняя:
+            
             <input type="text" class="form-control">
           </td>
           <td>
-            1
-            2
-            3
-            Средняя:
+            
             <input type="text" class="form-control">
           </td>
           <td>
-            1
-            2
-            3
-            Средняя:
             <input type="text" class="form-control">
           </td>
           <td></td>
@@ -140,7 +127,10 @@ caption {
 
 .info-block {
   margin: 10px 0px 0px;
-
-  
 }
+
+.input-table {
+  background: #d7f1f1;
+}
+
 </style>
