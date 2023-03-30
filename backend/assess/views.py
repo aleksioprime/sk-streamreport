@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from assess.serializers import StudyYearSerializer, ClassGroupSerializer, StudyPeriodSerializer, SummativeWorkSerializer, \
-    WorkAssessmentSerializer, WorkCriteriaMarkSerializer, ProfileStudentSerializer
-from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark
+    WorkAssessmentSerializer, WorkCriteriaMarkSerializer, ProfileStudentSerializer, WorkGroupDateListSerializer, WorkGroupDateItemSerializer
+from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate
 from member.models import ProfileTeacher, ProfileStudent, User
 
 
@@ -60,7 +60,7 @@ class SummativeWorkViewSet(viewsets.ModelViewSet):
             print(f"[SummativeWork] Get-запрос period: {period}")
             summative_work = summative_work.filter(period=period)
         if teacher:
-            print(f"[SummativeWork] Get-запрос period: {teacher}")
+            print(f"[SummativeWork] Get-запрос teacher: {teacher}")
             summative_work = summative_work.filter(teacher=teacher)
         print(f"[SummativeWork] Ответ от сервера: {summative_work}")
         return summative_work
@@ -81,6 +81,17 @@ class SummativeWorkViewSet(viewsets.ModelViewSet):
 #     def update(self, request, pk=None, *args, **kwargs):
 #         print('Переданные данные: ', request.data)
 #         return super().update(request, pk=None, *args, **kwargs)
+
+class WorkGroupDateItemViewSet(viewsets.ModelViewSet):
+    queryset = WorkGroupDate.objects.all()
+    serializer_class = WorkGroupDateItemSerializer
+    
+    def get_queryset(self):
+        workgroup = WorkGroupDate.objects.all()
+        work = self.request.query_params.get("work", None)
+        if work:
+            workgroup = workgroup.filter(student__group=work)
+        return workgroup
 
 class WorkAssessmentViewSet(viewsets.ModelViewSet):
     queryset = WorkAssessment.objects.all()

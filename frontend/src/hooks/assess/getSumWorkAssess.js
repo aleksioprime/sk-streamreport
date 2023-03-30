@@ -1,21 +1,22 @@
 import { ref, onMounted } from 'vue'
 import { axiosAPI } from '@/axios'
 
-export function getSumWork() {
-	const sumWork = ref({
-		criteria: [],
-		assessment: []
+export function getWorkGroup() {
+	const workGroup = ref({
+		work: {
+			criteria: []
+		},
+		students: []
 	});
-	const getSumWorkData = async (id_sumwork, callback) => {
-		await axiosAPI.get(`/assessment/sumwork/${id_sumwork}`).then((response) => {
+	const getWorkGroupData = async (id) => {
+		await axiosAPI.get(`/assessment/workgroup/${id}`).then((response) => {
 			console.log("Загрузка итоговой работы")
-			sumWork.value = response.data;
-			console.log(sumWork.value)
-			callback();
+			workGroup.value = response.data;
+			console.log(workGroup.value)
 		});
 	};
 	return {
-		sumWork, getSumWorkData
+		workGroup, getWorkGroupData
 	}
 }
 

@@ -221,7 +221,7 @@ export default {
     // Обновление итоговых работ при выборе периода
     refreshSumWorkBySubject(pr) {
       this.currentPeriod = pr;
-      this.getSumWorkData({period: pr.id});
+      this.getSumWorkData({period: pr.id, teacher: this.authUser.teacher.id});
     },
   },
   mounted() {

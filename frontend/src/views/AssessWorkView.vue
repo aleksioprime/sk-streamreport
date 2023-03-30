@@ -5,45 +5,45 @@
       <template v-slot:header>Журнал оценок за итоговую работу</template>
     </base-header>
     <modal-class @save="saveClassModal" @cancel="hideClassModal" :modalTitle="modalTitleClass">
-      <assess-work-form v-if="Object.keys(this.sumWork).length" v-model:studentsWork="studentsWork"/>
+      <assess-work-form v-if="Object.keys(workGroup.work).length" v-model:studentsWork="studentsWork"/>
     </modal-class>
     <div class="info">
-      <div>{{ sumWork.title }}</div>
-      <div v-if="sumWork.unit">{{ sumWork.unit.title }}</div>
-      <div v-if="sumWork.groups">{{ currentClass.group.class_year }}{{ currentClass.group.letter }} класс</div>
+      <div>{{ workGroup.work.title }}</div>
+      <div v-if="workGroup.work.unit">{{ workGroup.work.unit.title }}</div>
+      <div v-if="workGroup.work.groups">{{ workGroup.group.class_year }}{{ workGroup.group.letter }} класс</div>
     </div>
     <button class="btn btn-primary mt-2" @click="showClassModal">Редактирование списка студентов</button>
     <div class="tools" ref="activeInput">
 
     </div>
-    <div v-if="sumWork.assessment.length">
+    <div v-if="workGroup.students.length">
       <!-- Таблица оценок выбранного итоговой работы и класса -->
       <table class="table table-sm table-bordered mt-3 mark-table">
         <thead class="align-middle text-center">
           <tr>
             <td rowspan="2">№</td>
             <td rowspan="2">ФИО студента</td>
-            <td :colspan="sumWork.criteria.length">Баллы по критериям</td>
+            <td :colspan="workGroup.work.criteria.length">Баллы по критериям</td>
             <td rowspan="2">Сумма</td>
             <td rowspan="2">Расчёт</td>
             <td rowspan="2">Оценка</td>
           </tr>
           <tr>
-            <td v-for="cr in sumWork.criteria" :key="cr.id">{{ cr.letter }}</td>
+            <td v-for="cr in workGroup.work.criteria" :key="cr.id">{{ cr.letter }}</td>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(assess, index) in sumWork.assessment" :key="assess.id">
+          <tr v-for="(assess, index) in workGroup.students" :key="assess.id">
             <td class="text-center">{{ index + 1 }}</td>
             <td>{{ assess.student.user.last_name }} {{ assess.student.user.first_name }}</td>
-            <td v-for="cr in sumWork.criteria" :key="cr.id" class="criterion">
+            <td v-for="cr in workGroup.work.criteria" :key="cr.id" class="criterion">
               <input type="text" class="input-table" v-model="markCriterion.mark">
               <div @click="(event) => setEditField(event, assess, cr)">{{ getMarkForStudent(cr.id, assess.criteria_marks) }}</div>
             </td>
             <td class="text-center">
-              <b>{{ calcSumStudentMarks(assess.criteria_marks) }}</b>/{{ calcMaxStudentMarks(assess.work.criteria) }}
+              <b>{{ calcSumStudentMarks(assess.criteria_marks) }}</b>/{{ calcMaxStudentMarks(workGroup.work.criteria) }}
             </td>
-            <td class="text-center">{{ calcStudentMarks(assess.criteria_marks, assess.work.criteria) }}</td>
+            <td class="text-center">{{ calcStudentMarks(assess.criteria_marks, workGroup.work.criteria) }}</td>
             <td class="text-center grade">
               <input type="text" class="input-table" v-model="currentWorkAssess.grade">
               <div class="text-table" @click="(event) => setEditField(event, assess)">{{ assess.grade || "-" }}</div>
@@ -61,7 +61,7 @@
 <script>
 import { Modal } from 'bootstrap';
 import AssessWorkForm from "@/components/AssessWorkForm.vue"
-import { getSumWork } from "@/hooks/assess/getSumWorkAssess"
+import { getWorkGroup } from "@/hooks/assess/getSumWorkAssess"
 
 export default {
   name: 'AssessWorkView',
@@ -70,12 +70,9 @@ export default {
   },
   setup(props) {
     // Получение функции запроса данных итоговой работы
-    const { sumWork, getSumWorkData } = getSumWork();
-    // Получение функции запроса списка оценок студентов
-    // const { workAssess, getWorkAssessData } = getWorkAssess();
+    const { workGroup, getWorkGroupData } = getWorkGroup();
     return {
-      sumWork, getSumWorkData,
-      // workAssess, getWorkAssessData,
+      workGroup, getWorkGroupData,
     }
   },
   data() {
@@ -94,12 +91,12 @@ export default {
     },
     saveClassModal() {
       const dataStudentsWork = {
-        "assessment": this.studentsWork.map(item => { return {'student_id': item.id} }),
+        "students": this.studentsWork.map(item => { return {'student_id': item.id} }),
       }
       console.log('Отправка запроса на добавление студентов в журнал: ', dataStudentsWork);
-      this.axios.put(`/assessment/sumwork/${this.$route.params.id_sumwork}`, dataStudentsWork).then((response) => {
+      this.axios.put(`/assessment/workgroup/${this.$route.params.id}`, dataStudentsWork).then((response) => {
           console.log('Список студентов успешно изменён');
-          this.getSumWorkData(this.$route.params.id_sumwork, this.getStudentsWork);
+          this.getWorkGroupData(this.$route.params.id);
         }).finally(() => {
           console.log('Запрос завершён');
         });
@@ -178,7 +175,7 @@ export default {
         }
         console.log("Запрос на изменение данных: ", this.currentWorkAssess);
         this.axios.put(`/assessment/workassess/${assess.id}`, this.currentWorkAssess).then((response) => {
-          this.getSumWorkData(this.$route.params.id_sumwork, this.getStudentsWork);
+          this.getWorkGroupData(this.$route.params.id);
           console.log('Оценка успешно обновлена');
         }).finally(() => {
           this.currentWorkAssess = {};
@@ -188,19 +185,23 @@ export default {
     setStudentCriteriaMark(assess, criterion) {
       if (Object.keys(this.markCriterion).length) {
         this.markCriterion.criterion_id = criterion.id;
-        const assessMark = assess.criteria_marks.find(item => item.criterion.id == criterion.id);
-        if (assessMark) { this.markCriterion.id = assessMark.id }
+        const assessMark = { ...assess.criteria_marks.find(item => item.criterion.id == criterion.id) };
+        if (assessMark) { 
+          this.markCriterion.id = assessMark.id;
+        }
         if (this.markCriterion.mark > 8) {
           this.markCriterion.mark = 8
         } else if (this.markCriterion.mark < 0) {
           this.markCriterion.mark = 0
+        } else {
+          this.markCriterion.mark = Number(this.markCriterion.mark)
         }
         const dataMarkCriterion = {
           "criteria_marks": [ this.markCriterion ],
         }
         console.log("Запрос на изменение данных: ", dataMarkCriterion);
         this.axios.put(`/assessment/workassess/${assess.id}`, dataMarkCriterion).then((response) => {
-          this.getSumWorkData(this.$route.params.id_sumwork, this.getStudentsWork);
+          this.getWorkGroupData(this.$route.params.id);
           console.log('Оценка успешно обновлена');
         }).finally(() => {
           this.markCriterion = {};
@@ -208,18 +209,15 @@ export default {
       }
     },
     getStudentsWork() {
-      this.studentsWork = this.sumWork.assessment.map(item => item.student)
+      this.studentsWork = this.workGroup.students.map(item => item.student)
     },
   },
   mounted() {
-    this.getSumWorkData(this.$route.params.id_sumwork, this.getStudentsWork);
+    this.getWorkGroupData(this.$route.params.id);
     this.modalClass = new Modal(`#modalClass`, { backdrop: 'static' });
 
   },
   computed: {
-    currentClass() {
-      return this.sumWork.groups.find(item => item.group.id == this.$route.params.id_class)
-    },
   },
   watch: {
   }

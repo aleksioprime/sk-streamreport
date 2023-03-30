@@ -40,7 +40,7 @@ const routes = [
     component: AssessList,
   },
   {
-    path: '/assessment/sumwork/:id_sumwork/class/:id_class',
+    path: '/assessment/sumwork/:id',
     name: 'assessworkview',
     component: AssessWorkView,
   },
