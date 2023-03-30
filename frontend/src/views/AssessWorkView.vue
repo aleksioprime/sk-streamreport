@@ -12,7 +12,7 @@
       <div v-if="workGroup.work.unit">{{ workGroup.work.unit.title }}</div>
       <div v-if="workGroup.work.groups">{{ workGroup.group.class_year }}{{ workGroup.group.letter }} класс</div>
     </div>
-    <button class="btn btn-primary mt-2" @click="showClassModal">Редактирование списка студентов</button>
+    <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
     <div class="tools" ref="activeInput">
 
     </div>
@@ -21,15 +21,15 @@
       <table class="table table-sm table-bordered mt-3 mark-table">
         <thead class="align-middle text-center">
           <tr>
-            <td rowspan="2">№</td>
+            <td rowspan="2" style="width: 30px">№</td>
             <td rowspan="2">ФИО студента</td>
             <td :colspan="workGroup.work.criteria.length">Баллы по критериям</td>
-            <td rowspan="2">Сумма</td>
-            <td rowspan="2">Расчёт</td>
-            <td rowspan="2">Оценка</td>
+            <td rowspan="2" style="width: 80px">Сумма</td>
+            <td rowspan="2" style="width: 80px">Расчёт</td>
+            <td rowspan="2" style="width: 70px">Оценка</td>
           </tr>
           <tr>
-            <td v-for="cr in workGroup.work.criteria" :key="cr.id">{{ cr.letter }}</td>
+            <td style="width: 80px;" v-for="cr in workGroup.work.criteria" :key="cr.id">{{ cr.letter }}</td>
           </tr>
         </thead>
         <tbody>
@@ -86,7 +86,8 @@ export default {
   },
   methods: {
     showClassModal() {
-      this.modalTitleClass = "Добавление студентов";
+      this.modalTitleClass = "Изменение списка группы";
+      this.getStudentsWork();
       this.modalClass.show();
     },
     saveClassModal() {
@@ -213,9 +214,10 @@ export default {
     },
   },
   mounted() {
-    this.getWorkGroupData(this.$route.params.id);
+    this.getWorkGroupData(this.$route.params.id).finally(() => {
+      this.getStudentsWork();
+    });
     this.modalClass = new Modal(`#modalClass`, { backdrop: 'static' });
-
   },
   computed: {
   },

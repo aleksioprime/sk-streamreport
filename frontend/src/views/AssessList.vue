@@ -48,7 +48,7 @@
           <div class="sumworks-grouped">
             <div class="sumworks-year">
               <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} классы</div>
-              <div class="sumassess"><a :href="`/assessment/period/${currentPeriod.id}/subject/${subject}/class/${year}`">Итоговые оценки</a></div>
+              <div class="sumassess" @click="$router.push(`/assessment/period/${currentPeriod.id}/subject/${subject}/class/${year}`)">Итоговые оценки</div>
             </div>
             <assess-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit(sumwork.id)" @deleteWork="showSumWorkModalDelete(sumwork.id)"/>
           </div>
@@ -288,12 +288,25 @@ export default {
 }
 .sumworks-year {
   display: flex;
+  align-items: center;
+  background-color: #33cccc;
+  padding: 10px;
 }
 .sumworks-year .title{
   font-weight: 700;
+  font-size: 1.2rem;
 }
 .sumworks-year .sumassess {
   margin-left: auto;
+  padding: 10px;
+  background-color: #ffbf40;
+  color: #000000;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.sumworks-year .sumassess:hover {
+  background-color: #fad385;
 }
 .sumworks-grouped {
   border: 1px solid #33cccc;

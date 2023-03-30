@@ -33,15 +33,12 @@ class ClassGroupSerializer(serializers.ModelSerializer):
         model = ClassGroup
         fields = '__all__'
 
-
-
 class StudyPeriodSerializer(serializers.ModelSerializer):
     study_year = StudyYearSerializer()
     class_year = ClassYearSerializer(many=True)
     class Meta:
         model = StudyPeriod
         fields = '__all__'
-
 
 class WorkCriteriaMarkSerializer(serializers.ModelSerializer):
     criterion = CriterionSerializer(read_only=True)
@@ -151,11 +148,11 @@ class WorkGroupDateItemSerializer(serializers.ModelSerializer):
         print('Валидированные данные: ', validated_data)
         workassess = validated_data.pop('workassess', None)
         if workassess:
-            instance_workassess = WorkAssessment.objects.filter(work_date=instance)
+            instance_students = [ item.student for item in WorkAssessment.objects.filter(work_date=instance)]
+            WorkAssessment.objects.filter(~Q(student__in=[item.get('student') for item in workassess])).delete()
             new_workassess = []
             for data in workassess:
-                if data not in instance_workassess:
-                    print(data)
+                if data.get('student') not in instance_students:
                     new_workassess.append(WorkAssessment(work_date=instance, **data))
             WorkAssessment.objects.bulk_create(new_workassess)
         return super().update(instance, validated_data)
