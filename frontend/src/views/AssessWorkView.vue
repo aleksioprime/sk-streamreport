@@ -192,7 +192,7 @@ export default {
         }
         if (this.markCriterion.mark > 8) {
           this.markCriterion.mark = 8
-        } else if (this.markCriterion.mark < 0) {
+        } else if (this.markCriterion.mark < 0 || typeof this.markCriterion.mar !== 'number') {
           this.markCriterion.mark = 0
         } else {
           this.markCriterion.mark = Number(this.markCriterion.mark)
