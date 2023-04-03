@@ -22,13 +22,17 @@
 </template>
 
 <script>
-import { getStudents } from "@/hooks/assess/getSumWorkAssess"
+import { getStudents } from "@/hooks/assess/getSumWorkAssess";
 
 export default {
   props: {
     studentsWork: {
       type: Array,
       default: () => []
+    },
+    year: {
+      type: Object,
+      default: {}
     }
   },
   setup(props) {
@@ -55,7 +59,8 @@ export default {
     },
   },
   mounted() {
-    this.getStudentsData({class: this.$route.params.id_class});
+    console.log('Текущий класс: ', this.year)
+    this.getStudentsData({class: this.year.id});
   },
   computed: {
     filterStudents() {

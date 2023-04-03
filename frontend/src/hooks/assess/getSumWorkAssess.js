@@ -25,7 +25,7 @@ export function getStudents() {
 	const getStudentsData = async (data) => {
 		const config = {
 			params: {
-				class: data.class || "",
+				class: data.class || null,
 			}
 		}
 		await axiosAPI.get('/student', config).then((response) => {

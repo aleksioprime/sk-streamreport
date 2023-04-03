@@ -120,9 +120,13 @@ class PeriodAssessment(models.Model):
     student = models.ForeignKey('member.ProfileStudent', verbose_name=_("Студент"), on_delete=models.SET_NULL, null=True, related_name="periodassess")
     period = models.ForeignKey('assess.StudyPeriod', verbose_name=_("Период"), on_delete=models.SET_NULL, null=True, related_name="periodassess")
     subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"), on_delete=models.SET_NULL, null=True, related_name="periodassess")
-    class_year = models.ForeignKey('curriculum.ClassYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="periodassess")
-    criteria_marks = models.ManyToManyField('curriculum.Criterion', through='assess.PeriodCriteriaMark', blank=True, related_name="periodassess")
-    form_grade = models.DecimalField(verbose_name=_("Средняя оценка за текущие работы"), max_digits=3, decimal_places=2)
+    year = models.ForeignKey('curriculum.ClassYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="periodassess")
+    criterion_a = models.SmallIntegerField(verbose_name=_("Оценка по критерию A"), default=None, null=True)
+    criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True)
+    criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True)
+    criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True)
+    summ_grade = models.DecimalField(verbose_name=_("Оценка за итоговые работы"), max_digits=3, decimal_places=2, default=0)
+    form_grade = models.DecimalField(verbose_name=_("Оценка за текущие работы"), max_digits=3, decimal_places=2, default=0)
     final_grade = models.SmallIntegerField(verbose_name=_("Итоговая оценка"), default=0)
     class Meta:
         verbose_name = 'Журнал оценок за уч. период'
@@ -130,17 +134,3 @@ class PeriodAssessment(models.Model):
         ordering = ['period', 'student']
     def __str__(self):
         return '{} - {}'.format(self.period, self.student)
-    
-class PeriodCriteriaMark(models.Model):
-    """ Выставление оценок по критериям в журнале учебных периодов """
-    period_assess = models.ForeignKey('assess.PeriodAssessment', verbose_name=_("Позиция оценки в уч. периоде"), on_delete=models.SET_NULL,
-                                null=True, related_name="period_criteria_mark")
-    criterion = models.ForeignKey('curriculum.Criterion', verbose_name=_("Критерий оценки"), on_delete=models.SET_NULL,
-                             null=True, related_name="period_criteria_mark")
-    mark = models.SmallIntegerField(verbose_name=_("Оценка по критерию"), default=0)
-    class Meta:
-        verbose_name = 'Оценка по выбранным критериям в периоде'
-        verbose_name_plural = 'Оценки по выбранным критериям в период'
-        ordering = ['period_assess', 'criterion']
-    def __str__(self):
-        return '{}: {} ({})'.format(self.period_assess, self.criterion, self.mark)

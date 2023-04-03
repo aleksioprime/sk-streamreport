@@ -45,7 +45,7 @@ const routes = [
     component: AssessWorkView,
   },
   {
-    path: '/assessment/period/:id_period/subject/:id_subject/class/:id_class',
+    path: '/assessment/year/:id_year/period/:id_period/subject/:id_subject',
     name: 'assessperiodview',
     component: AssessPeriodView,
   },

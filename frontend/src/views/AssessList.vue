@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header>
-      <template v-slot:header>Итоговые работы</template>
+      <template v-slot:header>Мои итоговые работы</template>
     </base-header>
     <div class="tools">
       <div class="my-2">
@@ -52,7 +52,7 @@
           <div class="sumworks-grouped">
             <div class="sumworks-year">
               <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} классы</div>
-              <div class="sumassess" @click="$router.push(`/assessment/period/${currentPeriod.id}/subject/${subject}/class/${year}`)">Итоговые оценки</div>
+              <div class="sumassess" @click="$router.push(`/assessment/year/${year}/period/${currentPeriod.id}/subject/${subject}`)">Итоговые оценки</div>
             </div>
             <assess-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit(sumwork.id)" @deleteWork="showSumWorkModalDelete(sumwork.id)"/>
           </div>

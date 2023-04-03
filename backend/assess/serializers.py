@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkGroupDate, WorkAssessment, WorkCriteriaMark
+from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkGroupDate, WorkAssessment, WorkCriteriaMark, PeriodAssessment
 from curriculum.serializers import SubjectSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.serializers import ClassGroupSerializer, UserSerializer
 from member.models import ProfileTeacher, User, ProfileStudent
@@ -36,9 +36,12 @@ class ClassGroupSerializer(serializers.ModelSerializer):
 class StudyPeriodSerializer(serializers.ModelSerializer):
     study_year = StudyYearSerializer()
     class_year = ClassYearSerializer(many=True)
+    type = serializers.SerializerMethodField(source="get_type")
     class Meta:
         model = StudyPeriod
         fields = '__all__'
+    def get_type(self, obj):
+        return obj.get_type_display()
 
 class WorkCriteriaMarkSerializer(serializers.ModelSerializer):
     criterion = CriterionSerializer(read_only=True)
@@ -90,6 +93,7 @@ class SummativeWorkSerializer(serializers.ModelSerializer):
     unit = UnitMYPSerializerListCreate(read_only=True)
     criteria = CriterionSerializer(many=True, read_only=True)
     groups = WorkGroupDateListSerializer(many=True, source='workgroup', required=False)
+    period = StudyPeriodSerializer(read_only=True)
     class Meta:
         model = SummativeWork
         fields = ['id', 'title', 'teacher', 'teacher_id', 'subject', 'subject_id', 
@@ -149,10 +153,62 @@ class WorkGroupDateItemSerializer(serializers.ModelSerializer):
         workassess = validated_data.pop('workassess', None)
         if workassess:
             instance_students = [ item.student for item in WorkAssessment.objects.filter(work_date=instance)]
-            WorkAssessment.objects.filter(~Q(student__in=[item.get('student') for item in workassess])).delete()
+            WorkAssessment.objects.filter(Q(work_date=instance) & ~Q(student__in=[item.get('student') for item in workassess])).delete()
             new_workassess = []
             for data in workassess:
                 if data.get('student') not in instance_students:
                     new_workassess.append(WorkAssessment(work_date=instance, **data))
             WorkAssessment.objects.bulk_create(new_workassess)
         return super().update(instance, validated_data)
+    
+class PeriodAssessmentSerializer(serializers.ModelSerializer):
+    student = ProfileStudentSerializer(read_only=True)
+    period = StudyPeriodSerializer(read_only=True)
+    subject = SubjectSerializer(read_only=True)
+    year = ClassYearSerializer(read_only=True)
+    class Meta:
+        model = PeriodAssessment
+        fields = ['id', 'student', 'student_id', 'period', 'period_id', 'subject', 'subject_id',
+                  'year', 'year_id', 'criterion_a', 'criterion_b', 'criterion_c', 'criterion_d', 
+                  'summ_grade', 'form_grade', 'final_grade']
+        extra_kwargs = {
+            'student_id': {'source': 'student', 'write_only': True},
+            'period_id': {'source': 'period', 'write_only': True},
+            'subject_id': {'source': 'subject', 'write_only': True},
+            'year_id': {'source': 'year', 'write_only': True},
+        }
+
+class WorkGroupDateStudentListSerializer(serializers.ModelSerializer):
+    work = SummativeWorkSerializer(read_only=True)
+    class Meta:
+        model = WorkGroupDate
+        fields = ['id', 'work', 'date', 'lesson']
+
+class WorkAssessmentStudentSerializer(serializers.ModelSerializer):
+    work_date = WorkGroupDateStudentListSerializer(read_only=True)
+    criteria_marks = WorkCriteriaMarkSerializer(many=True, source='work_criteria_mark', read_only=True)
+    class Meta:
+        model = WorkAssessment
+        fields = ['id', 'work_date', 'criteria_marks', 'grade']
+
+class StudentWorkSerializer(serializers.ModelSerializer):
+    group = ClassGroupSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
+    # workgroups = WorkAssessmentStudentSerializer(many=True, source='workassess', read_only=True)
+    workgroups = serializers.SerializerMethodField('get_workgroups')
+    class Meta:
+        model = ProfileStudent
+        fields = '__all__'
+    def get_workgroups(self, instance):
+        workassess_queryset = WorkAssessment.objects.filter(student=instance)
+        period = self.context.get("period", None)
+        subject = self.context.get("subject", None)
+        year = self.context.get("year", None)
+        if period:
+            workassess_queryset = workassess_queryset.filter(work_date__work__period=period)
+        if subject:
+            workassess_queryset = workassess_queryset.filter(work_date__work__subject=subject)
+        if year:
+            workassess_queryset = workassess_queryset.filter(work_date__work__groups__class_year=year).distinct()
+        serializer = WorkAssessmentStudentSerializer(instance=workassess_queryset, many=True, context=self.context)
+        return serializer.data

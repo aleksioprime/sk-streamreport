@@ -5,7 +5,7 @@
       <template v-slot:header>Журнал оценок за итоговую работу</template>
     </base-header>
     <modal-class @save="saveClassModal" @cancel="hideClassModal" :modalTitle="modalTitleClass">
-      <assess-work-form v-if="Object.keys(workGroup.work).length" v-model:studentsWork="studentsWork"/>
+      <assess-work-form v-if="completeLoadWorkGroup" v-model:studentsWork="studentsWork" :year="workGroup.group"/>
     </modal-class>
     <div class="info">
       <div>{{ workGroup.work.title }}</div>
@@ -82,6 +82,7 @@ export default {
       markCriterion: {},
       modalTitleClass: null,
       studentsWork: [],
+      completeLoadWorkGroup: false,
     }
   },
   methods: {
@@ -192,7 +193,7 @@ export default {
         }
         if (this.markCriterion.mark > 8) {
           this.markCriterion.mark = 8
-        } else if (this.markCriterion.mark < 0 || typeof this.markCriterion.mar !== 'number') {
+        } else if (this.markCriterion.mark < 0) {
           this.markCriterion.mark = 0
         } else {
           this.markCriterion.mark = Number(this.markCriterion.mark)
@@ -216,6 +217,7 @@ export default {
   mounted() {
     this.getWorkGroupData(this.$route.params.id).finally(() => {
       this.getStudentsWork();
+      this.completeLoadWorkGroup = true;
     });
     this.modalClass = new Modal(`#modalClass`, { backdrop: 'static' });
   },
