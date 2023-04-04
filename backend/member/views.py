@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import routers, viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
-from member.serializers import UserSerializer, DepartmentSerializer, RoleSerializer, ClassGroupSerializer, UserImportSerializer
+from member.serializers import UserSerializer, DepartmentSerializer, RoleSerializer, ClassGroupSerializer, UserImportSerializer, ProfileStudentSerializer
 from member.models import User, Department, RoleUser, ProfileStudent, ProfileTeacher
 from assess.models import ClassGroup
 from rest_framework.exceptions import AuthenticationFailed

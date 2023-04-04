@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, PeriodAssessment, PeriodCriteriaMark, WorkGroupDate
+from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, PeriodAssessment, WorkGroupDate
 
 # Register your models here.
 @admin.register(StudyYear)
@@ -25,7 +25,7 @@ class WorkGroupDateAdmin(ImportExportModelAdmin):
 
 @admin.register(WorkAssessment)
 class WorkAssessmentAdmin(ImportExportModelAdmin):
-    list_display = ("work", "student", "grade")
+    list_display = ("work_date", "student", "grade")
 
 @admin.register(WorkCriteriaMark)
 class WorkCriteriaMarkAdmin(ImportExportModelAdmin):
@@ -33,8 +33,4 @@ class WorkCriteriaMarkAdmin(ImportExportModelAdmin):
 
 @admin.register(PeriodAssessment)
 class PeriodAssessmentAdmin(ImportExportModelAdmin):
-    list_display = ("period", "student", "final_grade")
-    
-@admin.register(PeriodCriteriaMark)
-class PeriodCriteriaMarkAdmin(ImportExportModelAdmin):
-    list_display = ("period_assess", "criterion", "mark")
+    list_display = ("period", "student", "criterion_a", "criterion_b", "criterion_c", "criterion_d", "final_grade")

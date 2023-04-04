@@ -5,7 +5,8 @@ import UnitList from '@/views/UnitList.vue'
 import UnitMYPView from '@/views/UnitMYPView.vue'
 import UserList from '@/views/UserList.vue'
 import AssessList from '@/views/AssessList.vue'
-
+import AssessWorkView from '@/views/AssessWorkView.vue'
+import AssessPeriodView from '@/views/AssessPeriodView.vue'
 
 const routes = [
   {
@@ -34,9 +35,19 @@ const routes = [
     component: UserList
   },
   {
-    path: '/assess',
+    path: '/assessment',
     name: 'assesslist',
     component: AssessList,
+  },
+  {
+    path: '/assessment/sumwork/:id',
+    name: 'assessworkview',
+    component: AssessWorkView,
+  },
+  {
+    path: '/assessment/year/:id_year/period/:id_period/subject/:id_subject',
+    name: 'assessperiodview',
+    component: AssessPeriodView,
   },
 ]
 
