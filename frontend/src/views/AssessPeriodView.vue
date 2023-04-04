@@ -25,13 +25,13 @@
       </div>
     </div>
     <table class="table table-sm table-bordered mt-2 table-responsive w-100">
-      <thead class="thead-dark text-center align-middle">
+      <thead class="text-center align-middle">
         <tr>
           <td scope="col" rowspan="2">№</td>
-          <td scope="col" rowspan="2" style="width: 50%">ФИО студента</td>
-          <td scope="col" colspan="6" style="width: 20%">Оценка за итоговые работы</td>
-          <td rowspan="2" style="width: 10%">Среднее текущее</td>
-          <td rowspan="2" style="width: 10%">Итог</td>
+          <td scope="col" rowspan="2">ФИО студента</td>
+          <td scope="col" colspan="6">Оценка за итоговые работы</td>
+          <td rowspan="2" style="width: 25px">Среднее текущее</td>
+          <td rowspan="2" style="width: 25px">Итог</td>
         </tr>
         <tr>
           <td>A</td>
@@ -39,7 +39,7 @@
           <td>C</td>
           <td>D</td>
           <td>Сумма</td>
-          <td>Итог</td>
+          <td style="width: 25px">Итог</td>
         </tr>
       </thead>
       <tbody>
@@ -47,43 +47,46 @@
           <tr>
             <th scope="row" rowspan="2">{{ index + 1 }}</th>
             <td rowspan="2">{{ st.user.last_name }} {{ st.user.first_name }}</td>
-            <td><div class="criterion-mark"><div class="criterion-mark-item" v-for="mark in getCriterionMarkForStudent(st, 'A')" :key="mark">{{ mark }}</div></div></td>
-            <td><div class="criterion-mark"><div class="criterion-mark-item" v-for="mark in getCriterionMarkForStudent(st, 'B')" :key="mark">{{ mark }}</div></div></td>
-            <td><div class="criterion-mark"><div class="criterion-mark-item" v-for="mark in getCriterionMarkForStudent(st, 'C')" :key="mark">{{ mark }}</div></div></td>
-            <td><div class="criterion-mark"><div class="criterion-mark-item" v-for="mark in getCriterionMarkForStudent(st, 'D')" :key="mark">{{ mark }}</div></div></td>
-            <td>{{ calcSumStudentMarks(st) }}</td>
-            <td>{{ calcStudentCriteriaMarks(st) }}</td>
-            <td rowspan="2"></td>
-            <td></td>
+            <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-a" v-for="mark in st.calcCriteriaA" :key="mark">{{ mark }}</div></div></td>
+            <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-b" v-for="mark in st.calcCriteriaB" :key="mark">{{ mark }}</div></div></td>
+            <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-c" v-for="mark in st.calcCriteriaC" :key="mark">{{ mark }}</div></div></td>
+            <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-d" v-for="mark in st.calcCriteriaD" :key="mark">{{ mark }}</div></div></td>
+            <td class="uneditable">{{ st.sumCriteria }}/{{ st.allCriteria }}</td>
+            <td class="uneditable">{{ st.criteriaFinalMark }}</td>
+            <td class="uneditable"></td>
+            <td class="uneditable">{{ st.finalGrade }}</td>
           </tr>
           <tr>
-            <td>
-              <!-- <input type="text" class="input-table" v-model="criterionA"> -->
-              <div>{{ getMarkForStudent(st, 'criterion_a') }}</div>
+            <td class="editable">
+              <input type="text" class="table-input" v-model="currentAssess.criterion_a">
+              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'criterion_a') }}</div>
             </td>
-            <td>
-              <!-- <input type="text" class="input-table" v-model="criterionB"> -->
-              <div>{{ getMarkForStudent(st, 'criterion_b') }}</div>
+            <td class="editable">
+              <input type="text" class="table-input" v-model="currentAssess.criterion_b">
+              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'criterion_b') }}</div>
             </td>
-            <td>
-              <!-- <input type="text" class="input-table" v-model="criterionC"> -->
-              <div>{{ getMarkForStudent(st, 'criterion_c') }}</div>
+            <td class="editable">
+              <input type="text" class="table-input" v-model="currentAssess.criterion_c">
+              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'criterion_c') }}</div>
             </td>
-            <td>
-              <!-- <input type="text" class="input-table" v-model="criterionD"> -->
-              <div>{{ getMarkForStudent(st, 'criterion_d') }}</div>
+            <td class="editable">
+              <input type="text" class="table-input" v-model="currentAssess.criterion_d">
+              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'criterion_d') }}</div>
             </td>
-            <td>
-              <!-- <input type="text" class="input-table" v-model="sumGrade"> -->
-              <div>{{ getMarkForStudent(st, 'sum_grade') }}</div>
+            <td class="uneditable">
+              {{ calcSumAssessmentMarks(st) }}
             </td>
-            <td>
-              <!-- <input type="text" class="input-table" v-model="formGrade"> -->
-              <div>{{ getMarkForStudent(st, 'form_grade') }}</div>
+            <td class="editable">
+              <input type="text" class="table-input" v-model="currentAssess.summ_grade">
+              <div class="table-text" @click="(event) => setEditField(event, st)" :title="getStudentCriteriaMarksResult(st)">{{ getMarkForStudent(st, 'summ_grade') }}</div>
             </td>
-            <td>
-              <!-- <input type="text" class="input-table" v-model="finalGrade"> -->
-              <div>{{ getMarkForStudent(st, 'final_grade') }}</div>
+            <td class="editable">
+              <input type="text" class="table-input" v-model="currentAssess.form_grade">
+              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'form_grade') }}</div>
+            </td>
+            <td class="editable">
+              <input type="text" class="table-input" v-model="currentAssess.final_grade">
+              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'final_grade') }}</div>
             </td>
           </tr>
         </template>
@@ -103,7 +106,7 @@ export default {
   },
   setup(props) {
     // Получение функции запроса данных студентов
-    const { students, getStudentsData } = getStudents();
+    const { students, calcFinalCriteriaMarks, getStudentsData } = getStudents();
     const { queryGroup, filteredStudentsByGroup } = filterStudentsByGroup(students);
     // Получение функции запроса данных итоговых оценок студентов
     const { periodAssess, getPeriodAssessData } = getPeriodAssess();
@@ -111,7 +114,7 @@ export default {
     const { groupedArrayData } = getGroupedArray();
     const { currentPeriod, currentYear, currentSubject, currentGroups, getAssssmentJournalData } = getAssessmentJournal();
     return {
-      students, getStudentsData,
+      students, calcFinalCriteriaMarks, getStudentsData,
       queryGroup, filteredStudentsByGroup,
       periodAssess, getPeriodAssessData,
       sumWorks, getSumWorkData,
@@ -121,68 +124,112 @@ export default {
   },
   data() {
     return {
-      
+      currentAssess: {},
     }
   },
   methods: {
-    getCriterionMarkForStudent(student, letter) {
-      const marks = student.workgroups.map(item => {
-        const list_ = item.criteria_marks.filter(cm => cm.criterion.letter == letter).map(cm => cm.mark)
-        return list_.toString()
-      })
-      return marks.filter(item => item).map(item => Number(item))
-    },
-    getAverage(numbers) {
-      if (numbers.length) {
-        const sum = numbers.reduce((acc, number) => acc + number, 0);
-        const length = numbers.length;
-        return sum / length;
-      } 
-      return 0;
-    },
-    getListStudentMarks(student) {
-      const marksA = this.getCriterionMarkForStudent(student, 'A');
-      const marksB = this.getCriterionMarkForStudent(student, 'B');
-      const marksC = this.getCriterionMarkForStudent(student, 'C');
-      const marksD = this.getCriterionMarkForStudent(student, 'D');
-      const listMarks = [marksA, marksB, marksC, marksD]
-      const listAverageMarks = listMarks.map(item => this.getAverage(item))
-      return listAverageMarks
-    },
-    calcSumStudentMarks(student) {
-      const listAverageMarks = this.getListStudentMarks(student);
-      const sumMarks = listAverageMarks.reduce((acc, number) => acc + number, 0);
-      const sumAll = listAverageMarks.filter(item => item != 0).length * 8
-      if (sumAll) {
-        return `${sumMarks}/${sumAll}`;
+    calcSumAssessmentMarks(student) {
+      const assessment = this.periodAssess.find(item => item.student.id == student.id)
+      if (assessment) {
+        const listAssessmentMarks = [assessment.criterion_a, assessment.criterion_b, assessment.criterion_c, assessment.criterion_d]
+        const sumMarks = listAssessmentMarks.reduce((acc, number) => acc + number, 0);
+        const sumAll = listAssessmentMarks.filter(item => item != 0 && item != null).length * 8;
+        if (sumAll) {
+          return `${sumMarks}/${sumAll}`;
+        }
       }
       return '-'
     },
-    calcStudentCriteriaMarks(student) {
-      const grades = {1: [3, 5, 7], 2: [6, 10, 14], 3: [8, 14, 20], 4: [11, 19, 28]};
-      const listMarks = this.getListStudentMarks(student);
-      const sumMarks = listMarks.reduce((acc, number) => acc + number, 0);
-      const numMarks = listMarks.filter(item => item != 0).length
-      if (!numMarks) {
-        return '-'
-      } else if (sumMarks >= grades[numMarks][2]) {
-        return 5
-      } else if (sumMarks < grades[numMarks][2] && sumMarks >= grades[numMarks][1]) {
-        return 4
-      } else if (sumMarks < grades[numMarks][1] && sumMarks >= grades[numMarks][0]) {
-        return 3
-      } else if (sumMarks < grades[numMarks][0] && sumMarks > 0) {
-        return 2
-      } else {
-        return '-'
+    getStudentCriteriaMarksResult(student) {
+      const assessment = this.periodAssess.find(item => item.student.id == student.id)
+      if (assessment) {
+        const listAssessmentMarks = [assessment.criterion_a, assessment.criterion_b, assessment.criterion_c, assessment.criterion_d]
+        const sumMarks = listAssessmentMarks.reduce((acc, number) => acc + number, 0);
+        const numMarks = listAssessmentMarks.filter(item => item != 0 && item != null).length;
+        if (numMarks) {
+          return this.calcFinalCriteriaMarks(sumMarks, numMarks);
+        }
       }
+      return '-'
+    },
+    getStudentFinalMarkPredict() {
+      
+    },
+    getStudentFinalMarkResult() {
+
     },
     getMarkForStudent(student, field) {
       const criterionMark = this.periodAssess.find(item => item.student.id == student.id)
-      if (criterionMark) {
+      if (criterionMark && criterionMark[field]) {
         return criterionMark[field]
       } else {
         return "-"
+      }
+    },
+    setEditField(event, student) {
+      let textElement = event.target
+      let inputElement = event.target.parentElement.firstChild
+      inputElement.value = textElement.textContent
+      textElement.style.display = 'none';
+      inputElement.style.display = 'block';
+      inputElement.focus();
+      inputElement.select();
+      // Функция для сохранения изменённых данных в ячейке
+      const saveData = () => {
+        const assess = this.periodAssess.find(item => item.student.id == student.id)
+        if (assess) {
+          this.setStudentGradeEdit(assess);
+        } else {
+          this.setStudentGradeAdd(student);
+        }
+        textElement.style.display = 'block';
+        inputElement.style.display = 'none';
+      }
+      // Функция для отмены сохранения изменённых данных в ячейке
+      const cancelData = () => {
+        textElement.style.display = 'block';
+        inputElement.style.display = 'none';
+        this.currentAssess = {};
+      }
+      // Привязка функций к событиям потери фокуса и нажатию на Enter
+      inputElement.onblur = cancelData;
+      inputElement.onkeypress = (e) => {
+        if (e.key === "Enter") { saveData() }
+        if (e.key === "Escape") { cancelData() }
+      };
+    },
+    setStudentGradeEdit(assess) {
+      if (Object.keys(this.currentAssess).length) {
+        console.log("Запрос на изменение данных: ", this.currentAssess);
+        this.axios.put(`/assessment/periodassess/${assess.id}`, this.currentAssess).then((response) => {
+          this.getPeriodAssessData({
+            year: this.$route.params.id_year, 
+            period: this.$route.params.id_period,
+            subject: this.$route.params.id_subject
+          });
+          console.log('Оценка успешно обновлена');
+        }).finally(() => {
+          this.currentAssess = {};
+        });
+      }
+    },
+    setStudentGradeAdd(student) {
+      if (Object.keys(this.currentAssess).length) {
+        this.currentAssess.student_id = student.id;
+        this.currentAssess.subject_id = this.$route.params.id_subject;
+        this.currentAssess.period_id = this.$route.params.id_period;
+        this.currentAssess.year_id = this.$route.params.id_year;
+        console.log("Запрос на Добавление данных: ", this.currentAssess);
+        this.axios.post(`/assessment/periodassess`, this.currentAssess).then((response) => {
+          this.getPeriodAssessData({
+            year: this.$route.params.id_year, 
+            period: this.$route.params.id_period,
+            subject: this.$route.params.id_subject,
+          });
+          console.log('Оценка успешно выставлена');
+        }).finally(() => {
+          this.currentAssess = {};
+        });
       }
     },
   },
@@ -219,32 +266,30 @@ export default {
 </script>
 
 <style scoped>
-/* table {
-  width: 100%;
-  height: auto;
-  border-collapse: collapse;
-  margin: 20px 0px 8px;
-}
-
-td {
-  padding: 5px;
-  padding-right: 10px;
-  border: 1px solid black;
-}
-
-th {
-  padding: 10px;
-  border: 1px solid black;
-} */
 .criterion-mark {
   display: flex;
 }
-.criterion-mark-item {
+.criterion-mark.item {
   padding: 3px;
   border-radius: 3px;
-  background: #d7f1f1;
 }
-.criterion-mark-item:not(:last-of-type) {
+.item.cr-a{
+  background: #c7735e;
+  color: #fff;
+}
+.item.cr-b{
+  background: #c7c55e;
+  color: #fff;
+}
+.item.cr-c{
+  background: #2cb801;
+  color: #fff;
+}
+.item.cr-d{
+  background: #ae5ec7;
+  color: #fff;
+}
+.criterion-mark.item:not(:last-of-type) {
   margin-right: 3px;
 }
 .list-criteria {
@@ -261,7 +306,24 @@ th {
   margin: 10px 0px 0px;
 }
 
-.input-table {
-  background: #d7f1f1;
+.table-input {
+  border: none;
+  display: none;
+  width: 25px;
+}
+.table-text {
+  cursor: pointer;
+}
+table .uneditable {
+  background-color: #d9fafa;
+  vertical-align: middle;
+  text-align: center;
+  min-width: 20px;
+}
+table .editable {
+  background-color: #ffffff;
+  font-weight: 500;
+  text-align: center;
+  min-width: 20px;
 }
 </style>

@@ -125,7 +125,7 @@ class PeriodAssessment(models.Model):
     criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True)
     criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True)
     criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True)
-    summ_grade = models.DecimalField(verbose_name=_("Оценка за итоговые работы"), max_digits=3, decimal_places=2, default=0)
+    summ_grade = models.SmallIntegerField(verbose_name=_("Оценка за итоговые работы"), default=None, null=True)
     form_grade = models.DecimalField(verbose_name=_("Оценка за текущие работы"), max_digits=3, decimal_places=2, default=0)
     final_grade = models.SmallIntegerField(verbose_name=_("Итоговая оценка"), default=0)
     class Meta:
