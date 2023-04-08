@@ -5,19 +5,25 @@
 ```
 git clone https://ASemochkin@scm.sk.ru/scm/gym/freshstream.git
 ```
-### Запуск СУБД (через Docker, выполняет один раз после клонирования репозитория)
+### Запуск СУБД
+Выполняется через Docker один раз после клонирования репозитория
 1. Установить Docker Desktop (https://www.docker.com/products/docker-desktop/)
 2. Запустить Docker Desktop и в поиске ввести *postgres*
 3. Перейти на вкладку Images, выбрать верхний найденный образ *postgres* и нажать RUN
 4. В выпадающем списке Optional settings указать внешний порт (0 - для генерации случайного), тома хранения данных (volumes), переменные окружения (environment variables). Используются следующие данные:
+
 Host port: 32770
 Volumes:
+
 - Host path: postgres
 - Container path: /var/lib/postgresql/data/
+
 Environment variables:
+
 - POSTGRES_DB=igskolkovo
 - POSTGRES_USER=igadmin
 - POSTGRES_PASSWORD=Pox{@K
+
 5. Нажать *RUN*
 
 ### Запуск backend
@@ -26,14 +32,16 @@ Environment variables:
 cd backend
 ```
 2. Запустить стартовые команды
-Для операционной системы MacOS:
+
+- Для операционной системы MacOS:
 ```
 source run_mac.command
 ```
-Для операционной системы Windows:
+- Для операционной системы Windows:
 ```
 run_win.bat
 ```
+
 3. В случае необходимости взаимодействия с Django необходимо завершить работу сервера (Ctrl + C) и выполнить команды.
 Для подготовки и миграции данных:
 ```
