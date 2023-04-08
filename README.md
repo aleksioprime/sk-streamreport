@@ -13,6 +13,7 @@ git clone https://ASemochkin@scm.sk.ru/scm/gym/freshstream.git
 4. В выпадающем списке Optional settings указать внешний порт (0 - для генерации случайного), тома хранения данных (volumes), переменные окружения (environment variables). Используются следующие данные:
 
 Host port: 32770
+
 Volumes:
 
 - Host path: postgres
