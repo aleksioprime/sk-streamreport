@@ -51,7 +51,13 @@ python manage.py migrate
 ```
 Для импорта данных из фикстур в формате json:
 ```
+python manage.py loaddata data.json
 python manage.py loaddata --exclude contenttypes ../data/fixtures/data.json
+```
+Для экспорта данных в фикстуры в формате json:
+```
+python manage.py dumpdata > data.json 
+python -Xutf8 manage.py dumpdata > data.json 
 ```
 Для запуска сервера:
 ```
