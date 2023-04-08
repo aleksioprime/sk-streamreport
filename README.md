@@ -44,6 +44,7 @@ run_win.bat
 ```
 
 3. В случае необходимости взаимодействия с Django необходимо завершить работу сервера (Ctrl + C) и выполнить команды.
+
 Для подготовки и миграции данных:
 ```
 python manage.py makemigrations
@@ -62,6 +63,22 @@ python -Xutf8 manage.py dumpdata > data.json
 Для запуска сервера:
 ```
 python manage.py runserver
+```
+При первом запуске (находясь в терминале в папке backend проекта) необходимо создать виртуальную среду Python (используется версия 3.7.9) по пути **C:\venv\freshstream** для Windows или **~/venv/freshstream** для MacOS и установить необходимые библиотеки для Python.
+
+Для MacOS:
+```
+pip3 install virtualenv
+python3 -m venv ~/venv/freshstream
+source ~/venv/freshstream/bin/activate
+pip3 install -r requirements.txt
+```
+Для Windows:
+```
+pip install  virtualenv
+python -m venv C:\venv\freshstream
+C:\venv\freshstream\Scripts\activate.bat
+pip install -r requirements.txt
 ```
 ### Запуск frontend
 1. Открыть терминал и перейти в каталог frontend проекта
