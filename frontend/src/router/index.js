@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import UserLogin from '@/views/UserLogin.vue'
+import EmployeeBoard from '@/views/EmployeeBoard.vue'
+import StudentBoard from '@/views/StudentBoard.vue'
+
 import DashBoard from '@/views/DashBoard.vue'
 import UnitList from '@/views/UnitList.vue'
 import UnitMYPView from '@/views/UnitMYPView.vue'
@@ -33,6 +36,16 @@ const routes = [
     path: '/user',
     name: 'userlist',
     component: UserList
+  },
+  {
+    path: '/student',
+    name: 'student',
+    component: StudentBoard
+  },
+  {
+    path: '/employee',
+    name: 'employee',
+    component: EmployeeBoard
   },
   {
     path: '/assessment',

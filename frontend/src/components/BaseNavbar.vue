@@ -15,9 +15,10 @@
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Администрирование
             </a>
-            <ul class="dropdown-menu">
-              <router-link to="/user" class="dropdown-item">Пользователи</router-link>
-            </ul>
+            <div class="dropdown-menu">
+              <router-link to="/employee" class="dropdown-item">Сотрудники</router-link>
+              <router-link to="/student" class="dropdown-item">Студенты</router-link>
+            </div>
           </li>
           <li class="nav-item">
             <router-link to="/unit" class="nav-link" aria-current="page">Юниты</router-link>

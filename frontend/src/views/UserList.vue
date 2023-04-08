@@ -161,7 +161,7 @@ export default {
   methods: {
     // Запрос пользователей по выбранной роли
     refreshUsers() {
-      this.getUserData(this.queryRole);
+      this.getUserData({ role: this.queryRole });
     },
     // Получение результатов валидации из компонента с формой
     validFormResult(value) {
@@ -317,7 +317,7 @@ export default {
     window.addEventListener('keydown', this.unSelectUser);
     document.addEventListener('click', this.unSelectUser);
     // Запросы данных при загрузке страницы
-    this.getUserData(this.queryRole);
+    this.getUserData({ role: this.queryRole });
     this.getRolesData();
   },
   computed: {

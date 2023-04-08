@@ -7,7 +7,7 @@ from assess.models import ClassGroup
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import jwt, openpyxl
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import get_object_or_404
 from django.conf import settings
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -18,6 +18,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
 from django.contrib.auth.hashers import make_password
 import csv
+import jwt, openpyxl
 import pandas as pd
 from django.forms.models import model_to_dict
 from datetime import datetime
@@ -55,16 +56,22 @@ class ClassGroupViewSet(viewsets.ReadOnlyModelViewSet):
         # добавить фильтрацию по текущему учебному году
         return ClassGroup.objects.filter(study_year=1)
 
+class UsersSetPagination(PageNumberPagination):
+    page_size = 15
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
 # Набор CRUD-методов для работы с моделью Пользователи
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    pagination_class = UsersSetPagination
     def get_queryset(self):
         role = self.request.query_params.get("role", None)
         users = User.objects.all()
         if role:
-            users = users.filter(role__in=role)
+            users = users.filter(role__in=role.split(','))
         return users
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
