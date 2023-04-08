@@ -10,7 +10,7 @@ git clone https://ASemochkin@scm.sk.ru/scm/gym/freshstream.git
 1. Установить Docker Desktop (https://www.docker.com/products/docker-desktop/)
 2. Запустить Docker Desktop и в поиске ввести *postgres*
 3. Перейти на вкладку Images, выбрать верхний найденный образ *postgres* и нажать RUN
-4. В выпадающем списке Optional settings указать внешний порт (0 - для генерации случайного), тома хранения данных (volumes), переменные окружения (environment variables). Используются следующие данные:
+4. В выпадающем списке Optional settings указать порт (Host port), тома хранения данных (Volumes), переменные окружения (Environment variables). Используются следующие данные:
 
 Host port: 32770
 
