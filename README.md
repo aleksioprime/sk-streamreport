@@ -53,7 +53,7 @@ python manage.py migrate
 Для импорта данных из фикстур в формате json:
 ```
 python manage.py loaddata data.json
-python manage.py loaddata --exclude contenttypes ../data/fixtures/data.json
+python manage.py loaddata --exclude auth.permission --exclude contenttypes ../data/fixtures/data.json
 ```
 Для экспорта данных в фикстуры в формате json:
 ```
@@ -75,7 +75,7 @@ pip3 install -r requirements.txt
 ```
 Для Windows:
 ```
-pip install  virtualenv
+pip install virtualenv
 python -m venv C:\venv\freshstream
 C:\venv\freshstream\Scripts\activate.bat
 pip install -r requirements.txt
@@ -85,7 +85,7 @@ pip install -r requirements.txt
 ```
 cd frontend
 ```
-При первом запуске после клонирования репозитория необходимо установить окружение npm:
+При первом запуске после клонирования репозитория необходимо установить Node.js (https://nodejs.org/en) и выполнить команду:
 ```
 npm install
 ```

@@ -99,9 +99,9 @@
 </template>
 
 <script>
-import UserForm from "@/components/UserForm.vue";
-import UserImportForm from "@/components/UserImportForm.vue";
-import UserItem from "@/components/UserItem";
+import UserForm from "@/components/UserForm";
+import UserImportForm from "@/components/user/UserImportForm";
+import UserItem from "@/components/user/UserItem";
 import { Modal } from 'bootstrap';
 
 import { getUsers, getRoles, getGroups } from "@/hooks/user/getUserData";
@@ -359,7 +359,7 @@ export default {
   margin-left: 5px;
 }
 
-.img-btn-photo {
+/* .img-btn-photo {
   background: url('@/assets/img/photo-btn.png') no-repeat 50%;
   background-size: 100%;
 }
@@ -367,7 +367,7 @@ export default {
 .img-btn-pass {
   background: url('@/assets/img/password-btn.png') no-repeat 50%;
   background-size: 100%;
-}
+} */
 .img-btn-import {
   background: url('@/assets/img/import-btn.png') no-repeat 50%;
   background-size: 100%;

@@ -16,10 +16,11 @@ class StudyYear(models.Model):
 class ClassGroup(models.Model):
     """ Учебные классы """
     study_year = models.ForeignKey('assess.StudyYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, 
-                                   null=True, blank=True, related_name="classgroup")
+                                   null=True, blank=True, related_name="group")
     class_year = models.PositiveSmallIntegerField(verbose_name=_("Год обучения"), default=1)
     letter = models.CharField(max_length=1, verbose_name=_("Литера класса"), null=True, blank=True)
     id_dnevnik = models.CharField(max_length=255, verbose_name=_('ID системы Дневник.РУ'), blank=True, null=True)
+    students = models.ManyToManyField('member.ProfileStudent', verbose_name=_("Год обучения"), blank=True, related_name="groups")
     class Meta:
         verbose_name = 'Учебный класс'
         verbose_name_plural = 'Учебные классы'

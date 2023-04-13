@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
 from django.contrib.auth.hashers import make_password
+from django.db.models import Q
 import csv
 import jwt, openpyxl
 import pandas as pd
@@ -69,9 +70,14 @@ class UserViewSet(viewsets.ModelViewSet):
     pagination_class = UsersSetPagination
     def get_queryset(self):
         role = self.request.query_params.get("role", None)
+        search = self.request.query_params.get("search", None)
         users = User.objects.all()
-        if role:
-            users = users.filter(role__in=role.split(','))
+        if role == 'teacher':
+            users = users.filter(teacher__isnull=False)
+        if role == 'student':
+            users = users.filter(student__isnull=False)
+        if search:
+            users = users.filter(Q(first_name__icontains=search) | Q(last_name__icontains=search))
         return users
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)

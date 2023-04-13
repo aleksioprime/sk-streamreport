@@ -27,11 +27,26 @@ class StudyYearSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudyYear
         fields = '__all__'
-        
+
 class ClassGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClassGroup
-        fields = '__all__'
+        fields = ['id', 'class_year', 'letter', 'id_dnevnik']
+    def update(self, instance, validated_data):
+        print('Валидированные данные: ', validated_data)
+        return super().update(instance, validated_data)
+    
+class ClassGroupExtraSerializer(serializers.ModelSerializer):
+    students = ProfileStudentSerializer(many=True, read_only=True)
+    class Meta:
+        model = ClassGroup
+        fields = ['id', 'class_year', 'letter', 'id_dnevnik', 'students', 'students_ids']
+        extra_kwargs = {
+            'students_ids': {'source': 'students', 'write_only': True},
+        }
+    def update(self, instance, validated_data):
+        print('Валидированные данные: ', validated_data)
+        return super().update(instance, validated_data)
 
 class StudyPeriodSerializer(serializers.ModelSerializer):
     study_year = StudyYearSerializer()

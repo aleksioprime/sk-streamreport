@@ -19,24 +19,20 @@ class ClassGroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProfileStudentSerializer(serializers.ModelSerializer):
-    group = ClassGroupSerializer(read_only=True)
     class Meta:
         model = ProfileStudent
-        fields = ['id', 'id_dnevnik', 'group', 'group_id']
-        extra_kwargs = {
-            'group_id': {'source': 'group', 'write_only': True}
-        }
+        fields = ['id', 'id_dnevnik']
 
 class ProfileTeacherSerializer(serializers.ModelSerializer):
     units = UnitMYPSerializerListCreate(source='unitplan_myp', many=True, read_only=True)
     class Meta:
         model = ProfileTeacher
-        fields = ['id', 'id_dnevnik', 'units']
+        fields = ['id', 'id_dnevnik', 'units', 'position', 'admin']
 
 class UserSerializer(serializers.ModelSerializer):
     role = RoleSerializer(many=True, read_only=True)
-    student = ProfileStudentSerializer()
-    teacher = ProfileTeacherSerializer()
+    student = ProfileStudentSerializer(required=False)
+    teacher = ProfileTeacherSerializer(required=False)
     class Meta:
         model = User
         fields = ["id", "id_str", "username", "email", "first_name", "middle_name", 
@@ -65,30 +61,22 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data.get('password'))
         user.save()
-        user.role.set(validated_data.get('role'))
-        roles_list = [x.id for x in validated_data.get('role')]
-        print(roles_list)
-        print('Создан пользователь: ', user)
-        if 1 in roles_list:
-            student = ProfileStudent.objects.create(user=user, **validated_data.get('student'))
-            print('Создан студент: ', student)
-        if 2 in roles_list:
+        if 'teacher' in validated_data:
             teacher = ProfileTeacher.objects.create(user=user, **validated_data.get('teacher'))
-            print('Создан учитель: ', teacher)
+            print('Создан учитель:', teacher)
+        if 'student' in validated_data:
+            print("Добавление студента")
+            student = ProfileStudent.objects.create(user=user, **validated_data.get('student'))
+            print('Создан студент:', student)
         return user
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
-        roles_list = [x.id for x in validated_data.get('role')]
-        if 1 in roles_list:
+        if 'student' in validated_data:
             ProfileStudent.objects.update_or_create(user=instance, defaults=dict(validated_data.get('student')))
-        else:
-            ProfileStudent.objects.filter(user=instance).delete()
-        if 2 in roles_list:
+            validated_data.pop('student')
+        if 'teacher' in validated_data:
             ProfileTeacher.objects.update_or_create(user=instance, defaults=dict(validated_data.get('teacher')))
-        else:
-            ProfileTeacher.objects.filter(user=instance).delete()
-        validated_data.pop('teacher')
-        validated_data.pop('student')
+            validated_data.pop('teacher')
         return super().update(instance, validated_data)
 
 class UserImportSerializer(serializers.ModelSerializer):

@@ -37,7 +37,6 @@ class User(AbstractUser):
     gender = models.CharField(max_length=1, verbose_name=_("Пол"), choices=GENDER_CHOICES, default='O', null=True, blank=True)
     photo = models.ImageField(upload_to="member_photos", blank=True, verbose_name=_("Фотография"), null=True)
     role = models.ManyToManyField('member.RoleUser', verbose_name=_("Роли пользователя"), blank=True, related_name="role_user")
-    position = models.CharField(max_length=255, verbose_name=_("Должность"), blank=True, null=True)
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
@@ -60,14 +59,12 @@ class ProfileStudent(models.Model):
                                 blank=True, null=True, on_delete=models.SET_NULL)
     short_name = models.CharField(max_length=32, verbose_name=_("Студент"), null=True, blank=True)
     id_dnevnik = models.CharField(verbose_name=_('ID системы Дневник.РУ'), max_length=40, blank=True, null=True)
-    group = models.ForeignKey('assess.ClassGroup', verbose_name=_("Класс"), on_delete=models.SET_NULL,
-                              null=True, blank=True, related_name="student")
     class Meta:
         verbose_name = 'Профиль студента'
         verbose_name_plural = 'Профили студентов'
-        ordering = ['group', 'user']
+        ordering = ['user']
     def __str__(self):
-        return '{} - {}'.format(self.group, self.user)
+        return '{}'.format(self.user)
     def save(self, *args, **kwargs):
         if not self.short_name:
             if self.user:
@@ -80,8 +77,8 @@ class ProfileTeacher(models.Model):
                                 blank=True, null=True, on_delete=models.CASCADE)
     short_name = models.CharField(max_length=32, verbose_name=_("Учитель"), null=True, blank=True)
     id_dnevnik = models.CharField(verbose_name=_('ID системы Дневник.РУ'), max_length=40, blank=True, null=True)
-    # departments = models.ManyToManyField('member.Department', verbose_name=_("Отдел"),
-    #                                   blank=True, related_name="teacher")
+    position = models.CharField(max_length=255, verbose_name=_("Должность"), blank=True, null=True)
+    admin = models.BooleanField(verbose_name=_("Администрация"),null=True, default=False)
     class Meta:
         verbose_name = 'Профиль учителя'
         verbose_name_plural = 'Профили учителей'

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from assess.serializers import StudyYearSerializer, ClassGroupSerializer, StudyPeriodSerializer, SummativeWorkSerializer, \
+from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassGroupExtraSerializer,  StudyPeriodSerializer, SummativeWorkSerializer, \
     WorkAssessmentSerializer, WorkCriteriaMarkSerializer, ProfileStudentSerializer, WorkGroupDateItemSerializer, \
     PeriodAssessmentSerializer, StudentWorkSerializer
 from curriculum.serializers import ClassYearSerializer, SubjectSerializer      
@@ -19,7 +19,12 @@ class StudyYearViewSet(viewsets.ModelViewSet):
 
 class ClassGroupViewSet(viewsets.ModelViewSet):
     queryset = ClassGroup.objects.all()
-    serializer_class = ClassGroupSerializer
+    # serializer_class = ClassGroupSerializer
+    default_serializer_class = ClassGroupSerializer
+    serializer_classes = {
+        'retrieve': ClassGroupExtraSerializer,
+        'update': ClassGroupExtraSerializer,
+    }
     def get_queryset(self):
         grade = self.request.query_params.get("grade", None)
         groups = ClassGroup.objects.all()
@@ -28,6 +33,9 @@ class ClassGroupViewSet(viewsets.ModelViewSet):
             groups = groups.filter(class_year=grade)
         print(f"Ответ от сервера: {groups}")
         return groups
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
+
 
 # Набор CRUD-методов для работы с моделью Студенты
 class StudentViewSet(viewsets.ModelViewSet):

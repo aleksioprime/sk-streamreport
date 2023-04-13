@@ -164,7 +164,7 @@ export default {
     },
     sumWorkCreate() {
       this.$refs.assessmentForm.checkFieldsValidate();
-      this.validForm = true
+      // this.validForm = true
       if (this.validForm) {
         console.log("Запрос на создание итоговой работы: ", this.currentAssess);
         this.axios.post('assessment/sumwork', this.currentAssess).then((response) => {

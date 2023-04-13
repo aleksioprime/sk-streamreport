@@ -11,10 +11,11 @@ import FieldCheckboxEdit from "@/components/UI/FieldCheckboxEdit";
 import FieldListView from "@/components/UI/FieldListView";
 import FieldRadioEdit from "@/components/UI/FieldRadioEdit";
 import BaseHeader from "@/components/UI/BaseHeader";
+import BasePagination from "@/components/UI/BasePagination";
 
 
 export default [
     ModalUser, ModalUnit, UnitField, FieldTextEdit, FieldSelectEdit,
     FieldTextAreaEdit, FieldCheckboxEdit, FieldListView, FieldRadioEdit,
-    ModalDelete, BaseHeader, ModalAssess, ModalClass
+    ModalDelete, BaseHeader, ModalAssess, ModalClass, BasePagination
 ];

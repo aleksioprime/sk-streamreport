@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import UserLogin from '@/views/UserLogin.vue'
 import EmployeeBoard from '@/views/EmployeeBoard.vue'
 import StudentBoard from '@/views/StudentBoard.vue'
+import GroupBoard from '@/views/GroupBoard.vue'
 
 import DashBoard from '@/views/DashBoard.vue'
 import UnitList from '@/views/UnitList.vue'
@@ -10,6 +11,7 @@ import UserList from '@/views/UserList.vue'
 import AssessList from '@/views/AssessList.vue'
 import AssessWorkView from '@/views/AssessWorkView.vue'
 import AssessPeriodView from '@/views/AssessPeriodView.vue'
+import ReportList from '@/views/ReportList.vue'
 
 const routes = [
   {
@@ -48,6 +50,11 @@ const routes = [
     component: EmployeeBoard
   },
   {
+    path: '/group',
+    name: 'group',
+    component: GroupBoard
+  },
+  {
     path: '/assessment',
     name: 'assesslist',
     component: AssessList,
@@ -61,6 +68,11 @@ const routes = [
     path: '/assessment/year/:id_year/period/:id_period/subject/:id_subject',
     name: 'assessperiodview',
     component: AssessPeriodView,
+  },
+  {
+    path: '/report',
+    name: 'report',
+    component: ReportList,
   },
 ]
 

@@ -6,7 +6,8 @@ from assess.views import StudyYearViewSet, ClassGroupViewSet, StudyPeriodViewSet
 urlpatterns = [
     path('student', StudentViewSet.as_view({'get': 'list'})),
     path('assessment/year', StudyYearViewSet.as_view({'get': 'list'})),
-    path('assessment/group', ClassGroupViewSet.as_view({'get': 'list'})),
+    path('assessment/group', ClassGroupViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('assessment/group/<int:pk>', ClassGroupViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
     path('assessment/period', StudyPeriodViewSet.as_view({'get': 'list'})),
     path('assessment/student', StudentWorkViewSet.as_view({'get': 'list'})),
     path('assessment/sumwork', SummativeWorkViewSet.as_view({'get': 'list', 'post': 'create'})),

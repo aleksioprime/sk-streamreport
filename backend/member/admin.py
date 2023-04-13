@@ -23,7 +23,7 @@ class DepartmentAdmin(ImportExportModelAdmin):
     
 @admin.register(ProfileStudent)
 class ProfileStudentAdmin(ImportExportModelAdmin):
-    list_display = ("user", "short_name", "id_dnevnik", "group")
+    list_display = ("user", "short_name", "id_dnevnik")
     
 @admin.register(ProfileTeacher)
 class ProfileTeacherAdmin(ImportExportModelAdmin):
