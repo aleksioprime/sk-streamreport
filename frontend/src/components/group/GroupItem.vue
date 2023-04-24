@@ -1,6 +1,10 @@
 <template>
-  <div class="d-flex py-1 px-1 group-item" @click="$emit('select', group)">
-    {{ group.class_year }}{{ group.letter }} класс
+  <div class="group-item" @click="$emit('select', group)">
+    <div>{{ group.class_year }}{{ group.letter }} класс</div>
+    <div class="btn-wrapper" v-if="showEditButton">
+      <button class="btn-icon img-edit" @click="$emit('update', group)"></button>
+      <button class="btn-icon img-delete" @click="$emit('delete', group)"></button>
+    </div>
   </div>
 </template>
 
@@ -10,6 +14,10 @@ export default {
     group: {
       type: Object,
       required: true,
+    },
+    showEditButton: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
@@ -26,16 +34,34 @@ export default {
 <style>
 .group-item {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 5px;
 }
 .group-item:hover {
   background-color: azure;
 }
-.icon-admin {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 10px;
-  height: 10px;
-  background: red;
+.btn-wrapper {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.btn-icon {
+  border: none;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.btn-icon:not(:last-of-type) {
+  margin-right: 5px;
+}
+.btn-icon:hover {
+  transform: scale(1.1);
+}
+.img-edit {
+  background: url('@/assets/img/item-edit.png') no-repeat 50% / 90%;
+}
+.img-delete {
+  background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
 }
 </style>

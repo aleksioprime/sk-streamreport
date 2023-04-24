@@ -40,15 +40,17 @@ export function retrieveGroup() {
 }
 
 export function createGroup() {
+  const addedGroup = ref({});
   const fetchCreateGroup = async (group) => {
     await axiosAPI.post('/assessment/group', group).then((response) => {
       console.log('Группа успешно добавлена');
+      addedGroup.value = response.data;
     }).catch((error) => {
       console.log('Ошибка запроса: ', error);
     });
   };
   return {
-    fetchCreateGroup
+    addedGroup, fetchCreateGroup
   }
 }
 
@@ -69,7 +71,7 @@ export function updateGroup() {
 
 export function deleteGroup() {
   const fetchDeleteGroup = async (group) => {
-    await axiosAPI.delete(`/assessment/group/${group.id}`, user).then((response) => {
+    await axiosAPI.delete(`/assessment/group/${group}`).then((response) => {
       console.log('Группа успешно удалена');
     }).catch((error) => {
       console.log('Ошибка запроса: ', error);

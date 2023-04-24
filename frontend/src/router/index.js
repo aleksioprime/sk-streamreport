@@ -7,7 +7,7 @@ import GroupBoard from '@/views/GroupBoard.vue'
 import DashBoard from '@/views/DashBoard.vue'
 import UnitList from '@/views/UnitList.vue'
 import UnitMYPView from '@/views/UnitMYPView.vue'
-import UserList from '@/views/UserList.vue'
+// import UserList from '@/views/UserList.vue'
 import AssessList from '@/views/AssessList.vue'
 import AssessWorkView from '@/views/AssessWorkView.vue'
 import AssessPeriodView from '@/views/AssessPeriodView.vue'
@@ -34,11 +34,11 @@ const routes = [
     name: 'unitmypview',
     component: UnitMYPView,
   },
-  {
-    path: '/user',
-    name: 'userlist',
-    component: UserList
-  },
+  // {
+  //   path: '/user',
+  //   name: 'userlist',
+  //   component: UserList
+  // },
   {
     path: '/student',
     name: 'student',

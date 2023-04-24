@@ -6,6 +6,7 @@
     <!-- Кнопки добавления, редактирования, удаления пользователей -->
     <div class="btn-wrapper sticky-top">
       <button class="btn btn-primary my-3" @click="showAddUser">Добавить студента</button>
+      <button class="btn-icon img-import ms-2" type="button" @click="showImportUser"></button>
       <div v-if="currentUser.id && !flagUser.add" class="my-3 d-flex align-items-center ms-auto">
         <button type="button" class="btn-icon img-photo ms-2" @click="showEditPhoto"></button>
         <button type="button" class="btn-icon img-pass ms-2" @click="showEditPass"></button>
@@ -41,10 +42,11 @@
     </div>
     <!-- Модальное окно добавления/редактирования/удаления пользователя -->
     <modal-user :modalTitle="modalTitle" @cancel="hideUserModal" :flagUser="flagUser"
-      @create="userCreate" @update="userUpdate" @delete="userDelete">
+      @create="userCreate" @update="userUpdate" @delete="userDelete" @import="userImport">
       <template v-slot:body>
         <form-student ref="formStudent" v-if="flagUser.add || flagUser.edit" :addMode="flagUser.add"
           v-model:editedUser="editedUser" v-model:validFormStudent="validFormStudent" :currentYear="currentYear"/>
+        <form-import v-if="flagUser.import" v-model="newUsers" />
         <div v-if="flagUser.delete">
           <div>Вы действительно хотите удалить этого студента?</div>
           <div class="user-delete">
@@ -62,13 +64,14 @@
 import { Modal } from 'bootstrap';
 import { getUsers, createUser, updateUser, deleteUser } from "@/hooks/user/useUser";
 import { getGroups } from "@/hooks/user/useGroup";
+import FormImport from "@/components/user/FormImport";
 import UserList from "@/components/user/UserList";
 import FilterStudent from "@/components/user/FilterStudent";
 import FormStudent from "@/components/user/FormStudent";
 export default {
   name: 'StudentBoard',
   components: {
-    UserList, FilterStudent, FormStudent
+    UserList, FilterStudent, FormStudent, FormImport
   },
   setup(props) {
     const { users, isUserLoading, totalPages, totalUsers, fetchGetUsers } = getUsers();
@@ -93,6 +96,7 @@ export default {
       validFormStudent: false,
       searchValue: null,
       currentYear: null,
+      newUsers: [],
     }
   },
   methods: {
@@ -125,6 +129,12 @@ export default {
       this.modalTitle = "Удаление студента";
       this.editedUser = { ...this.currentUser }
       this.flagUser.delete = true;
+      this.modalUser.show();
+    },
+    // Открытие модального окна для импорта студентов
+    showImportUser() {
+      this.modalTitle = 'Импорт студентов';
+      this.flagUser.import = true;
       this.modalUser.show();
     },
     // Закрытие модального окна
@@ -168,6 +178,23 @@ export default {
         this.fetchGetUsers({ role: "student", page: this.currentPage, limit: this.limit });
       });
     },
+    // 
+    userImport() {
+      const data = {
+        'users_import': this.newUsers,
+        'users_role': 'student',
+      }
+      this.axios.post('/user/import', data)
+        .then((response) => {
+          console.log(response);
+          this.users = response.data;
+          this.currentUser = {};
+          this.userCancel();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     // Поиск студента по фамилии
     userSearch(search) {
       this.currentPage = 1;
@@ -184,6 +211,22 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @import '@/assets/css/spinner.css';
+
+.btn-icon {
+  border: none;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.btn-icon:hover {
+  transform: scale(1.2);
+}
+.img-delete {
+  background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
+}
+.img-import {
+  background: url('@/assets/img/item-import.png') no-repeat 50% / 90%;
+}
 </style>

@@ -1,13 +1,13 @@
 from xml.etree.ElementInclude import include
 from django.urls import path
-from member.views import UserAuth, DepartmentViewSet, RoleUserViewSet, ClassGroupViewSet, UserViewSet, \
+from member.views import UserAuth, DepartmentViewSet, ClassGroupViewSet, UserViewSet, \
     UserImportView, UserImportApply
 
 
 urlpatterns = [
     path('auth', UserAuth.as_view()),
     path('department', DepartmentViewSet.as_view({'get': 'list'})),
-    path('role', RoleUserViewSet.as_view({'get': 'list'})),
+    # path('role', RoleUserViewSet.as_view({'get': 'list'})),
     path('group', ClassGroupViewSet.as_view({'get': 'list'})),
     path('user/load', UserImportView.as_view()),
     path('user/import', UserImportApply.as_view()),

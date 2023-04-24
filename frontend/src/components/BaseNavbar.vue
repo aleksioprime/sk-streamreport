@@ -69,7 +69,7 @@ export default {
     // Проверка у текущего пользователя прав администратора
     checkAdmin() {
       if (this.authUser) {
-        return this.authUser.role.map(item => item.codename).includes('admin') || this.authUser.is_staff == true
+        return this.authUser.is_staff == true
       }
     },
   }

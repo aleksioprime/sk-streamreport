@@ -36,7 +36,7 @@ class User(AbstractUser):
     date_of_birth = models.DateField(max_length=10, verbose_name=_("Дата рождения"), null=True, blank=True)
     gender = models.CharField(max_length=1, verbose_name=_("Пол"), choices=GENDER_CHOICES, default='O', null=True, blank=True)
     photo = models.ImageField(upload_to="member_photos", blank=True, verbose_name=_("Фотография"), null=True)
-    role = models.ManyToManyField('member.RoleUser', verbose_name=_("Роли пользователя"), blank=True, related_name="role_user")
+    # role = models.ManyToManyField('member.RoleUser', verbose_name=_("Роли пользователя"), blank=True, related_name="role_user")
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
