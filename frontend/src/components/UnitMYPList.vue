@@ -3,7 +3,7 @@
     <!-- <div class="alert alert-danger"></div> -->
     <!-- Блок фильтрации юнитов MYP по подразделению и учителю -->
     <div class="row border-bottom mb-2">
-      <div class="col-md-5" v-if="checkAdmin">
+      <div class="col-md-5" v-if="isAdmin">
         <select id="department" class="form-select me-3 mb-2" v-model="queryDepartment" @change="refreshUnitByDepartment">
           <option :value="''" selected>Все подразделения</option>
           <option v-for="(department, i) in departments" :key="i" :value="department.id">
@@ -11,7 +11,7 @@
           </option>
         </select>
       </div>
-      <div class="col-md" v-if="checkAdmin">
+      <div class="col-md" v-if="isAdmin">
         <select id="teacher" class="form-select me-3 mb-2" v-model="queryTeacher" @change="refreshUnitByTeacher" :disabled="Boolean(querySubject)">
           <option :value="''" selected>Все учителя</option>
           <option v-for="(teacher, i) in teachers" :key="i" :value="teacher.id">
@@ -259,21 +259,15 @@ export default {
       }, {});
       return groupedObject;
     },
-    // Проверка у текущего пользователя прав администратора
-    checkAdmin() {
-      if (this.authUser) {
-        return this.authUser.role.map(item => item.codename).includes('admin') || this.authUser.is_staff == true
-      }
-    },
     subjectFilter() {
-      if (this.checkAdmin) {
+      if (this.isAdmin) {
         return this.subjectsFromDepartment
       } else {
         return this.subjectsFromTeacher(this.authUser)
       }
     },
     // подключение переменной авторизированного пользователя из store
-    ...mapGetters(['authUser']),
+    ...mapGetters(['authUser', 'isAdmin']),
   },
   mounted() {
     // Определение модального окна для создания юнита
@@ -281,7 +275,7 @@ export default {
     // Автоматическая загрузка юнитов и учителей при монтировании страницы
     // Если пользователь не администратор, то фильтра по подразделению и учителя нет, 
     // а в таблицу подгруджаются юниты текущего учителя
-    if (this.checkAdmin) {
+    if (this.isAdmin) {
       this.getTeachersData();
     } else {
       this.authUser.teacher ? this.queryTeacher = this.authUser.teacher.id : this.queryTeacher = '';

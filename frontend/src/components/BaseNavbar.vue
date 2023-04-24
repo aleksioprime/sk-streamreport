@@ -11,7 +11,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item dropdown" v-if="checkAdmin">
+          <li class="nav-item dropdown" v-if="isAdmin">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Модерация
             </a>
@@ -65,13 +65,7 @@ export default {
   mounted() {
   },
   computed: {
-    ...mapGetters(['authUser']),
-    // Проверка у текущего пользователя прав администратора
-    checkAdmin() {
-      if (this.authUser) {
-        return this.authUser.is_staff == true
-      }
-    },
+    ...mapGetters(['authUser', 'isAdmin']),
   }
 }
 </script>
