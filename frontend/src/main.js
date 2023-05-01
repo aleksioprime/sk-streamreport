@@ -25,7 +25,7 @@ router.beforeEach(async (to) => {
   }
   if (to.name == 'login' && token) {
     console.log('Вы залогинены: перенаправление на главную страницу');
-    return { name: 'unitlist' }
+    return { name: 'unitmyp' }
   }
 })
 

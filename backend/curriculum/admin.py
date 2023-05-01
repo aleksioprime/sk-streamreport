@@ -4,7 +4,7 @@ from curriculum.models import SubjectGroupIB, ClassYear, SubjectGroupFGOS, Subje
     Level, Objective, AchievementLevel, KeyConcept, RecommendSubjectKC, SubjectDirectionRC, RelatedConcept, \
     GlobalContext, ExplorationToDevelop, CategoryATL, ClusterATL, SkillATL, ReflectionMYP, \
     InquiryQuestionMYP, Aim, LearnerProfileIB, UnitPlannerMYP, UnitPlannerMYPID, UnitPlannerDP, \
-        ReflectionDP, InquiryQuestionDP, SubjectLevelMYP
+        ReflectionDP, InquiryQuestionDP
 
 @admin.register(SubjectGroupIB)
 class SubjectGroupIBAdmin(ImportExportModelAdmin):
@@ -100,15 +100,15 @@ class UnitPlannerMYPAdmin(ImportExportModelAdmin):
 
 @admin.register(UnitPlannerMYPID)
 class UnitPlannerMYPIDAdmin(ImportExportModelAdmin):
-    list_display = ("unitplan_myp", "form_integration")
+    list_display = ("title", "form_integration")
     
 @admin.register(ReflectionMYP)
 class ReflectionMYPAdmin(ImportExportModelAdmin):
-    list_display = ("planner", "type_post", "author")
+    list_display = ("type", "author")
 
 @admin.register(InquiryQuestionMYP)
 class InquiryQuestionMYPAdmin(ImportExportModelAdmin):
-    list_display = ("question", "type_inq", "planner")
+    list_display = ("question", "type")
 
 @admin.register(UnitPlannerDP)
 class UnitPlannerDPAdmin(ImportExportModelAdmin):
@@ -121,7 +121,3 @@ class ReflectionDPAdmin(ImportExportModelAdmin):
 @admin.register(InquiryQuestionDP)
 class InquiryQuestionDPAdmin(ImportExportModelAdmin):
     list_display = ("question", "type_inq", "planner")
-
-@admin.register(SubjectLevelMYP)
-class SubjectLevelMYPAdmin(ImportExportModelAdmin):
-    list_display = ("unit", "subject", "level")

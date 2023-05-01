@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header>
-      <template v-slot:header>Отзывы на студентов</template>
+      <template v-slot:header>Репорты наставника</template>
     </base-header>
     
   </div>

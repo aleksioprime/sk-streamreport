@@ -19,17 +19,48 @@
               <router-link to="/employee" class="dropdown-item">Сотрудники</router-link>
               <router-link to="/student" class="dropdown-item">Студенты</router-link>
               <router-link to="/group" class="dropdown-item">Учебные классы</router-link>
+              <router-link to="/syllabus" class="dropdown-item">Учебные планы</router-link>
+              <router-link to="/load" class="dropdown-item">Нагрузка</router-link>
             </div>
           </li>
-          <li class="nav-item">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Юниты
+            </a>
+            <div class="dropdown-menu">
+              <router-link to="/myp" class="dropdown-item">Средняя школа</router-link>
+              <router-link to="/dp" class="dropdown-item">Старшая школа</router-link>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Оценивание
+            </a>
+            <div class="dropdown-menu">
+              <router-link to="/assessment" class="dropdown-item">Итоговые работы</router-link>
+              <router-link to="/schedule" class="dropdown-item">График работ</router-link>
+              <router-link to="/report/teacher" class="dropdown-item">Репорты учителя</router-link>
+              <router-link to="/report/mentor" class="dropdown-item">Репорты наставника</router-link>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Дополнительно
+            </a>
+            <div class="dropdown-menu">
+              <router-link to="/extra/contest" class="dropdown-item">Олимпиады и конкурсы</router-link>
+              <router-link to="/extra/teaching" class="dropdown-item">Педагогическое менторство</router-link>
+            </div>
+          </li>
+          <!-- <li class="nav-item">
             <router-link to="/unit" class="nav-link" aria-current="page">Юниты</router-link>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <router-link to="/assessment" class="nav-link">Оценки</router-link>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <router-link to="/report" class="nav-link">Репорты</router-link>
-          </li>
+          </li> -->
         </ul>
         <div class="navbar-text d-flex align-items-center" v-if="authUser">
           <div class="navbar-user">

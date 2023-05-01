@@ -1,12 +1,13 @@
 from curriculum.models import UnitPlannerMYP, ClassYear, Subject, Criterion, LearnerProfileIB, SkillATL, Objective, Aim, GlobalContext, \
-    ExplorationToDevelop, KeyConcept, RelatedConcept, InquiryQuestionMYP, ATLMappingMYP, ReflectionMYP, Strand, Level, UnitPlannerMYPID, SubjectLevelMYP
+    ExplorationToDevelop, KeyConcept, RelatedConcept, InquiryQuestionMYP, ATLMappingMYP, ReflectionMYP, Strand, Level, UnitPlannerMYPID
 from member.models import ProfileTeacher, Department
 from curriculum.serializers import UnitMYPSerializerViewEdit, UnitMYPSerializerListCreate, ProfileTeacherSerializer, ClassYearSerializer, \
     SubjectSerializer, CriterionSerializer, DepartmentSerializer, LearnerProfileIBSerializer, SkillATLSerializer, ObjectiveSerializer, \
     AimSerializer, GlobalContextSerializer, ExplorationToDevelopSerializer, KeyConceptSerializer, RelatedConceptSerializer, InQuestionMYPSerializer, \
-    ATLMappingMYPSerializer, ReflectionMYPSerializer, StrandSerializer, LevelSerializer, UnitPlannerMYPIDSerializer, SubjectLevelMYPSerializer
+    ATLMappingMYPSerializer, ReflectionMYPSerializer, StrandSerializer, LevelSerializer, UnitPlannerMYPIDSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from docxtpl import DocxTemplate
 from rest_framework.views import APIView
 from django.conf import settings
@@ -31,10 +32,16 @@ class UnitPlannerMYPViewEdit(viewsets.ModelViewSet):
         print(request.data)
         return super().destroy(request, pk=None, *args, **kwargs)
 
+class UnitsSetPagination(PageNumberPagination):
+    page_size = 15
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
 # Набор методов для просмотра списка записей и добавления новой записи UnitPlannerMYP
 class UnitPlannerMYPListCreate(viewsets.ModelViewSet):
     queryset = UnitPlannerMYP.objects.all()
     serializer_class = UnitMYPSerializerListCreate
+    pagination_class = UnitsSetPagination
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
     def create(self, request, *args, **kwargs):
@@ -43,14 +50,17 @@ class UnitPlannerMYPListCreate(viewsets.ModelViewSet):
     def get_queryset(self):
         department = self.request.query_params.get("department", None)
         teacher = self.request.query_params.get("teacher", None)
-        subjects = self.request.query_params.get("subject", None)
+        subject = self.request.query_params.get("subject", None)
+        years = self.request.query_params.getlist("years[]", None)
         units_myp = UnitPlannerMYP.objects.all()
         if department:
             units_myp = units_myp.filter(subjects__department=department)
         if teacher:
             units_myp = units_myp.filter(authors__in=[teacher])
-        if subjects:
-            units_myp = units_myp.filter(subjects__in=[subjects])
+        if subject:
+            units_myp = units_myp.filter(subject=subject)
+        if years:
+            units_myp = units_myp.filter(class_year__in=years)
         return units_myp
        
 class DepartmentViewSet(viewsets.ModelViewSet):
@@ -65,10 +75,17 @@ class ClassYearViewSet(viewsets.ModelViewSet):
     queryset = ClassYear.objects.all()
     serializer_class = ClassYearSerializer
     def get_queryset(self):
+        class_year = ClassYear.objects.all()
         program = self.request.query_params.get("program", None)
-        if not program:
-            return ClassYear.objects.all()
-        return ClassYear.objects.filter(program=program)
+        subject = self.request.query_params.get("subject", None)
+        teacher = self.request.query_params.get("teacher", None)
+        if program:
+             class_year = class_year.filter(program=program)
+        if subject:
+            class_year = class_year.filter(unitplan_myp__subject=subject)
+        if teacher:
+            class_year = class_year.filter(unitplan_myp__authors__in=[teacher]).distinct()
+        return class_year
 
 class LevelViewSet(viewsets.ModelViewSet):
     queryset = Level.objects.all()
@@ -81,21 +98,24 @@ class SubjectViewSet(viewsets.ModelViewSet):
         subjects = Subject.objects.all()
         level = self.request.query_params.get("level", None)
         type_subject = self.request.query_params.get("type", None)
+        teacher = self.request.query_params.get("teacher", None)
         if level:
             subjects = subjects.filter(group_fgos__level=level)
         if type_subject:
             subjects = subjects.filter(type_subject=type_subject)
+        if teacher:
+            subjects = subjects.filter(unitplan_myp__authors__in=[teacher]).distinct()
         return subjects
     
-class SubjectLevelMYPViewSet(viewsets.ModelViewSet):
-    queryset = SubjectLevelMYP.objects.all()
-    serializer_class = SubjectLevelMYPSerializer
-    def get_queryset(self):
-        subject_level = SubjectLevelMYP.objects.all()
-        unit = self.request.query_params.get("unit", None)
-        if unit:
-            subject_level = subject_level.filter(unit=unit)
-        return subject_level
+# class SubjectLevelMYPViewSet(viewsets.ModelViewSet):
+#     queryset = SubjectLevelMYP.objects.all()
+#     serializer_class = SubjectLevelMYPSerializer
+#     def get_queryset(self):
+#         subject_level = SubjectLevelMYP.objects.all()
+#         unit = self.request.query_params.get("unit", None)
+#         if unit:
+#             subject_level = subject_level.filter(unit=unit)
+#         return subject_level
 
 class KeyConceptViewSet(viewsets.ModelViewSet):
     queryset = KeyConcept.objects.all()
@@ -141,6 +161,7 @@ class AimViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         aims = Aim.objects.all()
         subjects = self.request.query_params.get("subjects", None)
+        
         group = self.request.query_params.get("group", None)
         print(subjects)
         if subjects:
@@ -154,29 +175,29 @@ class CriterionViewSet(viewsets.ModelViewSet):
     serializer_class = CriterionSerializer
     def get_queryset(self):
         criteria = Criterion.objects.all()
-        subjects = self.request.query_params.get("subjects", None)
+        subject = self.request.query_params.get("subject", None)
+        subject = self.request.query_params.get("subject", None)
         group = self.request.query_params.get("group", None)
-        if subjects:
-            criteria = criteria.filter(subject_group__subject__in=subjects.split(','))
+        if subject:
+            criteria = criteria.filter(subject_group__subject__in=subject)
         if group:
             criteria = criteria.filter(subject_group=group)
+        if subject:
+            criteria = criteria.filter(subject_group__subject=subject)
         return criteria
 
 class StrandViewSet(viewsets.ModelViewSet):
     queryset = Strand.objects.all()
     serializer_class = StrandSerializer
     def get_queryset(self):
-        subjects = self.request.query_params.get("subjects", None)
-        criteria = self.request.query_params.get("criteria", None)
-        group = self.request.query_params.get("group", None)
-        # print(subjects, criteria)
+        subject = self.request.query_params.get("subject", None)
+        criteria = self.request.query_params.getlist("criteria[]", None)
         strands = Strand.objects.all()
-        if subjects:
-            strands = strands.filter(criterion__subject_group__subject__in=subjects.split(','))
-        if group:
-            strands = strands.filter(criterion__subject_group=group)
+        print(criteria, subject)
+        if subject:
+            strands = strands.filter(criterion__subject_group__subject__in=[subject])
         if criteria:
-            strands = strands.filter(criterion__in=criteria.split(','))
+            strands = strands.filter(criterion__in=criteria)
         return strands
     
 class SkillATLViewSet(viewsets.ModelViewSet):

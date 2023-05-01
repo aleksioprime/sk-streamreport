@@ -1,23 +1,30 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import UserLogin from '@/views/UserLogin.vue'
-import EmployeeBoard from '@/views/EmployeeBoard.vue'
-import StudentBoard from '@/views/StudentBoard.vue'
-import GroupBoard from '@/views/GroupBoard.vue'
-
 import DashBoard from '@/views/DashBoard.vue'
-import UnitList from '@/views/UnitList.vue'
+
+import AdminEmployee from '@/views/AdminEmployee.vue'
+import AdminStudent from '@/views/AdminStudent.vue'
+import AdminGroup from '@/views/AdminGroup.vue'
+import AdminLoad from '@/views/AdminLoad.vue'
+import AdminSyllabus from '@/views/AdminSyllabus.vue'
+import UnitMYP from '@/views/UnitMYP.vue'
 import UnitMYPView from '@/views/UnitMYPView.vue'
-// import UserList from '@/views/UserList.vue'
+import UnitDP from '@/views/UnitDP.vue'
+import UnitDPView from '@/views/UnitDPView.vue'
+import ReportTeacher from '@/views/ReportTeacher.vue'
+import ReportMentor from '@/views/ReportMentor.vue'
+import AssessSchedule from '@/views/AssessSchedule.vue'
 import AssessList from '@/views/AssessList.vue'
 import AssessWorkView from '@/views/AssessWorkView.vue'
 import AssessPeriodView from '@/views/AssessPeriodView.vue'
-import ReportList from '@/views/ReportList.vue'
+import ExtraContest from '@/views/ExtraContest.vue'
+import ExtraTeaching from '@/views/ExtraTeaching.vue'
 
 const routes = [
   {
     path: '/',
     name: 'dashboard',
-    component: UnitList,
+    component: DashBoard,
   },
   {
     path: '/login',
@@ -25,39 +32,59 @@ const routes = [
     component: UserLogin
   },
   {
-    path: '/unit',
-    name: 'unitlist',
-    component: UnitList,
+    path: '/myp',
+    name: 'unitmyp',
+    component: UnitMYP,
   },
   {
-    path: '/unit/:id',
+    path: '/myp/:id',
     name: 'unitmypview',
     component: UnitMYPView,
   },
-  // {
-  //   path: '/user',
-  //   name: 'userlist',
-  //   component: UserList
-  // },
+  {
+    path: '/dp',
+    name: 'unitdp',
+    component: UnitDP,
+  },
+  {
+    path: '/dp/:id',
+    name: 'unitdpview',
+    component: UnitDPView,
+  },
   {
     path: '/student',
     name: 'student',
-    component: StudentBoard
+    component: AdminStudent
   },
   {
     path: '/employee',
     name: 'employee',
-    component: EmployeeBoard
+    component: AdminEmployee
   },
   {
     path: '/group',
     name: 'group',
-    component: GroupBoard
+    component: AdminGroup
+  },
+  {
+    path: '/load',
+    name: 'load',
+    component: AdminLoad
+  },
+  {
+    path: '/syllabus',
+    name: 'syllabus',
+    component: AdminSyllabus
   },
   {
     path: '/assessment',
     name: 'assesslist',
     component: AssessList,
+  },
+  {
+    path: '/schedule',
+    name: 'assessSchedule',
+    component: AssessSchedule,
   },
   {
     path: '/assessment/sumwork/:id',
@@ -66,13 +93,28 @@ const routes = [
   },
   {
     path: '/assessment/year/:id_year/period/:id_period/subject/:id_subject',
-    name: 'assessperiodview',
+    name: 'assessPeriodView',
     component: AssessPeriodView,
   },
   {
-    path: '/report',
-    name: 'report',
-    component: ReportList,
+    path: '/report/teacher',
+    name: 'reportTeacher',
+    component: ReportTeacher,
+  },
+  {
+    path: '/report/mentor',
+    name: 'reportMentor',
+    component: ReportMentor,
+  },
+  {
+    path: '/extra/contest',
+    name: 'extraContest',
+    component: ExtraContest,
+  },
+  {
+    path: '/extra/teaching',
+    name: 'extraTeaching',
+    component: ExtraTeaching,
   },
 ]
 

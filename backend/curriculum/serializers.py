@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from curriculum.models import UnitPlannerMYP, KeyConcept, SubjectGroupIB, RelatedConcept, SubjectDirectionRC, Subject, \
     SubjectGroupIB, ClassYear, GlobalContext, ExplorationToDevelop, Aim, Objective, Strand, Criterion, Level, SkillATL, \
-    ClusterATL, CategoryATL, LearnerProfileIB, InquiryQuestionMYP, ATLMappingMYP, ReflectionMYP, UnitPlannerMYPID, SubjectLevelMYP
+    ClusterATL, CategoryATL, LearnerProfileIB, InquiryQuestionMYP, ATLMappingMYP, ReflectionMYP, UnitPlannerMYPID
 from member.models import ProfileTeacher, User, Department
 
 class SubjectGroupIBSerializer(serializers.ModelSerializer):
@@ -93,16 +93,16 @@ class LevelSerializer(serializers.ModelSerializer):
         model = Level
         fields = '__all__'
         
-class SubjectLevelMYPSerializer(serializers.ModelSerializer):
-    subject = SubjectSerializer(read_only=True)
-    level = LevelSerializer(read_only=True)
-    class Meta:
-        model = SubjectLevelMYP
-        fields = ['id', 'subject', 'level', 'subject_id', 'level_id']
-        extra_kwargs = {
-            'subject_id': {'source': 'subject', 'write_only': True},
-            'level_id': {'source': 'level', 'write_only': True},
-        }
+# class SubjectLevelMYPSerializer(serializers.ModelSerializer):
+#     subject = SubjectSerializer(read_only=True)
+#     level = LevelSerializer(read_only=True)
+#     class Meta:
+#         model = SubjectLevelMYP
+#         fields = ['id', 'subject', 'level', 'subject_id', 'level_id']
+#         extra_kwargs = {
+#             'subject_id': {'source': 'subject', 'write_only': True},
+#             'level_id': {'source': 'level', 'write_only': True},
+#         }
 
 class ObjectiveSerializer(serializers.ModelSerializer):
     level = LevelSerializer()
@@ -113,6 +113,7 @@ class ObjectiveSerializer(serializers.ModelSerializer):
 class StrandSerializer(serializers.ModelSerializer):
     criterion = CriterionSerializer()
     objective = ObjectiveSerializer(many=True)
+    letter_i = serializers.CharField(source='get_letter_display')
     class Meta:
         model = Strand
         fields = '__all__'
@@ -144,7 +145,7 @@ class ATLMappingMYPSerializer(serializers.ModelSerializer):
     strand = StrandSerializer(read_only=True)
     class Meta:
         model = ATLMappingMYP
-        fields = ['id', 'atl', 'atl_id', 'strand', 'strand_id', 'action', 'planner']
+        fields = ['id', 'atl', 'atl_id', 'strand', 'strand_id', 'action']
         extra_kwargs = {
             'strand_id': {'source': 'strand', 'write_only': True},
             'atl_id': {'source': 'atl', 'write_only': True},
@@ -173,6 +174,7 @@ class UnitPlannerMYPIDSerializer(serializers.ModelSerializer):
         }
 
 class UnitMYPSerializerViewEdit(serializers.ModelSerializer):
+    subject = SubjectSerializer(read_only=True)
     key_concepts = KeyConceptSerializer(many=True, read_only=True)
     related_concepts = RelatedConceptSerializer(many=True, read_only=True)
     authors = ProfileTeacherSerializer(many=True, read_only=True)
@@ -181,13 +183,11 @@ class UnitMYPSerializerViewEdit(serializers.ModelSerializer):
     explorations = ExplorationToDevelopSerializer(many=True, read_only=True)
     aims = AimSerializer(many=True, read_only=True)
     strands = StrandSerializer(many=True, read_only=True)
-    subjects = SubjectLevelMYPSerializer(many=True, source='subject_unit', required=False)
     criteria = CriterionSerializer(many=True, read_only=True)
     learner_profile = LearnerProfileIBSerializer(many=True, read_only=True)
     inquestions = InQuestionMYPSerializer(many=True, read_only=True)
     atlmapping = ATLMappingMYPSerializer(many=True, read_only=True)
     reflections = ReflectionMYPSerializer(many=True, read_only=True)
-    inter = UnitPlannerMYPIDSerializer(read_only=True)
     class Meta:
         model = UnitPlannerMYP
         fields = ['id', 'title', 'authors', 'order', 'class_year', 'hours', 'description',
@@ -197,7 +197,7 @@ class UnitMYPSerializerViewEdit(serializers.ModelSerializer):
                   'summative_assessment_soi', 'peer_self_assessment', 'standardization_moderation', 'prior_experiences', 'learning_experiences', 'teaching_strategies', 
                   'teaching_strategies', 'student_expectations', 'feedback', 'differentiation', 'criteria_ids', 'learner_profile_ids', 
                   'aims_ids', 'global_context_id', 'explorations_ids', 'key_concepts_ids', 'related_concepts_ids', 'class_year_id', 'authors_ids', 
-                  'inquestions', 'atlmapping', 'reflections', 'strands_ids', 'subjects', 'inter', 'resources'
+                  'inquestions', 'atlmapping', 'reflections', 'strands_ids','resources', 'subject', 'subject_id'
                   ]
         extra_kwargs = {
             'title': {'required': False},
@@ -211,72 +211,61 @@ class UnitMYPSerializerViewEdit(serializers.ModelSerializer):
             'key_concepts_ids': {'source': 'key_concepts', 'write_only': True},
             'related_concepts_ids': {'source': 'related_concepts', 'write_only': True},
             'class_year_id': {'source': 'class_year', 'write_only': True},
+            'subject_id': {'source': 'subject', 'write_only': True},
             'authors_ids': {'source': 'authors', 'write_only': True, 'required': False},
             }
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
-        if 'subject_unit' in validated_data.keys():
-            instance_subjects = SubjectLevelMYP.objects.filter(unit=instance)
-            list_subjects = [x.get('subject').id for x in validated_data['subject_unit']]
-            # Перебор имеющихся предметов в юните и удаление тех, которых нет в запросе
-            for data in instance_subjects.values():
-                if data['subject_id'] not in list_subjects:
-                    SubjectLevelMYP.objects.filter(id=data['id']).delete()
-            # Перебор предметов в запросе, добавление тех, которых нет в юните и редактирование уровня остальных
-            new_subjects = []
-            for data in validated_data['subject_unit']:
-                if not instance_subjects.filter(subject=data.get('subject')).count():
-                    new_subjects.append(SubjectLevelMYP(unit=instance, subject=data.get('subject'), level=data.get('level')))
-                else:
-                    SubjectLevelMYP.objects.filter(unit=instance, subject=data.get('subject')).update(level=data.get('level'))
-            SubjectLevelMYP.objects.bulk_create(new_subjects)
-            update_subject_list = SubjectLevelMYP.objects.filter(unit=instance)
-            # Если предметов больше 1, то сделать юнит междисциплинарным
-            if update_subject_list.count() > 1:
-                UnitPlannerMYPID.objects.get_or_create(unitplan_myp=instance)
-            else:
-                UnitPlannerMYPID.objects.filter(unitplan_myp=instance).delete()
-            validated_data.pop('subject_unit', None)
+        # if 'subject_unit' in validated_data.keys():
+        #     instance_subjects = SubjectLevelMYP.objects.filter(unit=instance)
+        #     list_subjects = [x.get('subject').id for x in validated_data['subject_unit']]
+        #     # Перебор имеющихся предметов в юните и удаление тех, которых нет в запросе
+        #     for data in instance_subjects.values():
+        #         if data['subject_id'] not in list_subjects:
+        #             SubjectLevelMYP.objects.filter(id=data['id']).delete()
+        #     # Перебор предметов в запросе, добавление тех, которых нет в юните и редактирование уровня остальных
+        #     new_subjects = []
+        #     for data in validated_data['subject_unit']:
+        #         if not instance_subjects.filter(subject=data.get('subject')).count():
+        #             new_subjects.append(SubjectLevelMYP(unit=instance, subject=data.get('subject'), level=data.get('level')))
+        #         else:
+        #             SubjectLevelMYP.objects.filter(unit=instance, subject=data.get('subject')).update(level=data.get('level'))
+        #     SubjectLevelMYP.objects.bulk_create(new_subjects)
+        #     update_subject_list = SubjectLevelMYP.objects.filter(unit=instance)
+        #     # Если предметов больше 1, то сделать юнит междисциплинарным
+        #     if update_subject_list.count() > 1:
+        #         UnitPlannerMYPID.objects.get_or_create(unitplan_myp=instance)
+        #     else:
+        #         UnitPlannerMYPID.objects.filter(unitplan_myp=instance).delete()
+        #     validated_data.pop('subject_unit', None)
         return super().update(instance, validated_data)
     
 class UnitMYPSerializerListCreate(serializers.ModelSerializer):
+    subject = SubjectSerializer(required=False)
+    level = LevelSerializer(required=False, read_only=True)
+    class_year = ClassYearSerializer(read_only=True)
     key_concepts = KeyConceptSerializer(many=True, required=False)
     related_concepts = RelatedConceptSerializer(many=True, required=False)
     authors = ProfileTeacherSerializer(many=True, read_only=True)
-    subjects = SubjectLevelMYPSerializer(many=True, source='subject_unit')
-    class_year = ClassYearSerializer(read_only=True)
     global_context = GlobalContextSerializer(required=False)
     explorations = ExplorationToDevelopSerializer(many=True, required=False)
     criteria = CriterionSerializer(many=True, read_only=True)
-    atlmapping = ATLMappingMYPSerializer(many=True, read_only=True)
+    atl_mapping = ATLMappingMYPSerializer(many=True, read_only=True)
     class Meta:
         model = UnitPlannerMYP
-        fields = ['id', 'title', 'subjects', 'order', 'class_year', 'hours', 'key_concepts', 
+        fields = ['id', 'title', 'order', 'subject', 'subject_id', 'level', 'level_id', 'class_year', 'hours', 'key_concepts', 
                   'related_concepts', 'authors', 'global_context', 'explorations', 'statement_inquiry', 'criteria',
-                  'criteria_ids', 'class_year_id', 'authors_ids', 'atlmapping', 
+                  'criteria_ids', 'class_year_id', 'authors_ids', 'atl_mapping', 
                   ]
         extra_kwargs = {
             'criteria_ids': {'source': 'criteria', 'write_only': True},
+            'subject_id': {'source': 'subject', 'write_only': True},
+            'level_id': {'source': 'level', 'write_only': True},
             'class_year_id': {'source': 'class_year', 'write_only': True},
             'authors_ids': {'source': 'authors', 'write_only': True},
             }
     def create(self, validated_data):
         print('Валидированные данные: ', validated_data)
-        instance = UnitPlannerMYP.objects.create(
-            title=validated_data['title'],
-            hours=validated_data['hours'],
-            class_year=validated_data['class_year'],
-        )
-        instance.criteria.set(validated_data['criteria'])
-        instance.authors.set(validated_data['authors'])
-        subjects = [SubjectLevelMYP(unit=instance, subject=data.get('subject'), level=data.get('level')) for data in validated_data['subject_unit']]
-        create_subject_list = SubjectLevelMYP.objects.bulk_create(subjects)
-        # Если предметов больше 1, то сделать юнит междисциплинарным
-        if len(create_subject_list) > 1:
-            UnitPlannerMYPID.objects.get_or_create(unitplan_myp=instance)
-        else:
-            UnitPlannerMYPID.objects.filter(unitplan_myp=instance).delete()
-        return instance
-        # return super().create(validated_data)
+        return super().create(validated_data)
         
         

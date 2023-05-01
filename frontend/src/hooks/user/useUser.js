@@ -34,6 +34,24 @@ export function getUsers() {
   }
 }
 
+
+export function getTeachers() {
+  const teachers = ref([]);
+  const isTeacherLoading = ref(true)
+  const fetchGetTeachers = async () => {
+    isTeacherLoading.value = true;
+    await axiosAPI.get('/teachers').then((response) => {
+      console.log('Получен список учителей: ', response.data)
+      teachers.value = response.data;
+    }).finally(() => {
+      isTeacherLoading.value = false;
+    });
+  };
+  return {
+    teachers, isTeacherLoading, fetchGetTeachers
+  }
+}
+
 export function createUser() {
   const fetchCreateUser = async (user) => {
     await axiosAPI.post('/user', user).then((response) => {

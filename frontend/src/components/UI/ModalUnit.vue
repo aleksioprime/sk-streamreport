@@ -13,7 +13,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" @click="$emit('cancel')">Отмена</button>
-          <button type="button" class="btn btn-primary" @click="$emit('create')">Добавить</button>
+          <button v-if="flagUnit.add" type="button" class="btn btn-primary" @click="$emit('create')">Добавить</button>
+          <button v-if="flagUnit.delete" type="button" class="btn btn-primary" @click="$emit('delete')">Удалить</button>
         </div>
       </div>
     </div>
@@ -28,20 +29,20 @@ export default {
       type: String,
       default: 'Заголовок окна'
     },
-    del: {
-      type: Boolean,
-      default: false
-    },
+    flagUnit: {
+      type: Object,
+      default: {
+        add: false,
+        edit: false,
+        delete: false,
+      }
+    }
   },
   data() {
     return {
-      modal: {}
     }
   },
   methods: {
-    hideDialog() {
-      this.$emit('update:show', false)
-    }
   },
   watch: {
   }
