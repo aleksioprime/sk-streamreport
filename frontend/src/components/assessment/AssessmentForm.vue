@@ -16,15 +16,18 @@
               placeholder="Введите фамилию для поиска...">
           </div>
         </div>
-        <div v-for="teacher in filteredTeachers" :key="teacher.id">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" :value="teacher.id"
-              :id="'teacher-' + teacher.id" v-model="summativeWork.teacher_id">
-            <label class="form-check-label" :for="'teacher-' + teacher.id">
-              {{ teacher.user.first_name }} {{ teacher.user.middle_name }} {{ teacher.user.last_name }}
-            </label>
+        <div v-if="!isTeacherLoading" class="list">
+          <div v-for="teacher in filteredTeachers" :key="teacher.id">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" :value="teacher.id"
+                :id="'teacher-' + teacher.id" v-model="summativeWork.teacher_id">
+              <label class="form-check-label" :for="'teacher-' + teacher.id">
+                {{ teacher.first_name }} {{ teacher.middle_name }} {{ teacher.last_name }}
+              </label>
+            </div>
           </div>
         </div>
+        <div v-else>Учителя загружаются. Пожалуйста, подождите</div>
       </div>
       <small ref="teacher_alert" class="alert-text"></small>
     </div>
@@ -56,8 +59,8 @@
       <div v-if="summativeWork.subject_id">
         <select id="unit" class="form-select" v-model="summativeWork.unit_id" @change="changeUnit">
           <option :value="null">Выберите юнит</option>
-          <option v-for="unit in unitsMYP" :key="unit.id" :value="unit.id">
-            <span>{{ unit.title }} ({{ unit.class_year.year_rus }} класс)</span>
+          <option v-for="unit in unitListMYP" :key="unit.id" :value="unit.id">
+            <span>{{ unit.class_year.year_rus }} класс - {{ unit.title }}</span>
           </option>
         </select>
       </div>
@@ -66,9 +69,8 @@
       </div>
       <small ref="unit_alert" class="alert-text"></small>
     </div>
-
- <!-- Выбор критериев оценки -->
- <div class="row my-2">
+    <!-- Выбор критериев оценки -->
+    <div class="row my-2">
       <div class="col">
         <div class="mb-2">Критерии оценки: </div>
         <div v-if="criteriaMYP.length > 0 ">
@@ -85,7 +87,6 @@
         <small ref="criteria_alert" class="alert-text"></small>
       </div>
     </div>
-
     <!-- Выбор классов и даты итоговой работы -->
     <div class="self">
         <div>Даты итоговых работ</div>
@@ -118,7 +119,6 @@
             <div class="border p-2">
             <div class="mb-1">
               <span v-if="editDateGroup">Редактировать выбранную дату</span>
-              
             </div>
             <div class="row">
               <div class="col-sm my-1">
@@ -157,24 +157,35 @@
 
 <script>
 import { toRefs } from 'vue';
-import { getUnitsMYP, getCriteriaMYP, getGroups } from "@/hooks/assess/getSumWorkData";
+// import { getUnitsMYP, getCriteriaMYP, getGroups } from "@/hooks/assess/getSumWorkData";
+import { getSubjects } from "@/hooks/curriculum/useSubject";
+import { getTeachers } from "@/hooks/user/useUser";
+import { getCriteriaMYP } from "@/hooks/unit/useCriterionMYP";
+import { getUnitListMYP } from "@/hooks/unit/useUnitMYP";
+import { getGroups } from "@/hooks/user/useGroup";
+import { getPeriods } from "@/hooks/assess/usePeriod";
 
 export default {
   props: {
     summativeWork: { type: Object },
-    teachers: { type: Array },
-    subjects: { type: Array },
-    periods: { type: Array },
     editMode: { type: Boolean },
+    studyPrograms: { type: Object }
   },
   setup(props) {
-    const { unitsMYP, getUnitsMYPData } = getUnitsMYP();
-    const { criteriaMYP, getCriteriaData } = getCriteriaMYP();
-    const { groups, getGroupsData } = getGroups();
+    const { subjects, fetchGetSubjects } = getSubjects();
+    const { teachers, isTeacherLoading, fetchGetTeachers } = getTeachers();
+    const { criteriaMYP, fetchGetCriteriaMYP } = getCriteriaMYP();
+    const { unitListMYP, fetchGetUnitListMYP } = getUnitListMYP();
+    const { groups, isGroupLoading, fetchGetGroups } = getGroups();
+    const { periods, currentPeriod, fetchGetPeriods } = getPeriods();
+
     return {
-      unitsMYP, getUnitsMYPData,
-      criteriaMYP, getCriteriaData,
-      groups, getGroupsData,
+      subjects, fetchGetSubjects,
+      teachers, isTeacherLoading, fetchGetTeachers,
+      criteriaMYP, fetchGetCriteriaMYP,
+      unitListMYP, fetchGetUnitListMYP,
+      groups, isGroupLoading, fetchGetGroups,
+      periods, currentPeriod, fetchGetPeriods,
     }
   },
   data() {
@@ -196,12 +207,12 @@ export default {
   },
   methods: {
     changeSubject(event) {
-      this.getUnitsMYPData(event.target.value);
-      this.getCriteriaData(event.target.value);
+      this.fetchGetUnitListMYP({ subject: this.summativeWork.subject_id });
+      this.fetchGetCriteriaMYP({ subject: this.summativeWork.subject_id });
     },
     changeUnit(event) {
-      let currentUnit = this.unitsMYP.find(item => item.id == event.target.value)
-      this.getGroupsData(currentUnit.class_year.year_rus);
+      let currentUnit = this.unitListMYP.find(item => item.id == event.target.value)
+      this.fetchGetGroups({ class_year: currentUnit.class_year.year_rus });
     },
     addWorkGroupDate(event) {
       event.preventDefault();
@@ -260,14 +271,19 @@ export default {
     },
   },
   mounted() {
+    this.fetchGetTeachers();
     if (this.editMode) {
-      console.log('Открытие формы в режиме редктирования');
-      this.getUnitsMYPData(this.summativeWork.subject_id).finally(() =>{
-        const currentUnit = this.unitsMYP.find(item => item.id == this.summativeWork.unit_id);
-        this.getGroupsData(currentUnit.class_year.id);
+      console.log('Открытие формы в режиме редатирования');
+      this.fetchGetUnitListMYP({ subject: this.summativeWork.subject_id }).finally(() =>{
+        const currentUnit = this.unitListMYP.find(item => item.id == this.summativeWork.unit_id);
+        console.log('Текущий юнит ', currentUnit.class_year)
+        this.fetchGetGroups({ class_year: currentUnit.class_year.year_rus });
       });
-      this.getCriteriaData(this.summativeWork.subject_id);
+      this.fetchGetCriteriaMYP({ subject: this.summativeWork.subject_id });
     }
+    this.fetchGetPeriods({ study_year: this.currentStudyYear, program: 'MYP' });
+    this.fetchGetSubjects({ level: 'ooo', type: 'base' });
+    
   },
   watch: {
   },
@@ -278,8 +294,8 @@ export default {
         return this.teachers.filter(teacher => this.summativeWork.teacher_id == teacher.id)
       }
       return this.teachers.filter((teacher) => {
-        if (teacher.user) {
-          return teacher.user.last_name.toLowerCase().includes(this.searchTeachers.toLowerCase()) || this.summativeWork.teacher_id == teacher.id
+        if (teacher) {
+          return teacher.last_name.toLowerCase().includes(this.searchTeachers.toLowerCase()) || this.summativeWork.teacher_id == teacher.id
         } else {
           return this.summativeWork.teacher_id == teacher.id
         }
@@ -297,6 +313,11 @@ export default {
 </script>
 
 <style scoped>
+.list {
+  max-height: 200px;
+  overflow-y: scroll;
+  margin-top: 15px;
+}
 .topPage {
   padding-top: 0%;
 }

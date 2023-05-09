@@ -8,6 +8,7 @@ export function getStrands() {
       params: {
         criteria: data.criteria || null,
         subject: data.subject || null,
+        group: data.group || null,
       }
     }
     await axiosAPI.get('myp/strands', config).then((response) => {

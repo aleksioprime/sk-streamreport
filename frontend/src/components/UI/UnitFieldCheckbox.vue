@@ -17,13 +17,15 @@
         <div v-else>
           <div class="field-description">{{ fieldText.description }}</div>
           <div class="field-warning">{{ fieldText.warning }}</div>
-          <div v-for="op in options" :key="op.id">
-            <div class="form-check ms-3">
-              <input class="form-check-input" type="checkbox" :value="op.id" :id="fieldName + '-' + op.id"
-                v-model="editData[`${fieldName}_ids`]">
-              <label class="form-check-label" :for="fieldName + '-' + op.id">
-                  <slot name="edit" :data="op"></slot>
-              </label>
+          <div class="check-wrapper" :class="{ 'horizontal' : checkLine}">
+            <div v-for="op in options" :key="op.id">
+              <div class="form-check ms-3">
+                <input class="form-check-input" type="checkbox" :value="op.id" :id="fieldName + '-' + op.id"
+                  v-model="editData[`${fieldName}_ids`]">
+                <label class="form-check-label" :for="fieldName + '-' + op.id">
+                    <slot name="edit" :data="op"></slot>
+                </label>
+              </div>
             </div>
           </div>
           <div class="field-buttons">
@@ -43,6 +45,7 @@ export default {
     fieldName: { String },
     fieldText: { Object },
     fieldData: { type: Object },
+    checkLine: { type: Boolean, default: false },
     options: { type: Array, default: () => [] },
   },
   setup(props) {

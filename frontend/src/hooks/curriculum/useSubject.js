@@ -6,6 +6,7 @@ export function getSubjects() {
   const fetchGetSubjects = async (data) => {
     const config = {
       params: {
+        department: data.department || null,
         level: data.level || null,
         type: data.type || null,
         teacher: data.teacher || null,

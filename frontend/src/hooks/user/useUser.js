@@ -38,9 +38,14 @@ export function getUsers() {
 export function getTeachers() {
   const teachers = ref([]);
   const isTeacherLoading = ref(true)
-  const fetchGetTeachers = async () => {
+  const fetchGetTeachers = async (role) => {
+    const config = {
+      params: {
+        role: role || null,
+      }
+    }
     isTeacherLoading.value = true;
-    await axiosAPI.get('/teachers').then((response) => {
+    await axiosAPI.get('/teachers', config).then((response) => {
       console.log('Получен список учителей: ', response.data)
       teachers.value = response.data;
     }).finally(() => {
@@ -88,5 +93,47 @@ export function deleteUser() {
   };
   return {
     fetchDeleteUser
+  }
+}
+
+export function archiveUser() {
+  const fetchArchiveUser = async (user) => {
+    user.is_active = false;
+    await axiosAPI.put(`/user/${user.id}`, user).then((response) => {
+      console.log('Пользователь успешно отправлен в архив');
+    }).catch((error) => {
+      console.log('Ошибка запроса: ', error);
+    });
+  };
+  return {
+    fetchArchiveUser
+  }
+}
+
+export function importUsers() {
+  const isUserNewLoading = ref(false)
+  const usersUpdated = ref([]);
+  const totalNewPages = ref(1)
+  const totalNewUsers = ref(1)
+  const fetchImportUsers = async (data, limit) => {
+    const newLimit = limit || 1;
+    isUserNewLoading.value = true;
+    await axiosAPI.post('/user/import', data).then((response) => {
+      console.log('Пользователи успешно импортированы');
+      usersUpdated.value = response.data.results;
+      usersUpdated.value.forEach((item) => {
+        const difData = (new Date().getTime() - new Date(item.date_of_birth));
+        item.year = Math.round(difData / (24 * 3600 * 365.25 * 1000));
+      });
+      totalNewUsers.value = response.data.count
+      totalNewPages.value = Math.ceil(totalNewUsers.value / newLimit);
+    }).catch((error) => {
+      console.log('Ошибка запроса: ', error);
+    }).finally(() => {
+      isUserNewLoading.value = false;
+    });
+  };
+  return {
+    usersUpdated, isUserNewLoading, totalNewPages, totalNewUsers, fetchImportUsers
   }
 }

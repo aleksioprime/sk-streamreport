@@ -5,7 +5,7 @@
 
 .field-title {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .field-label {
@@ -39,6 +39,9 @@
 
 .field-buttons {
     display: flex;
+    justify-content: flex-end;
+    column-gap: 5px;
+    margin-top: 10px;
 }
 
 .field-btn-edit {
@@ -53,7 +56,6 @@
 .field-btn-cancel {
     border: none;
     border-radius: 5px;
-    margin: 5px;
     padding: 5px 10px;
 }
 
@@ -85,14 +87,83 @@
 .field-item {
     margin-left: 10px;
 }
+
+.check-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.horizontal {
+    flex-direction: row;
+    flex-wrap: wrap
+}
+
+.block-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 40px;
+    row-gap: 5px;
+}
+
+.block-heading {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.block-none {
+    min-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ececec;
+}
+
+.block-item {
+    background-color: #ececec;
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: flex;
+}
+
 /* Анимации появления и исчезновения могут иметь    */
 /* различные продолжительности и функции плавности. */
 .slide-fade-enter-active {
     transition: all 0.2s ease-out;
 }
-
 .slide-fade-enter-from,
 .slide-fade-leave-to {
     transform: translateY(-20px);
     opacity: 0;
+}
+
+
+.field-btn-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: auto;
+    padding-left: 5px;
+}
+
+.btn-icon {
+    border: none;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.btn-icon:not(:last-of-type) {
+    margin-right: 5px;
+}
+
+.btn-icon:hover {
+    transform: scale(1.1);
+}
+
+.img-edit {
+    background: url('@/assets/img/item-edit.png') no-repeat 50% / 90%;
+}
+
+.img-delete {
+    background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
 }

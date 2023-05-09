@@ -25,8 +25,12 @@ router.beforeEach(async (to) => {
   }
   if (to.name == 'login' && token) {
     console.log('Вы залогинены: перенаправление на главную страницу');
-    return { name: 'unitmyp' }
+    return { name: 'dashboard' }
   }
+  if (to.meta.permissions && to.meta.permissions.length > 0) {
+    let isAllowed = to.meta.permissions == 'teacher' && store.state.authUser.teacher
+    if (! isAllowed) return { name: 'dashboard' }
+}
 })
 
 const app = createApp(App)

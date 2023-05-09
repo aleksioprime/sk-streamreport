@@ -1,6 +1,8 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, PeriodAssessment, WorkGroupDate
+from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, \
+    PeriodAssessment, WorkGroupDate, ClassEmployee, ReportPeriod, ReportTeacher, ReportMentor, EventType, \
+        EventParticipation, ReportPsychologist
 
 # Register your models here.
 @admin.register(StudyYear)
@@ -10,6 +12,10 @@ class StudyYearAdmin(ImportExportModelAdmin):
 @admin.register(ClassGroup)
 class ClassGroupAdmin(ImportExportModelAdmin):
     list_display = ("class_year", "letter", "id_dnevnik", "study_year")
+
+@admin.register(ClassEmployee)
+class ClassEmployeeAdmin(ImportExportModelAdmin):
+    list_display = ("role", "employee")
     
 @admin.register(StudyPeriod)
 class StudyPeriodAdmin(ImportExportModelAdmin):
@@ -34,3 +40,27 @@ class WorkCriteriaMarkAdmin(ImportExportModelAdmin):
 @admin.register(PeriodAssessment)
 class PeriodAssessmentAdmin(ImportExportModelAdmin):
     list_display = ("period", "student", "criterion_a", "criterion_b", "criterion_c", "criterion_d", "final_grade")
+
+@admin.register(ReportPeriod)
+class ReportPeriodAdmin(ImportExportModelAdmin):
+    list_display = ("study_year", "number", "date_start", "date_end")
+
+@admin.register(ReportTeacher)
+class ReportTeacherAdmin(ImportExportModelAdmin):
+    list_display = ("student", "period", "subject", "text", "author")
+
+@admin.register(ReportMentor)
+class ReportMentorAdmin(ImportExportModelAdmin):
+    list_display = ("student", "period", "text", "author")
+
+@admin.register(ReportPsychologist)
+class ReportPsychologistAdmin(ImportExportModelAdmin):
+    list_display = ("student", "period", "text", "author")
+
+@admin.register(EventType)
+class EventTypeAdmin(ImportExportModelAdmin):
+    list_display = ("name", "description")
+
+@admin.register(EventParticipation)
+class EventParticipationAdmin(ImportExportModelAdmin):
+    list_display = ("title", "type", "result")

@@ -33,6 +33,7 @@
                   <div v-if="editingGroupID == group.id" class="m-1">
                     <input v-model="editingGroup.class_year" type="number" placeholder="Номер" class="form-control my-1">
                     <input v-model="editingGroup.letter" type="text" placeholder="Буква" class="form-control my-1">
+
                     <input v-model="editingGroup.id_dnevnik" type="text" placeholder="ID Дневник.ру" class="form-control my-1">
                     <div class="d-flex justify-content-end">
                       <button class="btn-icon img-apply mx-1" @click="groupEdit"></button>
@@ -80,7 +81,27 @@
       <div class="col-sm">
         <div v-if="currentGroup">
           <div class="mb-2">Список студентов <b>{{ currentGroup.class_year }}{{ currentGroup.letter }}</b> класса</div>
-          <div class="mb-2">{{ currentGroup.id_dnevnik }}</div>
+          <div class="mb-2">Всего в группе: {{ currentGroup.students.length }} человек</div>
+          <div class="mb-2 d-flex align-items-center">
+            <div v-if="currentGroup.mentor">Наставник: {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }} {{ currentGroup.mentor.user.last_name }}</div>
+            <div v-else>Наставник не выбран</div> 
+            <button class="btn-icon img-edit ms-auto" v-if="!editMentor" @click="showEditMentor"></button>
+          </div>
+          <div v-if="editMentor" class="border p-2">
+            <input id="search-item" class="form-control mb-2" type="text" v-model="queryTeacher" placeholder="Введите текст для поиска...">
+            <div v-for="teacher in searchTeachers.slice(0, 5)" :key="teacher.id">
+              <div class="form-check ms-3">
+                <input class="form-check-input" type="radio" :value="teacher.id" :id="'mentor-' + teacher.id" v-model="editingGroup.mentor_id">
+                <label class="form-check-label" :for="'mentor-' + teacher.id">
+                  {{ teacher.first_name }} {{ teacher.middle_name }} {{ teacher.last_name }}
+                </label>
+              </div>
+            </div>
+            <div class="d-flex mt-2 justify-content-end">
+              <button class="btn btn-success" @click="editMentorConfirm" v-if="editingGroup.mentor_id">ОК</button>
+              <button class="btn btn-cancel" @click="editMentorCancel">Отмена</button>
+            </div>
+          </div>
           <div class="border p-2" v-if="currentGroup.students.length">
             <div v-for="student in currentGroup.students" :key="student.id" class="student-item">
               <div>{{ student.user.last_name }} {{ student.user.first_name }}</div>
@@ -152,6 +173,7 @@ import { getGroups, retrieveGroup, createGroup, updateGroup, deleteGroup } from 
 import { getStudyYears } from "@/hooks/assess/useStudyYear";
 import { getUsers } from "@/hooks/user/useUser";
 import { getGroupedArray } from "@/hooks/extra/extraFeatures";
+import { getTeachers } from "@/hooks/user/useUser";
 
 export default {
   name: 'GroupBoard',
@@ -167,6 +189,7 @@ export default {
     const { fetchDeleteGroup } = deleteGroup();
     const { studyYears, currentStudyYear, fetchGetStudyYears } = getStudyYears();
     const { users, isUserLoading, totalPages, totalUsers, fetchGetUsers } = getUsers();
+    const { teachers, isTeacherLoading, fetchGetTeachers } = getTeachers();
 
     return {
       groups, isGroupLoading, fetchGetGroups, groupedArrayData,
@@ -175,7 +198,8 @@ export default {
       updatedGroup, fetchUpdateGroup,
       fetchDeleteGroup,
       studyYears, currentStudyYear, fetchGetStudyYears,
-      users, isUserLoading, totalPages, totalUsers, fetchGetUsers
+      users, isUserLoading, totalPages, totalUsers, fetchGetUsers,
+      teachers, isTeacherLoading, fetchGetTeachers,
     }
   },
   data() {
@@ -190,6 +214,8 @@ export default {
       editingGroup: {},
       deletingGroupID: null,
       addingGroupYear: null,
+      editMentor: false,
+      queryTeacher: null,
     }
   },
   methods: {
@@ -243,7 +269,7 @@ export default {
       } else {
         this.addingGroupYear = 0;
       }
-      
+      this.editMentor = false;
     },
     groupAdd() {
       console.log('Запрос на добавление группы: ', this.editingGroup);
@@ -261,6 +287,7 @@ export default {
     showUpdateGroup(group) {
       this.editingGroupID = group.id;
       this.editingGroup = { ...group };
+      this.editMentor = false;
     },
     groupEdit() {
       console.log('Запрос на редактирование группы: ', this.editingGroup);
@@ -276,6 +303,7 @@ export default {
     },
     showDeleteGroup(group) {
       this.deletingGroupID = group.id;
+      this.editMentor = false;
     },
     groupDelete() {
       console.log('Запрос на удаление группы:', this.deletingGroupID);
@@ -295,6 +323,24 @@ export default {
       this.deletingGroupID = null;
       this.addingGroupYear = null;
     },
+    showEditMentor() {
+      this.fetchGetTeachers('mentor');
+      this.editingGroup.id = this.currentGroup.id;
+      this.queryTeacher = null;
+      this.editMentor = true;
+    },
+    editMentorConfirm() {
+      this.editMentor = false;
+      console.log('Запрос на редактирование группы: ', this.editingGroup);
+      this.fetchUpdateGroup(this.editingGroup).finally(() => {
+        this.currentGroup = { ...this.updatedGroup };
+        this.editingGroup = {};
+      })
+    },
+    editMentorCancel() {
+      this.editMentor = false;
+      this.editingGroup = {};
+    }
   },
   mounted() {
     this.fetchGetStudyYears().finally(() => {
@@ -302,13 +348,35 @@ export default {
       this.fetchGetGroups({ study_year: this.currentYear.id });
     });
   },
-  
+  computed: {
+    // Переменная с данными отфильтрованных учителей по значению поля поиска по фамилии (searchAuthors)
+    searchTeachers() {
+      if (!this.queryTeacher) {
+        return this.teachers.filter((item, index) => {
+          return (index <= 5) || this.editingGroup.mentor_id == item.id
+        })
+      }
+      return this.teachers.filter((item) => {
+        if (item.last_name) {
+          return item.last_name.toLowerCase().includes(this.queryTeacher.toLowerCase()) || this.editingGroup.mentor_id == item.id
+        } else {
+          return this.editingGroup.mentor_id == item.id
+        }
+      })
+    }
+  },
 }
 </script>
 
 <style scoped>
 @import '@/assets/css/spinner.css';
 
+.loader {
+  display: flex;
+  height: calc(100vh - 200px);
+  align-items: center;
+  justify-content: center;
+}
 .select-group {
   background-color: rgb(161, 161, 161) !important;
 }

@@ -6,7 +6,8 @@ export function getCriteriaMYP() {
   const fetchGetCriteriaMYP = async (data) => {
     const config = {
       params: {
-        subject: data.subject || null
+        subject: data.subject || null,
+        group: data.group || null,
       }
     }
     await axiosAPI.get('myp/criteria', config).then((response) => {
@@ -15,5 +16,24 @@ export function getCriteriaMYP() {
   };
   return {
     criteriaMYP, fetchGetCriteriaMYP
+  }
+}
+
+export function getCriteriaDetailMYP() {
+  const criteriaMYP = ref([]);
+  const fetchGetCriteriaDetailMYP = async (data) => {
+    const config = {
+      params: {
+        subject: data.subject || null,
+        group: data.group || null,
+      }
+    }
+    await axiosAPI.get('myp/criteria/detail', config).then((response) => {
+      console.log('Получение подробной информации по критериям: ', response.data)
+      criteriaMYP.value = response.data;
+    });
+  };
+  return {
+    criteriaMYP, fetchGetCriteriaDetailMYP
   }
 }

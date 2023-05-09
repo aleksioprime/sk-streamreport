@@ -9,6 +9,7 @@ import AdminLoad from '@/views/AdminLoad.vue'
 import AdminSyllabus from '@/views/AdminSyllabus.vue'
 import UnitMYP from '@/views/UnitMYP.vue'
 import UnitMYPView from '@/views/UnitMYPView.vue'
+import UnitMYPIDView from '@/views/UnitMYPIDView.vue'
 import UnitDP from '@/views/UnitDP.vue'
 import UnitDPView from '@/views/UnitDPView.vue'
 import ReportTeacher from '@/views/ReportTeacher.vue'
@@ -35,21 +36,41 @@ const routes = [
     path: '/myp',
     name: 'unitmyp',
     component: UnitMYP,
+    meta: {
+      permissions: ['teacher']
+    },
   },
   {
     path: '/myp/:id',
     name: 'unitmypview',
     component: UnitMYPView,
+    meta: {
+      permissions: ['teacher']
+    },
+  },
+  {
+    path: '/myp/idu/:id',
+    name: 'unitmypidview',
+    component: UnitMYPIDView,
+    meta: {
+      permissions: ['teacher']
+    },
   },
   {
     path: '/dp',
     name: 'unitdp',
     component: UnitDP,
+    meta: {
+      permissions: ['teacher']
+    },
   },
   {
     path: '/dp/:id',
     name: 'unitdpview',
     component: UnitDPView,
+    meta: {
+      permissions: ['teacher']
+    },
   },
   {
     path: '/student',

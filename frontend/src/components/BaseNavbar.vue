@@ -43,7 +43,7 @@
               <router-link to="/report/mentor" class="dropdown-item">Репорты наставника</router-link>
             </div>
           </li>
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Дополнительно
             </a>
@@ -51,7 +51,7 @@
               <router-link to="/extra/contest" class="dropdown-item">Олимпиады и конкурсы</router-link>
               <router-link to="/extra/teaching" class="dropdown-item">Педагогическое менторство</router-link>
             </div>
-          </li>
+          </li> -->
           <!-- <li class="nav-item">
             <router-link to="/unit" class="nav-link" aria-current="page">Юниты</router-link>
           </li> -->

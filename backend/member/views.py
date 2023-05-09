@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import routers, viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
-from member.serializers import UserSerializer, DepartmentSerializer, ClassGroupSerializer, UserImportSerializer, ProfileStudentSerializer
+from member.serializers import UserSerializer, DepartmentSerializer, ClassGroupSerializer, UserCreateSerializer, ProfileTeacherSerializer
 from member.models import User, Department, ProfileStudent, ProfileTeacher
 from assess.models import ClassGroup
 from rest_framework.exceptions import AuthenticationFailed
@@ -53,11 +53,6 @@ class DepartmentViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = DepartmentSerializer
 
 
-# class RoleUserViewSet(viewsets.ReadOnlyModelViewSet):
-#     queryset = RoleUser.objects.all()
-#     serializer_class = RoleSerializer
-
-
 class ClassGroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ClassGroup.objects.all()
     serializer_class = ClassGroupSerializer
@@ -74,17 +69,15 @@ class UsersSetPagination(PageNumberPagination):
 
 # Набор CRUD-методов для работы с моделью Пользователи
 
-
-class UserViewSet(viewsets.ModelViewSet):
+class UserCreateViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserCreateSerializer
     pagination_class = UsersSetPagination
-
     def get_queryset(self):
         role = self.request.query_params.get("role", None)
         search = self.request.query_params.get("search", None)
-        users = User.objects.all()
+        users = User.objects.filter(is_active=True)
         if role == 'teacher':
             users = users.filter(teacher__isnull=False)
         if role == 'student':
@@ -93,21 +86,21 @@ class UserViewSet(viewsets.ModelViewSet):
             users = users.filter(Q(first_name__icontains=search) | Q(
                 last_name__icontains=search))
         return users
-
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
-
     def create(self, request, *args, **kwargs):
         print(request.data)
         return super().create(request, *args, **kwargs)
 
+class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
     def retrieve(self, request, pk=None, *args, **kwargs):
         return super().retrieve(request, pk=None, *args, **kwargs)
-
     def update(self, request, pk=None, *args, **kwargs):
         print('Переданные данные для редактирования: ', request.data)
         return super().update(request, pk=None, *args, **kwargs)
-
     def destroy(self, request, pk=None, *args, **kwargs):
         print('Переданные данные для удаления: ', pk)
         return super().destroy(request, pk=None, *args, **kwargs)
@@ -128,6 +121,18 @@ class UserViewSet(viewsets.ModelViewSet):
 #     return router.urls
 
 # Экспорт пользователей через CSV
+
+
+    
+class TeacherViewSet(viewsets.ModelViewSet):
+    queryset = ProfileTeacher.objects.all()
+    serializer_class = ProfileTeacherSerializer
+    def get_queryset(self):
+        role = self.request.query_params.get("role", None)
+        teachers = ProfileTeacher.objects.all()
+        # if role == 'mentor':
+        #     teachers = teachers.filter(group__isnull=True)
+        return teachers
 
 
 @csrf_exempt
@@ -153,10 +158,6 @@ class UserImportView(APIView):
         file_name = temp_storage.save("_tmp.xlsx", file_content)
         tmp_file = temp_storage.path(file_name)
 
-        # csv_file = open(tmp_file, errors="ignore")
-        # reader = csv.reader(csv_file, delimiter=';')
-        # next(reader)
-
         dfs = pd.read_excel(tmp_file, engine='openpyxl').fillna('')
         applicant_list = dfs.to_dict('records')
         validated_list = [obj for obj in applicant_list if User.objects.filter(
@@ -169,16 +170,20 @@ class UserImportView(APIView):
             'file_import': file_name})
 
 
-class UserImportApply(APIView):
+class UserImportApply(APIView, UsersSetPagination):
+    pagination_class = UsersSetPagination
     def post(self, request):
-        users_import = request.data.get("users_import", None)
-        users_role = request.data.get("users_role", None)
-        def valid_data(x): return None if x == "NaT" else datetime.fromisoformat(x)
-        if users_import:
+        users_import = request.data.get("users", None)
+        role = request.data.get("role", None)
+        def valid_date(x): return None if x == "NaT" else datetime.fromisoformat(x)
+        if users_import and role:
             usernames = [u['username'] for u in users_import]
             usernames_database = User.objects.filter(username__in=usernames).all()
             new_users = []
+            new_teachers = []
+            new_students = []
             if usernames_database is not None:
+                groups = {}
                 for item in users_import:
                     created_user = User(
                         username=item['username'],
@@ -187,29 +192,51 @@ class UserImportApply(APIView):
                         first_name=item['first_name'],
                         middle_name=item.get('middle_name', None),
                         last_name=item['last_name'],
-                        date_of_birth=valid_data(item['date_of_birth']),
+                        date_of_birth=valid_date(item['date_of_birth']),
                         gender=item['gender'],
                     )
-                    print(created_user)
                     new_users.append(created_user)
+                    if role == 'teacher':
+                        created_teacher = ProfileTeacher(
+                            id_dnevnik=item['id_dnevnik'],
+                            position=item['position'],
+                            admin=item['admin'],
+                        )
+                        created_teacher.user = created_user
+                        new_teachers.append(created_teacher)
+                    if role == 'student':
+                        created_student = ProfileStudent(
+                            id_dnevnik=item['id_dnevnik'],
+                        )
+                        created_student.user = created_user
+                        # created_student.groups.through(ClassGroup(pk=item.get('group', None)))
+                        group_id = item.get('group', None)
+                        if group_id:
+                            groups[group_id] = groups.get(group_id, []) + [created_student]
+                        new_students.append(created_student)
                 print(new_users)
-                users = User.objects.bulk_create(new_users, ignore_conflicts=True)
-            # print(users)
-            # if users_role == 'student':
-            #     new_students = []
-            #     for i in range(len(users_import)):
-            #         new_students.append(ProfileStudent(
-            #             user=users[i], id_dnevnik=users_import[i]['id_dnevnik']
-            #         ))
-            #     ProfileStudent.objects.bulk_create(new_students)
-            # if users_role == 'teacher':
-            #     new_teachers = []
-            #     for i in range(len(users_import)):
-            #         new_teachers.append(ProfileTeacher(
-            #             user=users[i], 
-            #             id_dnevnik=users_import[i]['id_dnevnik'],
-            #             position=users_import[i]['position'],
-            #             admin=users_import[i]['admin'],
-            #         ))
-            #     ProfileTeacher.objects.bulk_create(new_teachers)
-        return Response(UserSerializer(User.objects.all(), many=True).data)
+                users = User.objects.bulk_create(new_users)
+                # users = User.objects.bulk_create(new_users, ignore_conflicts=True)
+                print(f'Созданы пользователи: {users}')
+                if role == 'teacher':
+                    teachers = ProfileTeacher.objects.bulk_create(new_teachers)
+                    print(f'Созданы сотрудники: {teachers}')
+                elif role == 'student':
+                    students = ProfileStudent.objects.bulk_create(new_students)
+                    for key in groups:
+                        group = ClassGroup.objects.filter(pk=key).first()
+                        iterator_students = filter(lambda x: x in groups[group.id], students)
+                        if group.students:
+                            for item in iterator_students:
+                                group.students.add(item)
+                        else:
+                            group.students.set(list(iterator_students))
+                    print(f'Созданы студенты: {students}')
+        if role == 'student':
+            queryset = self.paginate_queryset(User.objects.filter(student__isnull=False, is_active=True), request)
+        elif role == 'teacher':
+            queryset = self.paginate_queryset(User.objects.filter(teacher__isnull=False, is_active=True), request)
+        else:
+            queryset = self.paginate_queryset(User.objects.filter(is_active=True), request)
+        serializer = UserSerializer(queryset, many=True)
+        return self.get_paginated_response(serializer.data)

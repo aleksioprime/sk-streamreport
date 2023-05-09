@@ -1,7 +1,7 @@
 <template>
     <div>
         <base-header>
-            <template v-slot:header>Мои юниты DP</template>
+            <template v-slot:header>DP: список моих юнитов</template>
         </base-header>
 
     </div>

@@ -1,20 +1,22 @@
 <template>
   <div>
-    <div class="row">
-      <div class="col">
-        <h4>Студенты в списке класса</h4>
-        <select class="form-select" multiple v-model="currentStudentsGroup">
-          <option v-for="st in filterStudents" :key="st.id" :value="st">{{ st.user.last_name }} {{ st.user.first_name }}</option>
+    <div class="student-wrapper">
+      <div class="student-left">
+        <h4>Студенты в списке класса <small>({{ filterStudents.length }} человек)</small></h4>
+        <select class="form-select" multiple v-model="currentStudentsGroup" size="10">
+          <option v-for="(st, index) in filterStudents" :key="st.id" :value="st">
+            {{ ++index }}. {{ st.user.last_name }} {{ st.user.first_name }}</option>
         </select>
       </div>
-      <div class="col-2 d-flex flex-column justify-content-end">
-        <button class="btn btn-success my-2" @click="addStudentsToWork" :disabled="!currentStudentsGroup.length">&#8594;</button>
-        <button class="btn btn-danger my-2" @click="deleteStudentsFromWork" :disabled="!currentStudentsWork.length">&#8592;</button>
+      <div class="student-arrow">
+        <button class="btn btn-success my-2" @click="addStudentsToWork" :disabled="!currentStudentsGroup.length">&#8595;</button>
+        <button class="btn btn-danger my-2" @click="deleteStudentsFromWork" :disabled="!currentStudentsWork.length">&#8593;</button>
       </div>
-      <div class="col">
-        <h4>Студенты в журнале</h4>
-        <select class="form-select" multiple v-model="currentStudentsWork">
-          <option v-for="st in studentsWork" :key="st.id" :value="st.id">{{ st.user.last_name }} {{ st.user.first_name }}</option>
+      <div class="student-right">
+        <h4>Студенты в журнале <small>({{ studentsWork.length }} человек)</small></h4>
+        <select class="form-select" multiple v-model="currentStudentsWork" size="10">
+          <option v-for="(st, index) in studentsWork" :key="st.id" :value="st.id">
+            {{ ++index }}. {{ st.user.last_name }} {{ st.user.first_name }}</option>
         </select>
       </div>
     </div>
@@ -73,4 +75,20 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.student-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.student-left {
+
+}
+.student-arrow {
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+}
+.student-right {
+
+}
+</style>

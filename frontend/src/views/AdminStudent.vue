@@ -6,7 +6,7 @@
     <!-- Кнопки добавления, редактирования, удаления пользователей -->
     <div class="btn-wrapper sticky-top">
       <button class="btn btn-primary my-3" @click="showAddUser">Добавить студента</button>
-      <button class="btn-icon img-import ms-2" type="button" @click="showImportUser"></button>
+      <button class="btn btn-primary my-3 ms-2" @click="showImportUser" v-if="authUser.is_staff">Импорт</button>
       <div v-if="currentUser.id && !flagUser.add" class="my-3 d-flex align-items-center ms-auto">
         <button type="button" class="btn-icon img-photo ms-2" @click="showEditPhoto"></button>
         <button type="button" class="btn-icon img-pass ms-2" @click="showEditPass"></button>
@@ -48,7 +48,7 @@
           v-model:editedUser="editedUser" v-model:validFormStudent="validFormStudent" :currentYear="currentYear"/>
         <form-import v-if="flagUser.import" v-model="newUsers" />
         <div v-if="flagUser.delete">
-          <div>Вы действительно хотите удалить этого студента?</div>
+          <div>Вы действительно хотите отправить этого студента в архив?</div>
           <div class="user-delete">
             <div>{{ editedUser.last_name }} {{ editedUser.first_name }} {{ editedUser.middle_name }}</div>
             <div>Логин: {{ editedUser.username }}</div>
@@ -62,7 +62,8 @@
 
 <script>
 import { Modal } from 'bootstrap';
-import { getUsers, createUser, updateUser, deleteUser } from "@/hooks/user/useUser";
+import { mapGetters } from 'vuex';
+import { getUsers, createUser, updateUser, archiveUser, importUsers } from "@/hooks/user/useUser";
 import { getGroups } from "@/hooks/user/useGroup";
 import FormImport from "@/components/user/FormImport";
 import UserList from "@/components/user/UserList";
@@ -78,11 +79,13 @@ export default {
     const { groups, fetchGetGroups } = getGroups();
     const { fetchCreateUser } = createUser();
     const { fetchUpdateUser } = updateUser();
-    const { fetchDeleteUser } = deleteUser();
+    const { fetchArchiveUser } = archiveUser();
+    const { usersUpdated, isImportLoading, totalNewPages, totalNewUsers, fetchImportUsers } = importUsers()
     return {
       users, isUserLoading, totalPages, totalUsers, fetchGetUsers,
-      fetchCreateUser, fetchUpdateUser, fetchDeleteUser,
+      fetchCreateUser, fetchUpdateUser, fetchArchiveUser,
       groups, fetchGetGroups,
+      usersUpdated, isImportLoading, totalNewPages, totalNewUsers, fetchImportUsers,
     }
   },
   data() {
@@ -151,7 +154,9 @@ export default {
         console.log("Запрос на создание пользователя: ", this.editedUser);
         this.fetchCreateUser(this.editedUser).then(() => {
           this.hideUserModal();
-          this.fetchGetUsers({ role: "student", page: this.currentPage, limit: this.limit });
+          this.fetchGetUsers({ role: "student", page: this.currentPage, limit: this.limit }).finally(() => {
+            this.currentUser = {};
+          });
         })
       } else {
         console.log('Валидация неуспешна', this.currentUser)
@@ -165,7 +170,9 @@ export default {
         console.log("Запрос на обновление пользователя: ", this.editedUser);
         this.fetchUpdateUser(this.editedUser).then(() => {
           this.hideUserModal();
-          this.fetchGetUsers({ role: "student", page: this.currentPage, limit: this.limit });
+          this.fetchGetUsers({ role: "student", search: this.searchValue, page: this.currentPage, limit: this.limit }).finally(() => {
+            this.currentUser = this.users.find(item => item.id == this.currentUser.id);
+          });
         });
       } else {
         console.log('Валидация неуспешна', this.currentUser)
@@ -173,27 +180,30 @@ export default {
     },
     // Валидация формы и отправка запроса на удаление сотруднике
     userDelete() {
-      this.fetchDeleteUser(this.editedUser).then(() => {
+      delete this.editedUser.teacher;
+      this.fetchArchiveUser(this.editedUser).then(() => {
         this.hideUserModal();
-        this.fetchGetUsers({ role: "student", page: this.currentPage, limit: this.limit });
+        this.fetchGetUsers({ role: "student", page: this.currentPage, limit: this.limit }).finally(() => {
+          this.currentUser = {};
+        });
       });
     },
     // 
     userImport() {
       const data = {
-        'users_import': this.newUsers,
-        'users_role': 'student',
+        'users': this.newUsers,
+        'role': 'student',
       }
-      this.axios.post('/user/import', data)
-        .then((response) => {
-          console.log(response);
-          this.users = response.data;
-          this.currentUser = {};
-          this.userCancel();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      this.fetchImportUsers(data, this.limit).then(() => {
+        this.users = [ ...this.usersUpdated ];
+        this.isUserLoading = this.isImportLoading;
+        this.totalUsers = this.totalNewUsers;
+        this.totalPages = this.totalNewPages;
+        this.currentPage = 1,
+        this.hideUserModal();
+      }).finally(() => {
+        this.currentUser = {};
+      });
     },
     // Поиск студента по фамилии
     userSearch(search) {
@@ -207,6 +217,10 @@ export default {
     this.modalUser = new Modal('#modalUser', { backdrop: 'static' });
     // Запросы данных при загрузке страницы
     this.fetchGetUsers({ role: "student", page: this.currentPage, limit: this.limit });
+  },
+  computed: {
+    // подключение переменной авторизированного пользователя из store
+    ...mapGetters(['authUser', 'isAdmin']),
   },
 }
 </script>
@@ -228,5 +242,10 @@ export default {
 }
 .img-import {
   background: url('@/assets/img/item-import.png') no-repeat 50% / 90%;
+}
+.user-delete {
+  margin-top: 10px;
+  border: 1px solid #ced4da;
+  padding: 10px;
 }
 </style>

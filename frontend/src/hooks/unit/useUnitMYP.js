@@ -77,3 +77,36 @@ export function updateUnitMYP() {
     updatedUnitMYP, fetchUpdateUnitMYP
   }
 }
+
+export function deleteUnitMYP() {
+  const fetchDeleteUnitMYP = async (id) => {
+    await axiosAPI.delete(`/myp/unit/${id}`).then((response) => {
+      console.log('Юнит успешно удалён');
+    }).catch((error) => {
+      console.log('Ошибка запроса: ', error);
+    });
+  };
+  return {
+    fetchDeleteUnitMYP
+  }
+}
+
+export function getUnitListMYP() {
+  const unitListMYP = ref([]);
+  const fetchGetUnitListMYP = async (data) => {
+    const config = {
+      params: {
+        year: data.year || null,
+        subject: data.subject || null,
+        interdisciplinary: data.interdisciplinary || null,
+      }
+    }
+    await axiosAPI.get('/myp/unitlist', config).then((response) => {
+      console.log('Получен список юнитов: ', response.data)
+      unitListMYP.value = response.data;
+    });
+  };
+  return {
+    unitListMYP, fetchGetUnitListMYP
+  }
+}

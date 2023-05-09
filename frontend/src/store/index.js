@@ -10,7 +10,7 @@ export default createStore({
   getters: {
     authUser: state => state.authUser,
     isAuthenticated: state => !!state.accessToken,
-    isAdmin: state => (state.authUser && state.authUser.teacher && state.authUser.admin) || (state.authUser && state.authUser.is_staff),
+    isAdmin: state => (state.authUser && state.authUser.teacher && state.authUser.teacher.admin) || (state.authUser && state.authUser.is_staff),
   },
   mutations: {
     setUser(state, user) {

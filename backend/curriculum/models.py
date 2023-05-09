@@ -157,6 +157,7 @@ class Level(models.Model):
     subject_groups = models.ManyToManyField('curriculum.SubjectGroupIB',
                                                   verbose_name=_("Предметные группы"), blank=True,
                                                   related_name="level")
+    number = models.PositiveIntegerField(verbose_name=_("Номер"), default=1)
     class Meta:
         verbose_name = 'Образовательный уровень'
         verbose_name_plural = 'Образовательные уровни'
@@ -353,7 +354,6 @@ class UnitPlannerMYP(models.Model):
     authors = models.ManyToManyField('member.ProfileTeacher', verbose_name=_("Авторы"), related_name="unitplan_myp")
     class_year = models.ForeignKey('curriculum.ClassYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, blank=False, related_name="unitplan_myp")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
-    description = models.TextField(verbose_name=_("Описание"), null=True, blank=True)
     # Информация по Inquiry (Исследовательские вопросы добавляются в связанных таблицах)
     inquiry_questions = models.ManyToManyField('curriculum.InquiryQuestionMYP', verbose_name=_("Исследовательские вопросы"), blank=True, related_name="unitplan_myp")
     key_concepts = models.ManyToManyField('curriculum.KeyConcept', verbose_name=_("Ключевые концепты"), blank=True, related_name="unitplan_myp")
@@ -368,8 +368,7 @@ class UnitPlannerMYP(models.Model):
     strands = models.ManyToManyField('curriculum.Strand', verbose_name=_("Стренды предметной группы"), blank=True, related_name="unitplan_myp")
     content = models.TextField(verbose_name=_("Содержание (темы, знания и умения)"), null=True, blank=True)
     skills = models.TextField(verbose_name=_("Умения"), null=True, blank=True)
-    learner_profile = models.ManyToManyField('curriculum.LearnerProfileIB',verbose_name=_("Профиль студента"), blank=True, related_name="unitplan_myp")
-    description_lp = models.TextField(verbose_name=_("Описание развития профиля"), null=True, blank=True)
+    learner_profile = models.ManyToManyField('curriculum.DevelopProfileMYP',verbose_name=_("Профиль студента"), blank=True, related_name="unitplan_myp")
     international_mindedness = models.TextField(verbose_name=_("Межкультурное понимание"), null=True, blank=True)
     academic_integrity = models.TextField(verbose_name=_("Академическая честность"), null=True, blank=True)
     language_development = models.TextField(verbose_name=_("Языковое развитие"), null=True, blank=True)
@@ -391,10 +390,11 @@ class UnitPlannerMYP(models.Model):
     resources = models.TextField(verbose_name=_("Ресурсы"), null=True, blank=True)
     # Посты обратной связи от педагогов добавляются в связанных таблицах
     reflections = models.ManyToManyField('curriculum.ReflectionMYP', verbose_name=_("Рефлексия"), blank=True, related_name="unitplan_myp")
+    interdisciplinary = models.ForeignKey('curriculum.UnitPlannerMYPID', verbose_name=_("Междисциплинарный юнит"), on_delete=models.SET_NULL, null=True, blank=True, related_name="unitplan_myp")
     class Meta:
         verbose_name = 'UnitPlan MYP: Основные данные юнита'
         verbose_name_plural = 'UnitPlan MYP: Основные данные юнитов'
-        ordering = ['class_year', 'order', 'title']
+        ordering = ['class_year', 'subject', 'order', 'title']
     def __str__(self):
         return "{} ({})".format(self.title, self.class_year)
     
@@ -402,16 +402,29 @@ class UnitPlannerMYP(models.Model):
 class UnitPlannerMYPID(models.Model):
     """ Дополнение для междисциплинарных планеров MYP """
     title = models.CharField(max_length=255, verbose_name=_("Название междисциплинарного юнита"))
-    units = models.ManyToManyField('curriculum.UnitPlannerMYP', verbose_name=_("Юниты MYP"), related_name='inter')
-    form_integration = models.TextField(verbose_name=_("Формы интеграции"), null=True, blank=True)
+    class_year = models.ForeignKey('curriculum.ClassYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, blank=False, related_name="idu")
+    hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
     purpose_integration = models.TextField(verbose_name=_("Цель интеграции"), null=True, blank=True)
-    interdisciplinary_links = models.TextField(verbose_name=_("Междисциплинарные связи"), null=True, blank=True)
-    inter_criteria = models.ManyToManyField('curriculum.Criterion', verbose_name=_("Критерии оценки"), blank=True, related_name="inter")
-    inter_aims = models.ManyToManyField('curriculum.Aim', verbose_name=_("Цели"), blank=True, related_name="inter")
-    inter_strands = models.ManyToManyField('curriculum.Strand', verbose_name=_("Образовательные цели"), blank=True, related_name="inter")
+    key_concepts = models.ManyToManyField('curriculum.KeyConcept', verbose_name=_("Ключевые концепты"), blank=True, related_name="idu")
+    related_concepts = models.ManyToManyField('curriculum.RelatedConcept', verbose_name=_("Сопутствующие концепты"), blank=True, related_name="idu")
+    conceptual_understanding = models.TextField(verbose_name=_("Концептуальное понимание"), null=True, blank=True)
+    global_context = models.ForeignKey('curriculum.GlobalContext', verbose_name=_("Глобальный контекст"), on_delete=models.SET_NULL, null=True, blank=True, related_name="idu")
+    explorations = models.ManyToManyField('curriculum.ExplorationToDevelop', verbose_name=_("Линии исследования"), blank=True, related_name="idu")
+    statement_inquiry = models.TextField(verbose_name=_("Формулировка исследования"), null=True, blank=True)
+    inquiry_questions = models.ManyToManyField('curriculum.InquiryQuestionMYP', verbose_name=_("Исследовательские вопросы"), blank=True, related_name="idu")
+    aims = models.ManyToManyField('curriculum.Aim', verbose_name=_("Цели"), blank=True, related_name="idu")
+    criteria = models.ManyToManyField('curriculum.Criterion', verbose_name=_("Критерии оценки"), blank=True, related_name="idu")
+    strands = models.ManyToManyField('curriculum.Strand', verbose_name=_("Образовательные цели"), blank=True, related_name="idu")
+    tasks = models.TextField(verbose_name=_("Задания"), null=True, blank=True)
+    introduction = models.TextField(verbose_name=_("Введение в МДП"), null=True, blank=True)
+    learning_teaching = models.TextField(verbose_name=_("Учебная деятельность"), null=True, blank=True)
+    formative_assessment = models.TextField(verbose_name=_("Формирующее оценивание"), null=True, blank=True)
+    summative_assessment = models.TextField(verbose_name=_("Итоговое оценивание"), null=True, blank=True)
+    differentiation = models.TextField(verbose_name=_("Дифференцированный подход"), null=True, blank=True)
+    reflections = models.ManyToManyField('curriculum.ReflectionMYP', verbose_name=_("Рефлексия"), blank=True, related_name="idu")
     class Meta:
-        verbose_name = 'UnitPlan MYP: Междисциплинарность'
-        verbose_name_plural = 'UnitPlan MYP: Междисциплинарности'
+        verbose_name = 'UnitPlan MYP: Междисциплинарный юнит'
+        verbose_name_plural = 'UnitPlan MYP: Междисциплинарные юниты'
         ordering = ['title']
     def __str__(self):
         return "{}".format(self.title)
@@ -445,6 +458,17 @@ class ATLMappingMYP(models.Model):
     def __str__(self):
         return "{} ({})".format(self.atl, self.action)
 
+class DevelopProfileMYP(models.Model):
+    """ Развитие профиля студента MYP """
+    profile = models.ForeignKey('curriculum.LearnerProfileIB', verbose_name=_("Профиль студента"), on_delete=models.CASCADE, related_name="develop_myp")
+    description = models.TextField(verbose_name=_("Междисциплинарные связи"), null=True, blank=True)
+    class Meta:
+        verbose_name = 'UnitPlan MYP: Развития профиля студента'
+        verbose_name_plural = 'UnitPlan MYP: Развития профилей студента'
+        ordering = ['profile']
+    def __str__(self):
+        return "{}".format(self.profile)
+
 class ReflectionMYP(models.Model):
     """ Посты рефлексии по планеру MYP """
     POST_TYPE = [
@@ -474,10 +498,9 @@ class UnitPlannerDP(models.Model):
     title = models.CharField(max_length=255, verbose_name=_("Title"))
     subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Subject"), on_delete=models.SET_NULL, null=True, blank=False, related_name="unitplan_dp")
     class_year = models.ForeignKey('curriculum.ClassYear', verbose_name=_("Grade"), on_delete=models.SET_NULL, null=True, blank=False, related_name="unitplan_dp")
-    levels = models.CharField(choices=LEVEL_TYPE, verbose_name=_("Levels"), default='SL+HL', max_length=5)
+    # levels = models.CharField(choices=LEVEL_TYPE, verbose_name=_("Levels"), default='SL+HL', max_length=5)
     hours = models.PositiveSmallIntegerField(verbose_name=_("Hours"), default=0)
     course_part = models.CharField(max_length=255, verbose_name=_("Course Part"))
-    description = models.TextField(verbose_name=_("Description"), null=True, blank=True)
     # Информация по Inquiry (+ Guiding questions)
     transfer_goals = models.TextField(verbose_name=_("Transfer goals"), null=True, blank=True)
     essen_understand = models.TextField(verbose_name=_("Essential Understandings"), null=True, blank=True)

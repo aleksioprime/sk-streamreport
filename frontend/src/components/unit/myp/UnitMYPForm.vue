@@ -18,10 +18,10 @@
           <input ref="teacher" class="form-check-input" type="checkbox" :value="teacher.id" :id="'teacher-' + teacher.id"
             v-model="editedUnit.authors_ids">
           <label class="form-check-label" :for="'teacher-' + teacher.id">
-            {{ teacher.user.first_name }} {{ teacher.user.middle_name }} {{ teacher.user.last_name }}
+            {{ teacher.first_name }} {{ teacher.middle_name }} {{ teacher.last_name }}
           </label>
         </div>
-        <div v-if="index == 4 && searchTeachers.length() != 5">...</div>
+        <div v-if="index == 4 && searchTeachers.length != 5">...</div>
       </div>
       <small ref="teacher_alert" class="alert-text"></small>
     </div>
@@ -43,16 +43,32 @@
         <small ref="hours_alert" class="alert-text"></small>
       </div>
     </div>
-    <!-- Поле выбора предмета  -->
-    <div class="col-md">
-      <label for="grades" class="form-label">Учебный предмет:</label>
-      <select ref="grade" id="grades" class="form-select" v-model="editedUnit.subject_id" @change="getCriteriaBySubject">
-        <option :value="null">Выберите предмет в MYP</option>
-        <option v-for="(sb, i) in subjects" :key="i" :value="sb.id">
-          {{ sb.name_rus }} ({{ sb.group_ib.name_eng }})
-        </option>
-      </select>
-      <small ref="subject_alert" class="alert-text"></small>
+    <div class="row">
+      <!-- Поле выбора предмета  -->
+      <div class="col-md mt-2">
+        <label for="subject" class="form-label">Учебный предмет:</label>
+        <select ref="subject" id="subject" class="form-select" v-model="editedUnit.subject_id" @change="selectSubject">
+          <option :value="null">Выберите предмет в MYP</option>
+          <option v-for="(sb, i) in subjects" :key="i" :value="sb.id">
+            {{ sb.name_rus }} ({{ sb.group_ib.name_eng }})
+          </option>
+        </select>
+        <small ref="subject_alert" class="alert-text"></small>
+      </div>
+      <!-- Поле выбора уровня изучения предмета  -->
+      <div class="col-md-4 mt-2">
+        <label for="level" class="form-label">Уровень изучения:</label>
+        <div v-if="levels.length > 0">
+          <select ref="level" id="levels" class="form-select" v-model="editedUnit.level_id">
+            <option :value="null">Выберите уровень</option>
+            <option v-for="(lvl, i) in levels" :key="i" :value="lvl.id">
+              {{ lvl.name_eng }}
+            </option>
+          </select>
+        </div>
+        <div v-else>Для выбора уровня изучения укажите дисциплину</div>
+        <small ref="level_alert" class="alert-text"></small>
+      </div>
     </div>
     <!-- Поле выбора критериев оценки -->
     <div class="row my-2">
@@ -81,6 +97,7 @@ import { mapGetters } from 'vuex'
 import { getTeachers } from "@/hooks/user/useUser";
 import { getClassYears } from "@/hooks/unit/useClassYear";
 import { getSubjects } from "@/hooks/curriculum/useSubject";
+import { getLevels } from "@/hooks/unit/useLevel";
 import { getCriteriaMYP } from "@/hooks/unit/useCriterionMYP";
 
 export default {
@@ -97,12 +114,14 @@ export default {
     const { teachers, isTeacherLoading, fetchGetTeachers } = getTeachers();
     const { years, fetchGetClassYears } = getClassYears();
     const { subjects, fetchGetSubjects } = getSubjects();
+    const { levels, fetchGetLevels } = getLevels();
     const { criteriaMYP, fetchGetCriteriaMYP } = getCriteriaMYP();
 
     return {
       teachers, isTeacherLoading, fetchGetTeachers,
       years, fetchGetClassYears,
       subjects, fetchGetSubjects,
+      levels, fetchGetLevels,
       criteriaMYP, fetchGetCriteriaMYP,
     }
   },
@@ -123,12 +142,13 @@ export default {
     }
   },
   methods: {
-    getCriteriaBySubject() {
+    selectSubject() {
       if (this.editedUnit.subject_id) {
         this.fetchGetCriteriaMYP({ subject: this.editedUnit.subject_id })
       } else {
         this.criteriaMYP = []
       }
+      this.fetchGetLevels({ subject: this.editedUnit.subject_id});
     },
     // Проверка каждого поля формы на правильность введённых данных
     checkFieldsValidate() {
@@ -137,6 +157,7 @@ export default {
       this.editedUnit.class_year_id ? this.errorField.year = false : this.errorField.year = true;
       this.editedUnit.subject_id ? this.errorField.subject = false : this.errorField.subject = true;
       this.editedUnit.hours ? this.errorField.hours = false : this.errorField.hours = true;
+      this.editedUnit.level_id ? this.errorField.level = false : this.errorField.level = true;
       this.editedUnit.criteria_ids.length ? this.errorField.criteria = false : this.errorField.criteria = true;
       const validate = Object.values(this.errorField).every(item => item == false)
       this.$emit('update:validFormUnit', validate);
@@ -158,12 +179,12 @@ export default {
   computed: {
     // Переменная с данными отфильтрованных учителей по значению поля поиска по фамилии (searchAuthors)
     searchTeachers() {
-      if (this.searchAuthors) {
+      if (!this.searchAuthors) {
         return this.teachers.filter(teacher => this.editedUnit.authors_ids.includes(teacher.id))
       }
       return this.teachers.filter((teacher) => {
-        if (teacher.user) {
-          return teacher.user.last_name.toLowerCase().includes(this.searchAuthors.toLowerCase()) || this.editedUnit.authors_ids.includes(teacher.id)
+        if (teacher.last_name) {
+          return teacher.last_name.toLowerCase().includes(this.searchAuthors.toLowerCase()) || this.editedUnit.authors_ids.includes(teacher.id)
         } else {
           return this.editedUnit.authors_ids.includes(teacher.id)
         }

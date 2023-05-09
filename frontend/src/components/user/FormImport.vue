@@ -11,11 +11,13 @@
         </div>
       </div>
     </form>
+    
     <div class="table-wrapper">
+      <div>Всего в таблице: {{ applicantUsers.length }} </div>
       <table class="table" v-if="applicantUsers.length">
         <thead>
           <tr>
-            <th style>Пользователь</th>
+            <th style="width: 40%;">Пользователь</th>
             <th>ФИО</th>
           </tr>
         </thead>
@@ -26,7 +28,7 @@
           </tr>
         </tbody>
       </table>
-      <div v-else class="p-2">
+      <div v-else >
         Загрузите данные пользователей
       </div>
     </div>
@@ -90,6 +92,7 @@ export default {
   height: 50vh;
   border: 1px solid #28a8a8;
   margin-top: 10px;
+  padding: 10px;
 }
 .success {
   background-color: aquamarine;

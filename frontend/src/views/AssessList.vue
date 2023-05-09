@@ -3,25 +3,17 @@
     <base-header>
       <template v-slot:header>Мои итоговые работы</template>
     </base-header>
-    <div class="tools">
-      <div class="my-2">
-        <select id="study-year" class="form-select me-3 mb-2" v-model="currentStudyYear">
-          <option v-for="(study, i) in studyYears" :key="i" :value="study">
-              {{ study.name }} учебный год
-          </option>
-        </select>
-      </div>
-      <button type="button" class="btn btn-primary ms-auto mb-2 w-100" @click="showSumWorkModalAdd">
-        Cоздать итоговую работу
-      </button>
-    </div>
+    <button type="button" class="btn btn-primary" @click="showSumWorkModalAdd">
+      Cоздать итоговую работу
+    </button>
+    <assessment-filter @updateFetch="updateFetch" :studyPrograms="studyPrograms"/>
     <!-- Модальное окно добавления/редактирования/удаления итоговой работы -->
     <modal-assess :modalTitle="modalTitle" :flagAssess="flagAssess" 
       @create="sumWorkCreate" @delete="sumWorkDelete" @update="sumWorkEdit" @cancel="hideSumWorkModal">
       <template v-slot:body>
         <!-- Форма добавления/редактирования итоговой работы -->
-        <assess-form v-model:summativeWork="currentAssess" v-if="flagAssess.add || flagAssess.edit" :teachers="teachers"
-          :subjects="subjects" :periods="periods" @validForm="validFormResult" ref="assessmentForm" :editMode="formEditMode"/>
+        <assessment-form v-model:summativeWork="currentAssess" v-if="flagAssess.add || flagAssess.edit"
+        :studyPrograms="studyPrograms" @validForm="validFormResult" ref="assessmentForm" :editMode="formEditMode"/>
         <!-- Текст удаления итоговой работы -->
         <div v-if="flagAssess.delete" >
           <div class="mb-2">Вы действительно хотите удалить эту итоговую работу?</div>
@@ -33,28 +25,17 @@
         </div>
       </template>
     </modal-assess>
-    <!-- Выбор периодов обучения -->
-    <div class="period">
-      <div class="period-item" :class="[currentPeriod == pr ? 'period-select' : '']" 
-        v-for="pr in periods" :key="pr.id" @click="refreshSumWorkBySubject(pr)">
-        <div class="period-item-title">{{ pr.number }} триместр</div>
-        <div class="period-item-year">
-          <span v-for="(cy, index) in pr.class_year" :key="cy.id">{{ cy.year_rus }}<span v-if="index != pr.class_year.length - 1">, </span> </span> класс
-        </div>
-        <div class="period-item-date">{{ new Date(pr.date_start).toLocaleDateString() }} - {{ new Date(pr.date_end).toLocaleDateString() }}</div>
-      </div>
-    </div>
+    
     <!-- Вывод итоговых работ учителя, сгруппированных по предметам -->
-    <div v-if="Object.keys(groupedSumWorks(sumWorks, ['subject'])).length !== 0" class="sumworks">
-      <div v-for="(worksBySubject, subject) in groupedSumWorks(sumWorks, ['subject'])" :key="subject">
+    <div v-if="Object.keys(groupedSumWorks(summativeWorks, ['subject'])).length !== 0" class="sumworks">
+      <div v-for="(worksBySubject, subject) in groupedSumWorks(summativeWorks, ['subject'])" :key="subject">
         <div class="sumworks-subject" v-if="getSubject(subject)">{{ getSubject(subject).name_rus }}</div>
-        <div v-for="(worksByYear, year) in groupedSumWorks(worksBySubject, ['unit', 'class_year'])" :key="year">
+        <div v-for="(worksByYear, year) in groupedSumWorks(worksBySubject, ['unit', 'class_year'])" :key="year" class="sumworks-block">
+          <div class="sumworks-year" @click="$router.push(`/assessment/year/${year}/period/${currentPeriod.id}/subject/${subject}`)">
+            <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} {{  }} классы</div>
+          </div>
           <div class="sumworks-grouped">
-            <div class="sumworks-year">
-              <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} классы</div>
-              <div class="sumassess" @click="$router.push(`/assessment/year/${year}/period/${currentPeriod.id}/subject/${subject}`)">Итоговые оценки</div>
-            </div>
-            <assess-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit(sumwork.id)" @deleteWork="showSumWorkModalDelete(sumwork.id)"/>
+            <assessment-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit(sumwork.id)" @deleteWork="showSumWorkModalDelete(sumwork.id)"/>
           </div>
         </div>
       </div>
@@ -68,33 +49,35 @@
 <script>
 import { Modal } from 'bootstrap';
 import { mapGetters } from 'vuex';
-import AssessForm from "@/components/AssessForm.vue";
-import AssessItem from "@/components/AssessItem.vue";
-import { getSumWork, getTeachers, getGrades, getSubjects, getPeriods, getStudyYears } from "@/hooks/assess/getSumWorkData";
+import AssessmentForm from "@/components/assessment/AssessmentForm.vue";
+import AssessmentItem from "@/components/assessment/AssessmentItem.vue";
+import AssessmentFilter from "@/components/assessment/AssessmentFilter.vue";
+import { getSummativeWorks, createSummativeWork, updateSummativeWork, deleteSummativeWork } from "@/hooks/assess/useSummativeWork";
+import { getGroupedArray } from "@/hooks/extra/extraFeatures";
 
 export default {
   name: 'Assessment',
   components: {
-    AssessForm, AssessItem
+    AssessmentForm, AssessmentItem, AssessmentFilter
   },
   setup(props) {
-    const { sumWorks, getSumWorkData } = getSumWork()
-    const { grades, getGradesData } = getGrades()
-    const { teachers, getTeachersData } = getTeachers()
-    const { subjects, getSubjectsData } = getSubjects()
-    const { periods, currentPeriod, getPeriodsData } = getPeriods()
-    const { studyYears, currentStudyYear, getStudyYearsData } = getStudyYears()
+    const { summativeWorks, isSumWorkLoading, fetchGetSummativeWorks } = getSummativeWorks();
+    const { createdSummativeWork, fetchCreateSummativeWork } = createSummativeWork();
+    const { updatedSummativeWork, fetchUpdateSummativeWork } = updateSummativeWork();
+    const { fetchDeleteSummativeWork } = deleteSummativeWork();
+    const { groupedArrayData } = getGroupedArray();
+
     return {
-      sumWorks, getSumWorkData,
-      grades, getGradesData,
-      teachers, getTeachersData,
-      subjects, getSubjectsData,
-      periods, currentPeriod, getPeriodsData,
-      studyYears, currentStudyYear, getStudyYearsData
+      summativeWorks, isSumWorkLoading, fetchGetSummativeWorks,
+      createdSummativeWork, fetchCreateSummativeWork,
+      updatedSummativeWork, fetchUpdateSummativeWork,
+      fetchDeleteSummativeWork,
+      groupedArrayData
     }
   },
   data() {
     return {
+      currentPeriod: null,
       modalAssess: {},
       modalTitle: '',
       flagAssess: {},
@@ -108,9 +91,20 @@ export default {
       },
       validForm: false,
       formEditMode: false,
+      studyPrograms: [
+        { value: 'PYP', name_eng: 'Primary Years Programme', name_rus: 'Программа начальной школы' },
+        { value: 'MYP', name_eng: 'Middle Years Programme', name_rus: 'Программа средней школы' },
+        { value: 'DP', name_eng: 'Diploma Programme', name_rus: 'Программа старшей школы DP' },
+        { value: 'FGOS', name_eng: 'ФГОС', name_rus: 'Программа старшей школы ФГОС' },
+      ]
     }
   },
   methods: {
+    updateFetch(data) {
+      this.currentPeriod = data.period;
+      console.log('Параметры фильтрации: ', data)
+      this.fetchGetSummativeWorks({period: this.currentPeriod.id, teacher: this.authUser.teacher.id})
+    },
     hideSumWorkModal() {
       this.modalAssess.hide();
       this.flagAssess = {}
@@ -134,11 +128,11 @@ export default {
     showSumWorkModalEdit(id) {
       this.modalTitle = 'Редактирование итоговой работы';
       this.formEditMode = true;
-      this.currentAssess = { ...this.sumWorks.find(item => item.id == id) };
+      this.currentAssess = { ...this.summativeWorks.find(item => item.id == id) };
       this.currentAssess.teacher_id = this.currentAssess.teacher.id;
       this.currentAssess.subject_id = this.currentAssess.subject.id;
       this.currentAssess.unit_id = this.currentAssess.unit.id;
-      this.currentAssess.period_id = this.currentAssess.period;
+      this.currentAssess.period_id = this.currentAssess.period.id;
       this.currentAssess.criteria_ids = this.currentAssess.criteria.map(item => item.id);
       this.currentAssess.groups = this.currentAssess.groups.map(item => {
         return {
@@ -154,7 +148,7 @@ export default {
     },
     showSumWorkModalDelete(id) {
       this.modalTitle = 'Удаление итоговой работы';
-      this.currentAssess = { ...this.sumWorks.find(item => item.id == id) };
+      this.currentAssess = { ...this.summativeWorks.find(item => item.id == id) };
       this.modalAssess.show();
       this.flagAssess.delete = true;
     },
@@ -164,15 +158,13 @@ export default {
     },
     sumWorkCreate() {
       this.$refs.assessmentForm.checkFieldsValidate();
-      // this.validForm = true
       if (this.validForm) {
         console.log("Запрос на создание итоговой работы: ", this.currentAssess);
-        this.axios.post('assessment/sumwork', this.currentAssess).then((response) => {
-        }).finally(() => {
-          this.currentAssess = {};
-          this.getSumWorkData({period: this.currentPeriod.id, teacher: this.authUser.teacher.id});
+        this.fetchCreateSummativeWork(this.currentAssess).finally(() => {
+          this.fetchGetSummativeWorks({period: this.currentPeriod.id, teacher: this.authUser.teacher.id})
           this.hideSumWorkModal();
-        });
+          this.currentAssess = {};
+        })
       } else {
         console.log('Валидация неуспешна', this.currentAssess)
       }
@@ -181,24 +173,22 @@ export default {
       this.$refs.assessmentForm.checkFieldsValidate();
       if (this.validForm) {
         console.log("Запрос на изменение итоговой работы: ", this.currentAssess);
-        this.axios.put(`assessment/sumwork/${this.currentAssess.id}`, this.currentAssess).then((response) => {
-          }).finally(() => {
-            this.currentAssess = {};
-            this.getSumWorkData({period: this.currentPeriod.id, teacher: this.authUser.teacher.id});
-            this.hideSumWorkModal();
-          });
+        this.fetchUpdateSummativeWork(this.currentAssess.id, this.currentAssess).finally(() => {
+          this.fetchGetSummativeWorks({period: this.currentPeriod.id, teacher: this.authUser.teacher.id})
+          this.hideSumWorkModal();
+          this.currentAssess = {};
+        });
       } else {
         console.log('Валидация неуспешна', this.currentAssess)
       }
     },
     sumWorkDelete() {
       console.log("Запрос на удаление итоговой работы");
-      this.axios.delete(`assessment/sumwork/${this.currentAssess.id}`).then((response) => {
-        }).finally(() => {
-          this.currentAssess = {};
-          this.getSumWorkData({period: this.currentPeriod.id, teacher: this.authUser.teacher.id});
-          this.hideSumWorkModal();
-        });
+      this.fetchDeleteSummativeWork(this.currentAssess.id).finally(() => {
+        this.fetchGetSummativeWorks({period: this.currentPeriod.id, teacher: this.authUser.teacher.id})
+        this.hideSumWorkModal();
+        this.currentAssess = {};
+      });
     },
     // преобраование массива итоговых работ в группированный по предмету объект массивов
     groupedSumWorks(array, fields) {
@@ -214,73 +204,58 @@ export default {
       }, {});
       return groupedObject;
     },
-    // Нахождение предмета по его ID
+    // Нахождение предмета по его ID из списка итоговых работ
     getSubject(id) {
-      return this.subjects.find(item => item.id == id); 
+      let subject = null;
+      this.summativeWorks.forEach((item) => {
+        if (item.subject.id == id) {
+          subject = item.subject
+          return
+        }
+      })
+      return subject
     },
-    // Нахождение года обучения по его ID
+    // Нахождение года обучения по его ID из списка итоговых работ
     getGrade(id) {
-      return this.grades.find(item => item.id == id); 
-    },
-    // Обновление итоговых работ при выборе периода
-    refreshSumWorkBySubject(pr) {
-      this.currentPeriod = pr;
-      this.getSumWorkData({period: pr.id, teacher: this.authUser.teacher.id});
+      let year = null;
+      this.summativeWorks.forEach((item) => {
+        if (item.unit.class_year.id == id) {
+          year = item.unit.class_year
+          return
+        }
+      })
+      return year
     },
   },
   mounted() {
     // Инициализация объекта модального окна
     this.modalAssess = new Modal('#modalAssess', { backdrop: 'static' });
-    this.getTeachersData();
-    this.getStudyYearsData();
-    this.getSubjectsData('ooo', 'base');
-    this.getGradesData();
-    this.getPeriodsData(this.currentStudyYear).finally(() => {
-      this.getSumWorkData({period: this.currentPeriod.id, teacher: this.authUser.teacher.id});
-    });
   },
   computed: {
     // подключение переменной авторизированного пользователя из store
-    ...mapGetters(['authUser']),
+    ...mapGetters(['authUser', 'isAdmin']),
   }
 }
 </script>
 
 <style>
-.period {
+.tools {
   display: flex;
-  justify-content: center;
-  margin: 10px;
+  align-items: center;
 }
-.period-item {
-  padding: 10px;
-  cursor: pointer;
-  border: 1px solid #33cccc;
-  border-radius: 5px;
-  flex-grow: 1;
-  text-align: center;
-}
-.period-item:not(:last-of-type) {
-  margin-right: 5px;
-}
-.period-item:hover {
-  background: #33cccc;
-  color: #ffffff;
-}
-.period-item-title {
-  font-weight: 500;
-}
-.period-item-date {
-  font-size: 0.7rem;
-}
-.period-select {
-  background: #1e7979;
-  color: #ffffff;
+.tools .btn {
+  max-width: 300px;
 }
 .sumworks {
   display: flex;
   flex-direction: column;
   padding: 10px;
+}
+.sumworks-block {
+  border: 2px solid #c4c4c4;
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+  border-radius: 5px;
+  margin-top: 10px;
 }
 .sumworks-subject {
   font-size: 2em;
@@ -294,8 +269,17 @@ export default {
 .sumworks-year {
   display: flex;
   align-items: center;
-  background-color: #33cccc;
+  background-color: #c4c4c4;
   padding: 10px;
+  cursor: pointer;
+}
+.sumworks-year:hover {
+  transition: 0.6s;
+  background-color: #a3a3a3;
+}
+.sumworks-block:hover {
+  transition: 1s;
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.5);
 }
 .sumworks-year .title{
   color: #fff;
@@ -305,7 +289,6 @@ export default {
 .sumworks-year .sumassess {
   margin-left: auto;
   padding: 10px;
-  background-color: #ffbf40;
   color: #000000;
   border-radius: 5px;
   cursor: pointer;
@@ -315,8 +298,7 @@ export default {
   background-color: #fad385;
 }
 .sumworks-grouped {
-  border: 1px solid #33cccc;
-  margin: 10px 0;
   padding: 10px;
 }
+
 </style>

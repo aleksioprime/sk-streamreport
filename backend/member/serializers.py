@@ -1,12 +1,8 @@
 from rest_framework import serializers
-from member.models import User, RoleUser, Department, ProfileStudent, ProfileTeacher
+from member.models import User, Department, ProfileStudent, ProfileTeacher
 from assess.models import ClassGroup
 from curriculum.serializers import SubjectSerializer, UnitMYPSerializerListCreate
 
-# class RoleSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = RoleUser
-#         fields = '__all__'
         
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,19 +20,22 @@ class ProfileStudentSerializer(serializers.ModelSerializer):
         fields = ['id', 'id_dnevnik']
 
 class ProfileTeacherSerializer(serializers.ModelSerializer):
-    units = UnitMYPSerializerListCreate(source='unitplan_myp', many=True, read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    middle_name = serializers.CharField(source='user.middle_name', read_only=True)
+    # units = UnitMYPSerializerListCreate(source='unitplan_myp', many=True, read_only=True)
     class Meta:
         model = ProfileTeacher
-        fields = ['id', 'id_dnevnik', 'units', 'position', 'admin']
+        fields = ['id', 'id_dnevnik', 'position', 'admin', 'last_name', 'first_name', 'middle_name']
 
-class UserSerializer(serializers.ModelSerializer):
+class UserCreateSerializer(serializers.ModelSerializer):
     student = ProfileStudentSerializer(required=False)
     teacher = ProfileTeacherSerializer(required=False)
     class Meta:
         model = User
-        fields = ["id", "id_str", "username", "email", "first_name", "middle_name", 
+        fields = ["id", "username", "email", "first_name", "middle_name", 
                   "last_name", "last_login", "date_of_birth", "gender", "student", 
-                  "teacher", "photo", 'is_staff', 'password']
+                  "teacher", "photo", 'is_staff', 'password', 'is_active']
         read_only_fields = ['photo', 'is_staff']
         write_only_fields = ["password"]
         # extra_kwargs = {'username': {'required': False}, 'role': {'validators': []}}
@@ -67,6 +66,26 @@ class UserSerializer(serializers.ModelSerializer):
             student = ProfileStudent.objects.create(user=user, **validated_data.get('student'))
             print('Создан студент:', student)
         return user
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response.pop('password', None)
+        return response
+    
+class UserSerializer(serializers.ModelSerializer):
+    student = ProfileStudentSerializer(required=False)
+    teacher = ProfileTeacherSerializer(required=False)
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "first_name", "middle_name", 
+                  "last_name", "last_login", "date_of_birth", "gender", "student", 
+                  "teacher", "photo", 'is_staff', 'is_active']
+        read_only_fields = ['photo', 'is_staff']
+        extra_kwargs = {
+            'username': {'required': True},
+            'first_name': {'required': True},
+            'last_name': {'required': True},
+            'email': {'required': True},
+            }
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
         if 'student' in validated_data:

@@ -11,18 +11,15 @@
     <div class="unit">
       <div>Юнит:&nbsp;
         <a :href="`/unit/${sumwork.unit.id}`">{{ sumwork.unit.title }}</a> 
-        <span v-if="sumwork.unit.checkInterdisciplinary" class="badge rounded-pill text-bg-primary me-1">МДП<br></span>
+        <span v-if="sumwork.unit.interdisciplinary" class="badge rounded-pill text-bg-primary me-1">МДП<br></span>
       </div>
-      <div>
-        Предметы: 
-        <span v-for="(sb, i) in sumwork.unit.subjects" :key="i">{{ sb.subject.name_rus }}<span v-if="i + 1 != sumwork.unit.subjects.length">, </span></span>
-      </div>
+      <div>Предмет: {{ sumwork.unit.subject.name_rus }}</div>
     </div>
     
     <div class="assessment">
       <div class="criteria">
         <div class="criteria-title">Критерии оценки:</div>
-        <div class="criteria-item" v-for="cr in sumwork.criteria" :key="cr.id">{{ cr.letter }}</div>
+        <div class="criteria-item" :class="classCriteria(cr.letter)" v-for="cr in sumwork.criteria" :key="cr.id">{{ cr.letter }}</div>
       </div>
       <div v-if="sumwork.groups.length">
         <div class="group-title">Журналы оценок:</div>
@@ -52,6 +49,17 @@ export default {
     }
   },
   methods: {
+    classCriteria(letter) {
+      if (letter.toLowerCase() == 'a') {
+        return 'criteria-a'
+      } else if (letter.toLowerCase() == 'b') {
+        return 'criteria-b'
+      } else if (letter.toLowerCase() == 'c') {
+        return 'criteria-c'
+      } else {
+        return 'criteria-d'
+      }
+    },
   }
 }
 </script>
@@ -60,7 +68,7 @@ export default {
 .sumworks-item {
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid #33cccc;
+  border: 1px solid #c4c4c4;
   border-radius: 10px;
 }
 .sumworks-item .title {
@@ -103,8 +111,6 @@ export default {
 .sumworks-item .criteria-item {
   margin-right: 10px;
   padding: 5px 10px;
-  background: #33cccc;
-  color: #ffffff;
   border-radius: 5px;
   font-weight: 700;
 }
@@ -117,12 +123,10 @@ export default {
 .sumworks-item .assessment .groups {
   display: flex;
   flex-wrap: wrap;
-  border-left: 1px solid #33cccc;
-  padding-left: 10px;
   padding-bottom: 5px;
 }
 .sumworks-item .assessment .group {
-  border: 1px solid #33cccc;
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
   padding: 5px 15px;
   text-align: center;
   border-radius: 10px;
@@ -132,7 +136,7 @@ export default {
   margin-right: 10px
 }
 .sumworks-item .assessment .group:hover {
-  background: #33cccc;
+  background: #c4c4c4;
   color: #ffffff;
 }
 .sumworks-item .group-title {
@@ -160,5 +164,25 @@ export default {
   .sumworks-item .assessment {
     flex-direction: column;
   }
+}
+
+.criteria-a {
+  color: #54C3DA;
+  border: 1px solid #54C3DA;
+}
+
+.criteria-b {
+  color: #a59a50;
+  border: 1px solid #a59a50;
+}
+
+.criteria-c {
+  color: #7AC11A;
+  border: 1px solid #7AC11A;
+}
+
+.criteria-d {
+  color: #CA4348;
+  border: 1px solid #CA4348;
 }
 </style>

@@ -8,6 +8,7 @@ export function getGroups() {
     const config = {
       params: {
         study_year: data.study_year || null,
+        class_year: data.class_year || null,
       }
     }
     isGroupLoading.value = true;
