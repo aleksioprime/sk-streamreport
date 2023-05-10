@@ -9,13 +9,14 @@ export default createStore({
   },
   getters: {
     authUser: state => state.authUser,
-    isAuthenticated: state => !!state.accessToken
+    isAuthenticated: state => !!state.accessToken,
+    isAdmin: state => (state.authUser && state.authUser.teacher && state.authUser.teacher.admin) || (state.authUser && state.authUser.is_staff),
   },
   mutations: {
     setUser(state, user) {
       state.authUser = user;
     },
-    clearUser(state, user) {
+    clearUser(state) {
       state.authUser = null;
     },
     updateToken(state, { access, refresh }) {

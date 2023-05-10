@@ -5,45 +5,46 @@
       <template v-slot:header>Журнал оценок за итоговую работу</template>
     </base-header>
     <modal-class @save="saveClassModal" @cancel="hideClassModal" :modalTitle="modalTitleClass">
-      <assess-work-form v-if="completeLoadWorkGroup" v-model:studentsWork="studentsWork" :year="workGroup.group"/>
+      <assessment-work-form v-if="!isWorkGroupLoading" v-model:studentsWork="studentsWork" :year="summativeWorkGroup.group"/>
+      <div v-else>Данные загружаются</div>
     </modal-class>
     <div class="info">
-      <div>{{ workGroup.work.title }}</div>
-      <div v-if="workGroup.work.unit">{{ workGroup.work.unit.title }}</div>
-      <div v-if="workGroup.work.groups">{{ workGroup.group.class_year }}{{ workGroup.group.letter }} класс</div>
+      <div>{{ summativeWorkGroup.work.title }}</div>
+      <div v-if="summativeWorkGroup.work.unit">{{ summativeWorkGroup.work.unit.title }}</div>
+      <div v-if="summativeWorkGroup.work.groups">{{ summativeWorkGroup.group.class_year }}{{ summativeWorkGroup.group.letter }} класс (Всего: {{ summativeWorkGroup.group.count }})</div>
     </div>
     <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
     <div class="tools" ref="activeInput">
 
     </div>
-    <div v-if="workGroup.students.length">
+    <div v-if="summativeWorkGroup.students.length">
       <!-- Таблица оценок выбранного итоговой работы и класса -->
       <table class="table table-sm table-bordered mt-3 mark-table">
         <thead class="thead-dark text-center">
           <tr>
             <th rowspan="2" style="width: 5%">№</th>
             <th rowspan="2" style="width: 50%">ФИО студента</th>
-            <th :colspan="workGroup.work.criteria.length">Баллы по критериям</th>
+            <th :colspan="summativeWorkGroup.work.criteria.length">Баллы по критериям</th>
             <th rowspan="2" style="width: 10%">Сумма</th>
             <th rowspan="2" style="width: 10%">Расчёт</th>
             <th rowspan="2" style="width: 10%">Оценка</th>
           </tr>
           <tr>
-            <th style="width: 5%" v-for="cr in workGroup.work.criteria" :key="cr.id">{{ cr.letter }}</th>
+            <th style="width: 5%" v-for="cr in summativeWorkGroup.work.criteria" :key="cr.id">{{ cr.letter }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(assess, index) in workGroup.students" :key="assess.id">
+          <tr v-for="(assess, index) in summativeWorkGroup.students" :key="assess.id">
             <td class="text-center">{{ index + 1 }}</td>
             <td>{{ assess.student.user.last_name }} {{ assess.student.user.first_name }}</td>
-            <td v-for="cr in workGroup.work.criteria" :key="cr.id" class="criterion">
+            <td v-for="cr in summativeWorkGroup.work.criteria" :key="cr.id" class="criterion">
               <input type="text" class="input-table" v-model="markCriterion.mark">
               <div @click="(event) => setEditField(event, assess, cr)">{{ getMarkForStudent(cr.id, assess.criteria_marks) }}</div>
             </td>
             <td class="text-center">
-              <b>{{ calcSumStudentMarks(assess.criteria_marks) }}</b>/{{ calcMaxStudentMarks(workGroup.work.criteria) }}
+              <b>{{ calcSumStudentMarks(assess.criteria_marks) }}</b>/{{ calcMaxStudentMarks(summativeWorkGroup.work.criteria) }}
             </td>
-            <td class="text-center">{{ calcStudentMarks(assess.criteria_marks, workGroup.work.criteria) }}</td>
+            <td class="text-center">{{ calcStudentMarks(assess.criteria_marks, summativeWorkGroup.work.criteria) }}</td>
             <td class="text-center grade">
               <input type="text" class="input-table" v-model="currentWorkAssess.grade">
               <div class="text-table" @click="(event) => setEditField(event, assess)">{{ assess.grade || "-" }}</div>
@@ -60,19 +61,19 @@
 
 <script>
 import { Modal } from 'bootstrap';
-import AssessWorkForm from "@/components/AssessWorkForm.vue"
-import { getWorkGroup } from "@/hooks/assess/getSumWorkAssess"
+import AssessmentWorkForm from "@/components/assessment/AssessmentWorkForm.vue";
+import { getSummativeWorkGroup } from "@/hooks/assess/useSummativeWork";
 
 export default {
   name: 'AssessWorkView',
   components: {
-    AssessWorkForm,
+    AssessmentWorkForm,
   },
   setup(props) {
     // Получение функции запроса данных итоговой работы
-    const { workGroup, getWorkGroupData } = getWorkGroup();
+    const { summativeWorkGroup, isWorkGroupLoading, fetchGetSummativeWorkGroup } = getSummativeWorkGroup();
     return {
-      workGroup, getWorkGroupData,
+      summativeWorkGroup, isWorkGroupLoading, fetchGetSummativeWorkGroup
     }
   },
   data() {
@@ -98,7 +99,7 @@ export default {
       console.log('Отправка запроса на добавление студентов в журнал: ', dataStudentsWork);
       this.axios.put(`/assessment/workgroup/${this.$route.params.id}`, dataStudentsWork).then((response) => {
           console.log('Список студентов успешно изменён');
-          this.getWorkGroupData(this.$route.params.id);
+          this.fetchGetSummativeWorkGroup(this.$route.params.id);
         }).finally(() => {
           console.log('Запрос завершён');
         });
@@ -177,7 +178,7 @@ export default {
         }
         console.log("Запрос на изменение данных: ", this.currentWorkAssess);
         this.axios.put(`/assessment/workassess/${assess.id}`, this.currentWorkAssess).then((response) => {
-          this.getWorkGroupData(this.$route.params.id);
+          this.fetchGetSummativeWorkGroup(this.$route.params.id);
           console.log('Оценка успешно обновлена');
         }).finally(() => {
           this.currentWorkAssess = {};
@@ -203,7 +204,7 @@ export default {
         }
         console.log("Запрос на изменение данных: ", dataMarkCriterion);
         this.axios.put(`/assessment/workassess/${assess.id}`, dataMarkCriterion).then((response) => {
-          this.getWorkGroupData(this.$route.params.id);
+          this.fetchGetSummativeWorkGroup(this.$route.params.id);
           console.log('Оценка успешно обновлена');
         }).finally(() => {
           this.markCriterion = {};
@@ -211,11 +212,11 @@ export default {
       }
     },
     getStudentsWork() {
-      this.studentsWork = this.workGroup.students.map(item => item.student)
+      this.studentsWork = this.summativeWorkGroup.students.map(item => item.student)
     },
   },
   mounted() {
-    this.getWorkGroupData(this.$route.params.id).finally(() => {
+    this.fetchGetSummativeWorkGroup(this.$route.params.id).finally(() => {
       this.getStudentsWork();
       this.completeLoadWorkGroup = true;
     });

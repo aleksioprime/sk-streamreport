@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from assess.serializers import StudyYearSerializer, ClassGroupSerializer, StudyPeriodSerializer, SummativeWorkSerializer, \
+from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassGroupExtraSerializer,  StudyPeriodSerializer, SummativeWorkSerializer, \
     WorkAssessmentSerializer, WorkCriteriaMarkSerializer, ProfileStudentSerializer, WorkGroupDateItemSerializer, \
-    PeriodAssessmentSerializer, StudentWorkSerializer
+    PeriodAssessmentSerializer, StudentWorkSerializer, ReportPeriodSerializer, StudentReportTeacherSerializer, ReportTeacherSerializer, \
+    EventTypeSerializer, EventParticipationSerializer
 from curriculum.serializers import ClassYearSerializer, SubjectSerializer      
  
-from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment
+from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
+    ReportPeriod, ReportTeacher, EventType, EventParticipation
 from member.models import ProfileTeacher, ProfileStudent, User
 from curriculum.models import ClassYear, Subject
 
@@ -19,15 +21,24 @@ class StudyYearViewSet(viewsets.ModelViewSet):
 
 class ClassGroupViewSet(viewsets.ModelViewSet):
     queryset = ClassGroup.objects.all()
-    serializer_class = ClassGroupSerializer
+    # serializer_class = ClassGroupSerializer
+    default_serializer_class = ClassGroupSerializer
+    serializer_classes = {
+        'retrieve': ClassGroupExtraSerializer,
+        'update': ClassGroupExtraSerializer,
+    }
     def get_queryset(self):
-        grade = self.request.query_params.get("grade", None)
+        class_year = self.request.query_params.get("class_year", None)
+        study_year = self.request.query_params.get("study_year", None)
         groups = ClassGroup.objects.all()
-        if grade:
-            print(f"Get-запрос grade: {grade}")
-            groups = groups.filter(class_year=grade)
-        print(f"Ответ от сервера: {groups}")
+        if class_year:
+            groups = groups.filter(class_year=class_year)
+        if study_year:
+            groups = groups.filter(study_year=study_year)
         return groups
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
+
 
 # Набор CRUD-методов для работы с моделью Студенты
 class StudentViewSet(viewsets.ModelViewSet):
@@ -39,10 +50,10 @@ class StudentViewSet(viewsets.ModelViewSet):
         students = ProfileStudent.objects.all()
         if group:
             print(f"Get-запрос class: {group}")
-            students = students.filter(group=group)
+            students = students.filter(groups__in=[group])
         if year:
             print(f"Get-запрос year: {year}")
-            students = students.filter(group__class_year=year)
+            students = students.filter(groups__class_year__in=[year])
         print(f"Ответ от сервера: {students}")
         return students
 
@@ -53,8 +64,11 @@ class StudyPeriodViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         study_period = StudyPeriod.objects.all()
         study_year = self.request.query_params.get("study_year", None)
+        program = self.request.query_params.get("program", None)
         if study_year:
             study_period = study_period.filter(study_year=study_year)
+        if program:
+            study_period = study_period.filter(class_year__program__in=[program]).distinct()
         return study_period
 
 
@@ -130,8 +144,6 @@ class PeriodAssessmentViewSet(viewsets.ModelViewSet):
             period_assessment = period_assessment.filter(year=year)
         return period_assessment
     
-    
-    
 class StudentWorkViewSet(viewsets.ModelViewSet):
     queryset = ProfileStudent.objects.all()
     serializer_class = StudentWorkSerializer
@@ -140,9 +152,9 @@ class StudentWorkViewSet(viewsets.ModelViewSet):
         year = self.request.query_params.get("year", None)
         students = ProfileStudent.objects.all()
         if group:
-            students = students.filter(group=group)
+            students = students.filter(groups__in=[group]).distinct()
         if year:
-            students = students.filter(group__class_year=year)
+            students = students.filter(groups__class_year__in=[year]).distinct()
         return students
     def get_serializer_context(self, *args, **kwargs):
         period = self.request.query_params.get("period", None)
@@ -172,3 +184,69 @@ class AssessmentJournalAPIView(APIView):
             'groups': ClassGroupSerializer(groups_queryset, many=True).data,
             'subject': SubjectSerializer(subject_queryset).data
             })
+    
+class ReportPeriodViewSet(viewsets.ModelViewSet):
+    queryset = ReportPeriod.objects.all()
+    serializer_class = ReportPeriodSerializer
+    def get_queryset(self):
+        report_period = ReportPeriod.objects.all()
+        study_year = self.request.query_params.get("study_year", None)
+        if study_year:
+            report_period = report_period.filter(study_year=study_year)
+        return report_period
+    
+
+class StudentReportTeacherViewSet(viewsets.ModelViewSet):
+    queryset = ProfileStudent.objects.all()
+    serializer_class = StudentReportTeacherSerializer
+    def get_queryset(self):
+        group = self.request.query_params.get("group", None)
+        class_year = self.request.query_params.get("class_year", None)
+        students = ProfileStudent.objects.all()
+        if group:
+            students = students.filter(groups__in=[group]).distinct()
+        if class_year:
+            students = students.filter(groups__class_year__in=[class_year]).distinct()
+        return students
+    def get_serializer_context(self, *args, **kwargs):
+        period = self.request.query_params.get("period", None)
+        study_year = self.request.query_params.get("class_year", None)
+        study_year = self.request.query_params.get("study_year", None)
+        subject = self.request.query_params.get("subject", None)
+        author = self.request.query_params.get("author", None)
+        context = super().get_serializer_context()
+        if period:
+            context.update({"period": period})
+        if study_year:
+            context.update({"study_year": study_year})
+        if subject:
+            context.update({"subject": subject})
+        if author:
+            context.update({"author": author})
+        if study_year:
+            context.update({"study_year": author})
+        return context
+
+class ReportTeacherViewSet(viewsets.ModelViewSet):
+    queryset = ReportTeacher.objects.all()
+    serializer_class = ReportTeacherSerializer
+
+class EventTypeViewSet(viewsets.ModelViewSet):
+    queryset = EventType.objects.all()
+    serializer_class = EventTypeSerializer
+
+class EventParticipationViewSet(viewsets.ModelViewSet):
+    queryset = EventParticipation.objects.all()
+    serializer_class = EventParticipationSerializer
+    def get_queryset(self):
+        event_participation = EventParticipation.objects.all()
+        type = self.request.query_params.get("type", None)
+        level = self.request.query_params.get("level", None)
+        student = self.request.query_params.get("student", None)
+        if type:
+            event_participation = event_participation.filter(type=type)
+        if level:
+            event_participation = event_participation.filter(level=level)
+        if student:
+            event_participation = event_participation.filter(teacher_reports__student__in=[student], mentor_reports__student__in=[student])
+        return event_participation
