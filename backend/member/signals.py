@@ -4,7 +4,11 @@ from django.dispatch import receiver
 
 @receiver(post_delete, sender=ProfileStudent)
 def delete_student_profile(instance, **kwargs):
-    User.objects.filter(pk=instance.user.pk).delete()
+    user_queryset = User.objects.filter(pk=instance.user.pk)
+    if user_queryset:
+        user_queryset.delete()
 @receiver(post_delete, sender=ProfileTeacher)
 def delete_student_profile(instance, **kwargs):
-    User.objects.filter(pk=instance.user.pk).delete()
+    user_queryset = User.objects.filter(pk=instance.user.pk)
+    if user_queryset:
+        user_queryset.delete()
