@@ -26,7 +26,8 @@ class ProfileTeacherSerializer(serializers.ModelSerializer):
     # units = UnitMYPSerializerListCreate(source='unitplan_myp', many=True, read_only=True)
     class Meta:
         model = ProfileTeacher
-        fields = ['id', 'id_dnevnik', 'position', 'admin', 'last_name', 'first_name', 'middle_name']
+        fields = ['id', 'id_dnevnik', 'position', 'admin', 'last_name', 'first_name', 
+                  'middle_name', 'groups', 'psycho_groups']
 
 class UserCreateSerializer(serializers.ModelSerializer):
     student = ProfileStudentSerializer(required=False)

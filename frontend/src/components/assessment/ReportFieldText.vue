@@ -64,6 +64,10 @@ export default {
         user: {},
       }
     },
+    criteria: {
+      type: Object,
+      default: {}
+    }
   },
   setup(props) {
     const { generatedGPTText, isGPTTextLoading, fetchChatGPTReport } = getChatGPTReport();
@@ -90,7 +94,18 @@ export default {
       this.editData.text = this.student.teacher_report.text;
     },
     generateField() {
-      this.fetchChatGPTReport().finally(() => {
+      const data = {
+        mark: {
+          criterion_a: this.student.periodassess.criterion_a,
+          criterion_b: this.student.periodassess.criterion_b,
+          criterion_c: this.student.periodassess.criterion_c,
+          criterion_d: this.student.periodassess.criterion_d,
+        },
+        criteria: this.criteria,
+        first_name: this.student.user.first_name,
+        subject: this.student.teacher_report.subject.name_rus
+      }
+      this.fetchChatGPTReport(data).finally(() => {
         this.editData.text = this.generatedGPTText;
       });
     }

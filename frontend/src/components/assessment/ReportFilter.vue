@@ -21,18 +21,9 @@
     </div>
     
     <div class="row">
-      <!-- Выбор года обучения -->
-      <div class="col-md">
-        <select id="class-year" class="form-select me-3 mb-2" v-model="currentClassYear" @change="getClassGroups">
-          <option :value="null">Выберите год</option>
-          <option v-for="(year, i) in years" :key="i" :value="year.id">
-              {{ year.year_rus }} классы
-          </option>
-        </select>
-      </div>
       <!-- Выбор класса -->
       <div class="col-md">
-        <select id="class-group" class="form-select me-3 mb-2" v-model="currentGroup" @change="handleQuery" :disabled="!groups.length">
+        <select id="class-group" class="form-select me-3 mb-2" v-model="currentGroup" @change="handleQuery">
           <option :value="null">Выберите класс</option>
           <option v-for="(gr, i) in groups" :key="i" :value="gr.id">
               {{ gr.class_year }}{{ gr.letter }} класс
@@ -56,7 +47,6 @@
 import { getStudyYears } from "@/hooks/assess/useStudyYear";
 import { getReportPeriods } from "@/hooks/assess/useReportPeriod";
 import { getSubjects } from "@/hooks/curriculum/useSubject";
-import { getClassYears } from "@/hooks/unit/useClassYear";
 import { getTeachers } from "@/hooks/user/useUser";
 import { getGroups } from "@/hooks/user/useGroup";
 
@@ -68,28 +58,24 @@ export default {
     const { studyYears, currentStudyYear, fetchGetStudyYears } = getStudyYears();
     const { reportPeriods, currentReportPeriod, fetchGetReportPeriods } = getReportPeriods();
     const { subjects, fetchGetSubjects } = getSubjects();
-    const { years, fetchGetClassYears } = getClassYears();
     const { groups, fetchGetGroups } = getGroups();
     const { teachers, isTeacherLoading, fetchGetTeachers } = getTeachers();
     return {
       studyYears, currentStudyYear, fetchGetStudyYears,
       reportPeriods, currentReportPeriod, fetchGetReportPeriods,
       subjects, fetchGetSubjects,
-      years, fetchGetClassYears,
       groups, fetchGetGroups,
       teachers, isTeacherLoading, fetchGetTeachers
     }
   },
   data() {
     return {
-      currentClassYear: null,
       currentGroup: null,
       currentSubject: null,
     }
   },
   methods: {
     resetQuery() {
-      this.currentClassYear = null;
       this.currentSubject = null;
       this.currentGroup = null;
     },
@@ -101,7 +87,6 @@ export default {
     handleQuery(event) {
       this.$emit('updateFetch', { 
         study_year: this.currentStudyYear.id,
-        class_year: this.currentClassYear, 
         period: this.currentReportPeriod,
         subject: this.currentSubject,
         group: this.currentGroup,
@@ -112,11 +97,17 @@ export default {
     }
   },
   mounted() {
-    this.fetchGetStudyYears().finally(() => {
-      this.fetchGetReportPeriods({ study_year: this.currentStudyYear })
-    });
-    this.fetchGetClassYears({ program: 'MYP' });
     this.fetchGetSubjects({ level: 'ooo', type: 'base' });
+    this.fetchGetStudyYears().finally(() => {
+      this.fetchGetReportPeriods({ study_year: this.currentStudyYear }).finally(() => {
+        this.fetchGetGroups({ study_year: this.currentStudyYear.id });
+        this.currentSubject = this.$route.params.id_subject;
+        this.currentGroup = this.$route.params.id_group;
+        this.handleQuery();
+      })
+      
+    });
+    
   },
   watch: {
     

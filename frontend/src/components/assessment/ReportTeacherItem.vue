@@ -8,8 +8,9 @@
         <div class="student-name">{{ student.user.last_name }} {{ student.user.first_name }}</div>
       </div>
     </div>
-    <div class="assess-title">Результаты студента за {{ period.assessment_period.number }} {{ period.assessment_period.type }}</div>
-    <div class="student-assessment">
+    <div class="assess-title" data-bs-toggle="collapse" :href="`#collapse-${student.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-${student.id}`">
+      Результаты студента за {{ period.assessment_period.number }} {{ period.assessment_period.type }}</div>
+    <div class="student-assessment collapse" :id="`collapse-${student.id}`">
       <div class="assess-wrapper">
         <div class="assess-item">
           <div class="assess-criterion">{{ criterionA.letter }}. {{ criterionA.name_eng }}</div>
@@ -41,11 +42,14 @@
       </div>
     </div>
     <div class="student-report">
-      <report-field-text id="student-report" :student="student" @save="fetchSaveReport"/>
+      <report-field-text id="student-report" :student="student" 
+      :criteria="{ criterion_a: criterionA, criterion_b: criterionB, criterion_c: criterionC, criterion_d: criterionD,}" @save="fetchSaveReport"/>
     </div>
-    <div class="student-events" v-if="student.teacher_report.id">
-      <div>Участие в мероприятиях</div>
-      <report-field-blocks id="student-events" :fieldData="student.teacher_report.events" :fieldName="'events'" @save="fetchSaveEvent">
+    <div class="student-events" v-if="student.teacher_report.text">
+      <div class="events-title" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
+      aria-expanded="false" :aria-controls="`collapse-events-${student.id}`">Участие в мероприятиях</div>
+      <report-field-blocks class="collapse" :id="`collapse-events-${student.id}`" :fieldData="student.teacher_report.events" 
+      :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveEvent">
         <!-- Слот для блоков показа записей -->
         <template v-slot:show="field">
           <div class="blocks-wrapper">
@@ -56,9 +60,26 @@
         </template>
         <template v-slot:form="item">  
           <div class="my-2">
-            <input class="form-control" type="text" v-model="item.data.title">
-            <textarea class="form-control" type="text" v-model="item.data.result"
-              placeholder="Описание результатов"></textarea>
+            <input class="form-control my-1" type="text" v-model="item.data.title" placeholder="Название мероприятия">
+            <div class="row">
+              <div class="col-md">
+                <select id="levels" class="form-select my-1" v-model="item.data.level">
+                  <option :value="null">Выберите уровень</option>
+                  <option v-for="(lvl, i) in levels" :key="i" :value="lvl.value">
+                    {{ lvl.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md">
+                <select id="types" class="form-select my-1" v-model="item.data.type_id">
+                  <option :value="null">Выберите тип</option>
+                  <option v-for="(type, i) in types" :key="i" :value="type.id">
+                    {{ type.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <textarea class="form-control my-1" type="text" v-model="item.data.result" placeholder="Описание результатов"></textarea>
           </div>
         </template>
       </report-field-blocks>
@@ -89,11 +110,22 @@ export default {
       default: []
     },
     period: { Object },
+    types: { 
+      type: Array,
+      default: [],
+    },
+    levels: { 
+      type: Array,
+      default: [],
+    },
   },
 
   data() {
     return {
-      
+      defaultEvent: {
+        type_id: null,
+        level: '0',
+      }
     }
   },
   methods: {
@@ -166,7 +198,14 @@ export default {
 }
 .assess-title {
   margin-top: 10px;
+  border-bottom: 0.5px solid #a7a7a78a;
 }
+.assess-title:hover {
+  font-weight: 700;
+}
+/* .assess-title::after {
+  content: '   \25BC';
+} */
 .student-assessment {
   margin-top: 10px;
   display: flex;
@@ -212,4 +251,12 @@ export default {
 
 .student-report {
   margin-top: 10px;
-}</style>
+}
+.events-title {
+  margin-top: 10px;
+  border-bottom: 0.5px solid #a7a7a78a;
+}
+.events-title:hover {
+  font-weight: 700;
+}
+</style>

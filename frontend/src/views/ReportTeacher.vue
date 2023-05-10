@@ -6,7 +6,7 @@
     <report-filter @updateFetch="updateFetch"/>
     <div v-if="studentsReport.length" class="report-wrapper">
       <report-teacher-item v-for="student in studentsReport" :key="student.id" :period="currentPeriod"
-      :student="student" @updateReport="fetchUpdateReport" :criteria="criteriaMYP"/>
+      :student="student" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :criteria="criteriaMYP"/>
     </div>
     <div v-else class="report-none">
       Пока нет данных
@@ -20,6 +20,7 @@ import ReportFilter from "@/components/assessment/ReportFilter.vue";
 import ReportTeacherItem from "@/components/assessment/ReportTeacherItem.vue";
 import { getStudentsReport, createReportTeacher, updateReportTeacher } from "@/hooks/assess/useReportTeacher";
 import { getCriteriaDetailMYP } from "@/hooks/unit/useCriterionMYP";
+import { getEventTypes } from "@/hooks/assess/useEvent";
 
 export default {
   components: {
@@ -30,18 +31,26 @@ export default {
     const { createdReportTeacher, fetchCreateReportTeacher } = createReportTeacher();
     const { updatedReportTeacher, fetchUpdateReportTeacher } = updateReportTeacher();
     const { criteriaMYP, fetchGetCriteriaDetailMYP } = getCriteriaDetailMYP();
+    const { eventTypes, fetchGetEventTypes } = getEventTypes();
     return {
       studentsReport, isStudentsReportLoading, fetchGetStudentsReport,
       createdReportTeacher, fetchCreateReportTeacher,
       updatedReportTeacher, fetchUpdateReportTeacher,
       criteriaMYP, fetchGetCriteriaDetailMYP,
+      eventTypes, fetchGetEventTypes
     }
   },
   data() {
     return {
       currentReport: {},
       currentFetchData: {},
-      currentPeriod: {}
+      currentPeriod: {},
+      eventLevels: [
+        { value: '0', name: 'Без уровня' },
+        { value: '1', name: '1 уровень' },
+        { value: '2', name: '2 уровень' },
+        { value: '3', name: '3 уровень' },
+      ]
     }
   },
   methods: {
@@ -98,7 +107,7 @@ export default {
     },
   },
   mounted() {
-
+    this.fetchGetEventTypes();
   },
   computed: {
   }

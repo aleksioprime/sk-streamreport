@@ -22,6 +22,7 @@ class ClassGroup(models.Model):
     id_dnevnik = models.CharField(max_length=255, verbose_name=_('ID системы Дневник.РУ'), blank=True, null=True)
     students = models.ManyToManyField('member.ProfileStudent', verbose_name=_("Студенты"), blank=True, related_name="groups")
     mentor = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Наставник"), related_name='groups', null=True, on_delete=models.SET_NULL)
+    psychologist = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Психолог"), related_name='psycho_groups', null=True, on_delete=models.SET_NULL)
     support = models.ManyToManyField('assess.ClassEmployee', verbose_name=_("Поддержка"), related_name='groups', blank=True)
     class Meta:
         verbose_name = 'Учебный класс'

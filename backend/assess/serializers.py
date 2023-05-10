@@ -30,9 +30,12 @@ class StudyYearSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ClassGroupSerializer(serializers.ModelSerializer):
+    mentor = ProfileTeacherSerializer(read_only=True)
+    psychologist = ProfileTeacherSerializer(read_only=True)
     class Meta:
         model = ClassGroup
-        fields = ['id', 'class_year', 'letter', 'id_dnevnik', 'count', 'study_year']
+        fields = ['id', 'class_year', 'letter', 'id_dnevnik', 'count', 'study_year', 
+                  'mentor', 'psychologist']
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
         return super().update(instance, validated_data)
@@ -40,13 +43,15 @@ class ClassGroupSerializer(serializers.ModelSerializer):
 class ClassGroupExtraSerializer(serializers.ModelSerializer):
     students = ProfileStudentSerializer(many=True, read_only=True)
     mentor = ProfileTeacherSerializer(read_only=True)
+    psychologist = ProfileTeacherSerializer(read_only=True)
     class Meta:
         model = ClassGroup
         fields = ['id', 'class_year', 'letter', 'id_dnevnik', 'students', 'students_ids', 
-                  'support', 'support_id', 'mentor', 'mentor_id']
+                  'support', 'support_id', 'mentor', 'mentor_id', 'psychologist', 'psychologist_id']
         extra_kwargs = {
             'students_ids': {'source': 'students', 'write_only': True},
             'mentor_id': {'source': 'mentor', 'write_only': True},
+            'psychologist_id': {'source': 'psychologist', 'write_only': True},
             'support_id': {'source': 'support', 'write_only': True},
         }
     def update(self, instance, validated_data):
@@ -265,7 +270,7 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
     period = ReportPeriodSerializer(read_only=True)
     subject = SubjectSerializer(read_only=True)
     year = ClassYearSerializer(read_only=True)
-    events = EventParticipationSerializer(many=True)
+    events = EventParticipationSerializer(many=True, required=False)
     author = ProfileTeacherSerializer(read_only=True)
     class Meta:
         model = ReportTeacher

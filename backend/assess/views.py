@@ -2,11 +2,12 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassGroupExtraSerializer,  StudyPeriodSerializer, SummativeWorkSerializer, \
     WorkAssessmentSerializer, WorkCriteriaMarkSerializer, ProfileStudentSerializer, WorkGroupDateItemSerializer, \
-    PeriodAssessmentSerializer, StudentWorkSerializer, ReportPeriodSerializer, StudentReportTeacherSerializer, ReportTeacherSerializer
+    PeriodAssessmentSerializer, StudentWorkSerializer, ReportPeriodSerializer, StudentReportTeacherSerializer, ReportTeacherSerializer, \
+    EventTypeSerializer, EventParticipationSerializer
 from curriculum.serializers import ClassYearSerializer, SubjectSerializer      
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
-    ReportPeriod,ReportTeacher
+    ReportPeriod, ReportTeacher, EventType, EventParticipation
 from member.models import ProfileTeacher, ProfileStudent, User
 from curriculum.models import ClassYear, Subject
 
@@ -229,3 +230,23 @@ class StudentReportTeacherViewSet(viewsets.ModelViewSet):
 class ReportTeacherViewSet(viewsets.ModelViewSet):
     queryset = ReportTeacher.objects.all()
     serializer_class = ReportTeacherSerializer
+
+class EventTypeViewSet(viewsets.ModelViewSet):
+    queryset = EventType.objects.all()
+    serializer_class = EventTypeSerializer
+
+class EventParticipationViewSet(viewsets.ModelViewSet):
+    queryset = EventParticipation.objects.all()
+    serializer_class = EventParticipationSerializer
+    def get_queryset(self):
+        event_participation = EventParticipation.objects.all()
+        type = self.request.query_params.get("type", None)
+        level = self.request.query_params.get("level", None)
+        student = self.request.query_params.get("student", None)
+        if type:
+            event_participation = event_participation.filter(type=type)
+        if level:
+            event_participation = event_participation.filter(level=level)
+        if student:
+            event_participation = event_participation.filter(teacher_reports__student__in=[student], mentor_reports__student__in=[student])
+        return event_participation

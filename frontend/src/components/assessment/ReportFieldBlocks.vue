@@ -1,5 +1,5 @@
 <template>
-  <div class="unit-field">
+  <div class="unit-field my-2">
     <div class="block-wrapper" v-if="checkData">
       <div v-for="item in fieldData" :key="item.id">
         <div class="block-item">
