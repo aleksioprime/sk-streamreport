@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from curriculum.models import SubjectGroupIB, ClassYear, SubjectGroupFGOS, Subject, AcademicPlan, Criterion, Strand, \
+from curriculum.models import SubjectGroupIB, ClassYear, SubjectGroupFGOS, Subject, Criterion, Strand, \
     Level, Objective, AchievementLevel, KeyConcept, RecommendSubjectKC, SubjectDirectionRC, RelatedConcept, \
     GlobalContext, ExplorationToDevelop, CategoryATL, ClusterATL, SkillATL, ReflectionMYP, \
     InquiryQuestionMYP, Aim, LearnerProfileIB, UnitPlannerMYP, UnitPlannerMYPID, UnitPlannerDP, \
@@ -22,9 +22,6 @@ class SubjectGroupFGOSAdmin(ImportExportModelAdmin):
 class SubjectAdmin(ImportExportModelAdmin):
     list_display = ("name_rus", "group_ib", "group_fgos", "type_subject", "id_dnevnik")
 
-@admin.register(AcademicPlan)
-class AcademicPlanAdmin(ImportExportModelAdmin):
-    list_display = ("subject", "class_year", "study_year", "hours")
     
 @admin.register(Criterion)
 class CriterionAdmin(ImportExportModelAdmin):

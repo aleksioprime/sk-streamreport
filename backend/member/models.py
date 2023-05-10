@@ -63,19 +63,4 @@ class ProfileTeacher(models.Model):
     def __str__(self):
         return '{}'.format(self.user)
 
-class WorkLoad(models.Model):
-    """ Преподавательская нагрузка """
-    teacher = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Учитель"), on_delete=models.CASCADE,
-                              null=True, blank=True, related_name="workload")
-    subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"), on_delete=models.CASCADE,
-                                      null=True, blank=True, related_name="workload")
-    group = models.ForeignKey('assess.ClassGroup', verbose_name=_("Класс"), on_delete=models.CASCADE,
-                              null=True, blank=True, related_name="workload")
-    hours = models.PositiveSmallIntegerField(verbose_name=_("Часы"), default=1)
-    class Meta:
-        verbose_name = 'Рабочая нагрузка'
-        verbose_name_plural = 'Рабочие нагрузки'
-        ordering = ['teacher']
-    def __str__(self):
-        return '{} ({} - {} ч.)'.format(self.teacher, self.subject, self.hours)
     
