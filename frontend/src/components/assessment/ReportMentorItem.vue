@@ -8,47 +8,14 @@
         <div class="student-name">{{ student.user.last_name }} {{ student.user.first_name }}</div>
       </div>
     </div>
-    <div class="assess-title" data-bs-toggle="collapse" :href="`#collapse-${student.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-${student.id}`">
-      Результаты студента за {{ period.assessment_period.number }} {{ period.assessment_period.type }}</div>
-    <div class="student-assessment collapse" :id="`collapse-${student.id}`">
-      <div class="assess-wrapper">
-        <div class="assess-item">
-          <div class="assess-criterion">{{ criterionA.letter }}. {{ criterionA.name_eng }}</div>
-          <div class="assess-mark">{{ student.periodassess.criterion_a || '-' }}</div>
-        </div>
-        <div class="assess-item">
-          <div class="assess-criterion">{{ criterionB.letter }}. {{ criterionB.name_eng }}</div>
-          <div class="assess-mark">{{ student.periodassess.criterion_b || '-' }}</div>
-        </div>
-        <div class="assess-item">
-          <div class="assess-criterion">{{ criterionC.letter }}. {{ criterionC.name_eng }}</div>
-          <div class="assess-mark">{{ student.periodassess.criterion_c || '-' }}</div>
-        </div>
-        <div class="assess-item">
-          <div class="assess-criterion">{{ criterionD.letter }}. {{ criterionD.name_eng }}</div>
-          <div class="assess-mark">{{ student.periodassess.criterion_d || '-' }}</div>
-        </div>
-        <div class="assess-item">
-          <div class="assess-form">Текущая оценка</div>
-          <div class="assess-mark">{{ student.periodassess.form_grade || '-' }}</div>
-        </div>
-        <div class="assess-item">
-          <div class="assess-final">Итоговая оценка</div>
-          <div class="assess-mark">{{ student.periodassess.final_grade || '-' }}</div>
-        </div>
-      </div>
-      <div class="achievements-wrapper">
-
-      </div>
-    </div>
     <div class="student-report">
-      <report-field-text id="student-report" :student="student" :dataField="student.teacher_report" :generate="true"
+      <report-field-text id="student-report" :student="student" :dataField="student.mentor_report" :generate="false"
       :criteria="{ criterion_a: criterionA, criterion_b: criterionB, criterion_c: criterionC, criterion_d: criterionD,}" @save="fetchSaveReport"/>
     </div>
-    <div class="student-events" v-if="student.teacher_report.text">
+    <div class="student-events" v-if="student.mentor_report.text">
       <div class="events-title" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
       aria-expanded="false" :aria-controls="`collapse-events-${student.id}`">Участие в мероприятиях</div>
-      <report-field-blocks class="collapse" :id="`collapse-events-${student.id}`" :fieldData="student.teacher_report.events" 
+      <report-field-blocks class="collapse" :id="`collapse-events-${student.id}`" :fieldData="student.mentor_report.events" 
       :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveEvent">
         <!-- Слот для блоков показа записей -->
         <template v-slot:show="field">
@@ -92,7 +59,7 @@ import ReportFieldText from "@/components/assessment/ReportFieldText.vue";
 import ReportFieldBlocks from "@/components/assessment/ReportFieldBlocks.vue";
 
 export default {
-  name: 'ReportTeacherItem',
+  name: 'ReportMentorItem',
   components: {
     ReportFieldText, ReportFieldBlocks
   },
@@ -101,7 +68,7 @@ export default {
       type: Object,
       default: {
         group: {},
-        teacher_report: {},
+        mentor_report: {},
         user: {},
       }
     },
@@ -134,7 +101,7 @@ export default {
       const editReportStudents = {
         student_id: this.student.id,
         text: data.text,
-        id: this.student.teacher_report.id || null,
+        id: this.student.mentor_report.id || null,
       }
       this.$emit('updateReport', editReportStudents);
     },
@@ -143,7 +110,7 @@ export default {
       const editReportStudents = {
         student_id: this.student.id,
         events: data.events,
-        id: this.student.teacher_report.id || null,
+        id: this.student.mentor_report.id || null,
       }
       this.$emit('updateReport', editReportStudents);
     }

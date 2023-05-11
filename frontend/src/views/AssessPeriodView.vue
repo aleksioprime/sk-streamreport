@@ -1,103 +1,118 @@
 <template>
   <div>
     <base-header>
-      <template v-slot:link><a href="/assessment">Вернуться к списку итоговых работ</a></template>
+      <template v-slot:link><div @click="$router.push(`/assessment/group`)" class="link-back">Вернуться назад</div></template>
       <template v-slot:header>Журнал оценок за период</template>
     </base-header>
     <div class="row">
       <div class="col mb-2">
         <div>Период: <b>{{ currentPeriod.number }} {{ currentPeriod.type }}</b></div>
+        <div>Класс: <b>{{ currentGroup.class_year }}{{ currentGroup.letter }}</b> (Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }})</div>
         <div>Предмет: <b>{{ currentSubject.name_rus }} ({{ currentSubject.group_ib.name_eng }})</b></div>
-      </div>
-      <div class="col-sm-4 mb-2">
-        <select class="form-select" v-model="queryGroup">
-          <option selected :value="null">{{ currentYear.year_rus }}-е классы</option>
-          <option v-for="gr in currentGroups" :key="gr.id" :value="gr.id">{{ gr.class_year }}{{ gr.letter }} класс</option>
-        </select>
       </div>
     </div>
     <div class="d-flex flex-column border p-2">
-      <div v-for="(worksByUnit, unit) in groupedArrayData(sumWorks, ['unit'])" :key="unit.id">
+      <div v-for="(worksByUnit, unit) in groupedArrayData(summativeWorks, ['unit'])" :key="unit.id">
         <b>{{ worksByUnit[0].unit.title }}</b>
         <div v-for="work in worksByUnit" :key="work.id">
           - {{ work.title }} (<span class="list-criteria" v-for="cr in work.criteria" :key="cr.id">{{ cr.letter }} </span>)
         </div>
       </div>
     </div>
-    <table class="table table-sm table-bordered mt-2 table-responsive w-100">
-      <thead class="text-center align-middle">
-        <tr>
-          <td scope="col" rowspan="2">№</td>
-          <td scope="col" rowspan="2">ФИО студента</td>
-          <td scope="col" colspan="6">Оценка за итоговые работы</td>
-          <td rowspan="2" style="width: 25px">Среднее текущее</td>
-          <td rowspan="2" style="width: 25px">Итог</td>
-        </tr>
-        <tr>
-          <td>A</td>
-          <td>B</td>
-          <td>C</td>
-          <td>D</td>
-          <td>Сумма</td>
-          <td style="width: 25px">Итог</td>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-for="(st, index) in filteredStudentsByGroup" :key="st.id">
+    <div v-if="!isStudentsAssessmentLoading">
+      <table class="table table-sm table-bordered mt-2 table-responsive w-100">
+        <thead class="text-center align-middle">
           <tr>
-            <th scope="row" rowspan="2">{{ index + 1 }}</th>
-            <td rowspan="2">{{ st.user.last_name }} {{ st.user.first_name }}</td>
-            <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-a" v-for="mark in st.calcCriteriaA" :key="mark">{{ mark }}</div></div></td>
-            <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-b" v-for="mark in st.calcCriteriaB" :key="mark">{{ mark }}</div></div></td>
-            <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-c" v-for="mark in st.calcCriteriaC" :key="mark">{{ mark }}</div></div></td>
-            <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-d" v-for="mark in st.calcCriteriaD" :key="mark">{{ mark }}</div></div></td>
-            <td class="uneditable">{{ st.sumCriteria }}/{{ st.allCriteria }}</td>
-            <td class="uneditable">{{ st.criteriaFinalMark }}</td>
-            <td class="uneditable"></td>
-            <td class="uneditable">{{ st.finalGrade }}</td>
+            <td scope="col" rowspan="2">№</td>
+            <td scope="col" rowspan="2">ФИО студента</td>
+            <td scope="col" colspan="6">Оценка за итоговые работы</td>
+            <td rowspan="2" style="width: 25px">Среднее текущее</td>
+            <td rowspan="2" style="width: 25px">Итог</td>
           </tr>
           <tr>
-            <td class="editable">
-              <input type="text" class="table-input" v-model="currentAssess.criterion_a">
-              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'criterion_a') }}</div>
-            </td>
-            <td class="editable">
-              <input type="text" class="table-input" v-model="currentAssess.criterion_b">
-              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'criterion_b') }}</div>
-            </td>
-            <td class="editable">
-              <input type="text" class="table-input" v-model="currentAssess.criterion_c">
-              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'criterion_c') }}</div>
-            </td>
-            <td class="editable">
-              <input type="text" class="table-input" v-model="currentAssess.criterion_d">
-              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'criterion_d') }}</div>
-            </td>
-            <td class="uneditable">
-              {{ calcSumAssessmentMarks(st) }}
-            </td>
-            <td class="editable">
-              <input type="text" class="table-input" v-model="currentAssess.summ_grade">
-              <div class="table-text" @click="(event) => setEditField(event, st)" :title="getStudentCriteriaMarksResult(st)">{{ getMarkForStudent(st, 'summ_grade') }}</div>
-            </td>
-            <td class="editable">
-              <input type="text" class="table-input" v-model="currentAssess.form_grade">
-              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'form_grade') }}</div>
-            </td>
-            <td class="editable">
-              <input type="text" class="table-input" v-model="currentAssess.final_grade">
-              <div class="table-text" @click="(event) => setEditField(event, st)">{{ getMarkForStudent(st, 'final_grade') }}</div>
-            </td>
+            <td>A</td>
+            <td>B</td>
+            <td>C</td>
+            <td>D</td>
+            <td>Сумма</td>
+            <td style="width: 25px">Итог</td>
           </tr>
-        </template>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <template v-for="(st, index) in studentsAssessment" :key="st.id">
+            <tr>
+              <th scope="row" rowspan="2">{{ index + 1 }}</th>
+              <td rowspan="2">{{ st.user.last_name }} {{ st.user.first_name }}</td>
+              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-a" v-for="mark in st.calcCriteriaA" :key="mark">{{ mark }}</div></div></td>
+              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-b" v-for="mark in st.calcCriteriaB" :key="mark">{{ mark }}</div></div></td>
+              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-c" v-for="mark in st.calcCriteriaC" :key="mark">{{ mark }}</div></div></td>
+              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-d" v-for="mark in st.calcCriteriaD" :key="mark">{{ mark }}</div></div></td>
+              <td class="uneditable">{{ st.sumCriteria }}/{{ st.allCriteria }}</td>
+              <td class="uneditable">{{ st.criteriaFinalMark }}</td>
+              <td class="uneditable"></td>
+              <td class="uneditable">{{ st.finalGrade }}</td>
+            </tr>
+            <tr>
+              <td class="editable">
+                <input type="text" class="table-input" v-model="currentAssess.criterion_a">
+                <div class="table-text" @click="(event) => setEditField(event, st)">{{ st.periodassess.criterion_a || '-' }}</div>
+              </td>
+              <td class="editable">
+                <input type="text" class="table-input" v-model="currentAssess.criterion_b">
+                <div class="table-text" @click="(event) => setEditField(event, st)">{{ st.periodassess.criterion_b || '-' }}</div>
+              </td>
+              <td class="editable">
+                <input type="text" class="table-input" v-model="currentAssess.criterion_c">
+                <div class="table-text" @click="(event) => setEditField(event, st)">{{ st.periodassess.criterion_c || '-' }}</div>
+              </td>
+              <td class="editable">
+                <input type="text" class="table-input" v-model="currentAssess.criterion_d">
+                <div class="table-text" @click="(event) => setEditField(event, st)">{{ st.periodassess.criterion_d || '-' }}</div>
+              </td>
+              <td class="uneditable" :title="st.periodassess.prediction_criterion">
+                <div v-if="st.periodassess.count_criterion">{{ st.periodassess.summ_criterion }}/{{ st.periodassess.count_criterion * 8 }}</div>
+                <div v-else>-</div>
+              </td>
+              <td class="editable">
+                <input type="text" class="table-input" v-model="currentAssess.summ_grade">
+                <div class="table-text" @click="(event) => setEditField(event, st)">{{ st.periodassess.summ_grade || '-' }}</div>
+              </td>
+              <td class="editable">
+                <input type="text" class="table-input" v-model="currentAssess.form_grade">
+                <div class="table-text" @click="(event) => setEditField(event, st)">{{ st.periodassess.form_grade || '-' }}</div>
+              </td>
+              <td class="editable">
+                <input type="text" class="table-input" v-model="currentAssess.final_grade">
+                <div class="table-text" @click="(event) => setEditField(event, st)">{{ st.periodassess.final_grade || '-' }}</div>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+    <div v-else class="loader">
+      <div class="lds-spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import { getPeriodAssess, getStudents, getSumWork, getGroupedArray, getAssessmentJournal, filterStudentsByGroup } from "@/hooks/assess/getPeriodAssess";
+import { getAssessmentJournal, getSummativeWork, getStudentsAssessment } from "@/hooks/assess/usePeriodAssessment";
+import { getGroupedArray } from "@/hooks/extra/extraFeatures";
 
 export default {
   name: 'AssessPeriodView',
@@ -105,21 +120,15 @@ export default {
 
   },
   setup(props) {
-    // Получение функции запроса данных студентов
-    const { students, calcFinalCriteriaMarks, getStudentsData } = getStudents();
-    const { queryGroup, filteredStudentsByGroup } = filterStudentsByGroup(students);
-    // Получение функции запроса данных итоговых оценок студентов
-    const { periodAssess, getPeriodAssessData } = getPeriodAssess();
-    const { sumWorks, getSumWorkData } = getSumWork();
+    const { studentsAssessment, calcFinalCriteriaMarks, isStudentsAssessmentLoading, fetchGetStudentsAssessment } = getStudentsAssessment();
+    const { summativeWorks, fetchGetSummativeWork } = getSummativeWork();
     const { groupedArrayData } = getGroupedArray();
-    const { currentPeriod, currentYear, currentSubject, currentGroups, getAssssmentJournalData } = getAssessmentJournal();
+    const { currentPeriod, currentSubject, currentGroup, currentClassYear, fetchGetAssessmentJournal } = getAssessmentJournal();
     return {
-      students, calcFinalCriteriaMarks, getStudentsData,
-      queryGroup, filteredStudentsByGroup,
-      periodAssess, getPeriodAssessData,
-      sumWorks, getSumWorkData,
+      studentsAssessment, calcFinalCriteriaMarks, isStudentsAssessmentLoading, fetchGetStudentsAssessment,
+      summativeWorks, fetchGetSummativeWork,
       groupedArrayData,
-      currentPeriod, currentYear, currentSubject, currentGroups, getAssssmentJournalData
+      currentPeriod, currentSubject, currentClassYear, currentGroup, fetchGetAssessmentJournal,
     }
   },
   data() {
@@ -128,44 +137,6 @@ export default {
     }
   },
   methods: {
-    calcSumAssessmentMarks(student) {
-      const assessment = this.periodAssess.find(item => item.student.id == student.id)
-      if (assessment) {
-        const listAssessmentMarks = [assessment.criterion_a, assessment.criterion_b, assessment.criterion_c, assessment.criterion_d]
-        const sumMarks = listAssessmentMarks.reduce((acc, number) => acc + number, 0);
-        const sumAll = listAssessmentMarks.filter(item => item != 0 && item != null).length * 8;
-        if (sumAll) {
-          return `${sumMarks}/${sumAll}`;
-        }
-      }
-      return '-'
-    },
-    getStudentCriteriaMarksResult(student) {
-      const assessment = this.periodAssess.find(item => item.student.id == student.id)
-      if (assessment) {
-        const listAssessmentMarks = [assessment.criterion_a, assessment.criterion_b, assessment.criterion_c, assessment.criterion_d]
-        const sumMarks = listAssessmentMarks.reduce((acc, number) => acc + number, 0);
-        const numMarks = listAssessmentMarks.filter(item => item != 0 && item != null).length;
-        if (numMarks) {
-          return this.calcFinalCriteriaMarks(sumMarks, numMarks);
-        }
-      }
-      return '-'
-    },
-    getStudentFinalMarkPredict() {
-      
-    },
-    getStudentFinalMarkResult() {
-
-    },
-    getMarkForStudent(student, field) {
-      const criterionMark = this.periodAssess.find(item => item.student.id == student.id)
-      if (criterionMark && criterionMark[field]) {
-        return criterionMark[field]
-      } else {
-        return "-"
-      }
-    },
     setEditField(event, student) {
       let textElement = event.target
       let inputElement = event.target.parentElement.firstChild
@@ -176,11 +147,10 @@ export default {
       inputElement.select();
       // Функция для сохранения изменённых данных в ячейке
       const saveData = () => {
-        const assess = this.periodAssess.find(item => item.student.id == student.id)
-        if (assess) {
-          this.setStudentGradeEdit(assess);
+        if (student.periodassess.id) {
+          this.setStudentGradeEdit(student.periodassess.id);
         } else {
-          this.setStudentGradeAdd(student);
+          this.setStudentGradeAdd(student.id);
         }
         textElement.style.display = 'block';
         inputElement.style.display = 'none';
@@ -198,14 +168,15 @@ export default {
         if (e.key === "Escape") { cancelData() }
       };
     },
-    setStudentGradeEdit(assess) {
+    setStudentGradeEdit(periodassess_id) {
       if (Object.keys(this.currentAssess).length) {
         console.log("Запрос на изменение данных: ", this.currentAssess);
-        this.axios.put(`/assessment/periodassess/${assess.id}`, this.currentAssess).then((response) => {
-          this.getPeriodAssessData({
-            year: this.$route.params.id_year, 
+        this.axios.put(`/assessment/periodassess/${periodassess_id}`, this.currentAssess).then((response) => {
+          this.fetchGetStudentsAssessment({
+            group: this.$route.params.id_group, 
             period: this.$route.params.id_period,
-            subject: this.$route.params.id_subject
+            subject: this.$route.params.id_subject,
+            class_year: this.currentClassYear.id,
           });
           console.log('Оценка успешно обновлена');
         }).finally(() => {
@@ -213,18 +184,19 @@ export default {
         });
       }
     },
-    setStudentGradeAdd(student) {
+    setStudentGradeAdd(student_id) {
       if (Object.keys(this.currentAssess).length) {
-        this.currentAssess.student_id = student.id;
+        this.currentAssess.student_id = student_id;
         this.currentAssess.subject_id = this.$route.params.id_subject;
         this.currentAssess.period_id = this.$route.params.id_period;
-        this.currentAssess.year_id = this.$route.params.id_year;
+        this.currentAssess.year_id = this.currentClassYear.id;
         console.log("Запрос на Добавление данных: ", this.currentAssess);
         this.axios.post(`/assessment/periodassess`, this.currentAssess).then((response) => {
-          this.getPeriodAssessData({
-            year: this.$route.params.id_year, 
+          this.fetchGetStudentsAssessment({
+            group: this.$route.params.id_group, 
             period: this.$route.params.id_period,
             subject: this.$route.params.id_subject,
+            class_year: this.currentClassYear.id,
           });
           console.log('Оценка успешно выставлена');
         }).finally(() => {
@@ -234,27 +206,22 @@ export default {
     },
   },
   mounted() {
-    this.getAssssmentJournalData({
-      year: this.$route.params.id_year, 
+    this.fetchGetAssessmentJournal({
+      group: this.$route.params.id_group, 
       period: this.$route.params.id_period,
       subject: this.$route.params.id_subject
     })
-    this.getSumWorkData({
+    this.fetchGetSummativeWork({
       period: this.$route.params.id_period,
       subject: this.$route.params.id_subject,
-      year: this.$route.params.id_year,
+      group: this.$route.params.id_group,
       teacher: this.authUser.teacher.id
     });
-    this.getStudentsData({
-      year: this.$route.params.id_year, 
+    this.fetchGetStudentsAssessment({
+      group: this.$route.params.id_group, 
       period: this.$route.params.id_period,
-      subject: this.$route.params.id_subject
-    }).finally(() => {
-      this.getPeriodAssessData({
-        year: this.$route.params.id_year, 
-        period: this.$route.params.id_period,
-        subject: this.$route.params.id_subject
-      })
+      subject: this.$route.params.id_subject,
+      class_year: this.currentClassYear.id,
     });
     
   },
@@ -266,6 +233,16 @@ export default {
 </script>
 
 <style scoped>
+@import '@/assets/css/spinner.css';
+.loader {
+  display: flex;
+  height: calc(100vh - 200px);
+  align-items: center;
+  justify-content: center;
+}
+.link-back {
+  cursor: pointer;
+}
 .criterion-mark {
   display: flex;
 }
@@ -315,7 +292,7 @@ export default {
   cursor: pointer;
 }
 table .uneditable {
-  background-color: #d9fafa;
+  background-color: #f7f7f7;
   vertical-align: middle;
   text-align: center;
   min-width: 20px;
@@ -325,5 +302,9 @@ table .editable {
   font-weight: 500;
   text-align: center;
   min-width: 20px;
+  /* cursor: pointer; */
 }
+/* table .editable:hover {
+  background-color: #fffcfc;
+} */
 </style>

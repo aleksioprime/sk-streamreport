@@ -60,16 +60,6 @@ export default {
     user: {
       type: Object
     },
-    // years: {
-    //   type: Array,
-    //   required: true,
-    //   default: [],
-    // },
-    // subjects: {
-    //   type: Array,
-    //   required: true,
-    //   default: [],
-    // },
   },
   setup(props) {
     const { departments, fetchGetDepartments } = getDepartments();
@@ -99,7 +89,7 @@ export default {
     this.fetchGetClassYears({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
       // this.queryYears = this.years.map(item => item.id);
     });
-    this.fetchGetSubjects({ teacher: this.user.teacher.id, level: 'ooo', type: 'base' });
+    this.fetchGetSubjects({ teacher: this.user.teacher.id, program: 'MYP' });
   },
   watch: {
     querySubject() {
@@ -107,7 +97,7 @@ export default {
     },
     queryDepartment() {
       this.querySubject = null;
-      this.fetchGetSubjects({ department: this.queryDepartment, level: 'ooo', type: 'base' });
+      this.fetchGetSubjects({ department: this.queryDepartment, program: 'MYP' });
       // this.queryYears = this.years.map(item => item.id);
     },
     showAllUnits() {
@@ -118,10 +108,10 @@ export default {
           // this.queryYears = this.years.map(item => item.id);
         });
         this.queryDepartment = null;
-        this.fetchGetSubjects({ department: this.queryDepartment, level: 'ooo', type: 'base' }); 
+        this.fetchGetSubjects({ department: this.queryDepartment, program: 'MYP' }); 
         this.handleQuery();
       } else {
-        this.fetchGetSubjects({ teacher: this.user.teacher.id, level: 'ooo', type: 'base' }); 
+        this.fetchGetSubjects({ teacher: this.user.teacher.id, program: 'MYP' }); 
         this.fetchGetClassYears({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
           // this.queryYears = this.years.map(item => item.id);
         });

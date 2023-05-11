@@ -105,7 +105,6 @@ export default {
         this.currentGroup = this.$route.params.id_group;
         this.handleQuery();
       })
-      
     });
     
   },

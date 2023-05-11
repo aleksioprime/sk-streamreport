@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkGroupDate, WorkAssessment, WorkCriteriaMark, \
-    PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType
+    PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType, ReportMentor
 from curriculum.serializers import SubjectSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.serializers import ClassGroupSerializer, UserSerializer
 from member.models import ProfileTeacher, User, ProfileStudent
@@ -198,7 +198,8 @@ class PeriodAssessmentSerializer(serializers.ModelSerializer):
         model = PeriodAssessment
         fields = ['id', 'student', 'student_id', 'period', 'period_id', 'subject', 'subject_id',
                   'year', 'year_id', 'criterion_a', 'criterion_b', 'criterion_c', 'criterion_d', 
-                  'summ_grade', 'form_grade', 'final_grade']
+                  'summ_grade', 'summ_criterion', 'count_criterion', 'form_grade', 'final_grade',
+                  'prediction_criterion']
         extra_kwargs = {
             'student_id': {'source': 'student', 'write_only': True},
             'period_id': {'source': 'period', 'write_only': True},
@@ -224,6 +225,7 @@ class StudentWorkSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     # workgroups = WorkAssessmentStudentSerializer(many=True, source='workassess', read_only=True)
     workgroups = serializers.SerializerMethodField('get_workgroups')
+    periodassess = serializers.SerializerMethodField('get_assessment')
     class Meta:
         model = ProfileStudent
         fields = '__all__'
@@ -231,14 +233,27 @@ class StudentWorkSerializer(serializers.ModelSerializer):
         workassess_queryset = WorkAssessment.objects.filter(student=instance)
         period = self.context.get("period", None)
         subject = self.context.get("subject", None)
-        year = self.context.get("year", None)
+        group = self.context.get("group", None)
         if period:
             workassess_queryset = workassess_queryset.filter(work_date__work__period=period)
         if subject:
             workassess_queryset = workassess_queryset.filter(work_date__work__subject=subject)
-        if year:
-            workassess_queryset = workassess_queryset.filter(work_date__work__groups__class_year=year).distinct()
+        if group:
+            workassess_queryset = workassess_queryset.filter(work_date__work__groups__in=[group]).distinct()
         serializer = WorkAssessmentStudentSerializer(instance=workassess_queryset, many=True, context=self.context)
+        return serializer.data
+    def get_assessment(self, instance):
+        period_assessment_queryset = PeriodAssessment.objects.filter(student=instance)
+        subject = self.context.get("subject", None)
+        class_year = self.context.get("class_year", None)
+        period = self.context.get("period", None)
+        if subject:
+            period_assessment_queryset = period_assessment_queryset.filter(subject=subject)
+        if class_year:
+            period_assessment_queryset = period_assessment_queryset.filter(year=class_year)
+        if period:
+            period_assessment_queryset = period_assessment_queryset.filter(period=period)
+        serializer = PeriodAssessmentSerializer(instance=period_assessment_queryset.first(), context=self.context)
         return serializer.data
 
 class ReportPeriodSerializer(serializers.ModelSerializer):
@@ -300,10 +315,8 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 class StudentReportTeacherSerializer(serializers.ModelSerializer):
-    # groups = ClassGroupSerializer(many=True, read_only=True)
     group = serializers.SerializerMethodField('get_group')
     user = UserSerializer(read_only=True)
-    # teacher_reports = ReportTeacherSerializer(many=True, read_only=True)
     teacher_report = serializers.SerializerMethodField('get_reports')
     periodassess = serializers.SerializerMethodField('get_assessment')
     class Meta:
@@ -344,4 +357,89 @@ class StudentReportTeacherSerializer(serializers.ModelSerializer):
         if report_period:
             period_assessment_queryset = period_assessment_queryset.filter(period__report_period__in=[report_period]).distinct()
         serializer = PeriodAssessmentSerializer(instance=period_assessment_queryset.first(), context=self.context)
+        return serializer.data
+
+class ReportMentorSerializer(serializers.ModelSerializer):
+    student = ProfileStudentSerializer(read_only=True)
+    period = ReportPeriodSerializer(read_only=True)
+    year = ClassYearSerializer(read_only=True)
+    events = EventParticipationSerializer(many=True, required=False)
+    author = ProfileTeacherSerializer(read_only=True)
+    class Meta:
+        model = ReportMentor
+        fields = ['id', 'student', 'student_id', 'period', 'period_id',
+                  'year', 'year_id', 'text', 'events', 'author', 'author_id']
+        extra_kwargs = {
+            'student_id': {'source': 'student', 'write_only': True},
+            'period_id': {'source': 'period', 'write_only': True},
+            'year_id': {'source': 'year', 'write_only': True},
+            'author_id': {'source': 'author', 'write_only': True},
+        }
+    def create_or_update_events(self, events):
+        events_ids = []
+        for event in events:
+            event_instance, created = EventParticipation.objects.update_or_create(pk=event.get('id'), defaults=event)
+            events_ids.append(event_instance.pk)
+        return events_ids
+    def update(self, instance, validated_data):
+        print('Валидированные данные: ', validated_data)
+        events = validated_data.pop('events', None)
+        if events is not None:
+            original = EventParticipation.objects.filter(mentor_reports=instance)
+            original.filter(~Q(id__in=[item.get('id') for item in events if 'id' in item])).delete()
+            instance.events.set(self.create_or_update_events(events))
+            instance.save()
+        return super().update(instance, validated_data)
+
+class StudentReportMentorSerializer(serializers.ModelSerializer):
+    group = serializers.SerializerMethodField('get_group')
+    user = UserSerializer(read_only=True)
+    teacher_report = serializers.SerializerMethodField('get_teacher_reports')
+    mentor_report = serializers.SerializerMethodField('get_mentor_report')
+    periodassess = serializers.SerializerMethodField('get_assessments')
+    class Meta:
+        model = ProfileStudent
+        fields = '__all__'
+    def get_teacher_reports(self, instance):
+        report_queryset = ReportTeacher.objects.filter(student=instance)
+        period = self.context.get("period", None)
+        class_year = self.context.get("class_year", None)
+        author = self.context.get("author", None)
+        if period:
+            report_queryset = report_queryset.filter(period=period)
+        if author:
+            report_queryset = report_queryset.filter(author=author)
+        if class_year:
+            report_queryset = report_queryset.filter(year=class_year)
+        serializer = ReportTeacherSerializer(instance=report_queryset, many=True, context=self.context)
+        return serializer.data
+    def get_mentor_report(self, instance):
+        report_queryset = ReportMentor.objects.filter(student=instance)
+        period = self.context.get("period", None)
+        class_year = self.context.get("class_year", None)
+        author = self.context.get("author", None)
+        if period:
+            report_queryset = report_queryset.filter(period=period)
+        if author:
+            report_queryset = report_queryset.filter(author=author)
+        if class_year:
+            report_queryset = report_queryset.filter(year=class_year)
+        serializer = ReportMentorSerializer(instance=report_queryset.first(), context=self.context)
+        return serializer.data
+    def get_group(self, instance):
+        group_queryset = ClassGroup.objects.filter(students__in=[instance])
+        study_year = self.context.get("study_year", None)
+        if study_year:
+            group_queryset = group_queryset.filter(study_year=study_year)
+        serializer = ClassGroupSerializer(instance=group_queryset.last(), context=self.context)
+        return serializer.data
+    def get_assessments(self, instance):
+        period_assessment_queryset = PeriodAssessment.objects.filter(student=instance)
+        class_year = self.context.get("class_year", None)
+        report_period = self.context.get("period", None)
+        if class_year:
+            period_assessment_queryset = period_assessment_queryset.filter(year=class_year)
+        if report_period:
+            period_assessment_queryset = period_assessment_queryset.filter(period__report_period__in=[report_period]).distinct()
+        serializer = PeriodAssessmentSerializer(instance=period_assessment_queryset, many=True, context=self.context)
         return serializer.data

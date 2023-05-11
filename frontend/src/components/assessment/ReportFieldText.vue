@@ -7,7 +7,7 @@
     <div class="field-data" :class="{ 'field-editing': editMode }">
       <transition name="slide-fade">
         <div v-if="!editMode">
-          <div v-html="student.teacher_report.text"></div> 
+          <div v-html="dataField.text"></div> 
         </div>
         <div v-else>
           <div class="field-description">Введите описание</div>
@@ -37,7 +37,7 @@
             </div>
           </div>
           <div class="field-buttons">
-            <button class="field-btn-generate" @click="generateField">Сгенерировать</button>
+            <button class="field-btn-generate" v-if="generate" @click="generateField">Сгенерировать</button>
             <button class="field-btn-done" @click="saveField">Сохранить</button>
             <button class="field-btn-cancel" @click="cancelField">Отмена</button>
           </div>
@@ -63,6 +63,14 @@ export default {
         teacher_report: {},
         user: {},
       }
+    },
+    dataField: {
+      type: Object,
+      default: {}
+    },
+    generate: {
+      type: Boolean,
+      default: false,
     },
     criteria: {
       type: Object,
@@ -91,7 +99,7 @@ export default {
     },
     editField() {
       this.editMode = true;
-      this.editData.text = this.student.teacher_report.text;
+      this.editData.text = this.dataField.text;
     },
     generateField() {
       const data = {
@@ -103,7 +111,7 @@ export default {
         },
         criteria: this.criteria,
         first_name: this.student.user.first_name,
-        subject: this.student.teacher_report.subject.name_rus
+        subject: this.dataField.subject.name_rus
       }
       this.fetchChatGPTReport(data).finally(() => {
         this.editData.text = this.generatedGPTText;

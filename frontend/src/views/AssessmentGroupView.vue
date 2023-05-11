@@ -4,19 +4,28 @@
       <template v-slot:header>Итоговое оценивание</template>
     </base-header>
     <!-- Выбор учебного года -->
-    <div class="my-2">
-      <select id="study-year" class="form-select me-3 mb-2" v-model="currentStudyYear">
-        <option v-for="(study, i) in studyYears" :key="i" :value="study">
-          {{ study.name }} учебный год
-        </option>
-      </select>
+    <div class="row">
+      <div class="col-md my-2">
+        <select id="study-year" class="form-select me-3 mb-2" v-model="currentStudyYear">
+          <option v-for="(study, i) in studyYears" :key="i" :value="study">
+            {{ study.name }} учебный год
+          </option>
+        </select>
+      </div>
+      <!-- Выбор программы -->
+      <div class="col-md my-2">
+        <select id="programs" class="form-select me-3 mb-2" v-model="currentProgram">
+          <option v-for="(pr, i) in programs" :key="i" :value="pr.value">
+            {{ pr.name }}
+          </option>
+        </select>
+      </div>
     </div>
-
     <!-- Выбор предмета -->
     <div class="my-2">
       <select ref="subject" id="grades" class="form-select" v-model="currentSubject">
         <option :value="null">Выберите предмет</option>
-        <option v-for="(sb, i) in subjects" :key="i" :value="sb.id">
+        <option v-for="(sb, i) in subjects" :key="i" :value="sb">
           {{ sb.name_rus }} ({{ sb.group_ib.name_eng }})
         </option>
       </select>
@@ -28,15 +37,30 @@
         <div class="class-group">{{ year }} классы</div>
         <div v-for="group in groupsByYear" :key="group.id" class="class-item">
           <div>{{ group.class_year }}{{ group.letter }} класс ({{ getWordStudent(group.count) }})</div>
-          <div class="class-btns">
-            <div v-if="currentSubject">
-              <button class="btn btn-success" @click="$router.push(`/assessment/year/${group.class_year}/period/${currentPeriod.id}/subject/${currentSubject}`)">Оценки</button>
-              <button class="btn btn-primary" @click="$router.push(`/report/teacher/group/${group.id}/subject/${currentSubject}`)">Репорты</button>
+          <div class="class-wrapper" v-if="currentSubject">
+            <div class="assessment-title">Итоговые оценки по предмету {{ currentSubject.name_rus }}</div>
+            <div class="assessment-period">
+              <div class="period-item" v-for="period in periodClass(year)" :key="period.id">
+                <div class="period-title">{{ period.number }} {{ period.type }}</div>
+                <div class="period-info"></div>
+                <button class="period-btn" v-if="currentSubject" @click="$router.push(`/assessment/group/${group.id}/period/${period.id}/subject/${currentSubject.id}`)">
+                  Оценки
+                </button>
+              </div>
             </div>
-            <button class="btn btn-primary" 
-            v-if="authUser && group.mentor && authUser.teacher.id == group.mentor.id">Наставник</button>
-            <button class="btn btn-primary" v-if="authUser && group.psychologist && authUser.teacher.id == group.psychologist.id">Психолог</button>
-          </div> 
+            <div class="report-title">Репорты учителя ({{ authUser.teacher.last_name }} {{ authUser.teacher.first_name }} {{ authUser.teacher.middle_name }})</div>
+            <div class="report-period">
+              <div class="period-item" v-for="period in reportPeriods" :key="period.id">
+                <div class="period-title">{{ period.name }}</div>
+                <div class="period-info"></div>
+                <button class="period-btn" v-if="currentSubject" @click="$router.push(`/report/teacher/group/${group.id}/subject/${currentSubject.id}/`)">
+                  Репорты
+                </button>
+              </div>
+              <button class="btn btn-primary" @click="$router.push(`/report/mentor/group/${group.id}/`)">Наставник</button>
+              <button class="btn btn-primary" v-if="authUser && group.psychologist && authUser.teacher.id == group.psychologist.id">Психолог</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -50,6 +74,7 @@ import { getGroups } from "@/hooks/user/useGroup";
 import { getGroupedArray } from "@/hooks/extra/extraFeatures";
 import { getSubjects } from "@/hooks/curriculum/useSubject";
 import { getPeriods } from "@/hooks/assess/usePeriod";
+import { getReportPeriods } from "@/hooks/assess/useReportPeriod";
 import { mapGetters } from 'vuex';
 
 export default {
@@ -61,19 +86,28 @@ export default {
     const { groups, isGroupLoading, fetchGetGroups } = getGroups();
     const { groupedArrayData } = getGroupedArray();
     const { subjects, fetchGetSubjects } = getSubjects();
-    const { periods, currentPeriod, fetchGetPeriods } = getPeriods();
+    const { periods, fetchGetPeriods } = getPeriods();
+    const { reportPeriods, currentReportPeriod, fetchGetReportPeriods } = getReportPeriods();
+
     return {
       studyYears, currentStudyYear, fetchGetStudyYears,
       groups, isGroupLoading, fetchGetGroups,
       groupedArrayData,
       subjects, fetchGetSubjects,
-      periods, currentPeriod, fetchGetPeriods
+      periods, fetchGetPeriods,
+      reportPeriods, currentReportPeriod, fetchGetReportPeriods
     }
   },
   data() {
     return {
       currentSubject: null,
       currentProgram: 'MYP',
+      programs: [
+        { value: 'PYP', name: 'Программа начальной школы' },
+        { value: 'MYP', name: 'Программа средней школы' },
+        { value: 'DP', name: 'Программа старшей школы IB' },
+        { value: 'FGOS', name: 'Программа старшей школы ФГОС' },
+      ]
     }
   },
   methods: {
@@ -85,11 +119,16 @@ export default {
       if (number == 1) return `${count} студент`;
       return `${count} студентов`;
     },
+    periodClass(classYear) {      
+      return this.periods.filter(item => item.class_year.map(year => year.year_rus).includes(Number(classYear)))
+    },
   },
+ 
   mounted() {
     this.fetchGetStudyYears();
-    this.fetchGetGroups({ study_year: this.currentStudyYear }).finally(() => {
-      this.fetchGetPeriods({ study_year: this.currentStudyYear, program: this.currentProgram })
+    this.fetchGetGroups({ study_year: this.currentStudyYear, program: this.currentProgram }).finally(() => {
+      this.fetchGetPeriods({ study_year: this.currentStudyYear })
+      this.fetchGetReportPeriods({ study_year: this.currentStudyYear })
     });
     this.fetchGetSubjects({ level: 'ooo', type: 'base' });
   },
@@ -116,15 +155,40 @@ export default {
   /* align-items: center; */
   flex-direction: column;
 }
-.class-item:hover {
+/* .class-item:hover {
  background: #a7a7a78a;
- cursor: pointer;
-}
+} */
 .class-btns {
   margin-top: 10px;
   display: flex;
 }
 .class-btns .btn {
   margin-right: 5px;
+}
+.assessment-title, .report-title {
+  font-size: 0.8em;
+}
+.assessment-period, .report-period{
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+.period-item {
+  flex-grow: 1;
+  text-align: center;
+}
+.period-title {
+  font-size: 1em;
+}
+.period-btn {
+  border: 1px solid #a7a7a78a;
+  border-radius: 5px;
+}
+.period-btn:hover {
+  cursor: pointer;
+  background: #a7a7a78a;
+}
+.period-btn:not(:last-of-type) {
+  margin-right: 10px;
 }
 </style>

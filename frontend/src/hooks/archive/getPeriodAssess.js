@@ -145,9 +145,8 @@ export function getGroupedArray() {
 
 export function getAssessmentJournal() {
   const currentPeriod = ref({});
-  const currentYear = ref({});
   const currentSubject = ref({ group_ib: {} });
-  const currentGroups = ref([]);
+  const currentGroup = ref({});
   const getAssssmentJournalData = async (data) => {
     const config = {
       params: {
@@ -159,14 +158,13 @@ export function getAssessmentJournal() {
     await axiosAPI.get('/assessment/journal', config).then((response) => {
       console.log("Загрузка данных для журнала")
       currentPeriod.value = response.data.period;
-      currentYear.value = response.data.year;
       currentSubject.value = response.data.subject;
-      currentGroups.value = response.data.groups;
+      currentGroup.value = response.data.group;
       console.log(response.data)
     });
   };
   return {
-    currentPeriod, currentYear, currentSubject, currentGroups, getAssssmentJournalData
+    currentPeriod, currentSubject, currentGroup, getAssssmentJournalData
   }
 }
 

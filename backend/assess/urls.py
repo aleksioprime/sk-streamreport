@@ -2,7 +2,8 @@ from django.urls import path
 from assess.views import StudyYearViewSet, ClassGroupViewSet, StudyPeriodViewSet, SummativeWorkViewSet, \
     WorkAssessmentViewSet, PeriodAssessmentViewSet, StudentViewSet, WorkGroupDateItemViewSet, \
     StudentWorkViewSet, AssessmentJournalAPIView, ReportPeriodViewSet, StudentReportTeacherViewSet, \
-    ReportTeacherViewSet, EventParticipationViewSet, EventTypeViewSet
+    ReportTeacherViewSet, EventParticipationViewSet, EventTypeViewSet, StudentReportMentorViewSet, \
+    ReportMentorViewSet, ReportMentorJournalAPIView
 
 urlpatterns = [
     path('student', StudentViewSet.as_view({'get': 'list'})),
@@ -12,6 +13,7 @@ urlpatterns = [
     path('assessment/period', StudyPeriodViewSet.as_view({'get': 'list'})),
     path('assessment/report/period', ReportPeriodViewSet.as_view({'get': 'list'})),
     path('assessment/student/report/teacher', StudentReportTeacherViewSet.as_view({'get': 'list'})),
+    path('assessment/student/report/mentor', StudentReportMentorViewSet.as_view({'get': 'list'})),
     path('assessment/student', StudentWorkViewSet.as_view({'get': 'list'})),
     path('assessment/sumwork', SummativeWorkViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('assessment/sumwork/<int:pk>', SummativeWorkViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
@@ -22,7 +24,10 @@ urlpatterns = [
     path('assessment/periodassess/<int:pk>', PeriodAssessmentViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('assessment/report/teacher', ReportTeacherViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('assessment/report/teacher/<int:pk>', ReportTeacherViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('assessment/report/mentor', ReportMentorViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('assessment/report/mentor/<int:pk>', ReportMentorViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('assessment/journal', AssessmentJournalAPIView.as_view()),
+    path('assessment/report/mentor/journal', ReportMentorJournalAPIView.as_view()),
     path('assessment/events', EventParticipationViewSet.as_view({'get': 'list'})),
     path('assessment/events/types', EventTypeViewSet.as_view({'get': 'list'})),
 ]

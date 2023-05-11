@@ -1,6 +1,9 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+
+GRADES = { 1: [3, 5, 7], 2: [6, 10, 14], 3: [8, 14, 20], 4: [11, 19, 28] }
+
 class StudyYear(models.Model):
     """ Учебные года """
     name = models.CharField(max_length=32, verbose_name=_("Учебный год"))
@@ -181,26 +184,45 @@ class PeriodAssessment(models.Model):
     period = models.ForeignKey('assess.StudyPeriod', verbose_name=_("Период"), on_delete=models.SET_NULL, null=True, related_name="periodassess")
     subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"), on_delete=models.SET_NULL, null=True, related_name="periodassess")
     year = models.ForeignKey('curriculum.ClassYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="periodassess")
-    criterion_a = models.SmallIntegerField(verbose_name=_("Оценка по критерию A"), default=None, null=True)
-    criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True)
-    criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True)
-    criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True)
+    criterion_a = models.SmallIntegerField(verbose_name=_("Оценка по критерию A"), default=None, null=True, blank=True)
+    criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True, blank=True)
+    criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True, blank=True)
+    criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True, blank=True)
     summ_grade = models.SmallIntegerField(verbose_name=_("Оценка за итоговые работы"), default=None, null=True)
-    form_grade = models.DecimalField(verbose_name=_("Оценка за текущие работы"), max_digits=3, decimal_places=2, default=0)
-    final_grade = models.SmallIntegerField(verbose_name=_("Итоговая оценка"), default=0)
+    form_grade = models.DecimalField(verbose_name=_("Оценка за текущие работы"), max_digits=3, decimal_places=2, default=None, blank=True)
+    final_grade = models.SmallIntegerField(verbose_name=_("Итоговая оценка"), default=None, blank=True, null=True)
     class Meta:
         verbose_name = 'Итоговые оценки за период'
         verbose_name_plural = 'Итоговые оценки за период'
         ordering = ['period', 'student']
     def __str__(self):
         return '{} - {}'.format(self.period, self.student)
-    
+    @property
+    def summ_criterion(self):
+        return sum([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if isinstance(x, int)])
+        # return self.criterion_a + self.criterion_b + self.criterion_c + self.criterion_d
+    @property
+    def count_criterion(self):
+        return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if x])
+    @property
+    def prediction_criterion(self):
+        if self.summ_criterion >= GRADES[self.count_criterion][2]:
+            return 5
+        elif self.summ_criterion < GRADES[self.count_criterion][2] and self.summ_criterion >= GRADES[self.count_criterion][1]:
+            return 4
+        elif self.summ_criterion < GRADES[self.count_criterion][1] and self.summ_criterion >= GRADES[self.count_criterion][0]:
+            return 3
+        elif self.summ_criterion < GRADES[self.count_criterion][0] and self.summ_criterion > 0:
+            return 2
+        else:
+            return '-'
 
 class ReportPeriod(models.Model):
     """ Периоды для заполнения репортов в году """
     study_year = models.ForeignKey('assess.StudyYear', verbose_name=_("Учебный год"), on_delete=models.SET_NULL, \
         null=True, blank=True, related_name="report_period")
     number = models.PositiveSmallIntegerField(verbose_name=_("Номер периода"), default=1)
+    name = models.CharField(max_length=255, verbose_name=_("Название периода"), default=None, null=True)
     assessment_period = models.ForeignKey('assess.StudyPeriod', verbose_name=_("Оценочный период"), on_delete=models.SET_NULL, null=True, blank=True, related_name="report_period")
     date_start = models.DateField(verbose_name=_("Дата начала"))
     date_end = models.DateField(verbose_name=_("Дата окончания"))

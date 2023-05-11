@@ -60,7 +60,7 @@
               <div v-if="unit.subject">{{ unit.subject.name_rus }}</div>
             </label>
           </div>
-          <div v-if="index == 4 && searchUnitForIDU.length() != 5">...</div>
+          <div v-if="index == 4 && searchUnitForIDU.length != 5">...</div>
         </div>
       </div>
       <div v-else>Нет данных для отображения.<br>Выберите год обучения, чтобы получить список юнитов</div>

@@ -475,11 +475,6 @@ export default {
 .myp-sidebar {
   max-width: 300px;
 }
-@media (max-width: 576px) {
-  .myp-sidebar {
-    max-width: 100%;
-  }
-}
 .navbar-myp {
   font-size: 0.9em;
   position: sticky;
@@ -489,6 +484,15 @@ export default {
   -ms-overflow-style: none;
   scrollbar-width: none; 
 }
+@media (max-width: 576px) {
+  .myp-sidebar {
+    max-width: 100%;
+  }
+  .navbar-myp {
+    height: inherit;
+  }
+}
+
 .navbar-myp::-webkit-scrollbar {
   display: none;
 }

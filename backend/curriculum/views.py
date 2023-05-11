@@ -131,12 +131,15 @@ class SubjectViewSet(viewsets.ModelViewSet):
         type_subject = self.request.query_params.get("type", None)
         teacher = self.request.query_params.get("teacher", None)
         department = self.request.query_params.get("department", None)
+        program = self.request.query_params.get("program", None)
         if department:
             subjects = subjects.filter(department=department)
         if level:
             subjects = subjects.filter(group_fgos__level=level)
         if type_subject:
             subjects = subjects.filter(type_subject=type_subject)
+        if program:
+            subjects = subjects.filter(group_ib__program=program)
         if teacher:
             subjects = subjects.filter(unitplan_myp__authors__in=[teacher]).distinct()
         return subjects

@@ -31,7 +31,7 @@
       <div v-for="(worksBySubject, subject) in groupedSumWorks(summativeWorks, ['subject'])" :key="subject">
         <div class="sumworks-subject" v-if="getSubject(subject)">{{ getSubject(subject).name_rus }}</div>
         <div v-for="(worksByYear, year) in groupedSumWorks(worksBySubject, ['unit', 'class_year'])" :key="year" class="sumworks-block">
-          <div class="sumworks-year" @click="$router.push(`/assessment/year/${year}/period/${currentPeriod.id}/subject/${subject}`)">
+          <div class="sumworks-year">
             <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} {{  }} классы</div>
           </div>
           <div class="sumworks-grouped">

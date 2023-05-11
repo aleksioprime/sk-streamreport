@@ -10,6 +10,7 @@ export function getSubjects() {
         level: data.level || null,
         type: data.type || null,
         teacher: data.teacher || null,
+        program: data.program || null,
       }
     }
     await axiosAPI.get('myp/subjects', config).then((response) => {

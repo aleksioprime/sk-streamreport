@@ -74,7 +74,6 @@ import UnitMypForm from "@/components/unit/myp/UnitMYPForm";
 import UnitMypIduForm from "@/components/unit/myp/UnitMYPIDUForm";
 
 import { getUnitsMYP, createUnitMYP } from "@/hooks/unit/useUnitMYP";
-import { getSubjects } from "@/hooks/curriculum/useSubject";
 import { createInterdisciplinaryUnit } from "@/hooks/unit/useInterdisciplinaryUnit";
 
 export default {
@@ -85,12 +84,10 @@ export default {
   setup(props) {
     const { unitsMYP, isUnitLoading, totalPages, totalUnits, fetchGetUnitsMYP } = getUnitsMYP();
     const { createdUnitMYP, fetchCreateUnitMYP } = createUnitMYP();
-    const { subjects, fetchGetSubjects } = getSubjects();
     const { interdisciplinaryUnit, fetchCreateInterdisciplinaryUnit } = createInterdisciplinaryUnit();
     return {
       unitsMYP, isUnitLoading, totalPages, totalUnits, fetchGetUnitsMYP,
       createdUnitMYP, fetchCreateUnitMYP,
-      subjects, fetchGetSubjects,
       interdisciplinaryUnit, fetchCreateInterdisciplinaryUnit,
     }
   },
