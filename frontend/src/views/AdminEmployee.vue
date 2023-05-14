@@ -164,7 +164,7 @@ export default {
         console.log("Запрос на обновление пользователя: ", this.editedUser);
         this.fetchUpdateUser(this.editedUser).then(() => {
           this.hideUserModal();
-          this.fetchGetUsers({ role: "teacher", page: this.currentPage, limit: this.limit }).finally(() => {
+          this.fetchGetUsers({ role: "teacher", search: this.searchValue, page: this.currentPage, limit: this.limit }).finally(() => {
             this.currentUser = this.users.find(item => item.id == this.currentUser.id);
           });
         });

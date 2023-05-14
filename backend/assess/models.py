@@ -53,7 +53,7 @@ class AcademicPlan(models.Model):
     class Meta:
         verbose_name = 'Учебный план'
         verbose_name_plural = 'Учебные планы'
-        ordering = ['subject', 'class_year']
+        ordering = ['subject__name_rus', 'class_year']
     def __str__(self):
         return "{} ({})".format(self.subject, self.class_year)
     

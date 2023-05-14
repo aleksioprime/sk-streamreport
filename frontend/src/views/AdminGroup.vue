@@ -16,7 +16,7 @@
       <div class="col-sm-4">
         <div v-if="groups.length > 0" ref="grouplist" class="accordion" id="accordionGroups">
           <!-- Список групп -->
-          <div v-for="(groupsByYear, year) in groupedArrayData(groups, ['class_year'])" :key="year"
+          <div v-for="(groupsByYear, year) in groupedArrayData(groups, ['class_year','year_rus'])" :key="year"
             class="accordion-item">
             <h2 class="accordion-header" :id="`heading-${year}`">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -31,9 +31,12 @@
                   <group-item :group="group" @select="groupSelect" @update="showUpdateGroup" @delete="showDeleteGroup"
                     :class="[currentGroup && currentGroup.id == group.id ? 'select-group' : '']" :showEditButton="currentGroup && currentGroup.id == group.id"/>
                   <div v-if="editingGroupID == group.id" class="m-1">
-                    <input v-model="editingGroup.class_year" type="number" placeholder="Номер" class="form-control my-1">
+                    <select id="class_year" class="form-select my-1" v-model="editingGroup.class_year_id">
+                      <option v-for="(cy, i) in years" :key="i" :value="cy.id">
+                        {{ cy.year_rus }}-й год
+                      </option>
+                    </select>
                     <input v-model="editingGroup.letter" type="text" placeholder="Буква" class="form-control my-1">
-
                     <input v-model="editingGroup.id_dnevnik" type="text" placeholder="ID Дневник.ру" class="form-control my-1">
                     <div class="d-flex justify-content-end">
                       <button class="btn-icon img-apply mx-1" @click="groupEdit"></button>
@@ -51,7 +54,11 @@
                 <div>
                   <button class="btn-icon img-append" @click="showAddGroup(year)"></button>
                   <div v-if="addingGroupYear == year" class="m-1">
-                    <input v-model="editingGroup.class_year" type="number" placeholder="Номер" class="form-control my-1">
+                    <select id="class_year" class="form-select my-1" v-model="editingGroup.class_year_id">
+                      <option v-for="(cy, i) in years" :key="i" :value="cy.id">
+                        {{ cy.year_rus }}-й год
+                      </option>
+                    </select>
                     <input v-model="editingGroup.letter" type="text" placeholder="Буква" class="form-control my-1">
                     <input v-model="editingGroup.id_dnevnik" type="text" placeholder="ID Дневник.ру" class="form-control my-1">
                     <div class="d-flex justify-content-end">
@@ -65,7 +72,11 @@
           </div>
           <button class="btn btn-success btn-sm m-1" @click="showAddGroup(year)">Создать группу</button>
           <div v-if="addingGroupYear == 0" class="m-1">
-            <input v-model="editingGroup.class_year" type="number" placeholder="Номер" class="form-control my-1">
+            <select id="class_year" class="form-select my-1" v-model="editingGroup.class_year_id">
+              <option v-for="(cy, i) in years" :key="i" :value="cy.id">
+                {{ cy.year_rus }}-й год
+              </option>
+            </select>
             <input v-model="editingGroup.letter" type="text" placeholder="Буква" class="form-control my-1">
             <input v-model="editingGroup.id_dnevnik" type="text" placeholder="ID Дневник.ру" class="form-control my-1">
             <div class="d-flex justify-content-end">
@@ -100,6 +111,26 @@
             <div class="d-flex mt-2 justify-content-end">
               <button class="btn btn-success" @click="editMentorConfirm" v-if="editingGroup.mentor_id">ОК</button>
               <button class="btn btn-cancel" @click="editMentorCancel">Отмена</button>
+            </div>
+          </div>
+          <div class="mb-2 d-flex align-items-center">
+            <div v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.user.first_name }} {{ currentGroup.psychologist.user.middle_name }} {{ currentGroup.psychologist.user.last_name }}</div>
+            <div v-else>Психолог не выбран</div> 
+            <button class="btn-icon img-edit ms-auto" v-if="!editPsycho" @click="showEditPsycho"></button>
+          </div>
+          <div v-if="editPsycho" class="border p-2">
+            <input id="search-item" class="form-control mb-2" type="text" v-model="queryTeacher" placeholder="Введите текст для поиска...">
+            <div v-for="teacher in searchTeachers.slice(0, 5)" :key="teacher.id">
+              <div class="form-check ms-3">
+                <input class="form-check-input" type="radio" :value="teacher.id" :id="'mentor-' + teacher.id" v-model="editingGroup.psychologist_id">
+                <label class="form-check-label" :for="'mentor-' + teacher.id">
+                  {{ teacher.first_name }} {{ teacher.middle_name }} {{ teacher.last_name }}
+                </label>
+              </div>
+            </div>
+            <div class="d-flex mt-2 justify-content-end">
+              <button class="btn btn-success" @click="editPsychoConfirm" v-if="editingGroup.psychologist_id">ОК</button>
+              <button class="btn btn-cancel" @click="editPsychoCancel">Отмена</button>
             </div>
           </div>
           <div class="border p-2" v-if="currentGroup.students.length">
@@ -171,6 +202,7 @@ import { Collapse } from 'bootstrap';
 import GroupItem from "@/components/group/GroupItem";
 import { getGroups, retrieveGroup, createGroup, updateGroup, deleteGroup } from "@/hooks/user/useGroup";
 import { getStudyYears } from "@/hooks/assess/useStudyYear";
+import { getClassYears } from "@/hooks/unit/useClassYear";
 import { getUsers } from "@/hooks/user/useUser";
 import { getGroupedArray } from "@/hooks/extra/extraFeatures";
 import { getTeachers } from "@/hooks/user/useUser";
@@ -190,7 +222,7 @@ export default {
     const { studyYears, currentStudyYear, fetchGetStudyYears } = getStudyYears();
     const { users, isUserLoading, totalPages, totalUsers, fetchGetUsers } = getUsers();
     const { teachers, isTeacherLoading, fetchGetTeachers } = getTeachers();
-
+    const { years, fetchGetClassYears } = getClassYears();
     return {
       groups, isGroupLoading, fetchGetGroups, groupedArrayData,
       retrievedGroup, fetchRetrieveGroup,
@@ -200,6 +232,7 @@ export default {
       studyYears, currentStudyYear, fetchGetStudyYears,
       users, isUserLoading, totalPages, totalUsers, fetchGetUsers,
       teachers, isTeacherLoading, fetchGetTeachers,
+      years, fetchGetClassYears
     }
   },
   data() {
@@ -216,6 +249,7 @@ export default {
       addingGroupYear: null,
       editMentor: false,
       queryTeacher: null,
+      editPsycho: false,
     }
   },
   methods: {
@@ -265,7 +299,7 @@ export default {
     showAddGroup(year) {
       if (year) {
         this.addingGroupYear = year;
-        this.editingGroup.class_year = year;
+        this.editingGroup.class_year_id = year;
       } else {
         this.addingGroupYear = 0;
       }
@@ -274,7 +308,7 @@ export default {
     groupAdd() {
       console.log('Запрос на добавление группы: ', this.editingGroup);
       this.fetchCreateGroup(this.editingGroup).finally(() => {
-        const currentClassYear = this.editingGroup.class_year
+        const currentClassYear = this.editingGroup.class_year_id
         this.fetchGetGroups({ study_year: this.currentYear.id }).finally(() => {
           const collapse = document.querySelector(`#collapse-${currentClassYear}`);
           new Collapse(collapse, {toggle: false}).show()
@@ -287,6 +321,7 @@ export default {
     showUpdateGroup(group) {
       this.editingGroupID = group.id;
       this.editingGroup = { ...group };
+      this.editingGroup.class_year_id = group.class_year.id;
       this.editMentor = false;
     },
     groupEdit() {
@@ -340,12 +375,31 @@ export default {
     editMentorCancel() {
       this.editMentor = false;
       this.editingGroup = {};
+    },
+    showEditPsycho() {
+      this.fetchGetTeachers('mentor');
+      this.editingGroup.id = this.currentGroup.id;
+      this.queryTeacher = null;
+      this.editPsycho = true;
+    },
+    editPsychoConfirm() {
+      this.editPsycho = false;
+      console.log('Запрос на редактирование группы: ', this.editingGroup);
+      this.fetchUpdateGroup(this.editingGroup).finally(() => {
+        this.currentGroup = { ...this.updatedGroup };
+        this.editingGroup = {};
+      })
+    },
+    editPsychoCancel() {
+      this.editPsycho = false;
+      this.editingGroup = {};
     }
   },
   mounted() {
     this.fetchGetStudyYears().finally(() => {
       this.currentYear = this.currentStudyYear;
       this.fetchGetGroups({ study_year: this.currentYear.id });
+      this.fetchGetClassYears({});
     });
   },
   computed: {

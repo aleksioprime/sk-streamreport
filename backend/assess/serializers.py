@@ -68,12 +68,11 @@ class ClassGroupExtraSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClassGroup
         fields = ['id', 'class_year', 'letter', 'id_dnevnik', 'students', 'students_ids', 
-                  'support', 'support_id', 'mentor', 'mentor_id', 'psychologist', 'psychologist_id']
+                  'mentor', 'mentor_id', 'psychologist', 'psychologist_id']
         extra_kwargs = {
             'students_ids': {'source': 'students', 'write_only': True},
             'mentor_id': {'source': 'mentor', 'write_only': True},
             'psychologist_id': {'source': 'psychologist', 'write_only': True},
-            'support_id': {'source': 'support', 'write_only': True},
         }
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
@@ -556,8 +555,8 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
         class_year_id = self.context.get("class_year", None)
         period_id = self.context.get("period", None)
         class_year = ClassYear.objects.filter(pk=class_year_id).first()
-        # subjects = Subject.objects.filter(plan__class_year=class_year, group_ib__program=class_year.program).distinct()
-        subject_queryset = Subject.objects.filter(group_ib__program=class_year.program)
+        subject_queryset = Subject.objects.filter(plan__class_year=class_year_id, group_ib__program=class_year.program)
+        # subject_queryset = Subject.objects.filter(group_ib__program=class_year.program)
         subject_reports = list(subject_queryset.values('id', 'name_rus'))
         subjects = list(subject_queryset.values_list('id', flat=True))
         report_queryset = ReportTeacher.objects.filter(student=instance,

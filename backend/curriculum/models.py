@@ -81,7 +81,7 @@ class Subject(models.Model):
     class Meta:
         verbose_name = 'Предмет'
         verbose_name_plural = 'Предметы'
-        ordering = ['group_ib', 'name_eng']
+        ordering = ['group_ib', 'name_rus']
     def __str__(self):
         return "{} ({})".format(self.name_rus, self.group_fgos.get_level_display())
 

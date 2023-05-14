@@ -21,6 +21,10 @@ class ProfileTeacherSerializer(serializers.ModelSerializer):
         model = ProfileTeacher
         fields = ['id', 'id_dnevnik', 'position', 'admin', 'last_name', 'first_name', 
                   'middle_name', 'groups', 'psycho_groups']
+        extra_kwargs = {
+            'groups': {'required': False, 'read_only': True},
+            'psycho_groups': {'required': False, 'read_only': True},
+            }
 
 class UserCreateSerializer(serializers.ModelSerializer):
     student = ProfileStudentSerializer(required=False)

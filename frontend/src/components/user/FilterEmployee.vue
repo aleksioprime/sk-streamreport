@@ -2,7 +2,7 @@
   <div class="block-filter">
     <div class="d-flex my-2">
       <input class="form-control" type="search" name="search" id="search" placeholder="Найти по фамилии..." v-model="searchValue" 
-        @keyup.enter="handleSearch" @search="handleSearch">
+         @search="handleSearch">
       <button class="btn btn-primary ms-2" @click="handleSearch" :disabled="!searchValue">Найти</button>
     </div>
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="group-item" @click="$emit('select', group)">
-    <div>{{ group.class_year }}{{ group.letter }} класс</div>
+    <div>{{ group.class_year.year_rus }}{{ group.letter }} класс</div>
     <div class="btn-wrapper" v-if="showEditButton">
       <button class="btn-icon img-edit" @click="$emit('update', group)"></button>
       <button class="btn-icon img-delete" @click="$emit('delete', group)"></button>
