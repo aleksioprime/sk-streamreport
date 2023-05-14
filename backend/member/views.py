@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import routers, viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
-from member.serializers import UserSerializer, DepartmentSerializer, ClassGroupSerializer, UserCreateSerializer, ProfileTeacherSerializer
+from member.serializers import UserSerializer, DepartmentSerializer, UserCreateSerializer, ProfileTeacherSerializer
 from member.models import User, Department, ProfileStudent, ProfileTeacher
 from assess.models import ClassGroup
 from rest_framework.exceptions import AuthenticationFailed
@@ -47,20 +47,9 @@ class UserAuth(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
-
 class DepartmentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-
-
-class ClassGroupViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = ClassGroup.objects.all()
-    serializer_class = ClassGroupSerializer
-
-    def get_queryset(self):
-        # добавить фильтрацию по текущему учебному году
-        return ClassGroup.objects.filter(study_year=1)
-
 
 class UsersSetPagination(PageNumberPagination):
     page_size = 15

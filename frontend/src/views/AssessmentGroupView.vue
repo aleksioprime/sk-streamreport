@@ -14,7 +14,7 @@
       </div>
       <!-- Выбор программы -->
       <div class="col-md my-2">
-        <select id="programs" class="form-select me-3 mb-2" v-model="currentProgram">
+        <select id="programs" class="form-select me-3 mb-2" v-model="currentProgram" @change="choiceProgram">
           <option v-for="(pr, i) in programs" :key="i" :value="pr.value">
             {{ pr.name }}
           </option>
@@ -33,32 +33,40 @@
 
 
     <div v-if="!isGroupLoading">
-      <div v-for="(groupsByYear, year) in groupedArrayData(groups, ['class_year'])" :key="year">
+      <div v-for="(groupsByYear, year) in groupedArrayData(groups, ['class_year', 'year_rus'])" :key="year">
         <div class="class-group">{{ year }} классы</div>
         <div v-for="group in groupsByYear" :key="group.id" class="class-item">
-          <div>{{ group.class_year }}{{ group.letter }} класс ({{ getWordStudent(group.count) }})</div>
-          <div class="class-wrapper" v-if="currentSubject">
-            <div class="assessment-title">Итоговые оценки по предмету {{ currentSubject.name_rus }}</div>
+          <div class="row">
+            <div class="col-sm">
+              <div class="class-title">{{ group.class_year.year_rus }}{{ group.letter }} класс ({{ getWordStudent(group.count) }})</div>
+            </div>
+          </div>
+          <div class="assessment-wrapper" v-if="currentSubject">
+            <div class="assessment-title">Итоговые оценки по предмету <b>{{ currentSubject.name_rus }}</b>:</div>
             <div class="assessment-period">
-              <div class="period-item" v-for="period in periodClass(year)" :key="period.id">
-                <div class="period-title">{{ period.number }} {{ period.type }}</div>
+              <div class="period-item" v-for="period in periodClass(year)" :key="period.id" @click="$router.push(`/assessment/group/${group.id}/period/${period.id}/subject/${currentSubject.id}`)">
+                <div class="period-title">Оценки за {{ period.number }} {{ period.type }}</div>
                 <div class="period-info"></div>
-                <button class="period-btn" v-if="currentSubject" @click="$router.push(`/assessment/group/${group.id}/period/${period.id}/subject/${currentSubject.id}`)">
-                  Оценки
-                </button>
               </div>
             </div>
-            <div class="report-title">Репорты учителя ({{ authUser.teacher.last_name }} {{ authUser.teacher.first_name }} {{ authUser.teacher.middle_name }})</div>
+          </div>
+          <div class="report-wrapper" v-if="currentSubject">
+            <div class="report-title">Репорты учителя по предмету <b>{{ currentSubject.name_rus }}</b>:
+            </div>
             <div class="report-period">
-              <div class="period-item" v-for="period in reportPeriods" :key="period.id">
-                <div class="period-title">{{ period.name }}</div>
+              <div class="period-item" v-for="period in reportPeriods" :key="period.id"  @click="$router.push(`/report/teacher/group/${group.id}/period/${period.id}/subject/${currentSubject.id}/`)">
+                <div class="period-title">Репорты за {{ period.name }}</div>
                 <div class="period-info"></div>
-                <button class="period-btn" v-if="currentSubject" @click="$router.push(`/report/teacher/group/${group.id}/subject/${currentSubject.id}/`)">
-                  Репорты
-                </button>
               </div>
-              <button class="btn btn-primary" @click="$router.push(`/report/mentor/group/${group.id}/`)">Наставник</button>
-              <button class="btn btn-primary" v-if="authUser && group.psychologist && authUser.teacher.id == group.psychologist.id">Психолог</button>
+            </div>
+          </div>
+          <div class="mentor-wrapper" >
+            <div class="report-title">Репорты наставника:</div>
+            <div class="mentor-period">
+              <div class="period-item" v-for="period in reportPeriods" :key="period.id"  @click="$router.push(`/report/mentor/group/${group.id}/period/${period.id}`)">
+                <div class="period-title">Репорты за {{ period.name }}</div>
+                <div class="period-info"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -111,6 +119,13 @@ export default {
     }
   },
   methods: {
+    choiceProgram() {
+      this.fetchGetGroups({ study_year: this.currentStudyYear, program: this.currentProgram }).finally(() => {
+        this.fetchGetPeriods({ study_year: this.currentStudyYear });
+        this.fetchGetReportPeriods({ study_year: this.currentStudyYear });
+        this.fetchGetSubjects({ program: this.currentProgram });
+      });
+    },
     getWordStudent(count) {
       let value = Math.abs(count) % 100;
       let number = value % 10;
@@ -130,7 +145,9 @@ export default {
       this.fetchGetPeriods({ study_year: this.currentStudyYear })
       this.fetchGetReportPeriods({ study_year: this.currentStudyYear })
     });
-    this.fetchGetSubjects({ level: 'ooo', type: 'base' });
+    this.fetchGetSubjects({ program: this.currentProgram }).finally(() => {
+      this.currentSubject = this.subjects.find(item => item.id == 40)
+    });
   },
   computed: {
     // подключение переменной авторизированного пользователя из store
@@ -139,8 +156,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @import '@/assets/css/spinner.css';
+.class-title {
+  font-weight: 700;
+}
 .class-group {
   text-transform: uppercase;
   font-size: 1.5em;
@@ -168,14 +188,23 @@ export default {
 .assessment-title, .report-title {
   font-size: 0.8em;
 }
-.assessment-period, .report-period{
+.assessment-period, .report-period, .mentor-period{
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 5px;
   margin: 10px 0;
 }
 .period-item {
-  flex-grow: 1;
-  text-align: center;
+  flex-basis: 49%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #a7a7a78a;
+}
+.period-item:hover {
+  cursor: pointer;
+  transition: 1s;
+  background: #a7a7a78a;
 }
 .period-title {
   font-size: 1em;
@@ -191,4 +220,8 @@ export default {
 .period-btn:not(:last-of-type) {
   margin-right: 10px;
 }
+.report-wrapper {
+  margin-top: 0;
+}
+
 </style>

@@ -101,7 +101,7 @@
               </tr>
               <tr v-for="(gr, i) in summativeWork.groups" :key="gr.id">
                 <td>
-                  <span v-if="findGroup(gr.group_id)">{{ findGroup(gr.group_id).class_year }}{{ findGroup(gr.group_id).letter }} класс</span>
+                  <span v-if="findGroup(gr.group_id)">{{ findGroup(gr.group_id).class_year.year_rus }}{{ findGroup(gr.group_id).letter }} класс</span>
                 </td>
                 <td>{{ new Date(gr.date).toLocaleDateString() }}</td>
                 <td>{{ gr.lesson }}</td>
@@ -125,7 +125,7 @@
                 <select id="level" class="form-select" v-model="choisenWorkGroupDate.group_id">
                   <option :value="null">Класс</option>
                   <option v-for="gr in filteredGroups" :key="gr.id" :value="gr.id">
-                    {{ gr.class_year }}{{ gr.letter }} класс
+                    {{ gr.class_year.year_rus }}{{ gr.letter }} класс
                   </option>
                 </select>
               </div>
@@ -160,7 +160,6 @@ import { toRefs } from 'vue';
 // import { getUnitsMYP, getCriteriaMYP, getGroups } from "@/hooks/assess/getSumWorkData";
 import { getSubjects } from "@/hooks/curriculum/useSubject";
 import { getTeachers } from "@/hooks/user/useUser";
-import { getCriteriaMYP } from "@/hooks/unit/useCriterionMYP";
 import { getUnitListMYP } from "@/hooks/unit/useUnitMYP";
 import { getGroups } from "@/hooks/user/useGroup";
 import { getPeriods } from "@/hooks/assess/usePeriod";
@@ -174,7 +173,6 @@ export default {
   setup(props) {
     const { subjects, fetchGetSubjects } = getSubjects();
     const { teachers, isTeacherLoading, fetchGetTeachers } = getTeachers();
-    const { criteriaMYP, fetchGetCriteriaMYP } = getCriteriaMYP();
     const { unitListMYP, fetchGetUnitListMYP } = getUnitListMYP();
     const { groups, isGroupLoading, fetchGetGroups } = getGroups();
     const { periods, currentPeriod, fetchGetPeriods } = getPeriods();
@@ -182,7 +180,6 @@ export default {
     return {
       subjects, fetchGetSubjects,
       teachers, isTeacherLoading, fetchGetTeachers,
-      criteriaMYP, fetchGetCriteriaMYP,
       unitListMYP, fetchGetUnitListMYP,
       groups, isGroupLoading, fetchGetGroups,
       periods, currentPeriod, fetchGetPeriods,
@@ -190,6 +187,7 @@ export default {
   },
   data() {
     return {
+      criteriaMYP: [],
       searchTeachers: null,
       choisenWorkGroupDate: { group_id: null },
       errorField: {},
@@ -208,11 +206,11 @@ export default {
   methods: {
     changeSubject(event) {
       this.fetchGetUnitListMYP({ subject: this.summativeWork.subject_id });
-      this.fetchGetCriteriaMYP({ subject: this.summativeWork.subject_id });
     },
     changeUnit(event) {
       let currentUnit = this.unitListMYP.find(item => item.id == event.target.value)
-      this.fetchGetGroups({ class_year: currentUnit.class_year.year_rus });
+      this.fetchGetGroups({ class_year: currentUnit.class_year.id })
+      this.criteriaMYP = [ ...currentUnit.criteria ];
     },
     addWorkGroupDate(event) {
       event.preventDefault();
@@ -277,9 +275,9 @@ export default {
       this.fetchGetUnitListMYP({ subject: this.summativeWork.subject_id }).finally(() =>{
         const currentUnit = this.unitListMYP.find(item => item.id == this.summativeWork.unit_id);
         console.log('Текущий юнит ', currentUnit.class_year)
-        this.fetchGetGroups({ class_year: currentUnit.class_year.year_rus });
+        this.fetchGetGroups({ class_year: currentUnit.class_year.id });
+        this.criteriaMYP = [ ...currentUnit.criteria ];
       });
-      this.fetchGetCriteriaMYP({ subject: this.summativeWork.subject_id });
     }
     this.fetchGetPeriods({ study_year: this.currentStudyYear, program: 'MYP' });
     this.fetchGetSubjects({ level: 'ooo', type: 'base' });

@@ -7,54 +7,108 @@
       <div class="student-info">
         <div class="student-name">{{ student.user.last_name }} {{ student.user.first_name }}</div>
       </div>
+      <div class="ms-auto">Экспорт в PDF</div>
     </div>
     <div class="student-report">
-      <report-field-text id="student-report" :student="student" :dataField="student.mentor_report" :generate="false"
-      :criteria="{ criterion_a: criterionA, criterion_b: criterionB, criterion_c: criterionC, criterion_d: criterionD,}" @save="fetchSaveReport"/>
+      <report-field-text id="student-report" :student="student" :dataField="student.mentor_report" @save="fetchSaveReport"/>
     </div>
-    <div class="student-events" v-if="student.mentor_report.text">
+    <div class="student-events" v-if="student.events.length || student.mentor_report.text">
       <div class="events-title" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
       aria-expanded="false" :aria-controls="`collapse-events-${student.id}`">Участие в мероприятиях</div>
-      <report-field-blocks class="collapse" :id="`collapse-events-${student.id}`" :fieldData="student.mentor_report.events" 
-      :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveEvent">
-        <!-- Слот для блоков показа записей -->
-        <template v-slot:show="field">
-          <div class="blocks-wrapper">
-            <div>{{ field.data.title }}</div>
-            <div>Тип: {{ field.data.type_name }}. Уровень: {{ field.data.level_name }}</div>
-            <div>Результаты: {{ field.data.result }}</div>
+      <div class="events-wrapper collapse" :id="`collapse-events-${student.id}`">
+        <div class="events-teacher" v-if="student.events.length">
+          <div class="events-teacher-title">Мероприятия от учителей-предметников</div>
+          <div v-for="event in student.events" :key="event.id" class="event-item">
+            <div>{{ event.title }} ({{ event.type_name }}, {{ event.level_name }})</div>
+            <div>Результаты: {{ event.result }}</div>
+            <div v-if="event.teacher_report">{{ event.teacher_report.subject.name_rus }} ({{ event.teacher_report.author.user.last_name }} {{ event.teacher_report.author.user.first_name }} {{ event.teacher_report.author.user.middle_name }})</div>
           </div>
-        </template>
-        <template v-slot:form="item">  
-          <div class="my-2">
-            <input class="form-control my-1" type="text" v-model="item.data.title" placeholder="Название мероприятия">
-            <div class="row">
-              <div class="col-md">
-                <select id="levels" class="form-select my-1" v-model="item.data.level">
-                  <option :value="null">Выберите уровень</option>
-                  <option v-for="(lvl, i) in levels" :key="i" :value="lvl.value">
-                    {{ lvl.name }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md">
-                <select id="types" class="form-select my-1" v-model="item.data.type_id">
-                  <option :value="null">Выберите тип</option>
-                  <option v-for="(type, i) in types" :key="i" :value="type.id">
-                    {{ type.name }}
-                  </option>
-                </select>
-              </div>
+        </div>
+        <report-field-blocks :fieldData="student.mentor_report.events" :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveEvent"  v-if="student.mentor_report.text">
+          <!-- Слот для блоков показа записей -->
+          <template v-slot:show="field">
+            <div class="blocks-wrapper">
+              <div>{{ field.data.title }}</div>
+              <div>Тип: {{ field.data.type_name }}. Уровень: {{ field.data.level_name }}</div>
+              <div>Результаты: {{ field.data.result }}</div>
             </div>
-            <textarea class="form-control my-1" type="text" v-model="item.data.result" placeholder="Описание результатов"></textarea>
+          </template>
+          <template v-slot:form="item">  
+            <div class="my-2">
+              <input class="form-control my-1" type="text" v-model="item.data.title" placeholder="Название мероприятия">
+              <div class="row">
+                <div class="col-md">
+                  <select id="levels" class="form-select my-1" v-model="item.data.level">
+                    <option :value="null">Выберите уровень</option>
+                    <option v-for="(lvl, i) in levels" :key="i" :value="lvl.value">
+                      {{ lvl.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md">
+                  <select id="types" class="form-select my-1" v-model="item.data.type_id">
+                    <option :value="null">Выберите тип</option>
+                    <option v-for="(type, i) in types" :key="i" :value="type.id">
+                      {{ type.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <textarea class="form-control my-1" type="text" v-model="item.data.result" placeholder="Описание результатов"></textarea>
+            </div>
+          </template>
+        </report-field-blocks>
+      </div>
+    </div>
+    <div class="subject-reports">
+      <div class="subject-reports-title">Репорты учителей-предметников</div>
+      <div class="accordion" id="accordionPanelsSubject">
+        <div class="subject-item accordion-item" v-for="subject in student.subject_reports" :key="subject.id">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#panels-subject-${subject.id}`" aria-expanded="true" :aria-controls="`panels-subject-${subject.id}`">
+              <div class="subject-title" :class="{'check-yes': subject.text }">{{ subject.name_rus }}</div>
+            </button>
+          </h2>
+          <div :id="`panels-subject-${subject.id}`" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <div v-if="subject.text">
+              <div class="subject-criteria">
+                <div class="criteria-item">
+                  <div class="criteria-name">{{ getCriteriaBySubject(subject.group, 'A') }}</div>
+                  <div class="criteria-value">{{ subject.criteria.criterion_a }}</div>
+                </div>
+                <div class="criteria-item">
+                  <div class="criteria-name">{{ getCriteriaBySubject(subject.group, 'B') }}</div>
+                  <div class="criteria-value">{{ subject.criteria.criterion_b }}</div>
+                </div>
+                <div class="criteria-item">
+                  <div class="criteria-name">{{ getCriteriaBySubject(subject.group, 'C') }}</div>
+                  <div class="criteria-value">{{ subject.criteria.criterion_c }}</div>
+                </div>
+                <div class="criteria-item">
+                  <div class="criteria-name">{{ getCriteriaBySubject(subject.group, 'D') }}</div>
+                  <div class="criteria-value">{{ subject.criteria.criterion_d }}</div>
+                </div>
+              </div>
+              <div class="subject-report">
+                <div v-html="subject.text"></div>
+              </div>
+              <div class="subject-teacher">
+                <div class="teacher-name">{{ subject.author_name }}</div>
+              </div>
+              </div>
+              <div v-else>Нет данных</div>
+            </div>
           </div>
-        </template>
-      </report-field-blocks>
+        </div>
+      </div>
+      
     </div>
   </div>
 </template>
   
 <script>
+import { mapGetters } from 'vuex';
 import ReportFieldText from "@/components/assessment/ReportFieldText.vue";
 import ReportFieldBlocks from "@/components/assessment/ReportFieldBlocks.vue";
 
@@ -96,43 +150,33 @@ export default {
     }
   },
   methods: {
+    getCriteriaBySubject(id, letter) {
+      const criterion = this.criteria.find(item => item.subject_group == id && item.letter == letter)
+      if (criterion) {
+        return `${criterion.letter}. ${criterion.name_eng}`
+      } 
+    },
     fetchSaveReport(data) {
       console.log('Сохранение репорта: ', data);
-      const editReportStudents = {
-        student_id: this.student.id,
-        text: data.text,
-        id: this.student.mentor_report.id || null,
-      }
+      let editReportStudents = { ...data }
+      editReportStudents.student_id = this.student.id;
+      editReportStudents.author_id = this.authUser.teacher.id;
+      editReportStudents.id = this.student.mentor_report.id || null
       this.$emit('updateReport', editReportStudents);
     },
     fetchSaveEvent(data) {
       console.log('Сохранение мероприятия: ', data);
-      const editReportStudents = {
-        student_id: this.student.id,
-        events: data.events,
-        id: this.student.mentor_report.id || null,
-      }
-      this.$emit('updateReport', editReportStudents);
     }
   },
   computed: {
-    criterionA() {
-      return this.criteria.find(item => item.letter == 'A')
-    },
-    criterionB() {
-      return this.criteria.find(item => item.letter == 'B')
-    },
-    criterionC() {
-      return this.criteria.find(item => item.letter == 'C')
-    },
-    criterionD() {
-      return this.criteria.find(item => item.letter == 'D')
-    },
-  }
+  // подключение переменной авторизированного пользователя из store
+  ...mapGetters(['authUser', 'isAdmin']),
+  
+  },
 }
 </script>
   
-<style>
+<style scoped>
 .report-item {
   padding: 10px;
   display: flex;
@@ -181,7 +225,6 @@ export default {
 
 .achievements-wrapper {
   flex-grow: 1;
-  border: 0.5px solid #a7a7a78a;
   min-height: 100px;
   margin-bottom: 10px;
 }
@@ -221,9 +264,77 @@ export default {
 }
 .events-title {
   margin-top: 10px;
-  border-bottom: 0.5px solid #a7a7a78a;
+  border: 0.5px solid #a7a7a78a;
+  border-radius: 5px;
+  padding: 10px;
 }
 .events-title:hover {
-  font-weight: 700;
+  background: #d8d8d88a;
+  border: 0.5px solid #fff;
+  font-weight: inherit;
+}
+.event-item {
+  padding: 10px;
+  border: 0.5px solid #a7a7a78a;
+  border-radius: 5px;
+}
+.events-teacher-title {
+  margin: 10px 0;
+}
+.subject-reports-title {
+  margin: 10px 0;
+  text-transform: uppercase;
+  font-size: 1.2em;
+}
+.subject-reports {
+  margin-top: 10px;
+}
+.subject-title {
+  margin-left: 15px;
+}
+.subject-title:before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  background: url('@/assets/img/check-no.png') no-repeat 50% / 100%;
+}
+.check-yes:before {
+  background: url('@/assets/img/check-yes.png') no-repeat 50% / 100%;
+}
+.subject-criteria{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border: 1px solid #a7a7a78a;
+  border-radius: 5px;
+  padding: 10px;
+  row-gap: 5px;
+}
+.criteria-item {
+  flex-basis: 45%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0
+}
+.criteria-value {
+  border: 1px solid #a7a7a78a;
+  padding: 5px 10px;
+  margin-left: 10px;
+}
+.subject-report {
+  margin-top: 10px;
+  font-style: italic;
+}
+.subject-teacher {
+  display: flex;
+}
+.teacher-name {
+  margin-left: auto;
 }
 </style>

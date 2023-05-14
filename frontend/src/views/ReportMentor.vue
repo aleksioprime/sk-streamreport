@@ -3,43 +3,47 @@
     <base-header>
       <template v-slot:header>Репорты наставника</template>
     </base-header>
-    <!-- Выбор учебного года -->
-    <div class="my-2">
-      <select id="study-year" class="form-select me-3 mb-2" v-model="currentStudyYear" @change="resetQuery">
-        <option v-for="(study, i) in studyYears" :key="i" :value="study">
-            {{ study.name }} учебный год
-        </option>
-      </select>
+    <div class="col-md mb-2">
+      <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
+      <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> 
+      <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}</div>
     </div>
-    <!-- Выбор периодов обучения -->
-    <div class="block-period">
-      <div v-for="pr in reportPeriods" :key="pr.id" class="period">
-        <input type="radio" name="period" :value="pr" :id="'period-' + pr.id"
-          v-model="currentReportPeriod" @change="choicePeriod">
-        <label :for="'period-' + pr.id">
-        <div class="period-title">{{ pr.number }} период</div>
-        <div class="period-item-date">{{ new Date(pr.date_start).toLocaleDateString() }} - {{ new Date(pr.date_end).toLocaleDateString() }}</div>
-        </label>
-      </div>
-    </div>
-    <div v-if="studentsReport.length" class="report-wrapper">
-      <div class="student-list">
-        <div v-for="student in studentsReport" :key="student.id">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="student" :value="student" :id="'student-' + student.id"
-              v-model="currentStudent">
-            <label class="form-check-label" :for="'student-' + student.id">
-              <div>{{ student.user.last_name }} {{ student.user.first_name }}</div>
-            </label>
+    <div v-if="!isStudentsReportLoading && !firstLoading">
+      <div v-if="studentsReport.length" class="report-wrapper">
+        <div class="student-list">
+          <div v-for="student in studentsReport" :key="student.id">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="student" :value="student" :id="'student-' + student.id"
+                v-model="currentStudent">
+              <label class="form-check-label" :for="'student-' + student.id">
+                <div>{{ student.user.last_name }} {{ student.user.first_name }}</div>
+              </label>
+            </div>
           </div>
         </div>
+        <report-mentor-item :period="currentReportPeriod" v-if="currentStudent" class="student-item" :criteria="criteriaMYP"
+        :student="currentStudent" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport"/>
+        <div v-else>Выберите студента</div>
       </div>
-      <report-mentor-item :period="currentReportPeriod" v-if="currentStudent" class="student-item"
-      :student="currentStudent" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport"/>
-      <div v-else>Выберите студента</div>
+      <div v-else class="report-none">
+        Пока нет данных
+      </div>
     </div>
-    <div v-else class="report-none">
-      Пока нет данных
+    <div v-else class="loader">
+      <div class="lds-spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   </div>
 </template>
@@ -47,31 +51,25 @@
 <script>
 import ReportMentorItem from "@/components/assessment/ReportMentorItem.vue";
 import { getStudentsReport, createReportMentor, updateReportMentor, getReportMentorJournal } from "@/hooks/assess/useReportMentor";
-import { getCriteriaDetailMYP } from "@/hooks/unit/useCriterionMYP";
-import { getStudyYears } from "@/hooks/assess/useStudyYear";
-import { getReportPeriods } from "@/hooks/assess/useReportPeriod";
+import { getCriteriaMYP } from "@/hooks/unit/useCriterionMYP";
 
 export default {
   components: {
     ReportMentorItem
   },
   setup(props) {
-    const { studyYears, currentStudyYear, fetchGetStudyYears } = getStudyYears();
-    const { reportPeriods, currentReportPeriod, fetchGetReportPeriods } = getReportPeriods();
-    const { currentGroup, currentClassYear, eventTypes, fetchGetReportMentorJournal } = getReportMentorJournal();
+    const { currentGroup, currentReportPeriod, eventTypes, fetchGetReportMentorJournal } = getReportMentorJournal();
     const { studentsReport, isStudentsReportLoading, fetchGetStudentsReport } = getStudentsReport();
     const { createdReportMentor, fetchCreateReportMentor } = createReportMentor();
     const { updatedReportMentor, fetchUpdateReportMentor } = updateReportMentor();
-    const { criteriaMYP, fetchGetCriteriaDetailMYP } = getCriteriaDetailMYP();
+    const { criteriaMYP, fetchGetCriteriaMYP } = getCriteriaMYP();
 
     return {
-      currentGroup, currentClassYear, eventTypes, fetchGetReportMentorJournal,
+      currentGroup, currentReportPeriod, eventTypes, fetchGetReportMentorJournal,
       studentsReport, isStudentsReportLoading, fetchGetStudentsReport,
       createdReportMentor, fetchCreateReportMentor,
       updatedReportMentor, fetchUpdateReportMentor,
-      criteriaMYP, fetchGetCriteriaDetailMYP,
-      studyYears, currentStudyYear, fetchGetStudyYears,
-      reportPeriods, currentReportPeriod, fetchGetReportPeriods,
+      criteriaMYP, fetchGetCriteriaMYP,
     }
   },
   data() {
@@ -83,23 +81,15 @@ export default {
         { value: '1', name: '1 уровень' },
         { value: '2', name: '2 уровень' },
         { value: '3', name: '3 уровень' },
-      ]
+      ],
+      currentFetchData: {},
+      firstLoading: true,
     }
   },
   methods: {
-    choicePeriod() {
-      this.fetchGetStudentsReport({
-        group: this.$route.params.id_group,
-        class_year: this.currentClassYear.id,
-        period: this.currentReportPeriod.id,
-        study_year: this.currentStudyYear.id,
-      }).finally(() => {
-        this.currentStudent = this.studentsReport.find(item => this.currentStudent.id == item.id);
-      });
-    },
     fetchUpdateReport(editingReport) {
       editingReport.period_id = this.currentReportPeriod.id;
-      editingReport.year_id = this.currentClassYear.id;
+      editingReport.year_id = this.currentGroup.class_year.id;
       console.log('Запрос на добавление или обновление данных: ', editingReport)
       if (editingReport.id) {
         this.setStudentReportUpdate(editingReport);
@@ -111,12 +101,8 @@ export default {
       if (Object.keys(fetchData).length) {
         console.log("Запрос на добавление данных: ", fetchData);
         this.fetchCreateReportMentor(fetchData).finally(() => {
-          // this.replaceTextReport(fetchData.student_id, fetchData.text);
-          this.fetchGetStudentsReport({
-            group: this.$route.params.id_group,
-            class_year: this.currentClassYear.id,
-            period: this.currentReportPeriod.id,
-            study_year: this.currentStudyYear.id,
+          this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
+            this.currentStudent = this.studentsReport.find(item => item.id == this.createdReportMentor.student.id);
           });
         });
       }
@@ -125,44 +111,41 @@ export default {
       if (Object.keys(fetchData).length) {
         console.log("Запрос на изменение данных: ", fetchData);
         this.fetchUpdateReportMentor(fetchData).finally(() => {
-          // this.replaceTextReport(fetchData.student_id, fetchData.text);
-          this.fetchGetStudentsReport({
-            group: this.$route.params.id_group,
-            class_year: this.currentClassYear.id,
-            period: this.currentReportPeriod.id,
-            study_year: this.currentStudyYear.id,
+          this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
+            this.currentStudent = this.studentsReport.find(item => item.id == this.updatedReportMentor.student.id);
           });
         });
       }
     },
   },
   mounted() {
-    this.fetchGetStudyYears().finally(() => {
-      this.fetchGetReportPeriods({ study_year: this.currentStudyYear }).finally(() => {
-        this.fetchGetReportMentorJournal({
-          group: this.$route.params.id_group, 
-          period: this.currentReportPeriod.id,
-        }).finally(() => {
-          this.fetchGetStudentsReport({
-            group: this.$route.params.id_group,
-            class_year: this.currentClassYear.id,
-            period: this.currentReportPeriod.id,
-            study_year: this.currentStudyYear.id,
-          }).finally(() => {
-            this.currentStudent = this.studentsReport[0];
-          });
-        })
-      })
-    });
-
-    
+    this.fetchGetReportMentorJournal({
+      group: this.$route.params.id_group, 
+      period: this.$route.params.id_period,
+    }).finally(() => {
+      this.currentFetchData = {
+        group: this.currentGroup.id,
+        class_year: this.currentGroup.class_year.id,
+        period: this.currentReportPeriod.id,
+      }
+      this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
+        this.currentStudent = this.studentsReport[0];
+        this.firstLoading = false;
+        this.fetchGetCriteriaMYP({});
+      });
+    })
   },
 }
 </script>
 
 <style>
 @import '@/assets/css/spinner.css';
-
+.loader {
+  display: flex;
+  height: calc(100vh - 200px);
+  align-items: center;
+  justify-content: center;
+}
 .student-list {
   display: flex;
   flex-wrap: wrap;

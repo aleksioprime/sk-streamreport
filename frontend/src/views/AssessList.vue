@@ -27,12 +27,12 @@
     </modal-assess>
     
     <!-- Вывод итоговых работ учителя, сгруппированных по предметам -->
-    <div v-if="Object.keys(groupedSumWorks(summativeWorks, ['subject'])).length !== 0" class="sumworks">
-      <div v-for="(worksBySubject, subject) in groupedSumWorks(summativeWorks, ['subject'])" :key="subject">
+    <div v-if="Object.keys(groupedArrayData(summativeWorks, ['subject', 'id'])).length !== 0" class="sumworks">
+      <div v-for="(worksBySubject, subject) in groupedArrayData(summativeWorks, ['subject', 'id'])" :key="subject">
         <div class="sumworks-subject" v-if="getSubject(subject)">{{ getSubject(subject).name_rus }}</div>
-        <div v-for="(worksByYear, year) in groupedSumWorks(worksBySubject, ['unit', 'class_year'])" :key="year" class="sumworks-block">
+        <div v-for="(worksByYear, year) in groupedArrayData(worksBySubject, ['unit', 'class_year', 'year_rus'])" :key="year" class="sumworks-block">
           <div class="sumworks-year">
-            <div class="title" v-if="getGrade(year)">{{ getGrade(year).year_rus }} {{  }} классы</div>
+            <div class="title" v-if="year">{{ year }} классы</div>
           </div>
           <div class="sumworks-grouped">
             <assessment-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit(sumwork.id)" @deleteWork="showSumWorkModalDelete(sumwork.id)"/>
@@ -190,20 +190,6 @@ export default {
         this.currentAssess = {};
       });
     },
-    // преобраование массива итоговых работ в группированный по предмету объект массивов
-    groupedSumWorks(array, fields) {
-      let groupedObject = array.reduce((acc, obj) => {
-        let objField = obj
-        for (const field of fields) {
-          objField = objField[field];
-        }
-        const property = objField.id;
-        acc[property] = acc[property] || [];
-        acc[property].push(obj);
-        return acc;
-      }, {});
-      return groupedObject;
-    },
     // Нахождение предмета по его ID из списка итоговых работ
     getSubject(id) {
       let subject = null;
@@ -214,17 +200,6 @@ export default {
         }
       })
       return subject
-    },
-    // Нахождение года обучения по его ID из списка итоговых работ
-    getGrade(id) {
-      let year = null;
-      this.summativeWorks.forEach((item) => {
-        if (item.unit.class_year.id == id) {
-          year = item.unit.class_year
-          return
-        }
-      })
-      return year
     },
   },
   mounted() {

@@ -5,13 +5,13 @@
       <template v-slot:header>Журнал оценок за итоговую работу</template>
     </base-header>
     <modal-class @save="saveClassModal" @cancel="hideClassModal" :modalTitle="modalTitleClass">
-      <assessment-work-form v-if="!isWorkGroupLoading" v-model:studentsWork="studentsWork" :year="summativeWorkGroup.group"/>
+      <assessment-work-form v-if="!isWorkGroupLoading" v-model:studentsWork="studentsWork" :group="summativeWorkGroup.group"/>
       <div v-else>Данные загружаются</div>
     </modal-class>
     <div class="info">
       <div>{{ summativeWorkGroup.work.title }}</div>
       <div v-if="summativeWorkGroup.work.unit">{{ summativeWorkGroup.work.unit.title }}</div>
-      <div v-if="summativeWorkGroup.work.groups">{{ summativeWorkGroup.group.class_year }}{{ summativeWorkGroup.group.letter }} класс (Всего: {{ summativeWorkGroup.group.count }})</div>
+      <div v-if="summativeWorkGroup.work.groups">{{ summativeWorkGroup.group.class_year.year_rus }}{{ summativeWorkGroup.group.letter }} класс (Всего: {{ summativeWorkGroup.group.count }})</div>
     </div>
     <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
     <div class="tools" ref="activeInput">

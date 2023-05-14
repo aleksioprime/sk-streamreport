@@ -17,7 +17,7 @@ urlpatterns = [
     path('myp/criteria/detail', CriterionDetailViewSet.as_view({'get': 'list'})),
     path('myp/ibprofile', LearnerProfileIBViewSet.as_view({'get': 'list'})),
     path('myp/atl', SkillATLViewSet.as_view({'get': 'list'})),
-    path('objectives', ObjectiveViewSet.as_view({'get': 'list'})),
+    path('myp/objectives', ObjectiveViewSet.as_view({'get': 'list'})),
     path('myp/strands', StrandViewSet.as_view({'get': 'list'})),
     path('myp/aims', AimViewSet.as_view({'get': 'list'})),
     path('myp/gcontext', GlobalContextViewSet.as_view({'get': 'list'})),

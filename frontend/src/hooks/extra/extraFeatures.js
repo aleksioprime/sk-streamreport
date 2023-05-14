@@ -1,6 +1,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { axiosAPI } from '@/axios'
 
+
+// В массиве полей в конце нужно указывать id, если это необходимо
 export function getGroupedArray() {
 	function groupedArrayData (array, fields) {
 		let groupedObject = array.reduce((acc, obj) => {

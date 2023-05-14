@@ -4,14 +4,27 @@
       <template v-slot:link><div @click="$router.push(`/assessment/group`)" class="link-back">Вернуться назад</div></template>
       <template v-slot:header>Журнал оценок за период</template>
     </base-header>
-    <div class="row">
-      <div class="col mb-2">
+    <div class="row ">
+      <div class="col-md mb-2">
         <div>Период: <b>{{ currentPeriod.number }} {{ currentPeriod.type }}</b></div>
-        <div>Класс: <b>{{ currentGroup.class_year }}{{ currentGroup.letter }}</b> (Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }})</div>
+        <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> 
+        <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}</div>
         <div>Предмет: <b>{{ currentSubject.name_rus }} ({{ currentSubject.group_ib.name_eng }})</b></div>
       </div>
+      <div v-if="authenticatedDnevnik" class="col-md data-dnevnik">
+        <div class="dnevnik-biglogo"></div>
+        <div>Вы успешно синхронизированы с системой <a href="https://dnevnik.ru/">Дневник.ру</a></div>
+      </div>
+      <div v-else class="col-md data-dnevnik">
+        <div>
+          Вы не синхронизированы с <a href="https://dnevnik.ru/">Дневник.ру</a>.<br>
+          Для синхронизации авторизуйтесь в системе!
+        </div> 
+        <button class="btn btn-warning mt-2" @click="getDataDnevnik">Авторизоваться в Дневник.ру</button>
+      </div>
     </div>
-    <div class="d-flex flex-column border p-2">
+    <div>Выполненные итоговые работы за период</div>
+    <div class="d-flex flex-column border p-2" v-if="summativeWorks.length">
       <div v-for="(worksByUnit, unit) in groupedArrayData(summativeWorks, ['unit'])" :key="unit.id">
         <b>{{ worksByUnit[0].unit.title }}</b>
         <div v-for="work in worksByUnit" :key="work.id">
@@ -19,22 +32,25 @@
         </div>
       </div>
     </div>
-    <div v-if="!isStudentsAssessmentLoading">
-      <table class="table table-sm table-bordered mt-2 table-responsive w-100">
+    <div class="border p-2" v-else>
+      За <b>{{ currentPeriod.number }} {{ currentPeriod.type }}</b> в <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> классе итоговых работ не проводилось!
+    </div>
+    <div v-if="!isStudentsAssessmentLoading || !firstLoading">
+      <table class="asessment-table table table-sm table-bordered mt-2 table-responsive w-100">
         <thead class="text-center align-middle">
           <tr>
-            <td scope="col" rowspan="2">№</td>
+            <th scope="col" rowspan="2">№</th>
             <td scope="col" rowspan="2">ФИО студента</td>
             <td scope="col" colspan="6">Оценка за итоговые работы</td>
             <td rowspan="2" style="width: 25px">Среднее текущее</td>
             <td rowspan="2" style="width: 25px">Итог</td>
           </tr>
           <tr>
-            <td>A</td>
-            <td>B</td>
-            <td>C</td>
-            <td>D</td>
-            <td>Сумма</td>
+            <td class="column-criteria">A</td>
+            <td class="column-criteria">B</td>
+            <td class="column-criteria">C</td>
+            <td class="column-criteria">D</td>
+            <td class="column-criteria">Сумма</td>
             <td style="width: 25px">Итог</td>
           </tr>
         </thead>
@@ -43,14 +59,30 @@
             <tr>
               <th scope="row" rowspan="2">{{ index + 1 }}</th>
               <td rowspan="2">{{ st.user.last_name }} {{ st.user.first_name }}</td>
-              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-a" v-for="mark in st.calcCriteriaA" :key="mark">{{ mark }}</div></div></td>
-              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-b" v-for="mark in st.calcCriteriaB" :key="mark">{{ mark }}</div></div></td>
-              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-c" v-for="mark in st.calcCriteriaC" :key="mark">{{ mark }}</div></div></td>
-              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-d" v-for="mark in st.calcCriteriaD" :key="mark">{{ mark }}</div></div></td>
-              <td class="uneditable">{{ st.sumCriteria }}/{{ st.allCriteria }}</td>
-              <td class="uneditable">{{ st.criteriaFinalMark }}</td>
-              <td class="uneditable"></td>
-              <td class="uneditable">{{ st.finalGrade }}</td>
+              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-a" v-for="mark in st.criteria_list.criteria_a" :key="mark">{{ mark }}</div></div></td>
+              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-b" v-for="mark in st.criteria_list.criteria_b" :key="mark">{{ mark }}</div></div></td>
+              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-c" v-for="mark in st.criteria_list.criteria_c" :key="mark">{{ mark }}</div></div></td>
+              <td class="uneditable"><div class="criterion-mark"><div class="criterion-mark item cr-d" v-for="mark in st.criteria_list.criteria_d" :key="mark">{{ mark }}</div></div></td>
+              <td class="uneditable">
+                <div v-if="st.criteria_num">{{ st.criteria_sum }}/{{ st.criteria_num * 8 }}</div>
+              </td>
+              <td class="uneditable">{{ st.criteria_result }}</td>
+              <td class="uneditable">
+                <div class="dnevnik-mark">
+                  <div class="dnevnik-smalllogo"></div>
+                  <div v-if="isDataDnevnikLoading">
+                    {{ marksDnevnik.marks[st.id_dnevnik] }}
+                  </div>
+                  <div v-else class="loader-mark">
+                    
+                  </div>
+                </div>
+              </td>
+              <td class="uneditable">
+                <div v-if="st.criteria_result && marksDnevnik.marks[st.id_dnevnik]">
+                  {{ getFinalGrade(marksDnevnik.marks[st.id_dnevnik], st.criteria_result) }}
+                </div>
+              </td>
             </tr>
             <tr>
               <td class="editable">
@@ -71,7 +103,6 @@
               </td>
               <td class="uneditable" :title="st.periodassess.prediction_criterion">
                 <div v-if="st.periodassess.count_criterion">{{ st.periodassess.summ_criterion }}/{{ st.periodassess.count_criterion * 8 }}</div>
-                <div v-else>-</div>
               </td>
               <td class="editable">
                 <input type="text" class="table-input" v-model="currentAssess.summ_grade">
@@ -110,9 +141,13 @@
 </template>
 
 <script>
+import { updateUser } from "@/hooks/user/useUser";
 import { mapGetters } from 'vuex';
-import { getAssessmentJournal, getSummativeWork, getStudentsAssessment } from "@/hooks/assess/usePeriodAssessment";
+import { getAssessmentJournal, getSummativeWork, getStudentsAssessment, getAssessmentDnevnik } from "@/hooks/assess/usePeriodAssessment";
 import { getGroupedArray } from "@/hooks/extra/extraFeatures";
+
+const CLIEND_ID = '3097117bc2af450db4de47abe50d22ba'
+
 
 export default {
   name: 'AssessPeriodView',
@@ -120,23 +155,32 @@ export default {
 
   },
   setup(props) {
-    const { studentsAssessment, calcFinalCriteriaMarks, isStudentsAssessmentLoading, fetchGetStudentsAssessment } = getStudentsAssessment();
+    const { studentsAssessment, isStudentsAssessmentLoading, fetchGetStudentsAssessment } = getStudentsAssessment();
     const { summativeWorks, fetchGetSummativeWork } = getSummativeWork();
     const { groupedArrayData } = getGroupedArray();
-    const { currentPeriod, currentSubject, currentGroup, currentClassYear, fetchGetAssessmentJournal } = getAssessmentJournal();
+    const { currentPeriod, currentSubject, currentGroup, fetchGetAssessmentJournal } = getAssessmentJournal();
+    const { fetchUpdateUser } = updateUser();
+    const { marksDnevnik, isDataDnevnikLoading, fetchGetAssessmentDnevnik } = getAssessmentDnevnik();
     return {
-      studentsAssessment, calcFinalCriteriaMarks, isStudentsAssessmentLoading, fetchGetStudentsAssessment,
+      studentsAssessment, isStudentsAssessmentLoading, fetchGetStudentsAssessment,
       summativeWorks, fetchGetSummativeWork,
       groupedArrayData,
-      currentPeriod, currentSubject, currentClassYear, currentGroup, fetchGetAssessmentJournal,
+      currentPeriod, currentSubject, currentGroup, fetchGetAssessmentJournal,
+      fetchUpdateUser,
+      marksDnevnik, isDataDnevnikLoading, fetchGetAssessmentDnevnik,
     }
   },
   data() {
     return {
       currentAssess: {},
+      firstLoading: true,
+      authenticatedDnevnik: false,
     }
   },
   methods: {
+    getFinalGrade(formGrade, sumGrade) {
+      return +(formGrade * 0.4 + sumGrade * 0.6).toFixed(2)
+    },
     setEditField(event, student) {
       let textElement = event.target
       let inputElement = event.target.parentElement.firstChild
@@ -164,7 +208,10 @@ export default {
       // Привязка функций к событиям потери фокуса и нажатию на Enter
       inputElement.onblur = cancelData;
       inputElement.onkeypress = (e) => {
-        if (e.key === "Enter") { saveData() }
+        if (e.key === "Enter") {
+          // textElement.textContent = inputElement.value;
+          saveData();
+        }
         if (e.key === "Escape") { cancelData() }
       };
     },
@@ -176,7 +223,7 @@ export default {
             group: this.$route.params.id_group, 
             period: this.$route.params.id_period,
             subject: this.$route.params.id_subject,
-            class_year: this.currentClassYear.id,
+            class_year: this.currentGroup.class_year.id,
           });
           console.log('Оценка успешно обновлена');
         }).finally(() => {
@@ -189,14 +236,14 @@ export default {
         this.currentAssess.student_id = student_id;
         this.currentAssess.subject_id = this.$route.params.id_subject;
         this.currentAssess.period_id = this.$route.params.id_period;
-        this.currentAssess.year_id = this.currentClassYear.id;
+        this.currentAssess.year_id = this.currentGroup.class_year.id;
         console.log("Запрос на Добавление данных: ", this.currentAssess);
         this.axios.post(`/assessment/periodassess`, this.currentAssess).then((response) => {
           this.fetchGetStudentsAssessment({
             group: this.$route.params.id_group, 
             period: this.$route.params.id_period,
             subject: this.$route.params.id_subject,
-            class_year: this.currentClassYear.id,
+            class_year: this.currentGroup.class_year.id,
           });
           console.log('Оценка успешно выставлена');
         }).finally(() => {
@@ -204,12 +251,59 @@ export default {
         });
       }
     },
+    getDataDnevnik() {
+      window.location.href = `https://login.dnevnik.ru/oauth2?response_type=token&client_id=${CLIEND_ID}&scope=CommonInfo,ContactInfo,EducationalInfo&redirect_uri=${window.location.href}&state=`;
+    },
+    getValueFromHash(hash) {
+      return  hash.split('&').reduce(function (res, item) {
+        var parts = item.split('=');
+        res[parts[0]] = parts[1];
+        return res;
+      }, {});
+    },
   },
   mounted() {
+    if (this.authUser.access_token_dnevnik) {
+      this.authenticatedDnevnik = true
+    }
+    if (this.$route.hash) {
+      if (this.getValueFromHash(this.$route.hash.slice(1)).access_token != this.authUser.access_token_dnevnik) {
+        console.log('Получен новый токен');
+        let updateUser = {
+          id: this.authUser.id,
+          username: this.authUser.username,
+          first_name: this.authUser.first_name,
+          last_name: this.authUser.last_name,
+          email: this.authUser.email,
+          access_token_dnevnik: this.getValueFromHash(this.$route.hash.slice(1)).access_token,
+        }
+        this.fetchUpdateUser(updateUser).finally(() => {
+          this.$router.push(this.$route.path)
+        })
+      } else {
+        console.log('Получен старый токен');
+        this.$router.push(this.$route.path)
+      }
+    } else {
+      console.log('Токенов не приходило')
+    }
     this.fetchGetAssessmentJournal({
       group: this.$route.params.id_group, 
       period: this.$route.params.id_period,
-      subject: this.$route.params.id_subject
+      subject: this.$route.params.id_subject,
+    }).finally(() => {
+      this.fetchGetAssessmentDnevnik({
+        group_dnevnik: this.currentGroup.id_dnevnik, 
+        period_dnevnik: this.currentPeriod.id_dnevnik,
+        subject_dnevnik: this.currentSubject.id_dnevnik,
+        user: this.authUser.id
+      }).finally(() => {
+        if (this.marksDnevnik.result) {
+          this.authenticatedDnevnik = true
+        } else {
+          this.authenticatedDnevnik = false
+        }
+      })
     })
     this.fetchGetSummativeWork({
       period: this.$route.params.id_period,
@@ -221,14 +315,16 @@ export default {
       group: this.$route.params.id_group, 
       period: this.$route.params.id_period,
       subject: this.$route.params.id_subject,
-      class_year: this.currentClassYear.id,
+      class_year: this.currentGroup.class_year.id,
+    }).finally(() => {
+      this.firstLoading = false;
     });
-    
+
   },
   computed: {
     // подключение переменной авторизированного пользователя из store
     ...mapGetters(['authUser']),
-  }
+  },
 }
 </script>
 
@@ -242,6 +338,42 @@ export default {
 }
 .link-back {
   cursor: pointer;
+}
+.asessment-table th {
+  text-align: center;
+}
+.column-criteria {
+  min-width: 50px;
+}
+.data-dnevnik {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 70px;
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.dnevnik-biglogo {
+  width: 143px;
+  height: 50px;
+  background: url('@/assets/img/dnevnik.svg') no-repeat 50% / 90%;
+  margin-right: 10px;
+}
+.dnevnik-mark {
+  position: relative;
+  min-height: 24px;
+  color: #0273B2;
+  font-weight: 700;
+}
+.dnevnik-smalllogo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  background: url('@/assets/img/dnevnik_small.svg') no-repeat 50% / 90%;
 }
 .criterion-mark {
   display: flex;
@@ -307,4 +439,24 @@ table .editable {
 /* table .editable:hover {
   background-color: #fffcfc;
 } */
+
+.loader-mark {
+  width: 16px;
+  height: 16px;
+  border: 5px solid #0273B2;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  }
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
 </style>

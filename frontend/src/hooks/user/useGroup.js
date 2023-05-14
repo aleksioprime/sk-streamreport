@@ -9,6 +9,7 @@ export function getGroups() {
       params: {
         study_year: data.study_year || null,
         class_year: data.class_year || null,
+        program: data.program || null,
       }
     }
     isGroupLoading.value = true;
@@ -16,12 +17,35 @@ export function getGroups() {
       console.log('Список групп успешно получен: ', response.data);
       groups.value = response.data;
     }).finally(() => {
-      console.log('Остановка')
       isGroupLoading.value = false;
     });
   };
   return {
     groups, isGroupLoading, fetchGetGroups
+  }
+}
+
+export function getGroupsStudents() {
+  const groupsStudents = ref([]);
+  const isGroupStudentLoading = ref(true)
+  const fetchGetGroupsStudents = async (data) => {
+    const config = {
+      params: {
+        study_year: data.study_year || null,
+        class_year: data.class_year || null,
+        program: data.program || null,
+      }
+    }
+    isGroupStudentLoading.value = true;
+    await axiosAPI.get('/assessment/group/student', config).then((response) => {
+      console.log('Список групп со студентами успешно получен: ', response.data);
+      groupsStudents.value = response.data;
+    }).finally(() => {
+      isGroupStudentLoading.value = false;
+    });
+  };
+  return {
+    groupsStudents, isGroupStudentLoading, fetchGetGroupsStudents
   }
 }
 

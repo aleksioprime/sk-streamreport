@@ -27,6 +27,33 @@ export function getStudentsReport() {
   }
 }
 
+export function getReportTeacherJournal() {
+  const currentReportPeriod = ref({});
+  const currentSubject = ref({ group_ib: {} });
+  const currentGroup = ref({ mentor: { user: {} }, class_year: {} });
+  const eventTypes = ref([]);  
+  const fetchGetReportTeacher = async (data) => {
+    const config = {
+      params: {
+        period: data.period || null,
+        group: data.group || null,
+        subject: data.subject || null,
+      }
+    }
+    await axiosAPI.get('/assessment/report/teacher/journal', config).then((response) => {
+      console.log("Загрузка данных для журнала: ", response.data)
+      currentReportPeriod.value = response.data.period;
+      currentSubject.value = response.data.subject;
+      currentGroup.value = response.data.group;
+      eventTypes.value = response.data.event_types;
+    });
+  };
+  return {
+    currentReportPeriod, currentSubject, currentGroup, eventTypes, fetchGetReportTeacher
+  }
+}
+
+
 export function createReportTeacher() {
   const createdReportTeacher = ref([]);
   const fetchCreateReportTeacher = async (data) => {

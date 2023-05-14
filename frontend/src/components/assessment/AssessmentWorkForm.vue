@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { getStudents } from "@/hooks/assess/getSumWorkAssess";
+// import { getStudents } from "@/hooks/assess/getSumWorkAssess";
 
 export default {
   props: {
@@ -32,16 +32,18 @@ export default {
       type: Array,
       default: () => []
     },
-    year: {
+    group: {
       type: Object,
-      default: {}
-    }
+      default: {
+        students: [],
+      }
+    },
   },
   setup(props) {
     // Получение функции запроса списка студентов
-    const { students, getStudentsData } = getStudents();
+    // const { students, getStudentsData } = getStudents();
     return {
-      students, getStudentsData
+      // students, getStudentsData
     }
   },
   data() {
@@ -61,12 +63,12 @@ export default {
     },
   },
   mounted() {
-    console.log('Текущий класс: ', this.year)
-    this.getStudentsData({class: this.year.id});
+    console.log('Текущий класс: ', this.group)
+    // this.getStudentsData({class: this.group.id});
   },
   computed: {
     filterStudents() {
-      return this.students.filter(item => !this.studentsWork.map(item => item.id).includes(item.id))
+      return this.group.students.filter(item => !this.studentsWork.map(item => item.id).includes(item.id))
     }
   },
   watch: {

@@ -87,29 +87,33 @@ class AimSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class CriterionSerializer(serializers.ModelSerializer):
-    subject_group = SubjectGroupIBSerializer()
     class Meta:
         model = Criterion
-        fields = '__all__'
+        fields = ['id', 'letter', 'name_eng', 'name_rus', 'subject_group']
 
 class LevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Level
         fields = '__all__'
-
-class ObjectiveSerializer(serializers.ModelSerializer):
-    level = LevelSerializer()
-    class Meta:
-        model = Objective
-        fields = '__all__'
      
 class StrandSerializer(serializers.ModelSerializer):
-    criterion = CriterionSerializer()
-    objective = ObjectiveSerializer(many=True)
     letter_i = serializers.CharField(source='get_letter_display')
     class Meta:
         model = Strand
+        fields = ['id', 'number', 'letter', 'letter_i', 'name_eng', 'name_rus']
+
+class AchievementLevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AchievementLevel
         fields = '__all__'
+
+class ObjectiveSerializer(serializers.ModelSerializer):
+    level = LevelSerializer(read_only=True)
+    strand = StrandSerializer(read_only=True)
+    achievelevel = AchievementLevelSerializer(read_only=True, many=True)
+    class Meta:
+        model = Objective
+        fields = ['level', 'id', 'name_eng', 'name_rus', 'strand', 'achievelevel']
 
 class CategoryATLSerializer(serializers.ModelSerializer):
     class Meta:

@@ -20,13 +20,14 @@ class ClassGroup(models.Model):
     """ Учебные классы """
     study_year = models.ForeignKey('assess.StudyYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, 
                                    null=True, blank=True, related_name="group")
-    class_year = models.PositiveSmallIntegerField(verbose_name=_("Год обучения"), default=1)
+    # class_year = models.PositiveSmallIntegerField(verbose_name=_("Год обучения"), default=1)
+    class_year = models.ForeignKey('curriculum.ClassYear', verbose_name=_("Год обучения"),
+                                      on_delete=models.SET_NULL, null=True, related_name="group")
     letter = models.CharField(max_length=1, verbose_name=_("Литера класса"), null=True, blank=True)
     id_dnevnik = models.CharField(max_length=255, verbose_name=_('ID системы Дневник.РУ'), blank=True, null=True)
     students = models.ManyToManyField('member.ProfileStudent', verbose_name=_("Студенты"), blank=True, related_name="groups")
-    mentor = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Наставник"), related_name='groups', null=True, on_delete=models.SET_NULL)
-    psychologist = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Психолог"), related_name='psycho_groups', null=True, on_delete=models.SET_NULL)
-    support = models.ManyToManyField('assess.ClassEmployee', verbose_name=_("Поддержка"), related_name='groups', blank=True)
+    mentor = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Наставник"), related_name='groups', null=True, blank=True, on_delete=models.SET_NULL)
+    psychologist = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Психолог"), related_name='psycho_groups', null=True, blank=True, on_delete=models.SET_NULL)
     class Meta:
         verbose_name = 'Учебный класс'
         verbose_name_plural = 'Учебные классы'
@@ -74,21 +75,6 @@ class WorkLoad(models.Model):
         ordering = ['teacher']
     def __str__(self):
         return '{} ({} - {} ч.)'.format(self.teacher, self.subject, self.hours)
-
-class ClassEmployee(models.Model):
-    """ Поддержка класса """
-    ROLE_TYPE = [
-        ('psychologist', 'Психолог'),
-        ('assistant', 'Ассистент'),
-    ]
-    role =  models.CharField(max_length=16, choices=ROLE_TYPE, verbose_name=_("Роль сотрудника"))
-    employee = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Сотрудник"), related_name='classes', null=True, on_delete=models.SET_NULL)
-    class Meta:
-        verbose_name = 'Сотрудник класса'
-        verbose_name_plural = 'Сотрудники классов'
-        ordering = ['role', 'employee']
-    def __str__(self):
-        return "{} ({})".format(self.employee, self.role)
 
 class StudyPeriod(models.Model):
     """ Учебные периоды в году """
@@ -188,8 +174,8 @@ class PeriodAssessment(models.Model):
     criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True, blank=True)
     criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True, blank=True)
     criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True, blank=True)
-    summ_grade = models.SmallIntegerField(verbose_name=_("Оценка за итоговые работы"), default=None, null=True)
-    form_grade = models.DecimalField(verbose_name=_("Оценка за текущие работы"), max_digits=3, decimal_places=2, default=None, blank=True)
+    summ_grade = models.SmallIntegerField(verbose_name=_("Оценка за итоговые работы"), default=None, null=True, blank=True)
+    form_grade = models.DecimalField(verbose_name=_("Оценка за текущие работы"), max_digits=3, decimal_places=2, default=None, null=True, blank=True)
     final_grade = models.SmallIntegerField(verbose_name=_("Итоговая оценка"), default=None, blank=True, null=True)
     class Meta:
         verbose_name = 'Итоговые оценки за период'
@@ -223,7 +209,7 @@ class ReportPeriod(models.Model):
         null=True, blank=True, related_name="report_period")
     number = models.PositiveSmallIntegerField(verbose_name=_("Номер периода"), default=1)
     name = models.CharField(max_length=255, verbose_name=_("Название периода"), default=None, null=True)
-    assessment_period = models.ForeignKey('assess.StudyPeriod', verbose_name=_("Оценочный период"), on_delete=models.SET_NULL, null=True, blank=True, related_name="report_period")
+    assessment_periods = models.ManyToManyField('assess.StudyPeriod', verbose_name=_("Оценочные периоды"), blank=True, related_name="report_period")
     date_start = models.DateField(verbose_name=_("Дата начала"))
     date_end = models.DateField(verbose_name=_("Дата окончания"))
     @property
@@ -246,6 +232,10 @@ class ReportTeacher(models.Model):
     text = models.TextField(verbose_name=_("Текст репорта"), null=True, blank=True)
     events = models.ManyToManyField('assess.EventParticipation', verbose_name=_("Участие в мероприятиях"), blank=True, related_name="teacher_reports")
     author = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Автор репорта"), on_delete=models.SET_NULL, null=True, related_name="teacher_reports")
+    criterion_a = models.SmallIntegerField(verbose_name=_("Оценка по критерию A"), default=None, null=True, blank=True)
+    criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True, blank=True)
+    criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True, blank=True)
+    criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True, blank=True)
     class Meta:
         verbose_name = 'Репорт учителя'
         verbose_name_plural = 'Репорты учителя'

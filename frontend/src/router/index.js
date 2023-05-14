@@ -124,12 +124,12 @@ const routes = [
     component: AssessPeriodView,
   },
   {
-    path: '/report/teacher/group/:id_group/subject/:id_subject',
+    path: '/report/teacher/group/:id_group/period/:id_period/subject/:id_subject',
     name: 'reportTeacher',
     component: ReportTeacher,
   },
   {
-    path: '/report/mentor/group/:id_group/',
+    path: '/report/mentor/group/:id_group/period/:id_period',
     name: 'reportMentor',
     component: ReportMentor,
   },

@@ -1,17 +1,10 @@
 from rest_framework import serializers
 from member.models import User, Department, ProfileStudent, ProfileTeacher
-from assess.models import ClassGroup
-from curriculum.serializers import SubjectSerializer, UnitMYPSerializerListCreate
 
         
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = '__all__'
-        
-class ClassGroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ClassGroup
         fields = '__all__'
 
 class ProfileStudentSerializer(serializers.ModelSerializer):
@@ -79,7 +72,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "username", "email", "first_name", "middle_name", 
                   "last_name", "last_login", "date_of_birth", "gender", "student", 
-                  "teacher", "photo", 'is_staff', 'is_active']
+                  "teacher", "photo", 'is_staff', 'is_active', 'access_token_dnevnik']
         read_only_fields = ['photo', 'is_staff']
         extra_kwargs = {
             'username': {'required': True},

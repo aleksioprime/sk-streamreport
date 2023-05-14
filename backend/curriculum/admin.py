@@ -20,9 +20,8 @@ class SubjectGroupFGOSAdmin(ImportExportModelAdmin):
     
 @admin.register(Subject)
 class SubjectAdmin(ImportExportModelAdmin):
-    list_display = ("name_rus", "group_ib", "group_fgos", "type_subject", "id_dnevnik")
+    list_display = ("name_rus", "id_dnevnik", "group_ib", "group_fgos", "type_subject")
 
-    
 @admin.register(Criterion)
 class CriterionAdmin(ImportExportModelAdmin):
     list_display = ("name_eng", "letter", "subject_group")

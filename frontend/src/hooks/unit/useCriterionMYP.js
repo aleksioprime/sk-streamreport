@@ -11,6 +11,7 @@ export function getCriteriaMYP() {
       }
     }
     await axiosAPI.get('myp/criteria', config).then((response) => {
+      console.log('Получение краткой информации по критериям: ', response.data)
       criteriaMYP.value = response.data;
     });
   };

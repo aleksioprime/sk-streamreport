@@ -25,6 +25,7 @@ class User(AbstractUser):
     date_of_birth = models.DateField(max_length=10, verbose_name=_("Дата рождения"), null=True, blank=True)
     gender = models.CharField(max_length=1, verbose_name=_("Пол"), choices=GENDER_CHOICES, default='O', null=True, blank=True)
     photo = models.ImageField(upload_to="member_photos", blank=True, verbose_name=_("Фотография"), null=True)
+    access_token_dnevnik = models.CharField(max_length=255, verbose_name=_("Токен для подключения к Дневник.РУ"), null=True, blank=True)
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'

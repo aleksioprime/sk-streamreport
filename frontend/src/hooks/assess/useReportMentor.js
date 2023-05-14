@@ -2,9 +2,8 @@ import { ref, onMounted } from 'vue'
 import { axiosAPI } from '@/axios'
 
 export function getReportMentorJournal() {
-  const currentGroup = ref({ mentor: { user: {} } });
-  const currentClassYear = ref({});
-  const eventTypes = ref([]);
+  const currentReportPeriod = ref({});
+  const currentGroup = ref({ mentor: { user: {} }, class_year: {} });  const eventTypes = ref([]);
   const fetchGetReportMentorJournal = async (data) => {
     const config = {
       params: {
@@ -14,14 +13,14 @@ export function getReportMentorJournal() {
     }
     await axiosAPI.get('assessment/report/mentor/journal', config).then((response) => {
       console.log("Загрузка данных для журнала")
+      currentReportPeriod.value = response.data.period;
       currentGroup.value = response.data.group;
-      currentClassYear.value = response.data.class_year;
       eventTypes.value = response.data.event_types
       console.log(response.data)
     });
   };
   return {
-    currentGroup, currentClassYear, eventTypes, fetchGetReportMentorJournal
+    currentGroup, currentReportPeriod, eventTypes, fetchGetReportMentorJournal
   }
 }
 

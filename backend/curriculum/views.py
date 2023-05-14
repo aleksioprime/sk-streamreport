@@ -272,16 +272,13 @@ class ObjectiveViewSet(viewsets.ModelViewSet):
     queryset = Objective.objects.all()
     serializer_class = ObjectiveSerializer
     def get_queryset(self):
-        subjects = self.request.query_params.get("subjects", None)
-        class_year = self.request.query_params.get("class_year", None)
-        criteria = self.request.query_params.get("criteria", None)
+        strand = self.request.query_params.get("strand", None)
+        criterion = self.request.query_params.get("criterion", None)
         objectives = Objective.objects.all()
-        if subjects:
-            objectives = objectives.filter(strand__criterion__subject_group__subject__=subjects.split(','))
-        if class_year:
-            objectives = objectives.filter(level__years__in=class_year)
-        if criteria:
-            objectives = objectives.filter(strand__criterion__in=criteria.split(','))
+        if strand:
+            objectives = objectives.filter(strand=strand)
+        if criterion:
+            objectives = objectives.filter(strand__criterion__in=[criterion]).distinct()
         return objectives
     
 class ReflectionMYPViewSet(viewsets.ModelViewSet):
