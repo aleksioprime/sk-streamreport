@@ -27,9 +27,9 @@
             <div :id="`collapse-${year}`" class="accordion-collapse collapse" :aria-labelledby="`heading-${year}`"
               data-bs-parent="#accordionGroups">
               <div class="p-1">
-                <div v-for="group in groupsByYear" :key="group.id" class="border my-1">
+                <div v-for="group in groupsByYear" :key="group.id">
                   <group-item :group="group" @select="groupSelect" @update="showUpdateGroup" @delete="showDeleteGroup"
-                    :class="[currentGroup && currentGroup.id == group.id ? 'select-group' : '']" :showEditButton="currentGroup && currentGroup.id == group.id"/>
+                    :class="[currentGroup && currentGroup.id == group.id ? 'selected' : '']" :showEditButton="currentGroup && currentGroup.id == group.id"/>
                   <div v-if="editingGroupID == group.id" class="m-1">
                     <select id="class_year" class="form-select my-1" v-model="editingGroup.class_year_id">
                       <option v-for="(cy, i) in years" :key="i" :value="cy.id">
@@ -39,20 +39,20 @@
                     <input v-model="editingGroup.letter" type="text" placeholder="Буква" class="form-control my-1">
                     <input v-model="editingGroup.id_dnevnik" type="text" placeholder="ID Дневник.ру" class="form-control my-1">
                     <div class="d-flex justify-content-end">
-                      <button class="btn-icon img-apply mx-1" @click="groupEdit"></button>
-                      <button class="btn-icon img-cancel" @click="groupCancel"></button>
+                      <button class="icon icon-confirm mx-1" @click="groupEdit"></button>
+                      <button class="icon icon-cancel" @click="groupCancel"></button>
                     </div>
                   </div>
                   <div v-else-if="deletingGroupID == group.id" class="m-1">
                     <div>Вы действительно хотите удалить этот класс?</div>
                     <div class="d-flex justify-content-end">
-                      <button class="btn-icon img-apply mx-1" @click="groupDelete"></button>
-                      <button class="btn-icon img-cancel" @click="groupCancel"></button>
+                      <button class="icon icon-confirm mx-1" @click="groupDelete"></button>
+                      <button class="icon icon-cancel" @click="groupCancel"></button>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <button class="btn-icon img-append" @click="showAddGroup(year)"></button>
+                  <button class="icon icon-add" @click="showAddGroup(year)"></button>
                   <div v-if="addingGroupYear == year" class="m-1">
                     <select id="class_year" class="form-select my-1" v-model="editingGroup.class_year_id">
                       <option v-for="(cy, i) in years" :key="i" :value="cy.id">
@@ -62,15 +62,15 @@
                     <input v-model="editingGroup.letter" type="text" placeholder="Буква" class="form-control my-1">
                     <input v-model="editingGroup.id_dnevnik" type="text" placeholder="ID Дневник.ру" class="form-control my-1">
                     <div class="d-flex justify-content-end">
-                      <button class="btn-icon img-apply mx-1" :disabled="!(editingGroup.class_year && editingGroup.letter)" @click="groupAdd"></button>
-                      <button class="btn-icon img-cancel" @click="groupCancel"></button>
+                      <button class="icon icon-confirm mx-1" :disabled="!(editingGroup.class_year && editingGroup.letter)" @click="groupAdd"></button>
+                      <button class="icon icon-cancel" @click="groupCancel"></button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <button class="btn btn-success btn-sm m-1" @click="showAddGroup(year)">Создать группу</button>
+          <button class="btn btn-success btn-sm m-1" @click="showAddGroup()">Создать группу</button>
           <div v-if="addingGroupYear == 0" class="m-1">
             <select id="class_year" class="form-select my-1" v-model="editingGroup.class_year_id">
               <option v-for="(cy, i) in years" :key="i" :value="cy.id">
@@ -80,8 +80,8 @@
             <input v-model="editingGroup.letter" type="text" placeholder="Буква" class="form-control my-1">
             <input v-model="editingGroup.id_dnevnik" type="text" placeholder="ID Дневник.ру" class="form-control my-1">
             <div class="d-flex justify-content-end">
-              <button class="btn-icon img-apply mx-1" :disabled="!(editingGroup.class_year && editingGroup.letter)" @click="groupAdd"></button>
-              <button class="btn-icon img-cancel" @click="groupCancel"></button>
+              <button class="icon icon-confirm mx-1" :disabled="!(editingGroup.class_year && editingGroup.letter)" @click="groupAdd"></button>
+              <button class="icon icon-cancel" @click="groupCancel"></button>
             </div>
           </div>
         </div>
@@ -91,12 +91,12 @@
       </div>
       <div class="col-sm">
         <div v-if="currentGroup">
-          <div class="mb-2">Список студентов <b>{{ currentGroup.class_year }}{{ currentGroup.letter }}</b> класса</div>
+          <div class="mb-2"><h4>Список студентов <b>{{ currentGroup.class_year }}{{ currentGroup.letter }}</b> класса</h4></div>
           <div class="mb-2">Всего в группе: {{ currentGroup.students.length }} человек</div>
           <div class="mb-2 d-flex align-items-center">
             <div v-if="currentGroup.mentor">Наставник: {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }} {{ currentGroup.mentor.user.last_name }}</div>
             <div v-else>Наставник не выбран</div> 
-            <button class="btn-icon img-edit ms-auto" v-if="!editMentor" @click="showEditMentor"></button>
+            <button class="icon icon-edit ms-auto" v-if="!editMentor" @click="showEditMentor"></button>
           </div>
           <div v-if="editMentor" class="border p-2">
             <input id="search-item" class="form-control mb-2" type="text" v-model="queryTeacher" placeholder="Введите текст для поиска...">
@@ -116,7 +116,7 @@
           <div class="mb-2 d-flex align-items-center">
             <div v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.user.first_name }} {{ currentGroup.psychologist.user.middle_name }} {{ currentGroup.psychologist.user.last_name }}</div>
             <div v-else>Психолог не выбран</div> 
-            <button class="btn-icon img-edit ms-auto" v-if="!editPsycho" @click="showEditPsycho"></button>
+            <button class="icon icon-edit ms-auto" v-if="!editPsycho" @click="showEditPsycho"></button>
           </div>
           <div v-if="editPsycho" class="border p-2">
             <input id="search-item" class="form-control mb-2" type="text" v-model="queryTeacher" placeholder="Введите текст для поиска...">
@@ -134,9 +134,9 @@
             </div>
           </div>
           <div class="border p-2" v-if="currentGroup.students.length">
-            <div v-for="student in currentGroup.students" :key="student.id" class="student-item">
-              <div>{{ student.user.last_name }} {{ student.user.first_name }}</div>
-              <button class="ms-auto btn-icon img-remove" @click="deleteStudentFromGroup(student)"></button>
+            <div v-for="(student, index) in currentGroup.students" :key="student.id" class="student-item">
+              <div>{{ ++index }}. {{ student.user.last_name }} {{ student.user.first_name }}</div>
+              <button class="ms-auto icon icon-del" @click="deleteStudentFromGroup(student)"></button>
             </div>
           </div>
           <div class="border p-2" v-else>В группе нет студентов</div>
@@ -150,7 +150,7 @@
             <div class="border student-list">
               <div class="user-item" v-for="user in filterStudentsSearch(users)" :key="user.id">
                 <div>{{ user.last_name }} {{ user.first_name }}</div>
-                <button class="ms-auto btn-icon img-append" @click="appendStudentToGroup(user)"></button>
+                <button class="icon icon-add ms-auto" @click="appendStudentToGroup(user)"></button>
               </div>
             </div>
             <nav aria-label="pagination" class="mt-3 d-flex justify-content-center">
@@ -424,49 +424,18 @@ export default {
 
 <style scoped>
 @import '@/assets/css/spinner.css';
-
-.loader {
+.student-list {
   display: flex;
-  height: calc(100vh - 200px);
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 }
-.select-group {
-  background-color: rgb(161, 161, 161) !important;
-}
-
-.student-list {}
 .student-item {
   display: flex;
   align-items: center;
+  margin-top: 10px;
 }
 .user-item {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
-}
-.user-item:hover {
-  background-color: azure;
-}
-.btn-icon {
-  border: none;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-.btn-icon:hover {
-  transform: scale(1.2);
-}
-.img-append {
-  background: url('@/assets/img/item-plus.png') no-repeat 50% / 90%;
-}
-.img-remove {
-  background: url('@/assets/img/item-minus.png') no-repeat 50% / 90%;
-}
-.img-apply {
-  background: url('@/assets/img/item-apply.png') no-repeat 50% / 90%;
-}
-.img-cancel {
-  background: url('@/assets/img/item-cancel.png') no-repeat 50% / 90%;
+  padding: 10px;
 }
 </style>

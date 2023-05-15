@@ -119,8 +119,8 @@
 }
 
 .block-item {
-    background-color: #ececec;
-    border-radius: 5px;
+    border-radius: 10px;
+    border: 1px solid var(--bs-secondary);
     padding: 5px 10px;
     display: flex;
 }
@@ -136,34 +136,9 @@
     opacity: 0;
 }
 
-
 .field-btn-wrapper {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
     margin-left: auto;
     padding-left: 5px;
-}
-
-.btn-icon {
-    border: none;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-}
-
-.btn-icon:not(:last-of-type) {
-    margin-right: 5px;
-}
-
-.btn-icon:hover {
-    transform: scale(1.1);
-}
-
-.img-edit {
-    background: url('@/assets/img/item-edit.png') no-repeat 50% / 90%;
-}
-
-.img-delete {
-    background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
 }

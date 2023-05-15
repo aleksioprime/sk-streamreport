@@ -1,24 +1,23 @@
 <template>
   <div>
     <base-header>
+      <template v-slot:link><a href="#" @click="$router.push(`/assessment/group`)" >Вернуться к выбору класса</a></template>
       <template v-slot:header>Репорты наставника</template>
     </base-header>
     <div class="col-md mb-2">
       <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
-      <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> 
+      <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b>  ({{ getWordStudent(currentGroup.count) }}) 
       <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}</div>
     </div>
     <div v-if="!isStudentsReportLoading && !firstLoading">
       <div v-if="studentsReport.length" class="report-wrapper">
-        <div class="student-list">
-          <div v-for="student in studentsReport" :key="student.id">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="student" :value="student" :id="'student-' + student.id"
-                v-model="currentStudent">
-              <label class="form-check-label" :for="'student-' + student.id">
-                <div>{{ student.user.last_name }} {{ student.user.first_name }}</div>
-              </label>
-            </div>
+        <div class="student-list radiobutton">
+          <div v-for="student in studentsReport" :key="student.id" сlass="">
+            <input type="radio" name="student" :value="student" :id="'student-' + student.id"
+              v-model="currentStudent">
+            <label :for="'student-' + student.id">
+              <div>{{ student.user.last_name }} {{ student.user.first_name }}</div>
+            </label>
           </div>
         </div>
         <report-mentor-item :period="currentReportPeriod" v-if="currentStudent" class="student-item" :criteria="criteriaMYP"
@@ -87,6 +86,14 @@ export default {
     }
   },
   methods: {
+    getWordStudent(count) {
+      let value = Math.abs(count) % 100;
+      let number = value % 10;
+      if (value > 10 && value < 20) return `${count} студентов`;
+      if (number > 1 && number < 5) return `${count} студента`;
+      if (number == 1) return `${count} студент`;
+      return `${count} студентов`;
+    },
     fetchUpdateReport(editingReport) {
       editingReport.period_id = this.currentReportPeriod.id;
       editingReport.year_id = this.currentGroup.class_year.id;
@@ -140,19 +147,13 @@ export default {
 
 <style>
 @import '@/assets/css/spinner.css';
-.loader {
-  display: flex;
-  height: calc(100vh - 200px);
-  align-items: center;
-  justify-content: center;
-}
+
 .student-list {
   display: flex;
   flex-wrap: wrap;
-  column-gap: 10px;
+  column-gap: 5px;
+  row-gap: 5px;
   margin-bottom: 20px;
 }
-.student-item {
-  
-}
+
 </style>

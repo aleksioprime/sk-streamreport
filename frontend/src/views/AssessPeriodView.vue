@@ -1,19 +1,20 @@
 <template>
   <div>
     <base-header>
-      <template v-slot:link><div @click="$router.push(`/assessment/group`)" class="link-back">Вернуться назад</div></template>
+      <template v-slot:link><a href="#" @click="$router.push(`/assessment/group`)" >Вернуться к выбору класса</a></template>
       <template v-slot:header>Журнал оценок за период</template>
     </base-header>
     <div class="row ">
       <div class="col-md mb-2">
         <div>Период: <b>{{ currentPeriod.number }} {{ currentPeriod.type }}</b></div>
-        <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> 
-        <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}</div>
+        <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> ({{ getWordStudent(currentGroup.count) }}) 
+        <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}
+      </div>
         <div>Предмет: <b>{{ currentSubject.name_rus }} ({{ currentSubject.group_ib.name_eng }})</b></div>
       </div>
       <div v-if="authenticatedDnevnik" class="col-md data-dnevnik">
-        <div class="dnevnik-biglogo"></div>
-        <div>Вы успешно синхронизированы с системой <a href="https://dnevnik.ru/">Дневник.ру</a></div>
+        <div class="dnevnik-biglogo" href="https://dnevnik.ru/"></div>
+        <div>Вы успешно синхронизированы</div>
       </div>
       <div v-else class="col-md data-dnevnik">
         <div>
@@ -178,6 +179,14 @@ export default {
     }
   },
   methods: {
+    getWordStudent(count) {
+      let value = Math.abs(count) % 100;
+      let number = value % 10;
+      if (value > 10 && value < 20) return `${count} студентов`;
+      if (number > 1 && number < 5) return `${count} студента`;
+      if (number == 1) return `${count} студент`;
+      return `${count} студентов`;
+    },
     getFinalGrade(formGrade, sumGrade) {
       return +(formGrade * 0.4 + sumGrade * 0.6).toFixed(2)
     },

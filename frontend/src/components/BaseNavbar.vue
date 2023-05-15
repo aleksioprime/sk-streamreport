@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-md bg-light">
     <div class="container">
       <div @click="$router.push('/')" class="navbar-brand d-flex align-items-center pe-0">
-        <img src="@/assets/img/logo.png" alt="" height="35" class="logo-rotate">
+        <div class="logo-header"></div>
         <span>STREAM Report</span>
       </div>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
@@ -19,8 +19,8 @@
               <router-link to="/employee" class="dropdown-item">Сотрудники</router-link>
               <router-link to="/student" class="dropdown-item">Студенты</router-link>
               <router-link to="/group" class="dropdown-item">Учебные классы</router-link>
-              <router-link to="/syllabus" class="dropdown-item">Учебные планы</router-link>
-              <router-link to="/load" class="dropdown-item">Нагрузка</router-link>
+              <!-- <router-link to="/syllabus" class="dropdown-item">Учебные планы</router-link>
+              <router-link to="/load" class="dropdown-item">Нагрузка</router-link> -->
             </div>
           </li>
           <li class="nav-item dropdown">
@@ -38,7 +38,7 @@
             </a>
             <div class="dropdown-menu">
               <router-link to="/assessment" class="dropdown-item">Итоговые работы</router-link>
-              <router-link to="/schedule" class="dropdown-item">График работ</router-link>
+              <!-- <router-link to="/schedule" class="dropdown-item">График работ</router-link> -->
               <router-link to="/assessment/group" class="dropdown-item">Итоговое оценивание</router-link>
               <!-- <router-link to="/report/teacher" class="dropdown-item">Репорты учителя</router-link>
               <router-link to="/report/mentor" class="dropdown-item">Репорты наставника</router-link> -->
@@ -65,13 +65,13 @@
         </ul>
         <div class="navbar-text d-flex align-items-center" v-if="authUser">
           <div class="navbar-user">
-            <img :src='authUser.photo ? authUser.photo : require("@/assets/img/user.png")' alt="" width="30" class="me-2">
+            <img :src='authUser.photo ? authUser.photo : require("@/assets/img/teacher.svg")' alt="" width="30" class="me-2">
             <span v-if="authUser.last_name && authUser.first_name">
               {{ authUser.first_name }} {{ authUser.last_name.slice(0, 1) }}.
             </span>
             <span v-else>{{ authUser.username }}</span>
           </div>
-          <button class="btn-logout" @click="logout"></button>
+          <button class="icon icon-logout" @click="logout"></button>
         </div>
       </div>
     </div>
@@ -103,35 +103,16 @@ export default {
 </script>
 
 <style>
-.pointer {
-  cursor: pointer;
-}
-
-.logo-rotate {
-  display: inline-block;
-  margin-right: 10px;
-  overflow: hidden;
-  -webkit-transition: all 0.5s ease;
-  transition: all 0.5s ease;
-}
-
-.logo-rotate:hover {
-  -webkit-transform: rotate(360deg);
-  transform: rotate(360deg);
-}
 .navbar-user {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   min-width: 130px;
+  margin-right: 5px;
 }
-.btn-logout {
-  border: none;
-  min-width: 25px;
-  min-height: 25px;
+.navbar-brand {
   cursor: pointer;
-  margin-left: 10px;
-  background: url('@/assets/img/logout.svg') no-repeat 50% / 90%;
+  font-family: 'Fira Sans', sans-serif;
 }
 
 @media screen and (max-width: 768px) {

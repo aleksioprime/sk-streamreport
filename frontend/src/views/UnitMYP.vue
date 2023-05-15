@@ -3,27 +3,28 @@
     <base-header>
       <template v-slot:header>
         <div>MYP: список <span v-if="showAllUnits">всех</span><span v-else>моих</span> юнитов</div>
-        
+      </template>
+      <template v-slot:extra>
+        <div class="toggle" v-if="isAdmin">
+          <div class="toggle-item my">
+            <input id="show-my" type="radio" :value="false" v-model="showAllUnits">
+            <label for="show-my">Мои</label>
+          </div>
+          <div class="toggle-item all">
+            <input id="show-all" type="radio" :value="true" v-model="showAllUnits">
+            <label for="show-all">Все</label>
+          </div>
+        </div>
       </template>
     </base-header>
     <div class="row">
       <div class="col-md mb-2">
-        <button type="button" class="btn btn-primary btn-create" @click="showAddUnit">
+        <button type="button" class="btn btn-primary" @click="showAddUnit">
           Cоздать юнит
         </button>
-        <button type="button" class="btn btn-primary btn-create" @click="showAddIDU">
+        <button type="button" class="btn btn-primary" @click="showAddIDU">
           Cоздать МДП
         </button>
-      </div>
-      <div class="col-md-3 mb-2 d-flex show-toggle" v-if="isAdmin">
-        <div class="show-toggle-item my ms-auto">
-          <input id="show-my" type="radio" :value="false" v-model="showAllUnits">
-          <label for="show-my">Мои</label>
-        </div>
-        <div class="show-toggle-item all">
-          <input id="show-all" type="radio" :value="true" v-model="showAllUnits">
-          <label for="show-all">Все</label>
-        </div>
       </div>
     </div>
     <!-- Инструменты фильтрации юнитов -->
@@ -212,8 +213,6 @@ export default {
     this.modalUnitIDU = new Modal('#modalUnitIDU', { backdrop: 'static' });
     if (this.isAdmin) {
       this.showAllUnits = true;
-    } else {
-      this.updateFetchUnitMYP();
     }
   },
 }
@@ -221,52 +220,4 @@ export default {
   
 <style scoped>
 @import '@/assets/css/spinner.css';
-.loader {
-  display: flex;
-  height: calc(100vh - 200px);
-  align-items: center;
-  justify-content: center;
-}
-.btn-create {
-  min-width: 160px;
-}
-.btn-create:not(:nth-of-type(-1)) {
-  margin-right: 10px;
-}
-.show-toggle {
-	display: inline-block;
-	overflow: hidden;
-}
-.show-toggle-item {
-	float: left;
-	display: inline-block;
-}
-.show-toggle-item input[type=radio] {
-	display: none;
-}
-.show-toggle-item label {
-	display: inline-block;
-	padding: 0px 15px;   
-	line-height: 34px;    
-	border: 1px solid #999;
-	border-right: none;
-	cursor: pointer;
-	user-select: none;   
-}
- 
-.show-toggle .my label {
-	border-radius: 6px 0 0 6px;
-}
-.show-toggle .all label {
-	border-radius: 0 6px 6px 0;
-	border-right: 1px solid #999;
-}
- 
-/* Checked */
-.show-toggle .my input[type=radio]:checked + label {
-	background: #ffc5c5;
-}
-.show-toggle .all input[type=radio]:checked + label {
-	background: #bbffbb;
-}
 </style>

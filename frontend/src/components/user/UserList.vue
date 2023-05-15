@@ -3,10 +3,10 @@
     <!-- Список пользователь -->
     <transition-group name="user-list">
       <user-item v-for="user in users" :key="user.id" :user="user" @select="userSelect"
-        :class="[currentUser == user ? 'select-user' : '']" class="border my-1" />
+        :class="[currentUser == user ? 'selected' : '']" class="area" />
     </transition-group>
     <!-- Нумерация страниц -->
-    <base-pagination :total="totalPages" :current="currentPage" :range="2" @change="nextPage"/>
+    <base-pagination :total="totalPages" :current="currentPage" :range="4" @change="nextPage"/>
   </div>
   <div v-else>
     Список пользователей пуст
@@ -76,7 +76,7 @@ export default {
 </script>
 
 <style>
-.select-user {
-  background-color: rgb(161, 161, 161) !important;
+.selected {
+  background: #DBEDEB;
 }
 </style>

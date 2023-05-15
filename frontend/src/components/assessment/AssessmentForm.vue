@@ -92,31 +92,22 @@
         <div>Даты итоговых работ</div>
         <div v-if="summativeWork.unit_id">
           <div class="my-2 border p-2">
-            <table class="table mb-0 text-table" v-if="summativeWork.groups.length">
-              <tr>
-                <th class="ps-2" style="width: 30%">Класс</th>
-                <th style="width: 40%">Дата</th>
-                <th style="width: 20%">Урок</th>
-                <th style="width: 10%"></th>
-              </tr>
-              <tr v-for="(gr, i) in summativeWork.groups" :key="gr.id">
-                <td>
-                  <span v-if="findGroup(gr.group_id)">{{ findGroup(gr.group_id).class_year.year_rus }}{{ findGroup(gr.group_id).letter }} класс</span>
-                </td>
-                <td>{{ new Date(gr.date).toLocaleDateString() }}</td>
-                <td>{{ gr.lesson }}</td>
-                <td>
-                  <div class="d-flex">
-                    <div class="btn-table edit my-1" @click="editWorkGroupDate(gr.id)"></div>
-                    <div class="btn-table delete my-1" @click="deleteWorkGroupDate(gr.id)"></div>
-                  </div>
-                </td>
-              </tr>
-            </table>
+            <div v-if="summativeWork.groups.length">
+              <div v-for="(gr, i) in summativeWork.groups" :key="gr.id" class="block-item">
+                <div class="d-flex align-items-center">
+                  <span v-if="findGroup(gr.group_id)">{{ findGroup(gr.group_id).class_year.year_rus }}{{ findGroup(gr.group_id).letter }} класс </span>
+                  <span>({{ new Date(gr.date).toLocaleDateString() }}, {{ gr.lesson }} урок)</span>
+                </div>
+                <div class="field-btn-wrapper">
+                  <div class="icon icon-edit" @click="editWorkGroupDate(gr.id)"></div>
+                  <div class="icon icon-del" @click="deleteWorkGroupDate(gr.id)"></div>
+                </div>
+              </div>
+            </div>
             <div v-else class="my-2 fst-italic">
               Пока список пустой
             </div>
-            <div class="border p-2">
+            <div class="border p-2 mt-2">
             <div class="mb-1">
               <span v-if="editDateGroup">Редактировать выбранную дату</span>
             </div>
@@ -129,18 +120,16 @@
                   </option>
                 </select>
               </div>
-              <div class="col my-1">
+              <div class="col-5 my-1">
                 <input type="date" id="date" class="form-control" v-model="choisenWorkGroupDate.date">
               </div>
-              <div class="col-2 my-1">
-                <input type="text" id="lesson" class="form-control" placeholder=" № " v-model="choisenWorkGroupDate.lesson">
-              </div>
-              <div class="col-2 d-flex align-items-center me-3">
+              <div class="col my-1 d-flex align-items-center">
+                <input type="text" id="lesson" class="form-control me-2" placeholder=" № " v-model="choisenWorkGroupDate.lesson">
                 <div v-if="editDateGroup" class="d-flex">
-                  <button class="btn-table apply ms-auto" @click="applyWorkGroupDate"></button>
-                  <button class="btn-table cancel ms-auto" @click="cancelWorkGroupDate"></button>
+                  <button class="icon icon-confirm ms-auto" @click="applyWorkGroupDate"></button>
+                  <button class="icon icon-cancel ms-auto" @click="cancelWorkGroupDate"></button>
                 </div>
-                <button v-else class="img-btn-add ms-auto" @click="addWorkGroupDate" :disabled="!choisenWorkGroupDate.date || !choisenWorkGroupDate.lesson || !choisenWorkGroupDate.group_id"></button>
+                <button v-else class="icon icon-add ms-auto" @click="addWorkGroupDate" :disabled="!choisenWorkGroupDate.date || !choisenWorkGroupDate.lesson || !choisenWorkGroupDate.group_id"></button>
               </div>
             </div> 
           </div> 
@@ -329,21 +318,6 @@ export default {
   min-width: 25px;
   min-height: 25px;
   cursor: pointer;
-}
-.btn-table.edit {
-  background: url('@/assets/img/item-edit.png') no-repeat 50% / 90%;
-  margin-right: 5px;
-}
-.btn-table.delete {
-  background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
-}
-.btn-table.apply {
-  background: url('@/assets/img/btn-apply.png') no-repeat 50% / 90%;
-  margin-right: 5px;
-}
-.btn-table.cancel {
-  background: url('@/assets/img/btn-cancel.png') no-repeat 50% / 90%;
-  margin-right: 5px;
 }
 .alert-text {
     color: red;

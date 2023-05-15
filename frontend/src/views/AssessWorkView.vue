@@ -9,9 +9,9 @@
       <div v-else>Данные загружаются</div>
     </modal-class>
     <div class="info">
-      <div>{{ summativeWorkGroup.work.title }}</div>
-      <div v-if="summativeWorkGroup.work.unit">{{ summativeWorkGroup.work.unit.title }}</div>
-      <div v-if="summativeWorkGroup.work.groups">{{ summativeWorkGroup.group.class_year.year_rus }}{{ summativeWorkGroup.group.letter }} класс (Всего: {{ summativeWorkGroup.group.count }})</div>
+      <div><h4>{{ summativeWorkGroup.work.title }}</h4></div>
+      <div v-if="summativeWorkGroup.work.unit">Юнит: <a :href="`/unit/${summativeWorkGroup.work.unit.id}`">{{ summativeWorkGroup.work.unit.title }}</a></div>
+      <div v-if="summativeWorkGroup.work.groups">{{ summativeWorkGroup.group.class_year.year_rus }}{{ summativeWorkGroup.group.letter }} класс (Всего: {{ getWordStudent(summativeWorkGroup.group.count) }})</div>
     </div>
     <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
     <div class="tools" ref="activeInput">
@@ -37,15 +37,15 @@
           <tr v-for="(assess, index) in summativeWorkGroup.students" :key="assess.id">
             <td class="text-center">{{ index + 1 }}</td>
             <td>{{ assess.student.user.last_name }} {{ assess.student.user.first_name }}</td>
-            <td v-for="cr in summativeWorkGroup.work.criteria" :key="cr.id" class="criterion">
+            <td v-for="cr in summativeWorkGroup.work.criteria" :key="cr.id" class="editable">
               <input type="text" class="input-table" v-model="markCriterion.mark">
               <div @click="(event) => setEditField(event, assess, cr)">{{ getMarkForStudent(cr.id, assess.criteria_marks) }}</div>
             </td>
-            <td class="text-center">
+            <td class="uneditable">
               <b>{{ calcSumStudentMarks(assess.criteria_marks) }}</b>/{{ calcMaxStudentMarks(summativeWorkGroup.work.criteria) }}
             </td>
-            <td class="text-center">{{ calcStudentMarks(assess.criteria_marks, summativeWorkGroup.work.criteria) }}</td>
-            <td class="text-center grade">
+            <td class="uneditable">{{ calcStudentMarks(assess.criteria_marks, summativeWorkGroup.work.criteria) }}</td>
+            <td class="editable">
               <input type="text" class="input-table" v-model="currentWorkAssess.grade">
               <div class="text-table" @click="(event) => setEditField(event, assess)">{{ assess.grade || "-" }}</div>
             </td>
@@ -87,6 +87,14 @@ export default {
     }
   },
   methods: {
+    getWordStudent(count) {
+      let value = Math.abs(count) % 100;
+      let number = value % 10;
+      if (value > 10 && value < 20) return `${count} студентов`;
+      if (number > 1 && number < 5) return `${count} студента`;
+      if (number == 1) return `${count} студент`;
+      return `${count} студентов`;
+    },
     showClassModal() {
       this.modalTitleClass = "Изменение списка группы";
       this.getStudentsWork();

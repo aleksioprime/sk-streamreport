@@ -20,7 +20,7 @@
     </div>
     <!-- Выбор периодов обучения -->
     <div class="block-period">
-      <div v-for="pr in periods" :key="pr.id" class="period">
+      <div v-for="pr in periods" :key="pr.id" class="period radiobutton">
         <input type="radio" name="period" :value="pr" :id="'period-' + pr.id"
           v-model="currentPeriod" @change="handleQuery">
         <label :for="'period-' + pr.id">
@@ -56,7 +56,6 @@ export default {
   data() {
     return {
       currentProgram: 'MYP',
-      
     }
   },
   methods: {
@@ -93,8 +92,6 @@ export default {
 }
 .block-period {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   align-items: stretch;
   gap: 5px;
   margin-bottom: 10px;
@@ -102,30 +99,8 @@ export default {
 .period {
   flex-grow: 1;
 }
-.period input[type=radio] {
-	display: none;
-}
-.period label {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-	cursor: pointer;
-	padding: 10px;
-	border: 1px solid #999;
-	border-radius: 6px;
-	user-select: none;
-  font-size: 0.8em;
-}
-.period input[type=radio]:checked + label {
-	background: #ffe0a6;
-}
-.period label:hover {
-	color: #666;
-}
 .period-title {
   font-size: 1.5em;
-
+  font-weight: 700;
 }
 </style>

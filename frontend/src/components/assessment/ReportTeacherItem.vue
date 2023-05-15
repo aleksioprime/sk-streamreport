@@ -1,99 +1,99 @@
 <template>
-  <div class="report-item">
+  <div class="report-item area">
     <div class="student-header">
       <div class="student-photo">
-        <img :src='student.user.photo ? student.photo : require("@/assets/img/user.png")' alt="" width="50">
+        <img :src='student.user.photo ? student.photo : require("@/assets/img/student.svg")' alt="" width="50">
       </div>
       <div class="student-info">
         <div class="student-name">{{ student.user.last_name }} {{ student.user.first_name }}</div>
       </div>
     </div>
-    <div class="assess-title accordion-button" data-bs-toggle="collapse" :href="`#collapse-assessment-${student.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-assessment-${student.id}`">
+    <div class="assess-title selected" data-bs-toggle="collapse" :href="`#collapse-assessment-${student.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-assessment-${student.id}`">
       Результаты студента за <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">{{ asper.number }} {{ asper.type }}<span v-if="++index != period.assessment_periods.length">, </span> </span></div>
     <div :id="`collapse-assessment-${student.id}`" class="collapse">
       <div class="student-assessment" >
         <div class="assess-wrapper">
-          <div class="assess-item">
-            <div class="assess-criterion" @click="getObjectivesFromCriteria(criterionA.id)">{{ criterionA.letter }}. {{ criterionA.name_eng }}</div>
+          <div class="assess-item clicked" @click="getObjectivesFromCriteria(criterionA)">
+            <div class="assess-criterion">{{ criterionA.letter }}. {{ criterionA.name_eng }}</div>
             <div class="assess-mark">
-              <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(student.assessment.criteria_a, asper.number) }}
-                <span v-if="++index != period.assessment_periods.length">- </span>
-              </span>
+                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
+              </div>
             </div>
           </div>
-          <div class="assess-item">
-            <div class="assess-criterion" @click="getObjectivesFromCriteria(criterionB.id)">{{ criterionB.letter }}. {{ criterionB.name_eng }}</div>
+          <div class="assess-item clicked" @click="getObjectivesFromCriteria(criterionB)">
+            <div class="assess-criterion">{{ criterionB.letter }}. {{ criterionB.name_eng }}</div>
             <div class="assess-mark">
-              <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(student.assessment.criteria_b, asper.number) }}
-                <span v-if="++index != period.assessment_periods.length">- </span>
-              </span>
+                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
+              </div>
             </div>
           </div>
-          <div class="assess-item">
-            <div class="assess-criterion" @click="getObjectivesFromCriteria(criterionC.id)">{{ criterionC.letter }}. {{ criterionC.name_eng }}</div>
+          <div class="assess-item clicked" @click="getObjectivesFromCriteria(criterionC)">
+            <div class="assess-criterion">{{ criterionC.letter }}. {{ criterionC.name_eng }}</div>
             <div class="assess-mark">
-              <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(student.assessment.criteria_c, asper.number) }}
-                <span v-if="++index != period.assessment_periods.length">- </span>
-              </span>
+                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
+              </div>
             </div>
           </div>
-          <div class="assess-item">
-            <div class="assess-criterion" @click="getObjectivesFromCriteria(criterionD.id)">{{ criterionD.letter }}. {{ criterionD.name_eng }}</div>
+          <div class="assess-item clicked" @click="getObjectivesFromCriteria(criterionD)">
+            <div class="assess-criterion">{{ criterionD.letter }}. {{ criterionD.name_eng }}</div>
             <div class="assess-mark">
-              <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(student.assessment.criteria_d, asper.number) }}
-                <span v-if="++index != period.assessment_periods.length">- </span>
-              </span>
+                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
+              </div>
             </div>
           </div>
           <div class="assess-item">
             <div class="assess-sum">Оценка за ИР</div>
             <div class="assess-mark">
-              <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(student.assessment.summ_grades, asper.number) }}
-                <span v-if="++index != period.assessment_periods.length">- </span>
-              </span>
+                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
+              </div>
             </div>
           </div>
           <div class="assess-item">
             <div class="assess-form">Средняя текущая</div>
             <div class="assess-mark">
-              <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(student.assessment.form_grades, asper.number) }}
-                <span v-if="++index != period.assessment_periods.length">- </span>
-              </span>
+                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
+              </div>
             </div>
           </div>
           <div class="assess-item">
             <div class="assess-final">Итоговая оценка</div>
             <div class="assess-mark">
-              <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(student.assessment.final_grades, asper.number) }}
-                <span v-if="++index != period.assessment_periods.length">- </span>
-              </span>
+                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
+              </div>
             </div>
           </div>
         </div>
         <div class="achievements-wrapper">
           <div v-if="objectives.length">
-            <div class="achievements-filter">
-              <div>Показать предметные цели и уровни достижений за:</div>
+            <div class="achievements-filter selected">
+              <div>Показать предметные цели и уровни достижений по критерию <b>{{ this.currentCriterion.letter }}.{{ this.currentCriterion.name_eng }}</b> за:</div>
               <select class="form-select" name="level-subject" id="level-subject" v-model="currentYear">
                 <option :value="null">Выберите уровень</option>
                 <option v-for="lvl in levelSubject" :key="lvl.id" :value="lvl.id">{{ lvl.name_eng }}</option>
               </select>
             </div>
-            <div class="accordion" :id="`accordion-${currentCriterion}`">
+            <div class="accordion" :id="`accordion-${currentCriterion.id}`">
               <div class="accordion-item" v-for="objective in filteredObjectives" :key="objective.id">
                 <h2 class="accordion-header">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-objective-${objective.id}`" aria-expanded="true" :aria-controls="`collapse-objective-${objective.id}`">
                     {{ objective.strand.letter_i }}. {{ objective.name_eng }}
                   </button>
                 </h2>
-                <div :id="`collapse-objective-${objective.id}`" class="accordion-collapse collapse" :data-bs-parent="`#accordion-${currentCriterion}`">
+                <div :id="`collapse-objective-${objective.id}`" class="accordion-collapse collapse" :data-bs-parent="`#accordion-${currentCriterion.id}`">
                   <div class="accordion-body">
                     <div v-if="objective.achievelevel.length">
                       <div class="achievement-item" v-for="ach in objective.achievelevel" :key="ach.id">
@@ -107,7 +107,6 @@
               </div>
             </div>
           </div>
-          <div v-else>Выберите критерий</div>
         </div>
       </div>
     </div>
@@ -225,9 +224,10 @@ export default {
     }
   },
   methods: {
-    getObjectivesFromCriteria(id) {
-      this.currentCriterion = id;
-      this.fetchGetObjectives({ criterion: id })
+    getObjectivesFromCriteria(criterion) {
+      this.currentCriterion = criterion;
+      this.currentYear = null;
+      this.fetchGetObjectives({ criterion: criterion.id })
     },
     getMarkFromAssessment(assess, period) {
       if (assess) {
@@ -277,7 +277,6 @@ export default {
   flex-direction: column;
   border-radius: 10px;
   margin-top: 10px;
-  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
 }
 
 .report-item:hover {
@@ -302,12 +301,11 @@ export default {
   align-items: center;
 }
 .assess-title {
-  margin-top: 10px;
-  padding: 5px;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
 }
-.assess-title:hover {
-  font-weight: 700;
-}
+
 /* .assess-title::after {
   content: '   \25BC';
 } */
@@ -320,13 +318,14 @@ export default {
 
 .achievements-wrapper {
   flex-grow: 1;
-  min-height: 100px;
   margin-bottom: 10px;
 }
 .achievements-filter {
   margin: 10px 0;
   display: flex;
   align-items: center;
+  padding: 10px;
+  border-radius: 10px;
 }
 .achievements-filter select{
   margin-left: 10px;
@@ -356,24 +355,44 @@ export default {
   flex-direction: column;
   min-width: 350px;
   margin-bottom: 10px;
+  row-gap: 5px;
 }
 
 .assess-item {
   display: flex;
   align-items: center;
-  border-bottom: 0.5px solid #a7a7a78a;
-  padding: 0 5px;
+  border: 0.5px solid var(--bs-secondary);
+  padding: 5px 10px;
+  border-radius: 10px;
 }
-
-.assess-criterion:hover {
-  font-weight: 700;
+.assess-item.clicked {
   cursor: pointer;
+}
+.assess-item.clicked:hover {
+  background: var(--my-focus);
+}
+.assess-criterion {
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .assess-mark {
   font-weight: 700;
   margin-left: auto;
+  display: flex;
+  column-gap: 5px;
 }
+.assess-mark .mark {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  padding: 5px 5px;
+  border-radius: 5px;
+  background: var(--bs-secondary);
+}
+
 .student-criteria {
   margin-top: 10px;
 }

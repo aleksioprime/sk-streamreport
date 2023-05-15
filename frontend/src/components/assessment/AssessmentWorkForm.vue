@@ -2,7 +2,7 @@
   <div>
     <div class="student-wrapper">
       <div class="student-left">
-        <h4>Студенты в списке класса <small>({{ filterStudents.length }} человек)</small></h4>
+        <h4>Студенты в списке <small>({{ getWordStudent(filterStudents.length) }})</small></h4>
         <select class="form-select" multiple v-model="currentStudentsGroup" size="10">
           <option v-for="(st, index) in filterStudents" :key="st.id" :value="st">
             {{ ++index }}. {{ st.user.last_name }} {{ st.user.first_name }}</option>
@@ -13,7 +13,7 @@
         <button class="btn btn-danger my-2" @click="deleteStudentsFromWork" :disabled="!currentStudentsWork.length">&#8593;</button>
       </div>
       <div class="student-right">
-        <h4>Студенты в журнале <small>({{ studentsWork.length }} человек)</small></h4>
+        <h4>Студенты в журнале <small>({{ getWordStudent(studentsWork.length) }})</small></h4>
         <select class="form-select" multiple v-model="currentStudentsWork" size="10">
           <option v-for="(st, index) in studentsWork" :key="st.id" :value="st.id">
             {{ ++index }}. {{ st.user.last_name }} {{ st.user.first_name }}</option>
@@ -53,6 +53,14 @@ export default {
     }
   },
   methods: {
+    getWordStudent(count) {
+      let value = Math.abs(count) % 100;
+      let number = value % 10;
+      if (value > 10 && value < 20) return `${count} студентов`;
+      if (number > 1 && number < 5) return `${count} студента`;
+      if (number == 1) return `${count} студент`;
+      return `${count} студентов`;
+    },
     addStudentsToWork() {
       this.$emit('update:studentsWork', this.studentsWork.concat(this.currentStudentsGroup));
       this.currentStudentsGroup = [];

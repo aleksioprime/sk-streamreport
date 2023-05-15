@@ -2,7 +2,7 @@
   <div class="report-item">
     <div class="student-header">
       <div class="student-photo">
-        <img :src='student.user.photo ? student.photo : require("@/assets/img/user.png")' alt="" width="50">
+        <img :src='student.user.photo ? student.photo : require("@/assets/img/student.svg")' alt="" width="50">
       </div>
       <div class="student-info">
         <div class="student-name">{{ student.user.last_name }} {{ student.user.first_name }}</div>
@@ -65,8 +65,9 @@
       <div class="accordion" id="accordionPanelsSubject">
         <div class="subject-item accordion-item" v-for="subject in student.subject_reports" :key="subject.id">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#panels-subject-${subject.id}`" aria-expanded="true" :aria-controls="`panels-subject-${subject.id}`">
-              <div class="subject-title" :class="{'check-yes': subject.text }">{{ subject.name_rus }}</div>
+            <button class="accordion-button collapsed" 
+            :class="{'check-yes': subject.text && subject.criteria }" type="button" data-bs-toggle="collapse" :data-bs-target="`#panels-subject-${subject.id}`" aria-expanded="true" :aria-controls="`panels-subject-${subject.id}`">
+              <div class="subject-title">{{ subject.name_rus }}</div>
             </button>
           </h2>
           <div :id="`panels-subject-${subject.id}`" class="accordion-collapse collapse">
@@ -290,22 +291,14 @@ export default {
   margin-top: 10px;
 }
 .subject-title {
-  margin-left: 15px;
+  margin-left: 10px;
 }
-.subject-title:before {
-  content: "";
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  float: left;
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
-  background: url('@/assets/img/check-no.png') no-repeat 50% / 100%;
+.accordion-button {
+  background: #ebebeb;
+  color: #000000;
 }
-.check-yes:before {
-  background: url('@/assets/img/check-yes.png') no-repeat 50% / 100%;
+.check-yes {
+  background: #f8fccc;
 }
 .subject-criteria{
   display: flex;

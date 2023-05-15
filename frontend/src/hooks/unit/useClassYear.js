@@ -8,6 +8,7 @@ export function getClassYears() {
       params: {
         program: data.program || null,
         subject: data.subject || null,
+        department: data.department || null,
         teacher: data.teacher || null
       }
     }

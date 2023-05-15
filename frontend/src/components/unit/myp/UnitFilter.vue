@@ -2,32 +2,30 @@
   <div class="block-filter">
     <div v-if="showAllUnits">
       <div class="block-departments">
-        <div v-for="dp in departments" :key="dp.id" class="department">
+        <div v-for="dp in departments" :key="dp.id" class="department radiobutton">
           <input type="radio" name="department" :value="dp.id" :id="'department-' + dp.id"
-            v-model="queryDepartment" @change="handleQuery">
+            v-model="queryDepartment" @change="changeDepartment">
           <label :for="'department-' + dp.id">
-            <img :src='dp.photo ? dp.photo : require("@/assets/img/user.png")' alt="" width="50" height="50">
+            <div class="img"><img :src='dp.photo ? dp.photo : require("@/assets/img/sk_report_logo_notext.svg")' alt="" width="50" height="50"></div>
             <div>{{ dp.name }}</div>
           </label>
         </div>
       </div>
     </div>
-    <div class="d-flex align-items-center flex-wrap mb-2">
-      <div class="form-check me-2">
-        <input class="form-check-input" type="radio" name="subject" :value="null" :id="'subject-x'" v-model="querySubject"
-          @change="handleQuery">
-        <label class="form-check-label" :for="'subject-x'">
+    <div class="block-subject">
+      <div class="subject radiobutton">
+        <input type="radio" name="subject" :value="null" :id="'subject-x'" v-model="querySubject"
+          @change="changeSubject">
+        <label :for="'subject-x'">
           Все предметы
         </label>
       </div>
-      <div v-for="sb in subjects" :key="sb.id" class="me-2">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="subject" :value="sb.id" :id="'subject-' + sb.id"
-            v-model="querySubject" @change="handleQuery">
-          <label class="form-check-label" :for="'subject-' + sb.id">
-            {{ sb.name_rus }}
-          </label>
-        </div>
+      <div v-for="sb in subjects" :key="sb.id" class="subject radiobutton">
+        <input type="radio" name="subject" :value="sb.id" :id="'subject-' + sb.id"
+          v-model="querySubject" @change="changeSubject">
+        <label :for="'subject-' + sb.id">
+          {{ sb.name_rus }}
+        </label>
       </div>
     </div>
     <div class="d-flex align-items-center year-filter" v-if="years.length > 0" :class="{ 'filter-active' : this.queryYears.length }">
@@ -81,39 +79,65 @@ export default {
   },
   methods: {
     handleQuery(event) {
-      
       this.$emit('updateFetch', { years: this.queryYears, subject: this.querySubject, department: this.queryDepartment });
     },
+    changeDepartment() {
+      this.querySubject = null;
+      if (this.showAllUnits) {
+        this.fetchGetSubjects({ department: this.queryDepartment, program: 'MYP' }).finally(() => {
+          this.changeSubject();
+        });
+      } else {
+        this.fetchGetSubjects({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
+          this.changeSubject();
+        }); 
+      }
+    },
+    changeSubject() {
+      this.queryYears = [];
+      if (this.showAllUnits) {
+        if (this.querySubject) {
+          this.fetchGetClassYears({ subject: this.querySubject, program: 'MYP' }).finally(() => {
+          this.handleQuery();
+        });
+        } else {
+          this.fetchGetClassYears({ department: this.queryDepartment, program: 'MYP' }).finally(() => {
+          this.handleQuery();
+        });
+        }
+      } else {
+        this.fetchGetClassYears({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
+          this.handleQuery();
+        });
+      }
+    }
   },
   mounted() {
-    this.fetchGetClassYears({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
-      // this.queryYears = this.years.map(item => item.id);
-    });
-    this.fetchGetSubjects({ teacher: this.user.teacher.id, program: 'MYP' });
   },
   watch: {
-    querySubject() {
-      // this.queryYears = this.years.map(item => item.id)
-    },
-    queryDepartment() {
-      this.querySubject = null;
-      this.fetchGetSubjects({ department: this.queryDepartment, program: 'MYP' });
-      // this.queryYears = this.years.map(item => item.id);
-    },
     showAllUnits() {
       if (this.showAllUnits) {
         console.log('Включён режим администратора');
-        this.fetchGetDepartments();
-        this.fetchGetClassYears({ program: 'MYP' }).finally(() => {
-          // this.queryYears = this.years.map(item => item.id);
+        this.fetchGetDepartments().finally(() => {
+          if (this.departments.length) {
+            this.queryDepartment = this.departments[0].id;
+          }
+          this.querySubject = null;
+          this.queryYears = [];
+          this.fetchGetClassYears({ department: this.queryDepartment, program: 'MYP' });
+          this.fetchGetSubjects({ department: this.queryDepartment, program: 'MYP' }).finally(() => {
+            this.handleQuery();
+          }); 
         });
-        this.queryDepartment = null;
-        this.fetchGetSubjects({ department: this.queryDepartment, program: 'MYP' }); 
-        this.handleQuery();
       } else {
-        this.fetchGetSubjects({ teacher: this.user.teacher.id, program: 'MYP' }); 
-        this.fetchGetClassYears({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
-          // this.queryYears = this.years.map(item => item.id);
+        console.log('Режим администратора выключен');
+        this.queryDepartment = null;
+        this.querySubject = null;
+        this.queryYears = [];
+        this.fetchGetSubjects({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
+          this.fetchGetClassYears({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
+            this.handleQuery();
+          });
         });
       }
     }
@@ -145,40 +169,22 @@ export default {
 }
 .department img {
   margin-bottom: 10px;
+  object-fit: contain;
 }
-.department input[type=radio] {
-	display: none;
-}
-.department label {
-  height: 100%;
+.block-subject {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  /* justify-content: space-between; */
-	cursor: pointer;
-	padding: 10px;
-	border: 1px solid #999;
-	border-radius: 6px;
-	user-select: none;
-  font-size: 0.8em;
-}
- 
-/* Checked */
-.department input[type=radio]:checked + label {
-	background: #ffe0a6;
-}
- 
-/* Hover */
-.department label:hover {
-	color: #666;
+  flex-wrap: wrap;
+  /* flex-direction: column; */
+  gap: 5px;
+  margin-bottom: 10px;
 }
 .year-filter {
-  border: 1px solid #999;
+  border: 1px solid #ced4da;
   border-radius: 6px;
   padding: 10px;
 }
 .filter-active {
-  background: #ffe0a6;
+  
+  border: 1px solid var(--bs-primary);
 }
 </style>

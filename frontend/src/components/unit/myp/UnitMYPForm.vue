@@ -48,7 +48,7 @@
       <div class="col-md mt-2">
         <label for="subject" class="form-label">Учебный предмет:</label>
         <select ref="subject" id="subject" class="form-select" v-model="editedUnit.subject_id" @change="selectSubject">
-          <option :value="null">Выберите предмет в MYP</option>
+          <option :value="null">Выберите предмет</option>
           <option v-for="(sb, i) in subjects" :key="i" :value="sb.id">
             {{ sb.name_rus }} ({{ sb.group_ib.name_eng }})
           </option>
@@ -57,16 +57,16 @@
       </div>
       <!-- Поле выбора уровня изучения предмета  -->
       <div class="col-md-4 mt-2">
-        <label for="level" class="form-label">Уровень изучения:</label>
+        <label for="level" class="form-label">Уровень:</label>
         <div v-if="levels.length > 0">
           <select ref="level" id="levels" class="form-select" v-model="editedUnit.level_id">
-            <option :value="null">Выберите уровень</option>
+            <option :value="null">Уровень</option>
             <option v-for="(lvl, i) in levels" :key="i" :value="lvl.id">
               {{ lvl.name_eng }}
             </option>
           </select>
         </div>
-        <div v-else>Для выбора уровня изучения укажите дисциплину</div>
+        <div v-else>Укажите дисциплину</div>
         <small ref="level_alert" class="alert-text"></small>
       </div>
     </div>

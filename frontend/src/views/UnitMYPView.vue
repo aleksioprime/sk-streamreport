@@ -17,56 +17,56 @@
               <a class="nav-link myp-group" href="#myp-base">Основная информация</a>
               <a class="nav-link myp-group" href="#myp-inquiry">Исследование</a>
               <nav class="nav nav-pills flex-sm-column">
-                <a class="nav-link myp-field" :class="checkField('key_concepts')" href="#key_concepts">Ключевые концепты</a>
-                <a class="nav-link myp-field" :class="checkField('related_concepts')" href="#related_concepts">Предметные концепты</a>
-                <a class="nav-link myp-field" :class="checkField('conceptual_understanding')" href="#conceptual_understanding">Концептуальное понимание</a>
-                <a class="nav-link myp-field" :class="checkField('global_context')" href="#global_context">Глобальный контекст</a>
-                <a class="nav-link myp-field" :class="checkField('explorations')" href="#explorations">Линии исследования</a>
-                <a class="nav-link myp-field" :class="checkField('statement_inquiry')" href="#statement_inquiry">Формулировка исследования</a>
-                <a class="nav-link myp-field" :class="checkField('inquiry_questions')" href="#inquiry_questions">Исследовательские вопросы</a>
+                <a class="nav-link myp-field cheking" :class="checkField('key_concepts')" href="#key_concepts">Ключевые концепты</a>
+                <a class="nav-link myp-field cheking" :class="checkField('related_concepts')" href="#related_concepts">Предметные концепты</a>
+                <a class="nav-link myp-field cheking" :class="checkField('conceptual_understanding')" href="#conceptual_understanding">Концептуальное понимание</a>
+                <a class="nav-link myp-field cheking" :class="checkField('global_context')" href="#global_context">Глобальный контекст</a>
+                <a class="nav-link myp-field cheking" :class="checkField('explorations')" href="#explorations">Линии исследования</a>
+                <a class="nav-link myp-field cheking" :class="checkField('statement_inquiry')" href="#statement_inquiry">Формулировка исследования</a>
+                <a class="nav-link myp-field cheking" :class="checkField('inquiry_questions')" href="#inquiry_questions">Исследовательские вопросы</a>
               </nav>
               <a class="nav-link myp-group" href="#myp-objectives">Образовательные цели</a>
               <nav class="nav nav-pills flex-sm-column">
-                <a class="nav-link myp-field" :class="checkField('aims')" href="#aims">Общие цели</a>
-                <a class="nav-link myp-field" :class="checkField('criteria')" href="#criteria">Критерии оценивания</a>
-                <a class="nav-link myp-field" :class="checkField('strands')" href="#strands">Цели предметной группы</a>
-                <a class="nav-link myp-field" :class="checkField('content')" href="#content">Содержание</a>
-                <a class="nav-link myp-field" :class="checkField('skills')" href="#skills">Умения</a>
-                <a class="nav-link myp-field" :class="checkField('atl_mapping')" href="#atl_mapping">Карта ATL</a>
+                <a class="nav-link myp-field cheking" :class="checkField('aims')" href="#aims">Общие цели</a>
+                <a class="nav-link myp-field cheking" :class="checkField('criteria')" href="#criteria">Критерии оценивания</a>
+                <a class="nav-link myp-field cheking" :class="checkField('strands')" href="#strands">Цели предметной группы</a>
+                <a class="nav-link myp-field cheking" :class="checkField('content')" href="#content">Содержание</a>
+                <a class="nav-link myp-field cheking" :class="checkField('skills')" href="#skills">Умения</a>
+                <a class="nav-link myp-field cheking" :class="checkField('atl_mapping')" href="#atl_mapping">Карта ATL</a>
               </nav>
               <a class="nav-link myp-group" href="#myp-profile">Профиль студента</a>
               <nav class="nav nav-pills flex-sm-column">
-                <a class="nav-link myp-field" :class="checkField('learner_profile')" href="#learner_profile">Профиль студента IB</a>
-                <a class="nav-link myp-field" :class="checkField('international_mindedness')" href="#international_mindedness">Межкультурное понимание</a>
-                <a class="nav-link myp-field" :class="checkField('academic_integrity')" href="#academic_integrity">Академическая честность</a>
-                <a class="nav-link myp-field" :class="checkField('language_development')" href="#language_development">Языковое развитие</a>
-                <a class="nav-link myp-field" :class="checkField('infocom_technology')" href="#infocom_technology">Использование средств ИКТ</a>
-                <a class="nav-link myp-field" :class="checkField('service_as_action')" href="#service_as_action">Служение как действие</a>
+                <a class="nav-link myp-field cheking" :class="checkField('learner_profile')" href="#learner_profile">Профиль студента IB</a>
+                <a class="nav-link myp-field cheking" :class="checkField('international_mindedness')" href="#international_mindedness">Межкультурное понимание</a>
+                <a class="nav-link myp-field cheking" :class="checkField('academic_integrity')" href="#academic_integrity">Академическая честность</a>
+                <a class="nav-link myp-field cheking" :class="checkField('language_development')" href="#language_development">Языковое развитие</a>
+                <a class="nav-link myp-field cheking" :class="checkField('infocom_technology')" href="#infocom_technology">Использование средств ИКТ</a>
+                <a class="nav-link myp-field cheking" :class="checkField('service_as_action')" href="#service_as_action">Служение как действие</a>
               </nav>
               <a class="nav-link myp-group" href="#myp-assessment">Оценивание</a>
               <nav class="nav nav-pills flex-sm-column">
-                <a class="nav-link myp-field" :class="checkField('formative_assessment')" href="#formative_assessment">Текущее оценивание</a>
-                <a class="nav-link myp-field" :class="checkField('summative_assessment_task')" href="#summative_assessment_task">Итоговое оценивание (задания)</a>
-                <a class="nav-link myp-field" :class="checkField('summative_assessment_soi')" href="#summative_assessment_soi">Итоговое оценивание (взаимосвязь с
+                <a class="nav-link myp-field cheking" :class="checkField('formative_assessment')" href="#formative_assessment">Текущее оценивание</a>
+                <a class="nav-link myp-field cheking" :class="checkField('summative_assessment_task')" href="#summative_assessment_task">Итоговое оценивание (задания)</a>
+                <a class="nav-link myp-field cheking" :class="checkField('summative_assessment_soi')" href="#summative_assessment_soi">Итоговое оценивание (взаимосвязь с
                   исследовательским утверждением)</a>
-                <a class="nav-link myp-field" :class="checkField('peer_self_assessment')" href="#peer_self_assessment">Взаимное и самооценивание</a>
-                <a class="nav-link myp-field" :class="checkField('standardization_moderation')" href="#standardization_moderation">Стандартизация и модерация</a>
+                <a class="nav-link myp-field cheking" :class="checkField('peer_self_assessment')" href="#peer_self_assessment">Взаимное и самооценивание</a>
+                <a class="nav-link myp-field cheking" :class="checkField('standardization_moderation')" href="#standardization_moderation">Стандартизация и модерация</a>
               </nav>
               <a class="nav-link myp-group" href="#myp-teaching">Стратегии преподавания</a>
               <nav class="nav nav-pills flex-sm-column">
-                <a class="nav-link myp-field" :class="checkField('prior_experiences')"  href="#prior_experiences">Предыдущий опыт обучения</a>
-                <a class="nav-link myp-field" :class="checkField('learning_experiences')" href="#learning_experiences">Учебная деятельность</a>
-                <a class="nav-link myp-field" :class="checkField('teaching_strategies')" href="#teaching_strategies">Стратегии преподавания</a>
-                <a class="nav-link myp-field" :class="checkField('student_expectations')" href="#student_expectations">Ожидания студентов</a>
-                <a class="nav-link myp-field" :class="checkField('feedback')" href="#feedback">Обратная связь</a>
-                <a class="nav-link myp-field" :class="checkField('differentiation')" href="#differentiation">Дифференциация</a>
-                <a class="nav-link myp-field" :class="checkField('resources')" href="#resources">Ресурсы</a>
+                <a class="nav-link myp-field cheking" :class="checkField('prior_experiences')"  href="#prior_experiences">Предыдущий опыт обучения</a>
+                <a class="nav-link myp-field cheking" :class="checkField('learning_experiences')" href="#learning_experiences">Учебная деятельность</a>
+                <a class="nav-link myp-field cheking" :class="checkField('teaching_strategies')" href="#teaching_strategies">Стратегии преподавания</a>
+                <a class="nav-link myp-field cheking" :class="checkField('student_expectations')" href="#student_expectations">Ожидания студентов</a>
+                <a class="nav-link myp-field cheking" :class="checkField('feedback')" href="#feedback">Обратная связь</a>
+                <a class="nav-link myp-field cheking" :class="checkField('differentiation')" href="#differentiation">Дифференциация</a>
+                <a class="nav-link myp-field cheking" :class="checkField('resources')" href="#resources">Ресурсы</a>
               </nav>
               <a class="nav-link myp-group" href="#myp-reflections">Рефлексия</a>
               <nav class="nav nav-pills flex-sm-column">
-                <a class="nav-link myp-field" :class="checkField('reflections', type='Prior')"  href="#reflections_prior">До начала изучения</a>
-                <a class="nav-link myp-field" :class="checkField('reflections', type='During')" href="#reflections_during">В процессе изучения юнита</a>
-                <a class="nav-link myp-field" :class="checkField('reflections', type='After')" href="#reflections_after">По окончании изучения юнита</a>
+                <a class="nav-link myp-field cheking" :class="checkField('reflections', type='Prior')"  href="#reflections_prior">До начала изучения</a>
+                <a class="nav-link myp-field cheking" :class="checkField('reflections', type='During')" href="#reflections_during">В процессе изучения юнита</a>
+                <a class="nav-link myp-field cheking" :class="checkField('reflections', type='After')" href="#reflections_after">По окончании изучения юнита</a>
               </nav>
             </nav>
           </nav>
@@ -75,7 +75,7 @@
           <div data-bs-spy="scroll" data-bs-target="#navbar-myp" data-bs-smooth-scroll="true" tabindex="0">
             <!-- МЕЖДИСЦИПЛИНАРНЫЙ ЮНИТ -->
             <div v-if="unitMYP.interdisciplinary">
-              <div id="myp-base" class="myp-header">Это междисциплинарный юнит</div>
+              <div id="myp-base" class="myp-header"><h2>Это междисциплинарный юнит</h2></div>
               <div class="myp-interdisciplinary" @click="$router.push(`/myp/idu/${unitMYP.interdisciplinary.id}`)">
                 <div class="idu-header">{{ unitMYP.interdisciplinary.title }}</div>
                 <div>Предметы: 
@@ -88,7 +88,7 @@
               </div>
             </div>
             <!-- ОСНОВНАЯ ИНФОРМАЦИЯ -->
-            <div id="myp-base" class="myp-header">Основная информация</div>
+            <div id="myp-base" class="myp-header"><h2>Основная информация</h2></div>
             <!-- Название юнита -->
             <unit-field-string id="title" :fieldName="'title'" :fieldText="fieldText.title" :fieldData="unitMYP.title"
               @save="unitFieldSave" />
@@ -132,7 +132,7 @@
               <template v-slot:edit="field">{{ field.data.last_name }} {{ field.data.first_name }} {{ field.data.middle_name }}</template>
             </unit-field-checkbox-search>
             <!-- ИССЛЕДОВАНИЕ -->
-            <div id="myp-inquiry" class="myp-header">Исследование</div>
+            <div id="myp-inquiry" class="myp-header"><h2>Исследование</h2></div>
             <!-- Ключевые концепции -->
             <unit-field-checkbox id="key_concepts" :fieldName="'key_concepts'" :fieldText="fieldText.key_concepts"
               :fieldData="unitMYP.key_concepts" :options="keyConcepts" @save="unitFieldSave" @edit="unitFieldEdit">
@@ -204,7 +204,7 @@
               </template>
             </unit-field-blocks>
             <!-- ОБРАЗОВАТЕЛЬНЫЕ ЦЕЛИ -->
-            <div id="myp-objectives" class="myp-header">Образовательные цели</div>
+            <div id="myp-objectives" class="myp-header"><h2>Образовательные цели</h2></div>
             <!-- Общие цели -->
             <unit-field-checkbox id="aims" :fieldName="'aims'" :fieldText="fieldText.aims"
               :fieldData="unitMYP.aims" :options="aims" @save="unitFieldSave" @edit="unitFieldEdit">
@@ -243,7 +243,7 @@
                 <div class="blocks-wrapper">
                   <div class="blocks-title">ATL: {{ field.data.atl.name_eng }}</div>
                   <div>Objective: {{ field.data.strand.criterion.letter }} {{ field.data.strand.letter_i }}. {{ field.data.strand.name_eng }}</div>
-                  <div>{{ field.data.action }}</div>
+                  <div style="font-style: italic;">{{ field.data.action }}</div>
                 </div>
               </template>
               <!-- Слот для формы редактирования записей -->
@@ -273,7 +273,7 @@
               </template>
             </unit-field-blocks>
             <!-- Профиль студента -->
-            <div id="myp-profile" class="myp-header">Профиль студента</div>
+            <div id="myp-profile" class="myp-header"><h2>Профиль студента</h2></div>
             <!-- Таблица развития профиля студента IB -->
             <unit-field-blocks id="learner_profile" :fieldName="'learner_profile'" :fieldText="fieldText.learner_profile"
             :defaultItem="defaultProfile" :fieldData="unitMYP.learner_profile" @save="unitFieldSave" @edit="unitFieldEdit">
@@ -318,7 +318,7 @@
             <unit-field-text id="service_as_action" :fieldName="'service_as_action'" :fieldText="fieldText.service_as_action" :fieldData="unitMYP.service_as_action"
               @save="unitFieldSave" />
             <!-- ОЦЕНИВАНИЕ -->
-            <div id="myp-assessment" class="myp-header">Оценивание</div>
+            <div id="myp-assessment" class="myp-header"><h2>Оценивание</h2></div>
             <!-- Текущее оценивание -->
             <unit-field-text id="formative_assessment" :fieldName="'formative_assessment'" :fieldText="fieldText.formative_assessment" :fieldData="unitMYP.formative_assessment"
               @save="unitFieldSave" />
@@ -335,7 +335,7 @@
             <unit-field-text id="standardization_moderation" :fieldName="'standardization_moderation'" :fieldText="fieldText.standardization_moderation" :fieldData="unitMYP.standardization_moderation"
               @save="unitFieldSave" />
             <!-- СТРАТЕГИИ ПРЕПОДАВАНИЯ -->
-            <div id="myp-teaching" class="myp-header">Стратегии преподавания</div>
+            <div id="myp-teaching" class="myp-header"><h2>Стратегии преподавания</h2></div>
             <!-- Предыдущий опыт обучения -->
             <unit-field-text id="prior_experiences" :fieldName="'prior_experiences'" :fieldText="fieldText.prior_experiences" :fieldData="unitMYP.prior_experiences"
               @save="unitFieldSave" />
@@ -358,7 +358,7 @@
             <unit-field-text id="resources" :fieldName="'resources'" :fieldText="fieldText.resources" :fieldData="unitMYP.resources"
               @save="unitFieldSave" />
             <!-- РЕФЛЕКСИЯ -->
-            <div id="myp-reflections" class="myp-header">Рефлексия</div>
+            <div id="myp-reflections" class="myp-header"><h2>Рефлексия</h2></div>
             <!-- Посты рефлексии перед началом юнита -->
             <unit-field-blocks id="reflections_prior" :fieldName="'reflections_prior'" :fieldText="fieldText.reflection_prior"
               :fieldData="unitMYP.reflections.filter(item => item.type == 'Prior')"
@@ -366,8 +366,8 @@
               <!-- Слот для блоков показа записей -->
               <template v-slot:show="field">
                 <div class="blocks-wrapper">
-                  <div>{{ field.data.post }}</div>
-                  <div class="post-author">{{ field.data.author.first_name }} {{ field.data.author.middle_name }} {{ field.data.author.last_name }}</div>
+                  <div class="post-text">{{ field.data.post }}</div>
+                  <div>{{ field.data.author.first_name }} {{ field.data.author.middle_name }} {{ field.data.author.last_name }}</div>
                 </div>
               </template>
               <!-- Слот для формы редактирования записей -->
@@ -385,8 +385,8 @@
               <!-- Слот для блоков показа записей -->
               <template v-slot:show="field">
                 <div class="blocks-wrapper">
-                  <div>{{ field.data.post }}</div>
-                  <div class="post-author">{{ field.data.author.first_name }} {{ field.data.author.middle_name }} {{ field.data.author.last_name }}</div>
+                  <div class="post-text">{{ field.data.post }}</div>
+                  <div>{{ field.data.author.first_name }} {{ field.data.author.middle_name }} {{ field.data.author.last_name }}</div>
                 </div>
               </template>
               <!-- Слот для формы редактирования записей -->
@@ -404,8 +404,8 @@
               <!-- Слот для блоков показа записей -->
               <template v-slot:show="field">
                 <div class="blocks-wrapper">
-                  <div>{{ field.data.post }}</div>
-                  <div class="post-author">{{ field.data.author.first_name }} {{ field.data.author.middle_name }} {{ field.data.author.last_name }}</div>
+                  <div class="post-text">{{ field.data.post }}</div>
+                  <div>{{ field.data.author.first_name }} {{ field.data.author.middle_name }} {{ field.data.author.last_name }}</div>
                 </div>
               </template>
               <!-- Слот для формы редактирования записей -->
@@ -431,7 +431,7 @@
         <div v-if="flagUnit.delete">
           <div>Вы действительно хотите удалить этот юнит?</div>
           <div class="border mt-2 p-2">
-            <div class="idu-header">{{ unitMYP.title }}</div>
+            <div class="idu-header"><h4>{{ unitMYP.title }}</h4></div>
             <div>Год обучения: {{ unitMYP.class_year.year_ib }} ({{ unitMYP.class_year.year_rus }} класс)</div>
             <div>Предмет: {{ unitMYP.subject.name_rus }}</div>
             <div>Учителя: 
@@ -448,7 +448,7 @@
         <div v-if="flagUnitIDU.delete">
           <div>Вы действительно хотите удалить связь с междисциплинарным юнитом?</div>
           <div class="border mt-2 p-2">
-            <div class="idu-header">{{ unitMYP.interdisciplinary.title }}</div>
+            <div class="idu-header"><h4>{{ unitMYP.interdisciplinary.title }}</h4></div>
             <div>Предметы: 
               <span v-for="(un, index) in unitMYP.interdisciplinary.unitplan_myp" :key="un.id">
               {{ un.subject.name_rus }}<span v-if="++index !== unitMYP.interdisciplinary.unitplan_myp.length">,&nbsp;</span>
@@ -748,7 +748,7 @@ export default {
 }
 .myp-header {
   margin-bottom: 20px;
-  font-size: 2em;
+  margin-top: 10px;
 }
 .myp-header:not(:first-of-type) {
   margin-top: 20px;
@@ -809,8 +809,7 @@ export default {
   flex-basis: 100%;
 }
 
-.post-author {
-  text-align: right;
+.post-text {
   flex-basis: 100%;
   font-style: italic;
 }

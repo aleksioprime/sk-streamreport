@@ -4,14 +4,14 @@
       <template v-slot:header>Cписок студентов</template>
     </base-header>
     <!-- Кнопки добавления, редактирования, удаления пользователей -->
-    <div class="btn-wrapper sticky-top">
-      <button class="btn btn-primary my-3" @click="showAddUser">Добавить студента</button>
-      <button class="btn btn-primary my-3 ms-2" @click="showImportUser" v-if="authUser.is_staff">Импорт</button>
-      <div v-if="currentUser.id && !flagUser.add" class="my-3 d-flex align-items-center ms-auto">
-        <button type="button" class="btn-icon img-photo ms-2" @click="showEditPhoto"></button>
-        <button type="button" class="btn-icon img-pass ms-2" @click="showEditPass"></button>
-        <button type="button" class="btn-icon img-edit ms-4" @click="showEditUser"></button>
-        <button type="button" class="btn-icon img-del ms-2" @click="showDelUser"></button>
+    <div class="btn-wrapper">
+      <button class="btn btn-primary" @click="showAddUser">Добавить студента</button>
+      <button class="btn btn-primary" @click="showImportUser" v-if="authUser.is_staff">Импорт</button>
+      <div v-if="currentUser.id && !flagUser.add" class="icon-wrapper">
+        <!-- <button type="button" class="icon icon-photo ms-2" @click="showEditPhoto"></button>
+        <button type="button" class="icon icon-pass ms-2" @click="showEditPass"></button> -->
+        <button type="button" class="icon icon-edit ms-4" @click="showEditUser"></button>
+        <button type="button" class="icon icon-del ms-2" @click="showDelUser"></button>
         <!-- <button type="button" class="btn btn-primary ms-4" @click="showEditUser">Редактировать</button>
         <button type="button" class="btn btn-primary ms-2" @click="showDelUser">Удалить</button> -->
       </div>
@@ -227,25 +227,16 @@ export default {
 
 <style scoped>
 @import '@/assets/css/spinner.css';
-
-.btn-icon {
-  border: none;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-.btn-icon:hover {
-  transform: scale(1.2);
-}
-.img-delete {
-  background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
-}
-.img-import {
-  background: url('@/assets/img/item-import.png') no-repeat 50% / 90%;
-}
-.user-delete {
-  margin-top: 10px;
-  border: 1px solid #ced4da;
+.btn-wrapper {
+  top: 0;
+  position: sticky;
+  display: flex;
   padding: 10px;
+  background: #ffffff;
+  z-index: 2;
+}
+.icon-wrapper {
+  display: flex;
+  margin-left: auto;
 }
 </style>

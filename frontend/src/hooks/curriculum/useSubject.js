@@ -14,6 +14,7 @@ export function getSubjects() {
       }
     }
     await axiosAPI.get('myp/subjects', config).then((response) => {
+        console.log('Получен список предметов: ', response.data)
         subjects.value = response.data;
     });
   };

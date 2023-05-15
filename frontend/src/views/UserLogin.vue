@@ -2,7 +2,7 @@
     <div class="login">
       <div class="form-signin w-100 m-auto">
         <form @submit.prevent="login">
-          <img class="mb-3" src="@/assets/img/skreport.png" alt="" width="300">
+          <img class="mb-3" src="@/assets/img/sk_report_logo_notext.svg" alt="" width="300">
           <h1 class="h3 mb-3 fw-normal">Войти в систему</h1>
           <div v-if="incorrectAuth" class="alert alert-danger">Вы ввели неправильный логин или пароль</div>
           <div class="form-floating">

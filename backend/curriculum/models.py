@@ -83,7 +83,7 @@ class Subject(models.Model):
         verbose_name_plural = 'Предметы'
         ordering = ['group_ib', 'name_rus']
     def __str__(self):
-        return "{} ({})".format(self.name_rus, self.group_fgos.get_level_display())
+        return "{} ({}, {})".format(self.name_rus, self.group_fgos.get_level_display(), self.get_type_subject_display())
 
 class Criterion(models.Model):
     """ Критерии оценивания """

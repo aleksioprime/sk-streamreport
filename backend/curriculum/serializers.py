@@ -98,9 +98,10 @@ class LevelSerializer(serializers.ModelSerializer):
      
 class StrandSerializer(serializers.ModelSerializer):
     letter_i = serializers.CharField(source='get_letter_display')
+    criterion = CriterionSerializer(read_only=True)
     class Meta:
         model = Strand
-        fields = ['id', 'number', 'letter', 'letter_i', 'name_eng', 'name_rus']
+        fields = ['id', 'number', 'letter', 'letter_i', 'name_eng', 'name_rus', 'criterion']
 
 class AchievementLevelSerializer(serializers.ModelSerializer):
     class Meta:

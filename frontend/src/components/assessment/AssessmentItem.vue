@@ -1,10 +1,10 @@
 <template>
   <div class="sumworks-item">
-    <div class="title">
-      <div class="text">{{ sumwork.title }}</div>
+    <div class="title selected">
+      <div class="text"><h4>{{ sumwork.title }}</h4></div>
       <div class="tools">
-        <div class="btn edit" @click="$emit('editWork', sumwork)"></div>
-        <div class="btn delete" @click="$emit('deleteWork', sumwork)"></div>
+        <div class="icon icon-edit" @click="$emit('editWork', sumwork)"></div>
+        <div class="icon icon-del" @click="$emit('deleteWork', sumwork)"></div>
       </div>
     </div>
     <div class="teacher">Учитель:&nbsp;{{ sumwork.teacher.user.last_name }} {{ sumwork.teacher.user.first_name }} {{ sumwork.teacher.user.middle_name }}</div>
@@ -13,24 +13,25 @@
         <a :href="`/unit/${sumwork.unit.id}`">{{ sumwork.unit.title }}</a> 
         <span v-if="sumwork.unit.interdisciplinary" class="badge rounded-pill text-bg-primary me-1">МДП<br></span>
       </div>
-      <div>Предмет: {{ sumwork.unit.subject.name_rus }}</div>
     </div>
     
     <div class="assessment">
-      <div class="criteria">
-        <div class="criteria-title">Критерии оценки:</div>
-        <div class="criteria-item" :class="classCriteria(cr.letter)" v-for="cr in sumwork.criteria" :key="cr.id">{{ cr.letter }}</div>
-      </div>
-      <div v-if="sumwork.groups.length">
+      <div v-if="sumwork.groups.length" class="assessment-groups">
         <div class="group-title">Журналы оценок:</div>
-        <div class="groups">
+        <div class="group-wrapper">
           <div class="group" v-for="gr in sumwork.groups" :key="gr.id" @click="$router.push(`/assessment/sumwork/${gr.id}`)">
             <div class="group-name">{{ gr.group.class_year.year_rus }}{{ gr.group.letter }} класс</div>
             <div class="group-date">{{ new Date(gr.date).toLocaleDateString() }}</div>
           </div>
         </div>
       </div>
-      <div v-else>Не выбраны классы</div>
+      <div v-else class="assessment-groups">Не выбраны классы</div>
+      <div class="assessment-criteria">
+        <div class="criteria-title">Критерии оценки:</div>
+        <div class="criteria-wrapper">
+          <div class="criteria-item" :class="classCriteria(cr.letter)" v-for="cr in sumwork.criteria" :key="cr.id">{{ cr.letter }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -51,32 +52,35 @@ export default {
   methods: {
     classCriteria(letter) {
       if (letter.toLowerCase() == 'a') {
-        return 'criteria-a'
+        return 'criterion-a'
       } else if (letter.toLowerCase() == 'b') {
-        return 'criteria-b'
+        return 'criterion-b'
       } else if (letter.toLowerCase() == 'c') {
-        return 'criteria-c'
+        return 'criterion-c'
       } else {
-        return 'criteria-d'
+        return 'criterion-d'
       }
     },
   }
 }
 </script>
 
-<style>
+<style scoped>
 .sumworks-item {
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid #c4c4c4;
+  border: 1px solid var(--bs-secondary);
   border-radius: 10px;
 }
 .sumworks-item .title {
   display: flex;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
-.sumworks-item .title .text {
-  color: #1e7979;
-  font-weight: 700;
+.sumworks-item .title .text h4 {
+  margin-bottom: 0;
+  text-transform: uppercase;
 }
 .sumworks-item .tools {
   display: flex;
@@ -88,13 +92,7 @@ export default {
   min-height: 25px;
   cursor: pointer;
 }
-.btn.edit {
-  background: url('@/assets/img/item-edit.png') no-repeat 50% / 90%;
-  margin-right: 5px;
-}
-.btn.delete {
-  background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
-}
+
 .sumworks-item .unit {
   margin-bottom: 10px;
 }
@@ -102,47 +100,47 @@ export default {
 .sumworks-item .assessment {
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
 }
-.sumworks-item .criteria {
+.sumworks-item .assessment-criteria {
+  flex-basis: 40%;
+}
+.sumworks-item .assessment-groups {
+  flex-basis: 60%;
+}
+.sumworks-item .criteria-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  width: 170px;
-}
-.sumworks-item .criteria-item {
-  margin-right: 10px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: 700;
+  justify-content: flex-start;
+  row-gap: 5px;
+  column-gap: 5px;
 }
 .sumworks-item .criteria-title {
-  margin-right: 5px;
   margin-bottom: 10px;
-  flex-grow: 1;
-  flex-basis: 100%;
 }
-.sumworks-item .assessment .groups {
+.criteria-item {
+  margin-top: 0;
+}
+.sumworks-item .assessment .group-wrapper {
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 5px;
+  row-gap: 5px;
+  column-gap: 5px;
 }
 .sumworks-item .assessment .group {
-  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
   padding: 5px 15px;
   text-align: center;
+  border: 1px solid var(--my-focus);
   border-radius: 10px;
   cursor: pointer;
 }
-.sumworks-item .assessment .group:not(:last-of-type) {
-  margin-right: 10px
-}
 .sumworks-item .assessment .group:hover {
-  background: #c4c4c4;
-  color: #ffffff;
+  transition: 0.5s;
+  background: var(--my-focus);
+  color: #000;
 }
 .sumworks-item .group-title {
   margin-bottom: 10px;
-  flex-grow: 1;
-  flex-basis: 100%;
 }
 .sumworks-item .group-name {
   font-weight: 700;
@@ -156,33 +154,7 @@ export default {
 }
 
 @media screen and (max-width: 540px) {
-  .sumworks-item .assessment .groups {
-    border: none;
-    margin-top: 5px;
-    padding: 0;
-  }
-  .sumworks-item .assessment {
-    flex-direction: column;
-  }
+  
 }
 
-.criteria-a {
-  color: #54C3DA;
-  border: 1px solid #54C3DA;
-}
-
-.criteria-b {
-  color: #a59a50;
-  border: 1px solid #a59a50;
-}
-
-.criteria-c {
-  color: #7AC11A;
-  border: 1px solid #7AC11A;
-}
-
-.criteria-d {
-  color: #CA4348;
-  border: 1px solid #CA4348;
-}
 </style>

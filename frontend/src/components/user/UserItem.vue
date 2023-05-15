@@ -1,11 +1,12 @@
 <template>
-  <div class="d-flex py-1 px-1 user-item" @click="$emit('select', user)">
+  <div class="user-item" @click="$emit('select', user)">
     <div class="user-photo me-3">
-      <img :src='user.photo ? user.photo : require("@/assets/img/user.png")' alt="" width="50">
+      <img :src='user.photo ? user.photo : require("@/assets/img/teacher.svg")' alt="" width="50">
       <div v-if="user.teacher && user.teacher.admin" class="icon-admin"></div>
     </div>
     <div class="d-flex flex-column">
-      <div class="user-name">{{ user.last_name }} {{ user.first_name }} {{ user.middle_name }}</div>
+      <div class="user-name">
+        <h4>{{ user.last_name }} {{ user.first_name }} {{ user.middle_name }}</h4></div>
       <div>Пользователь: {{ user.username }} ({{ user.email }})</div>
       <div v-if="user.teacher">{{ user.teacher.position }}</div>
     </div>
@@ -36,9 +37,7 @@ export default {
 <style>
 .user-item {
   cursor: pointer;
-}
-.user-item:hover {
-  background-color: azure;
+  display: flex;
 }
 .user-name {
   text-transform: uppercase;
@@ -47,13 +46,5 @@ export default {
 }
 .user-photo {
   position: relative;
-}
-.icon-admin {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 10px;
-  height: 10px;
-  background: red;
 }
 </style>

@@ -1,12 +1,13 @@
 <template>
   <div>
     <base-header>
+      <template v-slot:link><a href="#" @click="$router.push(`/assessment/group`)" >Вернуться к выбору класса</a></template>
       <template v-slot:header>Репорты учителя</template>
     </base-header>
     <!-- <report-filter @updateFetch="updateFetch"/> -->
     <div class="col-md mb-2">
       <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
-      <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> 
+      <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> ({{ getWordStudent(currentGroup.count) }}) 
       <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}</div>
       <div>Предмет: <b>{{ currentSubject.name_rus }} ({{ currentSubject.group_ib.name_eng }})</b></div>
     </div>
@@ -80,6 +81,14 @@ export default {
     }
   },
   methods: {
+    getWordStudent(count) {
+      let value = Math.abs(count) % 100;
+      let number = value % 10;
+      if (value > 10 && value < 20) return `${count} студентов`;
+      if (number > 1 && number < 5) return `${count} студента`;
+      if (number == 1) return `${count} студент`;
+      return `${count} студентов`;
+    },
     updateFetch(data) {
       console.log('Обновление данных: ', data)
       this.currentFetchData = data;

@@ -18,9 +18,9 @@
         <div v-if="flagAssess.delete" >
           <div class="mb-2">Вы действительно хотите удалить эту итоговую работу?</div>
           <div class="border p-2">
-            <b>{{ currentAssess.title }}</b><br>
+            <h4>{{ currentAssess.title }}</h4>
             <div>{{ currentAssess.unit.title }}</div>
-            <div v-for="gr in currentAssess.groups" :key="gr.id">{{ gr.group.class_year }}{{ gr.group.letter }} класс - {{ new Date(gr.date).toLocaleDateString() }}</div>
+            <div v-for="gr in currentAssess.groups" :key="gr.id">{{ gr.group.class_year.year_rus }}{{ gr.group.letter }} класс - {{ new Date(gr.date).toLocaleDateString() }}</div>
           </div>
         </div>
       </template>
@@ -29,10 +29,10 @@
     <!-- Вывод итоговых работ учителя, сгруппированных по предметам -->
     <div v-if="Object.keys(groupedArrayData(summativeWorks, ['subject', 'id'])).length !== 0" class="sumworks">
       <div v-for="(worksBySubject, subject) in groupedArrayData(summativeWorks, ['subject', 'id'])" :key="subject">
-        <div class="sumworks-subject" v-if="getSubject(subject)">{{ getSubject(subject).name_rus }}</div>
-        <div v-for="(worksByYear, year) in groupedArrayData(worksBySubject, ['unit', 'class_year', 'year_rus'])" :key="year" class="sumworks-block">
+        <div class="sumworks-subject" v-if="getSubject(subject)"><h3>{{ getSubject(subject).name_rus }}</h3></div>
+        <div v-for="(worksByYear, year) in groupedArrayData(worksBySubject, ['unit', 'class_year', 'year_rus'])" :key="year" class="sumworks-block area">
           <div class="sumworks-year">
-            <div class="title" v-if="year">{{ year }} классы</div>
+            <div class="title" v-if="year"><h4>{{ year }} классы</h4></div>
           </div>
           <div class="sumworks-grouped">
             <assessment-item v-for="sumwork in worksByYear" :key="sumwork.id" :sumwork="sumwork" @editWork="showSumWorkModalEdit(sumwork.id)" @deleteWork="showSumWorkModalDelete(sumwork.id)"/>
@@ -227,15 +227,12 @@ export default {
   padding: 10px;
 }
 .sumworks-block {
-  border: 2px solid #c4c4c4;
-  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
-  border-radius: 5px;
   margin-top: 10px;
 }
 .sumworks-subject {
+  margin-top: 10px;
   font-size: 2em;
   padding-bottom: 5px;
-  border-bottom: 1px solid #ffbf40;
 }
 .sumworks-subject .title {
   font-weight: 700;
@@ -244,36 +241,17 @@ export default {
 .sumworks-year {
   display: flex;
   align-items: center;
-  background-color: #c4c4c4;
-  padding: 10px;
-  cursor: pointer;
-}
-.sumworks-year:hover {
-  transition: 0.6s;
-  background-color: #a3a3a3;
-}
-.sumworks-block:hover {
-  transition: 1s;
-  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.5);
-}
-.sumworks-year .title{
-  color: #fff;
-  font-weight: 700;
-  font-size: 1.5rem;
-}
-.sumworks-year .sumassess {
-  margin-left: auto;
-  padding: 10px;
-  color: #000000;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 700;
-}
-.sumworks-year .sumassess:hover {
-  background-color: #fad385;
-}
-.sumworks-grouped {
   padding: 10px;
 }
 
+.sumworks-year .title{
+  color: var(--bs-secondary);
+  font-weight: 700;
+}
+.sumworks-empty {
+  display: flex;
+  height: calc(100vh - 500px);
+  align-items: center;
+  justify-content: center;
+}
 </style>

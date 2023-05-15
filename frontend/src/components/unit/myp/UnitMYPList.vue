@@ -2,15 +2,15 @@
   <div v-if="units.length > 0" ref="userlist">
     <!-- Список юнитов -->
     <transition-group name="unit-list">
-      <div v-for="unit in units" :key="unit.id" class="unit-item" :class="{ 'unit-item-interdisciplinary' : unit.interdisciplinary }">
+      <div v-for="unit in units" :key="unit.id" class="unit-item area" :class="{ 'unit-item-interdisciplinary' : unit.interdisciplinary }">
         <div v-if="unit.interdisciplinary" class="unit-interdisciplinary" @click="$router.push(`/myp/idu/${unit.interdisciplinary.id}`)">
           <b>{{ unit.interdisciplinary.title }}</b>
           (<span v-for="(un, index) in unit.interdisciplinary.unitplan_myp" :key="un.id">
             {{ un.subject.name_rus }}<span v-if="++index !== unit.interdisciplinary.unitplan_myp.length">,&nbsp;</span>
           </span>)
         </div>
-        <div class="unit-header" @click="$router.push(`/myp/${unit.id}`)">
-          <div class="unit-title">{{ unit.title }}</div>
+        <div class="unit-header selected" @click="$router.push(`/myp/${unit.id}`)">
+          <div class="unit-title"><h4>{{ unit.title }}</h4></div>
           <small v-if="unit.subject && unit.class_year">
             {{ unit.subject.name_rus }}, {{ unit.class_year.year_ib }} {{ unit.class_year.program }} ({{ getHours(unit.hours) }})
           </small>
@@ -54,7 +54,7 @@
       </div>
     </transition-group>
     <!-- Нумерация страниц -->
-    <base-pagination :total="totalPages" :current="currentPage" :range="2" @change="nextPage" />
+    <base-pagination :total="totalPages" :current="currentPage" :range="4" @change="nextPage" />
   </div>
   <div v-else>
     Данных нет
@@ -100,13 +100,13 @@ export default {
     hasClassYear(unit) { return this.containsKey(unit, 'class_year') },
     classCriteria(letter) {
       if (letter.toLowerCase() == 'a') {
-        return 'criteria-a'
+        return 'criterion-a'
       } else if (letter.toLowerCase() == 'b') {
-        return 'criteria-b'
+        return 'criterion-b'
       } else if (letter.toLowerCase() == 'c') {
-        return 'criteria-c'
+        return 'criterion-c'
       } else {
-        return 'criteria-d'
+        return 'criterion-d'
       }
     },
     getHours(hours) {
@@ -129,30 +129,28 @@ export default {
   
 <style scoped>
 .unit-interdisciplinary {
-  background: #267272;
+  border: 1px solid var(--my-gymnasium);
+  background: #fff;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 10px;
   margin-bottom: 10px;
-  color: #fff;
+  color: var(--my-gymnasium);
   margin-top: -40px;
+  text-transform: uppercase;
 }
 
 .unit-interdisciplinary:hover {
-  background: #408181;
+  transition: 0.5s;
+  background: var(--my-gymnasium);
+  color: #fff;
   cursor: pointer;
 }
 .unit-item {
-  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
   border-radius: 10px;
   margin: 20px 0;
-  padding: 15px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-}
-
-.unit-item:hover {
-  transition: 0.5s;
-  box-shadow: 0px 5px 10px 2px rgba(117, 224, 158, 0.904);
 }
 
 .unit-item-interdisciplinary  {
@@ -160,23 +158,16 @@ export default {
 }
 
 .unit-header {
-  margin-bottom: 5px;
-  background: #f1f1f1;
-  padding: 5px;
-  border-radius: 5px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 .unit-header:hover {
-  transition: 2s;
-  background: #e4e3e3;
   cursor: pointer;
 }
 
 .unit-title {
   font-weight: 700;
-  font-size: 1.2em;
-}
-
-.unit-title {
   text-transform: uppercase;
 }
 
@@ -221,6 +212,7 @@ export default {
 }
 
 .criteria-item {
+  margin-top: 0;
   border-radius: 5px;
   padding: 5px;
   width: 40px;
@@ -228,25 +220,6 @@ export default {
   font-weight: 700;
 }
 
-.criteria-a {
-  color: #54C3DA;
-  border: 1px solid #54C3DA;
-}
-
-.criteria-b {
-  color: #a59a50;
-  border: 1px solid #a59a50;
-}
-
-.criteria-c {
-  color: #7AC11A;
-  border: 1px solid #7AC11A;
-}
-
-.criteria-d {
-  color: #CA4348;
-  border: 1px solid #CA4348;
-}
 .unit-atl {
   border: 1px solid #dee2e6;
   border-left: none;
@@ -262,6 +235,7 @@ export default {
 .unit-authors {
   margin-left: auto;
   font-style: italic;
+  padding-left: 10px;
 }
 .unit-progress {
   display: flex;

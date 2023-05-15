@@ -4,14 +4,14 @@
       <template v-slot:header>Cписок сотрудников</template>
     </base-header>
     <!-- Кнопки добавления, редактирования, удаления пользователей -->
-    <div class="btn-wrapper sticky-top">
-      <button class="btn btn-primary my-3" @click="showAddUser">Добавить сотрудника</button>
-      <button class="btn btn-primary my-3 ms-2" @click="showImportUser" v-if="authUser.is_staff">Импорт</button>
-      <div v-if="currentUser.id && !flagUser.add" class="my-3 d-flex align-items-center ms-auto">
-        <button type="button" class="btn-icon img-photo ms-2" @click="showEditPhoto"></button>
-        <button type="button" class="btn-icon img-pass ms-2" @click="showEditPass"></button>
-        <button type="button" class="btn-icon img-edit ms-4" @click="showEditUser"></button>
-        <button type="button" class="btn-icon img-del ms-2" @click="showDelUser"></button>
+    <div class="btn-wrapper">
+      <button class="btn btn-primary" @click="showAddUser">Добавить сотрудника</button>
+      <button class="btn btn-primary" @click="showImportUser" v-if="authUser.is_staff">Импорт</button>
+      <div v-if="currentUser.id && !flagUser.add" class="icon-wrapper">
+        <!-- <button type="button" class="icon icon-photo ms-2" @click="showEditPhoto"></button>
+        <button type="button" class="icon icon-pass ms-2" @click="showEditPass"></button> -->
+        <button type="button" class="icon icon-edit ms-4" @click="showEditUser"></button>
+        <button type="button" class="icon icon-del ms-2" @click="showDelUser"></button>
         <!-- <button type="button" class="btn btn-primary ms-4" @click="showEditUser">Редактировать</button>
         <button type="button" class="btn btn-primary ms-2" @click="showDelUser">Удалить</button> -->
       </div>
@@ -221,42 +221,17 @@ export default {
 
 <style scoped>
 @import '@/assets/css/spinner.css';
-.loader {
-  display: flex;
-  height: calc(100vh - 200px);
-  align-items: center;
-  justify-content: center;
-}
+
 .btn-wrapper {
+  top: 0;
+  position: sticky;
   display: flex;
-  padding: 5px 0;
-  background: #ffffff;
-}
-.btn-icon {
-  border: none;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-}
-.btn-icon:hover {
-  transition: all 0.2s;
-  transform: scale(1.3);
-}
-.img-photo {
-  background: url('@/assets/img/item-photo.png') no-repeat 50% / 90%;
-}
-.img-pass {
-  background: url('@/assets/img/item-password.png') no-repeat 50% / 90%;
-}
-.img-edit {
-  background: url('@/assets/img/item-edit.png') no-repeat 50% / 90%;
-}
-.img-del {
-  background: url('@/assets/img/item-delete.png') no-repeat 50% / 90%;
-}
-.user-delete {
-  margin-top: 10px;
-  border: 1px solid #ced4da;
   padding: 10px;
+  background: #ffffff;
+  z-index: 2;
+}
+.icon-wrapper {
+  display: flex;
+  margin-left: auto;
 }
 </style>
