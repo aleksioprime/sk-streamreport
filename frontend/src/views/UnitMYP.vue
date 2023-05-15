@@ -30,7 +30,7 @@
     <!-- Инструменты фильтрации юнитов -->
     <unit-filter ref="unitFilter" :showAllUnits="showAllUnits" :user="authUser" @updateFetch="getFilters"/>
     <!-- Список юнитов -->
-    <div v-if="!isUnitLoading" class="mt-3">
+    <div v-if="!isUnitLoading || !firstLoading" class="mt-3">
       <unit-myp-list :units="unitsMYP" @changePage="changePage" :totalPages="totalPages" :currentPage="currentPage" />
     </div>
     <div v-else class="loader">
@@ -108,7 +108,8 @@ export default {
         department: null,
         subject: null,
         years: []
-      }
+      },
+      firstLoading: true,
     }
   },
   methods: {
@@ -210,6 +211,8 @@ export default {
     this.modalUnitIDU = new Modal('#modalUnitIDU', { backdrop: 'static' });
     if (this.isAdmin) {
       this.showAllUnits = true;
+    } else {
+      this.$refs.unitFilter.fetchAllDataForUnits();
     }
   },
 }

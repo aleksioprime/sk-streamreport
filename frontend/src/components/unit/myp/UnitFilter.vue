@@ -139,7 +139,6 @@ export default {
     }
   },
   mounted() {
-    this.fetchAllDataForUnits();
   },
   watch: {
     showAllUnits() {
