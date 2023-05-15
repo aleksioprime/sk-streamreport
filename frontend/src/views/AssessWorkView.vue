@@ -10,7 +10,7 @@
     </modal-class>
     <div class="info">
       <div><h4>{{ summativeWorkGroup.work.title }}</h4></div>
-      <div v-if="summativeWorkGroup.work.unit">Юнит: <a :href="`/unit/${summativeWorkGroup.work.unit.id}`">{{ summativeWorkGroup.work.unit.title }}</a></div>
+      <div v-if="summativeWorkGroup.work.unit">Юнит: <a href="#" @click="$router.push(`/myp/${summativeWorkGroup.work.unit.id}`)">{{ summativeWorkGroup.work.unit.title }}</a></div>
       <div v-if="summativeWorkGroup.work.groups">{{ summativeWorkGroup.group.class_year.year_rus }}{{ summativeWorkGroup.group.letter }} класс (Всего: {{ getWordStudent(summativeWorkGroup.group.count) }})</div>
     </div>
     <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>

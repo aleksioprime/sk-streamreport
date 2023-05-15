@@ -5,8 +5,8 @@
         <div class="block-item">
           <slot name="show" :data="item"></slot>
           <div class="field-btn-wrapper" v-if="!createMode && !editingItemID && !deletingItemID">
-            <button class="btn-icon img-edit" @click="showEditForm(item.id)"></button>
-            <button class="btn-icon img-delete" @click="showDeleteForm(item.id)"></button>
+            <button class="icon icon-edit" @click="showEditForm(item.id)"></button>
+            <button class="icon icon-del" @click="showDeleteForm(item.id)"></button>
           </div>
         </div>
         <transition name="slide-fade">

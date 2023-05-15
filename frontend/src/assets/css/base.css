@@ -124,6 +124,9 @@ a {
 .icon-cancel {
   background: url('@/assets/img/cancel.svg') no-repeat 50% / 95%;
 }
+.icon-export-pdf {
+  background: url('@/assets/img/export_pdf.svg') no-repeat 50% / 95%;
+}
 
 /* Критерии */
 

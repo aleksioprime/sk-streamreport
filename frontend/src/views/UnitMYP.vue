@@ -28,7 +28,7 @@
       </div>
     </div>
     <!-- Инструменты фильтрации юнитов -->
-    <unit-filter :showAllUnits="showAllUnits" :user="authUser" @updateFetch="getFilters"/>
+    <unit-filter ref="unitFilter" :showAllUnits="showAllUnits" :user="authUser" @updateFetch="getFilters"/>
     <!-- Список юнитов -->
     <div v-if="!isUnitLoading" class="mt-3">
       <unit-myp-list :units="unitsMYP" @changePage="changePage" :totalPages="totalPages" :currentPage="currentPage" />
@@ -150,6 +150,7 @@ export default {
       if (this.validFormUnit) {
         console.log("Запрос на создание юнита: ", this.editedUnit);
         this.fetchCreateUnitMYP(this.editedUnit).then(() => {
+          this.$refs.unitFilter.fetchAllDataForUnits();
           this.updateFetchUnitMYP();
           this.hideUnitModal();
         })
@@ -190,7 +191,8 @@ export default {
       if (this.validFormUnitIDU) {
         console.log("Запрос на создание юнита: ", this.editedUnitIDU);
         this.fetchCreateInterdisciplinaryUnit(this.editedUnitIDU).finally(() => {
-          this.fetchGetUnitsMYP({ teacher: this.authUser.teacher.id, page: this.currentPage, limit: this.limit });
+          this.$refs.unitFilter.fetchAllDataForUnits();
+          this.updateFetchUnitMYP();
           this.hideUnitIDUModal();
         })
       } else {
@@ -201,11 +203,6 @@ export default {
   computed: {
     // подключение переменной авторизированного пользователя из store
     ...mapGetters(['authUser', 'isAdmin']),
-  },
-  watch: {
-    showAllUnits() {
-
-    }
   },
   mounted() {
     // Определение модального окна для создания юнита

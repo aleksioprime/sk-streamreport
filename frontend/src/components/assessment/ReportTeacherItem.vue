@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="assess-title selected" data-bs-toggle="collapse" :href="`#collapse-assessment-${student.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-assessment-${student.id}`">
-      Результаты студента за <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">{{ asper.number }} {{ asper.type }}<span v-if="++index != period.assessment_periods.length">, </span> </span></div>
+      Результаты студента за <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">{{ asper.number }} {{ asper.type }}<span v-if="++index != period.assessment_periods.length">, </span></span>.</div>
     <div :id="`collapse-assessment-${student.id}`" class="collapse">
       <div class="student-assessment" >
         <div class="assess-wrapper">
@@ -119,14 +119,14 @@
       :criteria="{ criterion_a: criterionA, criterion_b: criterionB, criterion_c: criterionC, criterion_d: criterionD }" @save="fetchSaveReport"/>
     </div>
     <div class="student-events" v-if="student.teacher_report.text">
-      <div class="events-title" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
+      <div class="events-title selected" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
       aria-expanded="false" :aria-controls="`collapse-events-${student.id}`">Участие в мероприятиях</div>
       <report-field-blocks class="collapse" :id="`collapse-events-${student.id}`" :fieldData="student.teacher_report.events" 
       :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport">
         <!-- Слот для блоков показа записей -->
         <template v-slot:show="field">
           <div class="blocks-wrapper">
-            <div>{{ field.data.title }}</div>
+            <div><b>{{ field.data.title }}</b></div>
             <div>Тип: {{ field.data.type_name }}. Уровень: {{ field.data.level_name }}</div>
             <div>Результаты: {{ field.data.result }}</div>
           </div>
@@ -401,9 +401,7 @@ export default {
 }
 .events-title {
   margin-top: 10px;
-  border-bottom: 0.5px solid #a7a7a78a;
-}
-.events-title:hover {
-  font-weight: 700;
+  border-radius: 10px;
+  padding: 10px;
 }
 </style>

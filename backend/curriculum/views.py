@@ -106,13 +106,13 @@ class ClassYearViewSet(viewsets.ModelViewSet):
         department = self.request.query_params.getlist("department", None)
         teacher = self.request.query_params.get("teacher", None)
         if program:
-             class_year = class_year.filter(program=program)
+            class_year = class_year.filter(program=program)
+        if teacher:
+            class_year = class_year.filter(unitplan_myp__authors__in=[teacher]).distinct()
         if subject:
             class_year = class_year.filter(unitplan_myp__subject=subject).distinct()
         if department:
             class_year = class_year.filter(unitplan_myp__subject__department__in=department).distinct()
-        if teacher:
-            class_year = class_year.filter(unitplan_myp__authors__in=[teacher]).distinct()
         return class_year
 
 class LevelViewSet(viewsets.ModelViewSet):

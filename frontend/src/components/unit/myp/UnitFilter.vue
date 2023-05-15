@@ -106,16 +106,12 @@ export default {
         });
         }
       } else {
-        this.fetchGetClassYears({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
+        this.fetchGetClassYears({ teacher: this.user.teacher.id, subject: this.querySubject, program: 'MYP' }).finally(() => {
           this.handleQuery();
         });
       }
-    }
-  },
-  mounted() {
-  },
-  watch: {
-    showAllUnits() {
+    },
+    fetchAllDataForUnits() {
       if (this.showAllUnits) {
         console.log('Включён режим администратора');
         this.fetchGetDepartments().finally(() => {
@@ -141,6 +137,14 @@ export default {
         });
       }
     }
+  },
+  mounted() {
+    this.fetchAllDataForUnits();
+  },
+  watch: {
+    showAllUnits() {
+      this.fetchAllDataForUnits();
+    }
   }
 }
 </script>
@@ -153,7 +157,6 @@ export default {
 .block-departments {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   align-items: stretch;
   gap: 5px;
   margin-bottom: 10px;
@@ -161,11 +164,15 @@ export default {
 .department {
 	flex-basis: 10%;
   flex-grow: 1;
+  min-width: 50px;
 }
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
   .department {
     flex-basis: 18%;
   }
+  /* .department:last-of-type {
+    flex-grow: 0;
+  } */
 }
 .department img {
   margin-bottom: 10px;

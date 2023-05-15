@@ -7,13 +7,13 @@
       <div class="student-info">
         <div class="student-name">{{ student.user.last_name }} {{ student.user.first_name }}</div>
       </div>
-      <div class="ms-auto">Экспорт в PDF</div>
+      <div class="ms-auto"><div class="icon icon-export-pdf"></div></div>
     </div>
     <div class="student-report">
       <report-field-text id="student-report" :student="student" :dataField="student.mentor_report" @save="fetchSaveReport"/>
     </div>
-    <div class="student-events" v-if="student.events.length || student.mentor_report.text">
-      <div class="events-title" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
+    <div class="student-events">
+      <div class="events-title selected" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
       aria-expanded="false" :aria-controls="`collapse-events-${student.id}`">Участие в мероприятиях</div>
       <div class="events-wrapper collapse" :id="`collapse-events-${student.id}`">
         <div class="events-teacher" v-if="student.events.length">
@@ -24,11 +24,14 @@
             <div v-if="event.teacher_report">{{ event.teacher_report.subject.name_rus }} ({{ event.teacher_report.author.user.last_name }} {{ event.teacher_report.author.user.first_name }} {{ event.teacher_report.author.user.middle_name }})</div>
           </div>
         </div>
-        <report-field-blocks :fieldData="student.mentor_report.events" :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveEvent"  v-if="student.mentor_report.text">
+        <div v-else class="events-no">
+          Данных о мероприятиях от учителей-предметников пока нет
+        </div>
+        <report-field-blocks :fieldData="student.mentor_report.events" :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport"  v-if="student.mentor_report.text">
           <!-- Слот для блоков показа записей -->
           <template v-slot:show="field">
             <div class="blocks-wrapper">
-              <div>{{ field.data.title }}</div>
+              <div><b>{{ field.data.title }}</b></div>
               <div>Тип: {{ field.data.type_name }}. Уровень: {{ field.data.level_name }}</div>
               <div>Результаты: {{ field.data.result }}</div>
             </div>
@@ -265,14 +268,8 @@ export default {
 }
 .events-title {
   margin-top: 10px;
-  border: 0.5px solid #a7a7a78a;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 10px;
-}
-.events-title:hover {
-  background: #d8d8d88a;
-  border: 0.5px solid #fff;
-  font-weight: inherit;
 }
 .event-item {
   padding: 10px;
@@ -281,6 +278,9 @@ export default {
 }
 .events-teacher-title {
   margin: 10px 0;
+}
+.events-no {
+  padding: 10px;
 }
 .subject-reports-title {
   margin: 10px 0;
@@ -319,6 +319,13 @@ export default {
   border: 1px solid #a7a7a78a;
   padding: 5px 10px;
   margin-left: 10px;
+  min-height: 40px;
+  border-radius: 5px;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
 }
 .subject-report {
   margin-top: 10px;

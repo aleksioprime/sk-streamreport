@@ -29,7 +29,7 @@
             </a>
             <div class="dropdown-menu">
               <router-link to="/myp" class="dropdown-item">Средняя школа</router-link>
-              <router-link to="/dp" class="dropdown-item">Старшая школа</router-link>
+              <!-- <router-link to="/dp" class="dropdown-item">Старшая школа</router-link> -->
             </div>
           </li>
           <li class="nav-item dropdown">

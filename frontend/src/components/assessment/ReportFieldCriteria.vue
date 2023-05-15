@@ -9,16 +9,20 @@
         <div v-if="!editMode">
           <div class="criteria-wrapper">
             <div class="criteria-item">
-              <div for="criteria-a">{{ criteria.criterion_a.letter }}. {{ criteria.criterion_a.name_eng }}: <b>{{ this.report.criterion_a || '-' }}</b></div>
+              <div class="criteria-a">{{ criteria.criterion_a.letter }}. {{ criteria.criterion_a.name_eng }}</div>
+              <div class="criteria-value">{{ this.report.criterion_a || '-' }}</div>
             </div>
             <div class="criteria-item">
-              <div for="criteria-b">{{ criteria.criterion_b.letter }}. {{ criteria.criterion_b.name_eng }}: <b>{{ this.report.criterion_b || '-' }}</b></div>
+              <div class="criteria-b">{{ criteria.criterion_b.letter }}. {{ criteria.criterion_b.name_eng }}</div>
+              <div class="criteria-value">{{ this.report.criterion_b || '-' }}</div>
             </div>
             <div class="criteria-item">
-              <div for="criteria-c">{{ criteria.criterion_c.letter }}. {{ criteria.criterion_c.name_eng }}: <b>{{ this.report.criterion_c || '-' }}</b></div>
+              <div class="criteria-c">{{ criteria.criterion_c.letter }}. {{ criteria.criterion_c.name_eng }}</div>
+              <div class="criteria-value">{{ this.report.criterion_c || '-' }}</div>
             </div>
             <div class="criteria-item">
-              <div for="criteria-d">{{ criteria.criterion_d.letter }}. {{ criteria.criterion_d.name_eng }}: <b>{{ this.report.criterion_d || '-' }}</b></div>
+              <div class="criteria-d">{{ criteria.criterion_d.letter }}. {{ criteria.criterion_d.name_eng }}</div>
+              <div class="criteria-value">{{ this.report.criterion_d || '-' }}</div>
             </div>
           </div>
         </div>
@@ -108,9 +112,9 @@ export default {
 }
 .criteria-item {
   margin-top: 10px;
+  flex-basis: 23%;
   display: flex;
   align-items: center;
-  flex-basis: 23%;
 }
 .criteria-item input {
   width: 70px;
@@ -118,6 +122,18 @@ export default {
 .criteria-item label {
   width: 100%;
   margin-right: 10px;
+}
+.criteria-value {
+  border: 1px solid #a7a7a78a;
+  padding: 5px 10px;
+  margin-left: auto;
+  min-height: 40px;
+  border-radius: 5px;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
 }
 @media screen and (max-width: 992px) {
   .criteria-item {
