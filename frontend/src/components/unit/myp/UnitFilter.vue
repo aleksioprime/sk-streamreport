@@ -88,7 +88,7 @@ export default {
           this.changeSubject();
         });
       } else {
-        this.fetchGetSubjects({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
+        this.fetchGetSubjects({ author: this.user.teacher.id, program: 'MYP' }).finally(() => {
           this.changeSubject();
         }); 
       }
@@ -106,7 +106,7 @@ export default {
         });
         }
       } else {
-        this.fetchGetClassYears({ teacher: this.user.teacher.id, subject: this.querySubject, program: 'MYP' }).finally(() => {
+        this.fetchGetClassYears({ author: this.user.teacher.id, subject: this.querySubject, program: 'MYP' }).finally(() => {
           this.handleQuery();
         });
       }
@@ -130,8 +130,8 @@ export default {
         this.queryDepartment = null;
         this.querySubject = null;
         this.queryYears = [];
-        this.fetchGetSubjects({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
-          this.fetchGetClassYears({ teacher: this.user.teacher.id, program: 'MYP' }).finally(() => {
+        this.fetchGetSubjects({ author: this.user.teacher.id, program: 'MYP' }).finally(() => {
+          this.fetchGetClassYears({ author: this.user.teacher.id, program: 'MYP' }).finally(() => {
             this.handleQuery();
           });
         });

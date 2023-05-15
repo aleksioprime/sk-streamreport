@@ -3,11 +3,12 @@ from rest_framework import viewsets
 from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassGroupExtraSerializer,  StudyPeriodSerializer, SummativeWorkSerializer, \
     WorkAssessmentSerializer, WorkCriteriaMarkSerializer, ProfileStudentSerializer, WorkGroupDateItemSerializer, \
     PeriodAssessmentSerializer, StudentWorkSerializer, ReportPeriodSerializer, StudentReportTeacherSerializer, ReportTeacherSerializer, \
-    EventTypeSerializer, EventParticipationSerializer, StudentReportMentorSerializer, ReportMentorSerializer, ClassGroupStudentsSerializer
+    EventTypeSerializer, EventParticipationSerializer, StudentReportMentorSerializer, ReportMentorSerializer, ClassGroupStudentsSerializer, \
+    WorkLoadSerializer
 from curriculum.serializers import ClassYearSerializer, SubjectSerializer      
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
-    ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor
+    ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad
 from member.models import ProfileTeacher, ProfileStudent, User
 from curriculum.models import ClassYear, Subject
 
@@ -34,6 +35,7 @@ class ClassGroupViewSet(viewsets.ModelViewSet):
         class_year = self.request.query_params.get("class_year", None)
         study_year = self.request.query_params.get("study_year", None)
         program = self.request.query_params.get("program", None)
+        teacher = self.request.query_params.get("teacher", None)
         groups = ClassGroup.objects.all()
         if class_year:
             groups = groups.filter(class_year=class_year)
@@ -41,6 +43,8 @@ class ClassGroupViewSet(viewsets.ModelViewSet):
             groups = groups.filter(study_year=study_year)
         if program:
             groups = groups.filter(class_year__program=program)
+        if teacher:
+            groups = groups.filter(workload__teacher=teacher)
         return groups
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
@@ -53,6 +57,7 @@ class ClassGroupStudentsViewSet(viewsets.ModelViewSet):
         class_year = self.request.query_params.get("class_year", None)
         study_year = self.request.query_params.get("study_year", None)
         program = self.request.query_params.get("program", None)
+        teacher = self.request.query_params.get("teacher", None)
         groups = ClassGroup.objects.all()
         if class_year:
             groups = groups.filter(class_year=class_year)
@@ -60,6 +65,8 @@ class ClassGroupStudentsViewSet(viewsets.ModelViewSet):
             groups = groups.filter(study_year=study_year)
         if program:
             groups = groups.filter(class_year__program=program)
+        if teacher:
+            groups = groups.filter(workload__teacher=teacher)
         return groups
 
 # Набор CRUD-методов для работы с моделью Студенты
@@ -362,3 +369,16 @@ class EventParticipationViewSet(viewsets.ModelViewSet):
         if student:
             event_participation = event_participation.filter(teacher_reports__student__in=[student], mentor_reports__student__in=[student])
         return event_participation
+    
+class WorkLoadViewSet(viewsets.ModelViewSet):
+    queryset = WorkLoad.objects.all()
+    serializer_class = WorkLoadSerializer
+    def get_queryset(self):
+        workload = WorkLoad.objects.all()
+        teacher = self.request.query_params.get("teacher", None)
+        study_year = self.request.query_params.get("study_year", None)
+        if teacher:
+            workload = workload.filter(teacher=teacher)
+        if study_year:
+            workload = workload.filter(study_year=study_year)
+        return workload

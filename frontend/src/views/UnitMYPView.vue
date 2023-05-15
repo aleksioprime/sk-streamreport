@@ -562,7 +562,7 @@ export default {
     unitFieldEdit(field) {
       switch(field) {
         case 'subject':
-          this.fetchGetSubjects({ level: 'ooo', type: 'base' });
+          this.fetchGetSubjects({ program: 'MYP' });
           break;
         case 'level':
           this.fetchGetLevels({ subject: this.unitMYP.subject.id})

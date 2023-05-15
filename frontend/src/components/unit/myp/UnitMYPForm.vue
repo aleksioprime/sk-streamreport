@@ -197,7 +197,7 @@ export default {
     console.log('Форма создания юнита инициализирована!');
     this.fetchGetTeachers();
     this.fetchGetClassYears({ program: 'MYP' });
-    this.fetchGetSubjects({ level: 'ooo', type: 'base' });
+    this.fetchGetSubjects({ program: 'MYP' });
     this.authUser.teacher ? this.editedUnit.authors_ids.push(this.authUser.teacher.id) : this.editedUnit.authors_ids = [];
   },
   watch: {

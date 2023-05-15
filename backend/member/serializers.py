@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from member.models import User, Department, ProfileStudent, ProfileTeacher
-
+from assess.models import ClassGroup
         
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,10 +12,17 @@ class ProfileStudentSerializer(serializers.ModelSerializer):
         model = ProfileStudent
         fields = ['id', 'id_dnevnik']
 
+class ClassGroupSerializer(serializers.ModelSerializer):
+    class_year = serializers.CharField(source='class_year.year_rus', read_only=True)
+    class Meta:
+        model = ClassGroup
+        fields = '__all__'
+
 class ProfileTeacherSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(source='user.last_name', read_only=True)
     first_name = serializers.CharField(source='user.first_name', read_only=True)
     middle_name = serializers.CharField(source='user.middle_name', read_only=True)
+    groups = ClassGroupSerializer(many=True, required=False)
     # units = UnitMYPSerializerListCreate(source='unitplan_myp', many=True, read_only=True)
     class Meta:
         model = ProfileTeacher
@@ -98,3 +105,9 @@ class UserImportSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = "__all__"
+
+
+class ContactSerailizer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.CharField()
+    message = serializers.CharField()

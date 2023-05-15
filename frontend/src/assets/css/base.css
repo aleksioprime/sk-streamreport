@@ -326,6 +326,18 @@ table .editable {
   background-image: url('@/assets/img/checkbox_on.svg');
 }
 
+.form-check-input:checked[type=radio] {
+  background-image: url('@/assets/img/radio_on.svg');
+}
+
+.form-check-input[type=checkbox] {
+  background-image: url('@/assets/img/checkbox_off.svg');
+}
+
+.form-check-input[type=radio] {
+  background-image: url('@/assets/img/radio_off.svg');
+}
+
 .form-check-input:checked {
   background-color: inherit;
   border-color: inherit;

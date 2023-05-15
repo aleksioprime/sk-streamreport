@@ -93,10 +93,10 @@
         <div v-if="summativeWork.unit_id">
           <div class="my-2 border p-2">
             <div v-if="summativeWork.groups.length">
-              <div v-for="(gr, i) in summativeWork.groups" :key="gr.id" class="block-item">
+              <div v-for="(gr, i) in summativeWork.groups" :key="gr.id" class="block-item mt-2">
                 <div class="d-flex align-items-center">
-                  <span v-if="findGroup(gr.group_id)">{{ findGroup(gr.group_id).class_year.year_rus }}{{ findGroup(gr.group_id).letter }} класс </span>
-                  <span>({{ new Date(gr.date).toLocaleDateString() }}, {{ gr.lesson }} урок)</span>
+                  <span v-if="findGroup(gr.group_id)">{{ findGroup(gr.group_id).class_year.year_rus }}{{ findGroup(gr.group_id).letter }} класс&nbsp;</span>
+                  <span> ({{ new Date(gr.date).toLocaleDateString() }}, {{ gr.lesson }} урок)</span>
                 </div>
                 <div class="field-btn-wrapper">
                   <div class="icon icon-edit" @click="editWorkGroupDate(gr.id)"></div>
@@ -269,7 +269,7 @@ export default {
       });
     }
     this.fetchGetPeriods({ study_year: this.currentStudyYear, program: 'MYP' });
-    this.fetchGetSubjects({ level: 'ooo', type: 'base' });
+    this.fetchGetSubjects({ program: 'MYP' });
     
   },
   watch: {

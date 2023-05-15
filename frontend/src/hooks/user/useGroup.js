@@ -10,6 +10,7 @@ export function getGroups() {
         study_year: data.study_year || null,
         class_year: data.class_year || null,
         program: data.program || null,
+        teacher: data.teacher || null,
       }
     }
     isGroupLoading.value = true;

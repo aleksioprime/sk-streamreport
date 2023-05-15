@@ -97,7 +97,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchGetSubjects({ level: 'ooo', type: 'base' });
+    this.fetchGetSubjects({ program: 'MYP' });
     this.fetchGetStudyYears().finally(() => {
       this.fetchGetReportPeriods({ study_year: this.currentStudyYear }).finally(() => {
         this.fetchGetGroups({ study_year: this.currentStudyYear.id });

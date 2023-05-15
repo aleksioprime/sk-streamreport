@@ -67,7 +67,7 @@
           <div class="navbar-user">
             <img :src='authUser.photo ? authUser.photo : require("@/assets/img/teacher.svg")' alt="" width="30" class="me-2">
             <span v-if="authUser.last_name && authUser.first_name">
-              {{ authUser.first_name }} {{ authUser.last_name.slice(0, 1) }}.
+              {{ authUser.first_name }} {{ authUser.last_name }}
             </span>
             <span v-else>{{ authUser.username }}</span>
           </div>

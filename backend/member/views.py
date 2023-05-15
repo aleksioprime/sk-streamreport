@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import routers, viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
-from member.serializers import UserSerializer, DepartmentSerializer, UserCreateSerializer, ProfileTeacherSerializer
+from member.serializers import UserSerializer, DepartmentSerializer, UserCreateSerializer, ProfileTeacherSerializer, ContactSerailizer
 from member.models import User, Department, ProfileStudent, ProfileTeacher
 from assess.models import ClassGroup
 from rest_framework.exceptions import AuthenticationFailed
@@ -24,6 +24,7 @@ import openpyxl
 import pandas as pd
 from django.forms.models import model_to_dict
 from datetime import datetime
+from django.core.mail import send_mail
 
 temp_storage = FileSystemStorage(location='tmp/')
 
@@ -229,3 +230,19 @@ class UserImportApply(APIView, UsersSetPagination):
             queryset = self.paginate_queryset(User.objects.filter(is_active=True), request)
         serializer = UserSerializer(queryset, many=True)
         return self.get_paginated_response(serializer.data)
+
+
+class FeedBackView(APIView):
+    serializer_class = ContactSerailizer
+    def post(self, request, *args, **kwargs):
+        serializer_class = ContactSerailizer(data=request.data)
+        if serializer_class.is_valid():
+            data = serializer_class.validated_data
+            name = data.get('name')
+            from_email = 'alesemochkin@yandex.ru'
+            subject = 'Stream Report - Обратная связь'
+            message = data.get('message')
+            print('Отправка сообщения')
+            send_mail(f'{subject}', f'{message}\n\nОт {name}', from_email, ['alesemochkin@yandex.ru'])
+            return Response({"result": "success"})
+        return Response({"result": "failed"})

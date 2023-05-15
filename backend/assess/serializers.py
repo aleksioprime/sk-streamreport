@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkGroupDate, WorkAssessment, WorkCriteriaMark, \
-    PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType, ReportMentor, GRADES
+    PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType, ReportMentor, GRADES, WorkLoad
 from curriculum.serializers import SubjectSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.serializers import UserSerializer
 from member.models import ProfileTeacher, User, ProfileStudent
@@ -581,3 +581,13 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
         
         result['subject_reports'] = subject_reports
         return result
+    
+
+class WorkLoadSerializer(serializers.ModelSerializer):
+    study_year = StudyYearSerializer(read_only=True)
+    teacher = ProfileTeacherSerializer(read_only=True)
+    subject = SubjectSerializer(read_only=True)
+    group = ClassGroupSimpleSerializer(read_only=True)
+    class Meta:
+        model = WorkLoad
+        fields = '__all__'

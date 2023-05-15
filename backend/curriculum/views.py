@@ -104,13 +104,16 @@ class ClassYearViewSet(viewsets.ModelViewSet):
         program = self.request.query_params.get("program", None)
         subject = self.request.query_params.get("subject", None)
         department = self.request.query_params.getlist("department", None)
+        author = self.request.query_params.get("author", None)
         teacher = self.request.query_params.get("teacher", None)
         if program:
             class_year = class_year.filter(program=program)
-        if teacher:
-            class_year = class_year.filter(unitplan_myp__authors__in=[teacher]).distinct()
+        if author:
+            class_year = class_year.filter(unitplan_myp__authors__in=[author]).distinct()
         if subject:
             class_year = class_year.filter(unitplan_myp__subject=subject).distinct()
+        if teacher:
+            class_year = class_year.filter(group__workload__teacher=teacher).distinct()
         if department:
             class_year = class_year.filter(unitplan_myp__subject__department__in=department).distinct()
         return class_year
@@ -132,9 +135,10 @@ class SubjectViewSet(viewsets.ModelViewSet):
         subjects = Subject.objects.all()
         level = self.request.query_params.get("level", None)
         type_subject = self.request.query_params.get("type", None)
-        teacher = self.request.query_params.get("teacher", None)
+        author = self.request.query_params.get("author", None)
         department = self.request.query_params.get("department", None)
         program = self.request.query_params.get("program", None)
+        teacher = self.request.query_params.get("teacher", None)
         if department:
             subjects = subjects.filter(department=department)
         if level:
@@ -143,8 +147,10 @@ class SubjectViewSet(viewsets.ModelViewSet):
             subjects = subjects.filter(type_subject=type_subject)
         if program:
             subjects = subjects.filter(group_ib__program=program)
+        if author:
+            subjects = subjects.filter(unitplan_myp__authors__in=[author]).distinct()
         if teacher:
-            subjects = subjects.filter(unitplan_myp__authors__in=[teacher]).distinct()
+            subjects = subjects.filter(workload__teacher=teacher).distinct()
         return subjects
     
 # class SubjectLevelMYPViewSet(viewsets.ModelViewSet):

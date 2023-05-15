@@ -9,6 +9,7 @@ export function getSubjects() {
         department: data.department || null,
         level: data.level || null,
         type: data.type || null,
+        author: data.author || null,
         teacher: data.teacher || null,
         program: data.program || null,
       }

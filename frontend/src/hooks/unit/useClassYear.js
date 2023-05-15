@@ -9,7 +9,8 @@ export function getClassYears() {
         program: data.program || null,
         subject: data.subject || null,
         department: data.department || null,
-        teacher: data.teacher || null
+        author: data.author || null,
+        teacher: data.teacher || null,
       }
     }
     await axiosAPI.get('myp/years', config).then((response) => {

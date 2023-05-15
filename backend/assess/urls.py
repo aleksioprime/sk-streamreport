@@ -4,7 +4,7 @@ from assess.views import StudyYearViewSet, ClassGroupViewSet, StudyPeriodViewSet
     StudentWorkViewSet, AssessmentJournalAPIView, ReportPeriodViewSet, StudentReportTeacherViewSet, \
     ReportTeacherViewSet, EventParticipationViewSet, EventTypeViewSet, StudentReportMentorViewSet, \
     ReportMentorViewSet, ReportMentorJournalAPIView, AssessmentDnevnikAPIView, ReportTeacherJournalAPIView, \
-    ClassGroupStudentsViewSet
+    ClassGroupStudentsViewSet, WorkLoadViewSet
 
 urlpatterns = [
     path('student', StudentViewSet.as_view({'get': 'list'})),
@@ -34,4 +34,5 @@ urlpatterns = [
     path('assessment/report/teacher/journal', ReportTeacherJournalAPIView.as_view()),
     path('assessment/events', EventParticipationViewSet.as_view({'get': 'list'})),
     path('assessment/events/types', EventTypeViewSet.as_view({'get': 'list'})),
+    path('assessment/workload', WorkLoadViewSet.as_view({'get': 'list'})),
 ]
