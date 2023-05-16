@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header>
-      <template v-slot:link><a href="/assessment">Вернуться к списку итоговых работ</a></template>
+      <template v-slot:link><a href="#" @click="$router.push(`/assessment`)">Вернуться к списку итоговых работ</a></template>
       <template v-slot:header>Журнал оценок за итоговую работу</template>
     </base-header>
     <modal-class @save="saveClassModal" @cancel="hideClassModal" :modalTitle="modalTitleClass">

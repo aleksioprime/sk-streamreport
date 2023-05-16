@@ -10,7 +10,7 @@
     <div class="teacher">Учитель:&nbsp;{{ sumwork.teacher.user.last_name }} {{ sumwork.teacher.user.first_name }} {{ sumwork.teacher.user.middle_name }}</div>
     <div class="unit">
       <div>Юнит:&nbsp;
-        <a :href="`/unit/${sumwork.unit.id}`">{{ sumwork.unit.title }}</a> 
+        <a href="#" @click="$router.push(`/myp/${sumwork.unit.id}`)">{{ sumwork.unit.title }}</a> 
         <span v-if="sumwork.unit.interdisciplinary" class="badge rounded-pill text-bg-primary me-1">МДП<br></span>
       </div>
     </div>
