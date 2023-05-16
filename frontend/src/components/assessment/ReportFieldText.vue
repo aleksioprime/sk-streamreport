@@ -102,20 +102,25 @@ export default {
       this.editData.text = this.dataField.text;
     },
     generateField() {
-      const data = {
-        mark: {
-          criterion_a: this.student.periodassess.criterion_a,
-          criterion_b: this.student.periodassess.criterion_b,
-          criterion_c: this.student.periodassess.criterion_c,
-          criterion_d: this.student.periodassess.criterion_d,
-        },
-        criteria: this.criteria,
-        first_name: this.student.user.first_name,
-        subject: this.dataField.subject.name_rus
+      if (this.student.teacher_report) {
+        const data = {
+          mark: {
+            criterion_a: this.student.teacher_report.criterion_a,
+            criterion_b: this.student.teacher_report.criterion_b,
+            criterion_c: this.student.teacher_report.criterion_c,
+            criterion_d: this.student.teacher_report.criterion_d,
+          },
+          criteria: this.criteria,
+          first_name: this.student.user.first_name,
+          subject: this.dataField.subject.name_rus
+        }
+        this.fetchChatGPTReport(data).finally(() => {
+          this.editData.text = this.generatedGPTText;
+        });
+      } else {
+        console.log('Нет данных')
       }
-      this.fetchChatGPTReport(data).finally(() => {
-        this.editData.text = this.generatedGPTText;
-      });
+      
     }
   },
 }
