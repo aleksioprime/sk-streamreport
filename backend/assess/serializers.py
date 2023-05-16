@@ -131,6 +131,10 @@ class WorkAssessmentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print('Валидированные данные: ', validated_data)
         return super().create(validated_data)
+    def to_internal_value(self, data):
+        if 'grade' in data and data['grade'] and not data['grade'].isdigit():
+            data.pop('grade', None)
+        return super(WorkAssessmentSerializer, self).to_internal_value(data)
 
 class SummativeWorkSerializer(serializers.ModelSerializer):
     teacher = ProfileTeacherSerializer(read_only=True)

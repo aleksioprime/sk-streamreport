@@ -1,7 +1,7 @@
 <template>
   <div class="unit-field">
     <div class="field-title">
-      <div class="field-label">Итоговые оценки по критериям</div>
+      <div class="field-label">Итоговые баллы по критериям</div>
       <button v-if="!editMode" class="field-btn-edit" @click="editField">Редактировать</button>
     </div>
     <div class="field-data" :class="{ 'field-editing': editMode }">

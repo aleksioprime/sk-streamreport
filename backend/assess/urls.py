@@ -4,7 +4,7 @@ from assess.views import StudyYearViewSet, ClassGroupViewSet, StudyPeriodViewSet
     StudentWorkViewSet, AssessmentJournalAPIView, ReportPeriodViewSet, StudentReportTeacherViewSet, \
     ReportTeacherViewSet, EventParticipationViewSet, EventTypeViewSet, StudentReportMentorViewSet, \
     ReportMentorViewSet, ReportMentorJournalAPIView, AssessmentDnevnikAPIView, ReportTeacherJournalAPIView, \
-    ClassGroupStudentsViewSet, WorkLoadViewSet
+    ClassGroupStudentsViewSet, WorkLoadViewSet, WorkAssessmentGiveMarksAPIView
 
 urlpatterns = [
     path('student', StudentViewSet.as_view({'get': 'list'})),
@@ -22,6 +22,7 @@ urlpatterns = [
     path('assessment/workgroup/<int:pk>', WorkGroupDateItemViewSet.as_view({'get': 'retrieve', 'put': 'update'})),
     path('assessment/workassess', WorkAssessmentViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('assessment/workassess/<int:pk>', WorkAssessmentViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('assessment/workassess/givemarks', WorkAssessmentGiveMarksAPIView.as_view()),
     path('assessment/periodassess', PeriodAssessmentViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('assessment/periodassess/<int:pk>', PeriodAssessmentViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('assessment/report/teacher', ReportTeacherViewSet.as_view({'get': 'list', 'post': 'create'})),

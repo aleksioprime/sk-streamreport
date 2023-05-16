@@ -13,48 +13,66 @@
       <div v-if="summativeWorkGroup.work.unit">Юнит: <a href="#" @click="$router.push(`/myp/${summativeWorkGroup.work.unit.id}`)">{{ summativeWorkGroup.work.unit.title }}</a></div>
       <div v-if="summativeWorkGroup.work.groups">{{ summativeWorkGroup.group.class_year.year_rus }}{{ summativeWorkGroup.group.letter }} класс (Всего: {{ getWordStudent(summativeWorkGroup.group.count) }})</div>
     </div>
-    <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
-    <div class="tools" ref="activeInput">
-
+    <div class="buttons">
+      <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
+      <button class="btn btn-primary mt-2 ms-auto" @click="giveMarks">Выставить итоговые оценки</button>
     </div>
-    <div v-if="summativeWorkGroup.students.length">
-      <!-- Таблица оценок выбранного итоговой работы и класса -->
-      <table class="table table-sm table-bordered mt-3 mark-table">
-        <thead class="thead-dark text-center">
-          <tr>
-            <th rowspan="2" style="width: 5%">№</th>
-            <th rowspan="2" style="width: 50%">ФИО студента</th>
-            <th :colspan="summativeWorkGroup.work.criteria.length">Баллы по критериям</th>
-            <th rowspan="2" style="width: 10%">Сумма</th>
-            <th rowspan="2" style="width: 10%">Расчёт</th>
-            <th rowspan="2" style="width: 10%">Оценка</th>
-          </tr>
-          <tr>
-            <th style="width: 5%" v-for="cr in summativeWorkGroup.work.criteria" :key="cr.id">{{ cr.letter }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(assess, index) in summativeWorkGroup.students" :key="assess.id">
-            <td class="text-center">{{ index + 1 }}</td>
-            <td>{{ assess.student.user.last_name }} {{ assess.student.user.first_name }}</td>
-            <td v-for="cr in summativeWorkGroup.work.criteria" :key="cr.id" class="editable">
-              <input type="text" class="input-table" v-model="markCriterion.mark">
-              <div @click="(event) => setEditField(event, assess, cr)">{{ getMarkForStudent(cr.id, assess.criteria_marks) }}</div>
-            </td>
-            <td class="uneditable">
-              <b>{{ calcSumStudentMarks(assess.criteria_marks) }}</b>/{{ calcMaxStudentMarks(summativeWorkGroup.work.criteria) }}
-            </td>
-            <td class="uneditable">{{ calcStudentMarks(assess.criteria_marks, summativeWorkGroup.work.criteria) }}</td>
-            <td class="editable">
-              <input type="text" class="input-table" v-model="currentWorkAssess.grade">
-              <div class="text-table" @click="(event) => setEditField(event, assess)">{{ assess.grade || "-" }}</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-if="!isWorkGroupLoading">
+      <div v-if="summativeWorkGroup.students.length">
+        <!-- Таблица оценок выбранного итоговой работы и класса -->
+        <table class="table table-sm table-bordered mt-3 mark-table">
+          <thead class="thead-dark text-center">
+            <tr>
+              <th rowspan="2" style="width: 5%">№</th>
+              <th rowspan="2" style="width: 50%">ФИО студента</th>
+              <th :colspan="summativeWorkGroup.work.criteria.length">Баллы по критериям</th>
+              <th rowspan="2" style="width: 10%">Сумма</th>
+              <th rowspan="2" style="width: 10%">Расчёт</th>
+              <th rowspan="2" style="width: 10%">Оценка</th>
+            </tr>
+            <tr>
+              <th style="width: 5%" v-for="cr in summativeWorkGroup.work.criteria" :key="cr.id">{{ cr.letter }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(assess, index) in summativeWorkGroup.students" :key="assess.id">
+              <td class="text-center">{{ index + 1 }}</td>
+              <td>{{ assess.student.user.last_name }} {{ assess.student.user.first_name }}</td>
+              <td v-for="cr in summativeWorkGroup.work.criteria" :key="cr.id" class="editable">
+                <input type="text" class="input-table" v-model="markCriterion.mark">
+                <div @click="(event) => setEditField(event, assess, cr)">{{ getMarkForStudent(cr.id, assess.criteria_marks) || "-" }}</div>
+              </td>
+              <td class="uneditable">
+                <b>{{ calcSumStudentMarks(assess.criteria_marks) }}</b>/{{ calcMaxStudentMarks(summativeWorkGroup.work.criteria) }}
+              </td>
+              <td class="uneditable">{{ calcStudentMarks(assess.criteria_marks, summativeWorkGroup.work.criteria) }}</td>
+              <td class="editable">
+                <input type="text" class="input-table" v-model="currentWorkAssess.grade">
+                <div class="text-table" @click="(event) => setEditField(event, assess)">{{ assess.grade || "-" }}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-else class="alert alert-danger mt-3" role="alert">
+          В этом классе пока нет студентов для оценки!
+      </div>
     </div>
-    <div v-else class="alert alert-danger mt-3" role="alert">
-        В этом классе пока нет студентов для оценки!
+    <div v-else class="loader">
+      <div class="lds-spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   </div>
 </template>
@@ -146,7 +164,9 @@ export default {
         return '-'
       }
     },
+
     setEditField(event, assess, criterion) {
+      let esc = false;
       let textElement = event.target
       let inputElement = event.target.parentElement.firstChild
       inputElement.value = textElement.textContent
@@ -156,37 +176,49 @@ export default {
       inputElement.select();
       // Функция для сохранения изменённых данных в ячейке
       const saveData = () => {
+        console.log('Сохранение оценки');
         if (criterion) {
           this.setStudentCriteriaMark(assess, criterion);
         } else {
           this.setStudentGrade(assess);
         }
+        textElement.textContent = inputElement.value;
         textElement.style.display = 'block';
         inputElement.style.display = 'none';
       }
       // Функция для отмены сохранения изменённых данных в ячейке
       const cancelData = () => {
+        console.log('Отмена редактирования');
+        inputElement.onblur = null;
         textElement.style.display = 'block';
         inputElement.style.display = 'none';
         this.currentWorkAssess = {};
         this.markCriterion = {};
       }
       // Привязка функций к событиям потери фокуса и нажатию на Enter
-      inputElement.onblur = cancelData;
-      inputElement.onkeypress = (e) => {
-        if (e.key === "Enter") { saveData() }
-      };
+      inputElement.onblur = saveData;
+      inputElement.onkeyup = (e) => {
+        if (e.key === "Enter") { saveData() } 
+        else if (e.key === "Escape") { cancelData() }
+      }; 
     }, 
     setStudentGrade(assess) {
       if (Object.keys(this.currentWorkAssess).length) {
-        if (this.currentWorkAssess.grade > 5) {
-          this.currentWorkAssess.grade = 5
+        if (this.currentWorkAssess.grade > 8) {
+          this.currentWorkAssess.grade = 8
         } else if (this.currentWorkAssess.grade < 0) {
           this.currentWorkAssess.grade = 0
+        } else {
+          this.currentWorkAssess.grade = Number(this.currentWorkAssess.grade)
         }
         console.log("Запрос на изменение данных: ", this.currentWorkAssess);
         this.axios.put(`/assessment/workassess/${assess.id}`, this.currentWorkAssess).then((response) => {
-          this.fetchGetSummativeWorkGroup(this.$route.params.id);
+          // Изменение данных только в строчке студента
+          const index = this.summativeWorkGroup.students.findIndex(item => item.id == assess.id);
+          if (index != -1) {
+            this.summativeWorkGroup.students[index] = response.data
+          }
+          // this.fetchGetSummativeWorkGroup(this.$route.params.id);
           console.log('Оценка успешно обновлена');
         }).finally(() => {
           this.currentWorkAssess = {};
@@ -212,7 +244,12 @@ export default {
         }
         console.log("Запрос на изменение данных: ", dataMarkCriterion);
         this.axios.put(`/assessment/workassess/${assess.id}`, dataMarkCriterion).then((response) => {
-          this.fetchGetSummativeWorkGroup(this.$route.params.id);
+          // Изменение данных только в строчке студента
+          const index = this.summativeWorkGroup.students.findIndex(item => item.id == assess.id);
+          if (index != -1) {
+            this.summativeWorkGroup.students[index] = response.data
+          }
+          // this.fetchGetSummativeWorkGroup(this.$route.params.id);
           console.log('Оценка успешно обновлена');
         }).finally(() => {
           this.markCriterion = {};
@@ -222,6 +259,17 @@ export default {
     getStudentsWork() {
       this.studentsWork = this.summativeWorkGroup.students.map(item => item.student)
     },
+    giveMarks() {
+      let arrayMarks = {}
+      this.summativeWorkGroup.students.forEach((element, index) => {
+        arrayMarks[element.id] = this.calcStudentMarks(element.criteria_marks, this.summativeWorkGroup.work.criteria)
+      })
+      console.log("Запрос на выставления оценок: ", arrayMarks);
+      this.axios.post(`/assessment/workassess/givemarks`, { marks: arrayMarks } ).then((response) => {
+        this.summativeWorkGroup.students = response.data.result;
+        console.log('Оценки успешно обновлены ', response.data);
+      });
+    }
   },
   mounted() {
     this.fetchGetSummativeWorkGroup(this.$route.params.id).finally(() => {
@@ -238,6 +286,9 @@ export default {
 </script>
 
 <style scoped>
+.buttons {
+  display: flex;
+}
 .mark-table .criterion{
   text-align: center;
   max-width: 20px;

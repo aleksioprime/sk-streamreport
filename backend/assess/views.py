@@ -145,6 +145,19 @@ class WorkAssessmentViewSet(viewsets.ModelViewSet):
         print('Переданные данные: ', request.data)
         return super().update(request, pk=None, *args, **kwargs)
 
+class WorkAssessmentGiveMarksAPIView(APIView):
+    def post(self, request):
+        if 'marks' in request.data:
+            marks = request.data['marks']
+            print(marks)
+            queryset = WorkAssessment.objects.filter(id__in=marks.keys())
+            for element in queryset:
+                if not element.grade:
+                    element.grade = marks[str(element.id)]
+                    element.save()
+            print(queryset)
+        return Response({'result': WorkAssessmentSerializer(queryset, many=True).data})
+
 
 class WorkCriteriaMarkViewSet(viewsets.ModelViewSet):
     queryset = WorkCriteriaMark.objects.all()
