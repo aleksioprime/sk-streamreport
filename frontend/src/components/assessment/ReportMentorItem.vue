@@ -21,7 +21,7 @@
           <div v-for="event in student.events" :key="event.id" class="event-item">
             <div>{{ event.title }} ({{ event.type_name }}, {{ event.level_name }})</div>
             <div>Результаты: {{ event.result }}</div>
-            <div v-if="event.teacher_report">{{ event.teacher_report.subject.name_rus }} ({{ event.teacher_report.author.user.last_name }} {{ event.teacher_report.author.user.first_name }} {{ event.teacher_report.author.user.middle_name }})</div>
+            <div v-if="event.teacher_report && event.teacher_report.author">{{ event.teacher_report.subject.name_rus }} ({{ event.teacher_report.author.user.last_name }} {{ event.teacher_report.author.user.first_name }} {{ event.teacher_report.author.user.middle_name }})</div>
           </div>
         </div>
         <div v-else class="events-no">
