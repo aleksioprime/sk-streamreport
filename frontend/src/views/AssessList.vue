@@ -163,7 +163,6 @@ export default {
         this.fetchCreateSummativeWork(this.currentAssess).finally(() => {
           this.fetchGetSummativeWorks({period: this.currentPeriod.id, teacher: this.authUser.teacher.id})
           this.hideSumWorkModal();
-          this.currentAssess = {};
         })
       } else {
         console.log('Валидация неуспешна', this.currentAssess)
@@ -176,7 +175,6 @@ export default {
         this.fetchUpdateSummativeWork(this.currentAssess.id, this.currentAssess).finally(() => {
           this.fetchGetSummativeWorks({period: this.currentPeriod.id, teacher: this.authUser.teacher.id})
           this.hideSumWorkModal();
-          this.currentAssess = {};
         });
       } else {
         console.log('Валидация неуспешна', this.currentAssess)
@@ -187,7 +185,6 @@ export default {
       this.fetchDeleteSummativeWork(this.currentAssess.id).finally(() => {
         this.fetchGetSummativeWorks({period: this.currentPeriod.id, teacher: this.authUser.teacher.id})
         this.hideSumWorkModal();
-        this.currentAssess = {};
       });
     },
     // Нахождение предмета по его ID из списка итоговых работ
