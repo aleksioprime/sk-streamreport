@@ -5,26 +5,27 @@
     </base-header>
     <div class="area p-3">
       <h4>Здравствуйте, <span v-if="authUser">{{ authUser.first_name }}</span>!</h4>
-      <div class="my-3">Вы находитесь в экспериментальной системе <b>Stream Report</b> Международной Гимназии Сколково</div>
-      <div>Ваша должность: {{ authUser.teacher.position }}</div>
-      <div v-if="authUser.teacher.groups.length">Вы наставник в классах: <span v-for="group in authUser.teacher.groups" :key="group.id"><b>{{ group.class_year }}{{ group.letter }}</b> </span></div>
-      <div class="mt-2">В <b>{{currentStudyYear.name}}</b> учебном году вы преподаёте следующие предметы: </div>
-      <ul>
-        <li v-for="work in workLoads" :key="work.id">{{ work.subject.name_rus }} в {{ work.group.class_year }}{{ work.group.letter }} классе</li>
-      </ul>
-      <div class="mt-3"><b>Stream Report</b> в настоящий момент находится в разработке, но некоторые функции уже доступны. Если вы обнаружили ошибки в работе программы, просим вас <a href="#" @click="showFeedback">оставить нам сообщение</a></div>
-      <div class="mb-3" v-if="showForm">
-        <textarea v-model="feedback.message" class="form-control mt-2" id="exampleFormControlTextarea1" rows="3"></textarea>
-        <div class="d-flex">
-          <button class="btn btn-primary my-2" @click="sendMessage">Отправить</button>
-          <button class="btn btn-secondary my-2" @click="hideFeedback">Отмена</button>
+      <div v-if="authUser && authUser.teacher">
+        <div class="my-3">Вы находитесь в экспериментальной системе <b>Stream Report</b> Международной Гимназии Сколково</div>
+        <div>Ваша должность: {{ authUser.teacher.position }}</div>
+        <div v-if="authUser.teacher.groups.length">Вы наставник в классах: <span v-for="group in authUser.teacher.groups" :key="group.id"><b>{{ group.class_year }}{{ group.letter }}</b> </span></div>
+        <div class="mt-2">В <b>{{currentStudyYear.name}}</b> учебном году вы преподаёте следующие предметы: </div>
+        <ul>
+          <li v-for="work in workLoads" :key="work.id">{{ work.subject.name_rus }} в {{ work.group.class_year }}{{ work.group.letter }} классе</li>
+        </ul>
+        <div class="mt-3"><b>Stream Report</b> в настоящий момент находится в разработке, но некоторые функции уже доступны. Если вы обнаружили ошибки в работе программы, просим вас <a href="#" @click="showFeedback">оставить нам сообщение</a></div>
+        <div class="mb-3" v-if="showForm">
+          <textarea v-model="feedback.message" class="form-control mt-2" id="exampleFormControlTextarea1" rows="3"></textarea>
+          <div class="d-flex">
+            <button class="btn btn-primary my-2" @click="sendMessage">Отправить</button>
+            <button class="btn btn-secondary my-2" @click="hideFeedback">Отмена</button>
+          </div>
+        </div>
+        <div class="alert alert-success mt-4 text-center" role="alert" v-if="showSuccess && !showForm">
+          Сообщение успешно отправлено!<br>
+          <a href="#" @click="showFeedback">Отправить ещё сообщение</a>
         </div>
       </div>
-      <div class="alert alert-success mt-4 text-center" role="alert" v-if="showSuccess && !showForm">
-        Сообщение успешно отправлено!<br>
-        <a href="#" @click="showFeedback">Отправить ещё сообщение</a>
-      </div>
-
     </div>
   </div>
 </template>
@@ -83,10 +84,11 @@ export default {
     ...mapGetters(['authUser', 'isAdmin']),
   },
   mounted() {
-    this.fetchGetStudyYears().finally(() => {
-      this.fetchGetWorkLoads({ study_year: this.currentStudyYear.id, teacher: this.authUser.teacher.id});
-    })
-    
+    if (this.authUser.teacher) {
+      this.fetchGetStudyYears().finally(() => {
+        this.fetchGetWorkLoads({ study_year: this.currentStudyYear.id, teacher: this.authUser.teacher.id});
+      })
+    }
   }
 }
 </script>
