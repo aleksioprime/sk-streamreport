@@ -205,36 +205,40 @@ export default {
         } else {
           this.setStudentGradeAdd(student.id);
         }
+        textElement.textContent = inputElement.value;
         textElement.style.display = 'block';
         inputElement.style.display = 'none';
       }
       // Функция для отмены сохранения изменённых данных в ячейке
       const cancelData = () => {
+        console.log('Отмена редактирования');
+        inputElement.onblur = null;
         textElement.style.display = 'block';
         inputElement.style.display = 'none';
         this.currentAssess = {};
       }
       // Привязка функций к событиям потери фокуса и нажатию на Enter
-      inputElement.onblur = cancelData;
+      inputElement.onblur = saveData;
       inputElement.onkeypress = (e) => {
-        if (e.key === "Enter") {
-          // textElement.textContent = inputElement.value;
-          saveData();
-        }
-        if (e.key === "Escape") { cancelData() }
+        if (e.key === "Enter") { saveData() } 
+        else if (e.key === "Escape") { cancelData() }
       };
     },
     setStudentGradeEdit(periodassess_id) {
       if (Object.keys(this.currentAssess).length) {
         console.log("Запрос на изменение данных: ", this.currentAssess);
         this.axios.put(`/assessment/periodassess/${periodassess_id}`, this.currentAssess).then((response) => {
-          this.fetchGetStudentsAssessment({
-            group: this.$route.params.id_group, 
-            period: this.$route.params.id_period,
-            subject: this.$route.params.id_subject,
-            class_year: this.currentGroup.class_year.id,
-          });
-          console.log('Оценка успешно обновлена');
+          console.log('Оценка успешно изменена', response.data);
+          const index = this.studentsAssessment.findIndex(item => item.periodassess.id == periodassess_id);
+          if (index != -1) {
+            this.studentsAssessment[index].periodassess = response.data
+          }
+          // this.fetchGetStudentsAssessment({
+          //   group: this.$route.params.id_group, 
+          //   period: this.$route.params.id_period,
+          //   subject: this.$route.params.id_subject,
+          //   class_year: this.currentGroup.class_year.id,
+          // });
         }).finally(() => {
           this.currentAssess = {};
         });
@@ -248,13 +252,13 @@ export default {
         this.currentAssess.year_id = this.currentGroup.class_year.id;
         console.log("Запрос на Добавление данных: ", this.currentAssess);
         this.axios.post(`/assessment/periodassess`, this.currentAssess).then((response) => {
+          console.log('Оценка успешно добавлена', response.data);
           this.fetchGetStudentsAssessment({
             group: this.$route.params.id_group, 
             period: this.$route.params.id_period,
             subject: this.$route.params.id_subject,
             class_year: this.currentGroup.class_year.id,
           });
-          console.log('Оценка успешно выставлена');
         }).finally(() => {
           this.currentAssess = {};
         });

@@ -13,10 +13,7 @@
       <div v-if="summativeWorkGroup.work.unit">Юнит: <a href="#" @click="$router.push(`/myp/${summativeWorkGroup.work.unit.id}`)">{{ summativeWorkGroup.work.unit.title }}</a></div>
       <div v-if="summativeWorkGroup.work.groups">{{ summativeWorkGroup.group.class_year.year_rus }}{{ summativeWorkGroup.group.letter }} класс (Всего: {{ getWordStudent(summativeWorkGroup.group.count) }})</div>
     </div>
-    <div class="buttons">
-      <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
-      <button class="btn btn-primary mt-2 ms-auto" @click="giveMarks">Выставить итоговые оценки</button>
-    </div>
+    <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
     <div v-if="!isWorkGroupLoading">
       <div v-if="summativeWorkGroup.students.length">
         <!-- Таблица оценок выбранного итоговой работы и класса -->
@@ -53,6 +50,10 @@
             </tr>
           </tbody>
         </table>
+        <div>Вы можете выставить итоговые оценки всей оценочной группе по расчёту системы</div>
+        <div class="buttons">
+          <button class="btn btn-primary mt-2 ms-auto" @click="giveMarks">Выставить итоговые оценки</button>
+        </div>
       </div>
       <div v-else class="alert alert-danger mt-3" role="alert">
           В этом классе пока нет студентов для оценки!
@@ -118,6 +119,7 @@ export default {
       this.getStudentsWork();
       this.modalClass.show();
     },
+    // Изменение состава оценочной группы итоговой работы
     saveClassModal() {
       const dataStudentsWork = {
         "students": this.studentsWork.map(item => { return {'student_id': item.id} }),
@@ -164,7 +166,7 @@ export default {
         return '-'
       }
     },
-
+    // Редактирование ячейки оценки итоговой работы
     setEditField(event, assess, criterion) {
       let esc = false;
       let textElement = event.target
@@ -204,8 +206,8 @@ export default {
     }, 
     setStudentGrade(assess) {
       if (Object.keys(this.currentWorkAssess).length) {
-        if (this.currentWorkAssess.grade > 8) {
-          this.currentWorkAssess.grade = 8
+        if (this.currentWorkAssess.grade > 5) {
+          this.currentWorkAssess.grade = 5
         } else if (this.currentWorkAssess.grade < 0) {
           this.currentWorkAssess.grade = 0
         } else {

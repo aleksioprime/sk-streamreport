@@ -152,7 +152,7 @@ class WorkAssessmentGiveMarksAPIView(APIView):
             print(marks)
             queryset = WorkAssessment.objects.filter(id__in=marks.keys())
             for element in queryset:
-                if not element.grade:
+                if not element.grade and type(marks[str(element.id)]) == int:
                     element.grade = marks[str(element.id)]
                     element.save()
             print(queryset)
