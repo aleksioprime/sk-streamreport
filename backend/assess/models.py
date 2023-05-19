@@ -232,6 +232,7 @@ class ReportTeacher(models.Model):
     text = models.TextField(verbose_name=_("Текст репорта"), null=True, blank=True)
     events = models.ManyToManyField('assess.EventParticipation', verbose_name=_("Участие в мероприятиях"), blank=True, related_name="teacher_reports")
     author = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Автор репорта"), on_delete=models.SET_NULL, null=True, related_name="teacher_reports")
+    achievements = models.ManyToManyField('assess.ReportAchievements', verbose_name=_("Уровни достижений"), blank=True, related_name="teacher_reports")
     criterion_a = models.SmallIntegerField(verbose_name=_("Оценка по критерию A"), default=None, null=True, blank=True)
     criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True, blank=True)
     criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True, blank=True)
@@ -242,7 +243,18 @@ class ReportTeacher(models.Model):
         ordering = ['period', 'student']
     def __str__(self):
         return '{} - {}'.format(self.period, self.student)
-    
+
+class ReportAchievements(models.Model):
+    """ Выбор уровней достижений и их предметных целей в репортах"""
+    objective = models.ForeignKey('curriculum.Objective', verbose_name=_("Предметная цель"), on_delete=models.CASCADE, null=True, related_name="report_achievements")
+    achievement = models.ForeignKey('curriculum.AchievementLevel', verbose_name=_("Уровень достижений"), on_delete=models.CASCADE, blank=True, null=True, related_name="report_achievements")
+    class Meta:
+        verbose_name = 'Репорты: уровнень достижений'
+        verbose_name_plural = 'Репорты: уровни достижений'
+        ordering = ['objective']
+    def __str__(self):
+        return '{}: {}'.format(self.objective, self.achievement)
+
 class ReportMentor(models.Model):
     """ Репорты наставника """
     student = models.ForeignKey('member.ProfileStudent', verbose_name=_("Студент"), on_delete=models.SET_NULL, null=True, related_name="mentor_reports")

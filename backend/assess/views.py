@@ -4,7 +4,7 @@ from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassG
     WorkAssessmentSerializer, WorkCriteriaMarkSerializer, ProfileStudentSerializer, WorkGroupDateItemSerializer, \
     PeriodAssessmentSerializer, StudentWorkSerializer, ReportPeriodSerializer, StudentReportTeacherSerializer, ReportTeacherSerializer, \
     EventTypeSerializer, EventParticipationSerializer, StudentReportMentorSerializer, ReportMentorSerializer, ClassGroupStudentsSerializer, \
-    WorkLoadSerializer
+    WorkLoadSerializer, TextTranslateSerailizer, GenerateReportSerailizer
 from curriculum.serializers import ClassYearSerializer, SubjectSerializer      
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
@@ -14,10 +14,14 @@ from curriculum.models import ClassYear, Subject
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db.models import Q
 
 import requests
 from datetime import datetime
-import locale
+
+from googletrans import Translator
+
+import openai
 
 class StudyYearViewSet(viewsets.ModelViewSet):
     queryset = StudyYear.objects.all()
@@ -260,6 +264,47 @@ class AssessmentDnevnikAPIView(APIView):
             'marks': student_mark,
             })
 
+# Перевод текста на выбранный язык
+class TextTranslateAPIView(APIView):
+    serializer_class = TextTranslateSerailizer
+    def post(self, request, *args, **kwargs):
+        serializer_class = TextTranslateSerailizer(data=request.data)
+        if serializer_class.is_valid():
+            data = serializer_class.validated_data
+            text = data.get('text')
+            language = data.get('language')
+            translator = Translator()
+            result = translator.translate(text, dest=language)
+            return Response({"result": "success", "text": result.text})
+        return Response({"result": "failed"})
+    
+# Запрос на генерацию текста
+class GenerateReportAPIView(APIView):
+    serializer_class = GenerateReportSerailizer
+    def post(self, request, *args, **kwargs):
+        serializer_class = GenerateReportSerailizer(data=request.data)
+        if serializer_class.is_valid():
+            data = serializer_class.validated_data
+            model_engine = "text-davinci-003"
+            openai.api_key = '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'
+            request_text = f"Напиши на русском языке отзыв по студенту по имени {data['name']} по {data['subject']}, который достиг плохих результатов: {data['text']}"
+            completion = openai.Completion.create(
+                engine=model_engine,
+                prompt=request_text,
+                max_tokens=1024,
+                temperature=0.7,
+                top_p=1,
+                frequency_penalty=0,
+                presence_penalty=0
+            )
+            result = completion.choices[0].text
+            if result.startswith('.'):
+                result = result[1:]
+            print(completion.choices[0].text)
+            # print(request_text)
+            return Response({"result": "success", "text": result.strip()})
+        return Response({"result": "failed"})
+
 class ReportTeacherJournalAPIView(APIView):
     def get(self, request):
         group_id = request.query_params.get("group", None)
@@ -270,7 +315,7 @@ class ReportTeacherJournalAPIView(APIView):
         group = ClassGroup.objects.filter(id=group_id).first()
         types = EventType.objects.all()
         return Response({
-            'group': ClassGroupSerializer(group).data,
+            'group': ClassGroupStudentsSerializer(group).data,
             'subject': SubjectSerializer(subject).data,
             'period': ReportPeriodSerializer(period).data,
             'event_types': EventTypeSerializer(types, many=True).data
@@ -299,6 +344,64 @@ class ReportPeriodViewSet(viewsets.ModelViewSet):
             report_period = report_period.filter(study_year=study_year)
         return report_period
     
+# Создание, редактирование, удаление репортов учителя  
+class ReportTeacherViewSet(viewsets.ModelViewSet):
+    queryset = ReportTeacher.objects.all()
+    serializer_class = ReportTeacherSerializer
+    def get_queryset(self):
+        group_id = self.request.query_params.get("group", None)
+        period_id = self.request.query_params.get("period", None)
+        subject_id = self.request.query_params.get("subject", None)
+        report_teacher = ReportTeacher.objects.all()
+        if group_id:
+            report_teacher = report_teacher.filter(student__groups__in=[group_id]).distinct()
+        if period_id:
+            report_teacher = report_teacher.filter(period=period_id)
+        if subject_id:
+            report_teacher = report_teacher.filter(subject=subject_id)
+        return report_teacher
+    def create(self, request, *args, **kwargs): 
+        # Если пришли данные с названием bulk_create, то срабатывает алгоритм массового создания записей репортов
+        data = request.data.pop('bulk_create', None)
+        if data:
+            reports = ReportTeacher.objects.filter(student__groups__id=data['group_id'], subject=data['subject_id'], period=data['period_id'], year=data['year_id'])
+            print(f"Отфильтровано записей: {reports}")
+            reports_delete = reports.filter(~Q(id__in=[item['id'] for item in data['students'] if 'id' in item]))
+            print(f"Записи на удаление: {reports_delete}")
+            reports_delete.delete()
+            subject = Subject.objects.filter(pk=data['subject_id']).first()
+            period = ReportPeriod.objects.filter(pk=data['period_id']).first()
+            year = ClassYear.objects.filter(pk=data['year_id']).first()
+            new_students = []
+            for item in data['students']:
+                if item['id'] is None:
+                    new_students.append(ReportTeacher(
+                        student=ProfileStudent.objects.filter(pk=item['student_id']).first(),
+                        subject=subject,
+                        period=period,
+                        year=year))
+            print(f"Записи на создание: {new_students}")
+            created_students = ReportTeacher.objects.bulk_create(new_students)
+            serializer = self.get_serializer(instance=created_students, many=True)
+            return Response({'result': 'success', 'reports': serializer.data})
+        return super().create(request, *args, **kwargs)
+    def get_serializer_context(self, *args, **kwargs):
+        period = self.request.query_params.get("period", None)
+        class_year = self.request.query_params.get("class_year", None)
+        subject = self.request.query_params.get("subject", None)
+        author = self.request.query_params.get("author", None)
+        context = super().get_serializer_context()
+        if period:
+            context.update({"period": period})
+        if subject:
+            context.update({"subject": subject})
+        if author:
+            context.update({"author": author})
+        if class_year:
+            context.update({"class_year": class_year})
+        return context
+
+# Получение списка студентов со сводной информацией по итоговым оценкам по предмету и репортам учителя
 class StudentReportTeacherViewSet(viewsets.ModelViewSet):
     queryset = ProfileStudent.objects.all()
     serializer_class = StudentReportTeacherSerializer
@@ -354,10 +457,6 @@ class StudentReportMentorViewSet(viewsets.ModelViewSet):
         if class_year:
             context.update({"class_year": class_year})
         return context
-
-class ReportTeacherViewSet(viewsets.ModelViewSet):
-    queryset = ReportTeacher.objects.all()
-    serializer_class = ReportTeacherSerializer
 
 class ReportMentorViewSet(viewsets.ModelViewSet):
     queryset = ReportMentor.objects.all()

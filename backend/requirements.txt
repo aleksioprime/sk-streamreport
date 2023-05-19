@@ -9,3 +9,5 @@ psycopg2-binary==2.9.5
 docxtpl==0.16.5
 
 htmldocx==0.0.6
+googletrans==3.1.0a0
+openai==0.27.6

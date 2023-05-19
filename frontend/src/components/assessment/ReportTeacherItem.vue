@@ -2,49 +2,55 @@
   <div class="report-item area">
     <div class="student-header">
       <div class="student-photo">
-        <img :src='student.user.photo ? student.photo : require("@/assets/img/student.svg")' alt="" width="50">
+        <img :src='report.student.user.photo ? report.student.user.photo : require("@/assets/img/student.svg")' alt="" width="50">
       </div>
       <div class="student-info">
-        <div class="student-name">{{ student.user.last_name }} {{ student.user.first_name }}</div>
+        <div class="student-name">{{ report.student.user.last_name }} {{ report.student.user.first_name }}</div>
       </div>
     </div>
-    <div class="assess-title selected" data-bs-toggle="collapse" :href="`#collapse-assessment-${student.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-assessment-${student.id}`">
-      Результаты студента за <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">{{ asper.number }} {{ asper.type }}<span v-if="++index != period.assessment_periods.length">, </span></span>.</div>
-    <div :id="`collapse-assessment-${student.id}`" class="collapse">
-      <div class="student-assessment" >
-        <div class="assess-wrapper">
-          <div class="assess-item clicked" @click="getObjectivesFromCriteria(criterionA)">
-            <div class="assess-criterion">{{ criterionA.letter }}. {{ criterionA.name_eng }}</div>
+    <div class="assess-title selected" data-bs-toggle="collapse" :href="`#collapse-assessment-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-assessment-${report.id}`">
+      <!-- Результаты студента за <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">{{ asper.number }} {{ asper.type }}<span v-if="++index != period.assessment_periods.length">, </span></span>. -->
+      Результаты студента по <b>Stream Report</b>
+    </div>
+    <div :id="`collapse-assessment-${report.id}`" class="collapse">
+      <div class="student-assessment">
+        <div class="assess-wrapper" v-if="report.assessment">
+          <div class="assess-item">
+            <div class="assess-criterion">{{ criteriaObject.criterion_a.letter }}. {{ criteriaObject.criterion_a.name_eng }}</div>
             <div class="assess-mark">
-              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
-                {{ getMarkFromAssessment(student.assessment.criteria_a, asper.number) }}
+              <div class="mark" :class="{'criterion-a' : getMarkFromAssessment(report.assessment.criteria_b, asper.number)}"
+                v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+                {{ getMarkFromAssessment(report.assessment.criteria_a, asper.number) }}
                 <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
-          <div class="assess-item clicked" @click="getObjectivesFromCriteria(criterionB)">
-            <div class="assess-criterion">{{ criterionB.letter }}. {{ criterionB.name_eng }}</div>
+          <div class="assess-item">
+            <div class="assess-criterion">{{ criteriaObject.criterion_b.letter }}. {{ criteriaObject.criterion_b.name_eng }}</div>
             <div class="assess-mark">
-              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
-                {{ getMarkFromAssessment(student.assessment.criteria_b, asper.number) }}
+              <div class="mark" :class="{'criterion-b' : getMarkFromAssessment(report.assessment.criteria_b, asper.number)}"
+                v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+                {{ getMarkFromAssessment(report.assessment.criteria_b, asper.number) }}
                 <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
-          <div class="assess-item clicked" @click="getObjectivesFromCriteria(criterionC)">
-            <div class="assess-criterion">{{ criterionC.letter }}. {{ criterionC.name_eng }}</div>
+          <div class="assess-item">
+            <div class="assess-criterion">{{ criteriaObject.criterion_c.letter }}. {{ criteriaObject.criterion_c.name_eng }}</div>
             <div class="assess-mark">
-              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
-                {{ getMarkFromAssessment(student.assessment.criteria_c, asper.number) }}
+              <div class="mark" :class="{'criterion-c' : getMarkFromAssessment(report.assessment.criteria_c, asper.number)}"
+                v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+                {{ getMarkFromAssessment(report.assessment.criteria_c, asper.number) }}
                 <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
-          <div class="assess-item clicked" @click="getObjectivesFromCriteria(criterionD)">
-            <div class="assess-criterion">{{ criterionD.letter }}. {{ criterionD.name_eng }}</div>
+          <div class="assess-item">
+            <div class="assess-criterion">{{ criteriaObject.criterion_d.letter }}. {{ criteriaObject.criterion_d.name_eng }}</div>
             <div class="assess-mark">
-              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
-                {{ getMarkFromAssessment(student.assessment.criteria_d, asper.number) }}
+              <div class="mark" :class="{'criterion-d' : getMarkFromAssessment(report.assessment.criteria_d, asper.number)}"
+                v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+                {{ getMarkFromAssessment(report.assessment.criteria_d, asper.number) }}
                 <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
@@ -52,8 +58,9 @@
           <div class="assess-item">
             <div class="assess-sum">Оценка за ИР</div>
             <div class="assess-mark">
-              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
-                {{ getMarkFromAssessment(student.assessment.summ_grades, asper.number) }}
+              <div class="mark" :class="{'grade' : getMarkFromAssessment(report.assessment.summ_grades, asper.number) }"
+                v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+                {{ getMarkFromAssessment(report.assessment.summ_grades, asper.number) }}
                 <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
@@ -61,8 +68,9 @@
           <div class="assess-item">
             <div class="assess-form">Средняя текущая</div>
             <div class="assess-mark">
-              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
-                {{ getMarkFromAssessment(student.assessment.form_grades, asper.number) }}
+              <div class="mark" :class="{'grade' : getMarkFromAssessment(report.assessment.form_grades, asper.number) }"
+                v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+                {{ getMarkFromAssessment(report.assessment.form_grades, asper.number) }}
                 <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
@@ -70,58 +78,35 @@
           <div class="assess-item">
             <div class="assess-final">Итоговая оценка</div>
             <div class="assess-mark">
-              <div class="mark" v-for="(asper, index) in period.assessment_periods" :key="asper.id">
-                {{ getMarkFromAssessment(student.assessment.final_grades, asper.number) }}
+              <div class="mark" :class="{'grade' : getMarkFromAssessment(report.assessment.final_grades, asper.number) }"
+                v-for="(asper, index) in period.assessment_periods" :key="asper.id">
+                {{ getMarkFromAssessment(report.assessment.final_grades, asper.number) }}
                 <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
         </div>
-        <div class="achievements-wrapper">
-          <div v-if="objectives.length">
-            <div class="achievements-filter selected">
-              <div>Показать предметные цели и уровни достижений по критерию <b>{{ this.currentCriterion.letter }}.{{ this.currentCriterion.name_eng }}</b> за:</div>
-              <select class="form-select" name="level-subject" id="level-subject" v-model="currentYear">
-                <option :value="null">Выберите уровень</option>
-                <option v-for="lvl in levelSubject" :key="lvl.id" :value="lvl.id">{{ lvl.name_eng }}</option>
-              </select>
-            </div>
-            <div class="accordion" :id="`accordion-${currentCriterion.id}`">
-              <div class="accordion-item" v-for="objective in filteredObjectives" :key="objective.id">
-                <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-objective-${objective.id}`" aria-expanded="true" :aria-controls="`collapse-objective-${objective.id}`">
-                    {{ objective.strand.letter_i }}. {{ objective.name_eng }}
-                  </button>
-                </h2>
-                <div :id="`collapse-objective-${objective.id}`" class="accordion-collapse collapse" :data-bs-parent="`#accordion-${currentCriterion.id}`">
-                  <div class="accordion-body">
-                    <div v-if="objective.achievelevel.length">
-                      <div class="achievement-item" v-for="ach in objective.achievelevel" :key="ach.id">
-                        <div class="achievement-name">The student {{ ach.name_eng }}</div>
-                        <div class="achievement-point">{{ ach.point - 1 }} - {{ ach.point }}</div>
-                      </div>
-                    </div>
-                    <div v-else>Нет данных</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
+    <div class="dnevnik-title selected" data-bs-toggle="collapse" :href="`#collapse-dnevnik-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-dnevnik-${report.id}`">
+      Результаты студента по <b>Дневник.ру</b>
+    </div>
+    <div :id="`collapse-dnevnik-${report.id}`" class="collapse">
+      <div class="dnevnik-wrapper">В разработке</div>
+    </div>
     <div class="student-criteria">
-      <report-field-criteria id="student-criteria" :report="student.teacher_report" @save="fetchSaveReport" :avg_criteria="student.avg_assessment"
-      :criteria="{ criterion_a: criterionA, criterion_b: criterionB, criterion_c: criterionC, criterion_d: criterionD }"/>
+      <report-field-criteria id="student-criteria" :report="report" @save="fetchSaveReport" :avg_criteria="report.avg_assessment"
+      :criteria="criteriaObject"/>
     </div>
     <div class="student-report">
-      <report-field-text id="student-report" :student="student" :dataField="student.teacher_report" :generate="true"
-      :criteria="{ criterion_a: criterionA, criterion_b: criterionB, criterion_c: criterionC, criterion_d: criterionD }" @save="fetchSaveReport"/>
+      <report-field-report id="student-report" :report="report" :dataField="report" :generate="true"
+      :criteria="criteriaObject" @save="fetchSaveReport"/>
     </div>
-    <div class="student-events" v-if="student.teacher_report.text">
-      <div class="events-title selected" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
-      aria-expanded="false" :aria-controls="`collapse-events-${student.id}`">Участие в мероприятиях</div>
-      <report-field-blocks class="collapse" :id="`collapse-events-${student.id}`" :fieldData="student.teacher_report.events" 
+    <div class="student-events">
+      <div class="events-title selected" data-bs-toggle="collapse" :href="`#collapse-events-${report.id}`" role="button" 
+      aria-expanded="false" :aria-controls="`collapse-events-${report.id}`">Участие в мероприятиях</div>
+      <report-field-blocks class="collapse" :id="`collapse-events-${report.id}`" :fieldData="report.events" 
       :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport">
         <!-- Слот для блоков показа записей -->
         <template v-slot:show="field">
@@ -162,21 +147,19 @@
   
 <script>
 import { mapGetters } from 'vuex';
-import ReportFieldText from "@/components/assessment/ReportFieldText.vue";
+import ReportFieldReport from "@/components/assessment/ReportFieldReport.vue";
 import ReportFieldCriteria from "@/components/assessment/ReportFieldCriteria.vue";
 import ReportFieldBlocks from "@/components/assessment/ReportFieldBlocks.vue";
-import { getObjectives } from "@/hooks/unit/useObjective";
 export default {
   name: 'ReportTeacherItem',
   components: {
-    ReportFieldText, ReportFieldBlocks, ReportFieldCriteria
+    ReportFieldReport, ReportFieldBlocks, ReportFieldCriteria
   },
   props: {
-    student: {
+    report: {
       type: Object,
       default: {
         group: {},
-        teacher_report: {},
         user: {},
         assessment: {
           criteria_a: {},
@@ -202,16 +185,6 @@ export default {
       type: Array,
       default: [],
     },
-    levelSubject: {
-      type: Array,
-      default: [],
-    }
-  },
-  setup(props) {
-    const { objectives, fetchGetObjectives } = getObjectives();
-    return {
-      objectives, fetchGetObjectives
-    }
   },
   data() {
     return {
@@ -219,21 +192,14 @@ export default {
         type_id: null,
         level: '0',
       },
-      currentCriterion: null,
-      currentYear: null
     }
   },
   methods: {
-    getObjectivesFromCriteria(criterion) {
-      this.currentCriterion = criterion;
-      this.currentYear = null;
-      this.fetchGetObjectives({ criterion: criterion.id })
-    },
     getMarkFromAssessment(assess, period) {
       if (assess) {
         const assessMark = assess.find(item => item.period == period)
         if (assessMark) {
-          return assessMark.mark || '0'
+          return assessMark.mark || 0
         } 
       }
       return 0
@@ -241,28 +207,19 @@ export default {
     fetchSaveReport(data) {
       console.log('Сохранение репорта: ', data);
       let editReportStudents = { ...data }
-      editReportStudents.student_id = this.student.id;
       editReportStudents.author_id = this.authUser.teacher.id;
-      editReportStudents.id = this.student.teacher_report.id || null
+      editReportStudents.id = this.report.id || null
       this.$emit('updateReport', editReportStudents);
     },
   },
   computed: {
-    filteredObjectives() {
-      console.log(this.currentYear)
-      return this.objectives.filter(item => item.level.id == this.currentYear)
-    },
-    criterionA() {
-      return this.criteria.find(item => item.letter == 'A')
-    },
-    criterionB() {
-      return this.criteria.find(item => item.letter == 'B')
-    },
-    criterionC() {
-      return this.criteria.find(item => item.letter == 'C')
-    },
-    criterionD() {
-      return this.criteria.find(item => item.letter == 'D')
+    criteriaObject() {
+      return {
+        criterion_a: this.criteria.find(item => item.letter == 'A'),
+        criterion_b: this.criteria.find(item => item.letter == 'B'),
+        criterion_c: this.criteria.find(item => item.letter == 'C'),
+        criterion_d: this.criteria.find(item => item.letter == 'D'),
+      }
     },
     // подключение переменной авторизированного пользователя из store
     ...mapGetters(['authUser', 'isAdmin']),
@@ -316,34 +273,6 @@ export default {
   column-gap: 5px;
 }
 
-.achievements-wrapper {
-  flex-grow: 1;
-  margin-bottom: 10px;
-}
-.achievements-filter {
-  margin: 10px 0;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-radius: 10px;
-}
-.achievements-filter select{
-  margin-left: 10px;
-  max-width: 200px;
-}
-.achievement-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 5px;
-  column-gap: 10px;
-}
-.achievement-point {
-  min-width: 100px;
-  padding: 5px;
-  border: 0.5px solid #a7a7a78a;
-  text-align: center;
-}
 @media (max-width: 768px) {
   .student-assessment {
     flex-direction: column;
@@ -355,14 +284,14 @@ export default {
   flex-direction: column;
   min-width: 350px;
   margin-bottom: 10px;
-  row-gap: 5px;
+  row-gap: 2px;
 }
 
 .assess-item {
   display: flex;
   align-items: center;
-  border: 0.5px solid var(--bs-secondary);
-  padding: 5px 10px;
+  /* border: 0.5px solid var(--bs-secondary); */
+  padding: 2px 10px;
   border-radius: 10px;
 }
 .assess-item.clicked {
@@ -390,9 +319,21 @@ export default {
   min-width: 40px;
   padding: 5px 5px;
   border-radius: 5px;
-  background: var(--bs-secondary);
+  background: #e9e9e9;
 }
-
+.assess-mark .grade {
+  color: #000;
+  background: #fff;
+  border: 1px solid #000;
+}
+.dnevnik-title {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
+}
+.dnevnik-wrapper {
+  padding: 10px;
+}
 .student-criteria {
   margin-top: 10px;
 }
@@ -402,6 +343,9 @@ export default {
 .events-title {
   margin-top: 10px;
   border-radius: 10px;
+  padding: 10px;
+}
+.accordion-button{
   padding: 10px;
 }
 </style>

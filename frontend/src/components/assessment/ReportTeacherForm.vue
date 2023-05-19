@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="student-wrapper">
+      <h3>{{ group.class_year.year_rus }}{{ group.letter }} класс ({{ getWordStudent(group.count) }})</h3>
       <div class="student-left">
-        <h4>Студенты в списке <small>({{ getWordStudent(filterStudents.length) }})</small></h4>
+        <h5>Оставшиеся в списке студенты <small>({{ getWordStudent(filterStudents.length) }})</small></h5>
         <select class="form-select" multiple v-model="currentStudentsGroup" size="10">
           <option v-for="(st, index) in filterStudents" :key="st.id" :value="st">
             {{ ++index }}. {{ st.user.last_name }} {{ st.user.first_name }}</option>
@@ -13,10 +14,10 @@
         <button class="btn btn-danger my-2" @click="deleteStudentsFromWork" :disabled="!currentStudentsWork.length">&#8593;</button>
       </div>
       <div class="student-right">
-        <h4>Студенты в журнале <small>({{ getWordStudent(studentsWork.length) }})</small></h4>
+        <h5>Добавленные в репорты студенты <small>({{ getWordStudent(reportStudents.length) }})</small></h5>
         <select class="form-select" multiple v-model="currentStudentsWork" size="10">
-          <option v-for="(st, index) in studentsWork" :key="st.id" :value="st.id">
-            {{ ++index }}. {{ st.user.last_name }} {{ st.user.first_name }}</option>
+          <option v-for="(st, index) in reportStudents" :key="st.id" :value="st.id">
+            {{ ++index }}. {{ st.student.user.last_name }} {{ st.student.user.first_name }}</option>
         </select>
       </div>
     </div>
@@ -26,7 +27,7 @@
 <script>
 export default {
   props: {
-    studentsWork: {
+    reportStudents: {
       type: Array,
       default: () => []
     },
@@ -53,11 +54,19 @@ export default {
       return `${count} студентов`;
     },
     addStudentsToWork() {
-      this.$emit('update:studentsWork', this.studentsWork.concat(this.currentStudentsGroup));
+      const result = this.currentStudentsGroup.reduce((result, item) => {
+        return [
+          ...result,
+          {'student': item},
+        ]
+      }, []);
+      console.log(result)
+
+      this.$emit('update:reportStudents', this.reportStudents.concat(result));
       this.currentStudentsGroup = [];
     },
     deleteStudentsFromWork() {
-      this.$emit('update:studentsWork', this.studentsWork.filter(item => !this.currentStudentsWork.includes(item.id)));
+      this.$emit('update:reportStudents', this.reportStudents.filter(item => !this.currentStudentsWork.includes(item.id)));
       this.currentStudentsWork = [];
     },
   },
@@ -66,9 +75,12 @@ export default {
   },
   computed: {
     filterStudents() {
-      return this.group.students.filter(item => !this.studentsWork.map(item => item.id).includes(item.id))
+      return this.group.students.filter(item => !this.reportStudents.map(item => item.student.id).includes(item.id))
     }
   },
+  watch: {
+
+  }
 }
 </script>
 

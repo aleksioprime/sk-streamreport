@@ -75,7 +75,10 @@ a {
   transition: none !important;
   background: var(--my-focus) !important;
 }
-
+.description {
+  font-size: 0.8em;
+  color: #646464;
+}
 .icon-admin {
   position: absolute;
   top: 0;
@@ -131,13 +134,16 @@ a {
 /* Критерии */
 
 .criterion-a, .criterion-b, .criterion-c, .criterion-d {
-  color: #000;
+  color: #000 !important;
+  background: #fff !important;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 40px;
+  max-width: 50px;
   padding: 5px 5px;
   border-radius: 5px;
+  font-weight: 700;
 }
 
 .criterion-a {

@@ -64,7 +64,7 @@
           </option>
         </select>
       </div>
-      <div v-else>
+      <div v-else class="description">
         Выберите предмет, по которому есть созданные юниты
       </div>
       <small ref="unit_alert" class="alert-text"></small>
@@ -83,7 +83,7 @@
             </div>
           </div>
         </div>
-        <div v-else>Для выбора критериев оценки укажите дисциплину</div>  
+        <div v-else class="description">Для выбора критериев оценки укажите дисциплину</div>  
         <small ref="criteria_alert" class="alert-text"></small>
       </div>
     </div>
@@ -104,10 +104,13 @@
                 </div>
               </div>
             </div>
-            <div v-else class="my-2 fst-italic">
-              Пока список пустой
+            <div v-else class="my-2">
+              Список пока пустой<br>
+              <div class="description">Составьте список проведения итоговых работ в выбранных классах по датам.
+                Для этого выберите класс, укажите дату проведения итоговой работы, введите номер урока в этот день и нажмите на '+'
+              </div>
             </div>
-            <div class="border p-2 mt-2">
+            <div class="p-2 mt-2">
             <div class="mb-1">
               <span v-if="editDateGroup">Редактировать выбранную дату</span>
             </div>
@@ -124,7 +127,7 @@
                 <input type="date" id="date" class="form-control" v-model="choisenWorkGroupDate.date">
               </div>
               <div class="col my-1 d-flex align-items-center">
-                <input type="text" id="lesson" class="form-control me-2" placeholder=" № " v-model="choisenWorkGroupDate.lesson">
+                <input type="text" id="lesson" class="form-control me-2" placeholder="Урок" v-model="choisenWorkGroupDate.lesson">
                 <div v-if="editDateGroup" class="d-flex">
                   <button class="icon icon-confirm ms-auto" @click="applyWorkGroupDate"></button>
                   <button class="icon icon-cancel ms-auto" @click="cancelWorkGroupDate"></button>
@@ -135,7 +138,7 @@
           </div> 
           </div>    
           </div>
-        <div v-else>
+        <div v-else class="description">
           Выберите юнит
         </div>
         <small ref="groups_alert" class="alert-text"></small>
@@ -186,7 +189,7 @@ export default {
         period: 'Выберите учебный период',
         subject: 'Выберите предмет',
         unit: 'Выберите юнит',
-        groups: 'Добавьте группы и даты итоговых работ',
+        groups: 'Создайте список проведения итоговых работ в выбранных классах по датам',
         criteria: 'Выберите критерии оценки',
       },
       editDateGroup: false,

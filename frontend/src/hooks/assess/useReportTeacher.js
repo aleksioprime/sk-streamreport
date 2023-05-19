@@ -27,6 +27,7 @@ export function getStudentsReport() {
   }
 }
 
+// Запрос на получение информации о текущем периоде, предмете, группе и типах мероприятий 
 export function getReportTeacherJournal() {
   const currentReportPeriod = ref({});
   const currentSubject = ref({ group_ib: {} });
@@ -53,6 +54,30 @@ export function getReportTeacherJournal() {
   }
 }
 
+
+export function getReportsTeacher() {
+  const reportsTeacher = ref([]);
+  const isReportsTeacherLoading = ref(true);
+  const fetchGetReportsTeacher = async (data) => {
+    const config = {
+      params: {
+        group: data.group || null,
+        period: data.period || null,
+        subject: data.subject || null,
+        class_year: data.class_year || null,
+      }
+    }
+    isReportsTeacherLoading.value = true;
+    await axiosAPI.get('/assessment/report/teacher', config).then((response) => {
+      console.log('Репорты получены: ', response.data)
+      reportsTeacher.value = response.data;
+      isReportsTeacherLoading.value = false;
+    });
+  };
+  return {
+    reportsTeacher, isReportsTeacherLoading, fetchGetReportsTeacher
+  }
+}
 
 export function createReportTeacher() {
   const createdReportTeacher = ref([]);

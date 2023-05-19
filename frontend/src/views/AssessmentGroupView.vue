@@ -192,9 +192,9 @@ export default {
     },
   },
   mounted() {
-    if (this.isAdmin) {
-      this.showAllData = true;
-    }
+    // if (this.isAdmin) {
+    //   this.showAllData = true;
+    // }
     this.fetchGetStudyYears();
     if (this.showAllData) {
       this.fetchGetSubjects({ program: this.currentProgram });

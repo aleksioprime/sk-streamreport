@@ -283,11 +283,14 @@ class ObjectiveViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         strand = self.request.query_params.get("strand", None)
         criterion = self.request.query_params.get("criterion", None)
+        subject = self.request.query_params.get("subject", None)
         objectives = Objective.objects.all()
         if strand:
             objectives = objectives.filter(strand=strand)
         if criterion:
             objectives = objectives.filter(strand__criterion__in=[criterion]).distinct()
+        if subject:
+            objectives = objectives.filter(strand__criterion__subject_group__subject__in=[subject]).distinct()
         return objectives
     
 class ReflectionMYPViewSet(viewsets.ModelViewSet):

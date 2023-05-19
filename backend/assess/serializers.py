@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkGroupDate, WorkAssessment, WorkCriteriaMark, \
-    PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType, ReportMentor, GRADES, WorkLoad
+    PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType, ReportMentor, GRADES, WorkLoad, ReportAchievements
 from curriculum.serializers import SubjectSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.serializers import UserSerializer
 from member.models import ProfileTeacher, User, ProfileStudent
-from curriculum.models import Subject, ClassYear
+from curriculum.models import Subject, ClassYear, Criterion
 from django.db.models import Q
 import math
 
@@ -351,17 +351,39 @@ class EventParticipationSerializer(serializers.ModelSerializer):
 # РЕПОРТЫ УЧИТЕЛЯ #
 ###################
 
+
+class ProfileStudentSimpleSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
+    class Meta:
+        model = ProfileStudent
+        fields = '__all__'
+
+class ReportAchievementsSerializer(serializers.ModelSerializer):
+    level = serializers.IntegerField(source='objective.level.id', read_only=True)
+    objective_description = serializers.CharField(source='objective.name_eng', read_only=True)
+    criterion = serializers.IntegerField(source='objective.strand.criterion.id', read_only=True)
+    point = serializers.IntegerField(source='achievement.point', read_only=True)
+    achievement_description = serializers.CharField(source='achievement.name_eng', read_only=True)
+    class Meta:
+        model = ReportAchievements
+        fields = ['id', 'objective', 'objective_id', 'achievement', 'achievement_id', 'level', 'criterion', 'point', 
+                  'objective_description', 'achievement_description']
+        extra_kwargs = {
+            'objective_id': {'source': 'objective', 'write_only': True},
+            'achievement_id': {'source': 'achievement', 'write_only': True},
+        }
+
 class ReportTeacherSerializer(serializers.ModelSerializer):
-    student = ProfileStudentSerializer(read_only=True)
-    period = ReportPeriodSerializer(read_only=True)
+    student = ProfileStudentSimpleSerializer(read_only=True)
     subject = SubjectSerializer(read_only=True)
     year = ClassYearSerializer(read_only=True)
     events = EventParticipationSerializer(many=True, required=False)
     author = ProfileTeacherSerializer(read_only=True)
+    achievements = ReportAchievementsSerializer(many=True, required=False)
     class Meta:
         model = ReportTeacher
         fields = ['id', 'student', 'student_id', 'period', 'period_id', 'subject', 'subject_id',
-                  'year', 'year_id', 'text', 'events', 'author', 'author_id',
+                  'year', 'year_id', 'text', 'events', 'author', 'author_id', 'achievements', 
                   'criterion_a', 'criterion_b', 'criterion_c', 'criterion_d']
         extra_kwargs = {
             'student_id': {'source': 'student', 'write_only': True},
@@ -369,6 +391,7 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
             'subject_id': {'source': 'subject', 'write_only': True},
             'year_id': {'source': 'year', 'write_only': True},
             'author_id': {'source': 'author', 'write_only': True},
+            # 'achievements_ids': {'source': 'achievements', 'write_only': True},
         }
     def create_or_update_events(self, events):
         events_ids = []
@@ -376,6 +399,12 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
             event_instance, created = EventParticipation.objects.update_or_create(pk=event.get('id'), defaults=event)
             events_ids.append(event_instance.pk)
         return events_ids
+    def create_or_update_achievements(self, achievements):
+        achievements_ids = []
+        for achievement in achievements:
+            achievement_instance, created = ReportAchievements.objects.update_or_create(pk=achievement.get('id'), defaults=achievement)
+            achievements_ids.append(achievement_instance.pk)
+        return achievements_ids
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
         events = validated_data.pop('events', None)
@@ -384,7 +413,80 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
             original.filter(~Q(id__in=[item.get('id') for item in events if 'id' in item])).delete()
             instance.events.set(self.create_or_update_events(events))
             instance.save()
+        achievements = validated_data.pop('achievements', None)
+        if achievements is not None:
+            original = ReportAchievements.objects.filter(teacher_reports=instance)
+            original.filter(~Q(id__in=[item.get('id') for item in achievements if 'id' in item])).delete()
+            instance.achievements.set(self.create_or_update_achievements(achievements))
+            instance.save()
         return super().update(instance, validated_data)
+    def to_representation(self, instance):
+        result = super(ReportTeacherSerializer, self).to_representation(instance)
+        # subject = self.context.get("subject", None)
+        # class_year = self.context.get("class_year", None)
+        # report_period = self.context.get("period", None)
+        if result['subject'] is None and result['year'] is None and result['period'] is None:
+            return result
+        subject_id = result['subject']['id']
+        class_year_id = result['year']['id']
+        period_id = result['period']
+        assessment = PeriodAssessment.objects.filter(student=instance.student,
+                                                            subject=subject_id,
+                                                            year=class_year_id,
+                                                            period__report_period__in=[period_id]).distinct()
+        criteria = {}
+        avg_criteria = {}
+        for assess in assessment:
+            criteria['criteria_a'] = criteria.get('criteria_a', []) + [ { 'mark': assess.criterion_a, 'period': assess.period.number } ]
+            if assess.criterion_a:
+                avg_criteria['criteria_a_sum'] = avg_criteria.get('criteria_a_sum', 0) + assess.criterion_a
+                avg_criteria['criteria_a_num'] = avg_criteria.get('criteria_a_num', 0) + 1
+            criteria['criteria_b'] = criteria.get('criteria_b', []) + [ { 'mark': assess.criterion_b, 'period': assess.period.number } ]
+            if assess.criterion_b:
+                avg_criteria['criteria_b_sum'] = avg_criteria.get('criteria_b_sum', 0) + assess.criterion_b
+                avg_criteria['criteria_b_num'] = avg_criteria.get('criteria_b_num', 0) + 1
+            criteria['criteria_c'] = criteria.get('criteria_c', []) + [ { 'mark': assess.criterion_c, 'period': assess.period.number } ]
+            if assess.criterion_c:
+                avg_criteria['criteria_c_sum'] = avg_criteria.get('criteria_c_sum', 0) + assess.criterion_c
+                avg_criteria['criteria_c_num'] = avg_criteria.get('criteria_c_num', 0) + 1
+            criteria['criteria_d'] = criteria.get('criteria_d', []) + [ { 'mark': assess.criterion_d, 'period': assess.period.number } ]
+            if assess.criterion_d:
+                avg_criteria['criteria_d_sum'] = avg_criteria.get('criteria_d_sum', 0) + assess.criterion_d
+                avg_criteria['criteria_d_num'] = avg_criteria.get('criteria_d_num', 0) + 1
+            criteria['summ_grades'] = criteria.get('summ_grades', []) + [ { 'mark': assess.summ_grade, 'period': assess.period.number } ]
+            criteria['form_grades'] = criteria.get('form_grades', []) + [ { 'mark': assess.form_grade, 'period': assess.period.number } ]
+            criteria['final_grades'] = criteria.get('final_grades', []) + [ { 'mark': assess.final_grade, 'period': assess.period.number } ]
+        result['assessment'] = criteria 
+        result['avg_assessment'] = {}
+        if avg_criteria:
+            if 'criteria_a_num' in avg_criteria:
+                result['avg_assessment']['criterion_a'] = math.ceil(avg_criteria['criteria_a_sum'] / avg_criteria['criteria_a_num'])
+            if 'criteria_b_num' in avg_criteria:
+                result['avg_assessment']['criterion_b'] = math.ceil(avg_criteria['criteria_b_sum'] / avg_criteria['criteria_b_num'])
+            if 'criteria_c_num' in avg_criteria:
+                result['avg_assessment']['criterion_c'] = math.ceil(avg_criteria['criteria_c_sum'] / avg_criteria['criteria_c_num'])
+            if 'criteria_d_num' in avg_criteria:
+                result['avg_assessment']['criterion_d'] = math.ceil(avg_criteria['criteria_d_sum'] / avg_criteria['criteria_d_num'])
+        criteria = Criterion.objects.filter(subject_group__subject__in=[result['subject']['id']]).distinct()
+        result['predict'] = {}
+        for criterion in criteria:
+            result['predict'][criterion.id] = {}
+            result['predict'][criterion.id]['all_strands'] = criterion.strand.count()
+        for item in result['achievements']:
+            result['predict'][item['criterion']]['count_points'] = result['predict'][item['criterion']].get('count_points', 0) + 1
+            if 'point' in item:
+                result['predict'][item['criterion']]['sum_points'] = result['predict'][item['criterion']].get('sum_points', 0) + item['point']
+        return result
+    # def to_internal_value(self, data):
+    #     if 'criterion_a' in data and not data['criterion_a'].isdigit():
+    #         data.pop('criterion_a', None)
+    #     if 'criterion_b' in data and not data['criterion_b'].isdigit():
+    #         data.pop('criterion_b', None)
+    #     if 'criterion_c' in data and not data['criterion_c'].isdigit():
+    #         data.pop('criterion_c', None)
+    #     if 'criterion_d' in data and not data['criterion_d'].isdigit():
+    #         data.pop('criterion_d', None)
+    #     return super(ReportTeacherSerializer, self).to_internal_value(data)
 
 class PeriodAssessmentStudentReportSerializer(serializers.ModelSerializer):
     class Meta:
@@ -591,3 +693,13 @@ class WorkLoadSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkLoad
         fields = '__all__'
+
+
+class TextTranslateSerailizer(serializers.Serializer):
+    text = serializers.CharField()
+    language = serializers.CharField()
+
+class GenerateReportSerailizer(serializers.Serializer):
+    name = serializers.CharField()
+    subject = serializers.CharField()
+    text = serializers.CharField()

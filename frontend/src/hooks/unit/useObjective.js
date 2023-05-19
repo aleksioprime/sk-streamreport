@@ -8,6 +8,7 @@ export function getObjectives() {
       params: {
         criterion: data.criterion || null,
         strand: data.strand || null,
+        subject: data.subject || null,
       }
     }
     await axiosAPI.get('myp/objectives', config).then((response) => {

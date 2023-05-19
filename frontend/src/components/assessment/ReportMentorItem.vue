@@ -10,7 +10,7 @@
       <div class="ms-auto"><div class="icon icon-export-pdf"></div></div>
     </div>
     <div class="student-report">
-      <report-field-text id="student-report" :student="student" :dataField="student.mentor_report" @save="fetchSaveReport"/>
+      <report-field-report id="student-report" :student="student" :dataField="student.mentor_report" @save="fetchSaveReport"/>
     </div>
     <div class="student-events">
       <div class="events-title selected" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
@@ -113,13 +113,13 @@
   
 <script>
 import { mapGetters } from 'vuex';
-import ReportFieldText from "@/components/assessment/ReportFieldText.vue";
+import ReportFieldReport from "@/components/assessment/ReportFieldReport.vue";
 import ReportFieldBlocks from "@/components/assessment/ReportFieldBlocks.vue";
 
 export default {
   name: 'ReportMentorItem',
   components: {
-    ReportFieldText, ReportFieldBlocks
+    ReportFieldReport, ReportFieldBlocks
   },
   props: {
     student: {

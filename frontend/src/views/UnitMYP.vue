@@ -116,7 +116,11 @@ export default {
     // Выбор текущей страницы
     changePage(page) {
       this.currentPage = page;
-      this.fetchGetUnitsMYP({ teacher: this.authUser.teacher.id, page: this.currentPage, limit: this.limit });
+      if (this.showAllUnits) {
+        this.fetchGetUnitsMYP({ department: this.currentFilter.department, years: this.currentFilter.years, subject: this.currentFilter.subject, page: this.currentPage, limit: this.limit });   
+      } else {
+        this.fetchGetUnitsMYP({ teacher: this.authUser.teacher.id, years: this.currentFilter.years, subject: this.currentFilter.subject, page: this.currentPage, limit: this.limit });
+      }
     },
     // Открытие модального окна для добавления юнита 
     showAddUnit() {
