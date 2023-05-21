@@ -270,17 +270,7 @@ export default {
       this.editData.criterion_c = this.report.criterion_c;
       this.editData.criterion_d = this.report.criterion_d;
       this.fetchGetLevels({ subject: this.$route.params.id_subject }).finally(() => {
-        if (this.report.subject.group_ib.id != 2) {
-          this.currentYear = this.levels.find(item => item.name_eng == this.report.year.year_ib)
-        } else {
-          if (this.report.year.year_ib == 'Year 1' || this.report.year.year_ib == 'Year 2') {
-            this.currentYear = this.levels.find(item => item.name_eng == 'Emergent')
-          } else if (this.report.year.year_ib == 'Year 3' || this.report.year.year_ib == 'Year 4') {
-            this.currentYear = this.levels.find(item => item.name_eng == 'Capable')
-          } else {
-            this.currentYear = this.levels.find(item => item.name_eng == 'Proficient')
-          }
-        }
+        this.currentYear = this.levels.find(item => item.class_year.includes(this.report.year.id))
         this.fetchGetObjectives({ subject: this.$route.params.id_subject }).finally(() => {
           this.getCurrentAchievement();
           this.currentCriterion = this.criteria.criterion_a

@@ -7,7 +7,7 @@
       <div class="student-info">
         <div class="student-name">{{ student.user.last_name }} {{ student.user.first_name }}</div>
       </div>
-      <div class="ms-auto"><div class="icon icon-export-pdf"></div></div>
+      <div class="ms-auto"><div class="icon icon-export-doc" @click="exportToPDF"></div></div>
     </div>
     <div class="student-report">
       <report-field-report id="student-report" :student="student" :dataField="student.mentor_report" @save="fetchSaveReport"/>
@@ -113,6 +113,7 @@
   
 <script>
 import { mapGetters } from 'vuex';
+import { saveAs } from 'file-saver';
 import ReportFieldReport from "@/components/assessment/ReportFieldReport.vue";
 import ReportFieldBlocks from "@/components/assessment/ReportFieldBlocks.vue";
 
@@ -170,6 +171,52 @@ export default {
     },
     fetchSaveEvent(data) {
       console.log('Сохранение мероприятия: ', data);
+    },
+    resolveBlob(response) {
+      const headerval = response.headers['content-disposition'];
+      if (headerval != null) {
+        let filename = headerval.split(';')[1].split('=')[1].replace('"', '').replace('"', '');
+        filename = decodeURI(filename);
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      } else {
+        handleKnownException(response);
+      }
+    },
+    handleKnownException(response) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        if (reader.result != null) {
+          const responseData = JSON.parse(reader.result);
+          if (responseData.code == 500) {
+            alert(responseData.msg);
+          }
+        }
+      }
+      reader.readAsText(response.data);
+    },
+    async exportToPDF() {
+      console.log('Запрос на экспорт в DOCX: ');
+      const config = {
+        responseType: 'blob',
+        params: {
+          group: this.$route.params.id_group, 
+          period: this.$route.params.id_period,
+          student: this.student.id,
+          report: this.student.mentor_report.id || null,
+        },
+      }
+      await this.axios.get('/assessment/export/reportmentor/docx', config).then((response) => {
+        this.resolveBlob(response)
+        // console.log(response);
+        // saveAs(response.data, `${this.student.user.first_name}.docx`);
+      });
     }
   },
   computed: {
@@ -197,6 +244,8 @@ export default {
 
 .student-header {
   display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .student-photo {

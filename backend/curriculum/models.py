@@ -139,6 +139,7 @@ class Level(models.Model):
                                                   verbose_name=_("Предметные группы"), blank=True,
                                                   related_name="level")
     number = models.PositiveIntegerField(verbose_name=_("Номер"), default=1)
+    class_year = models.ManyToManyField('curriculum.ClassYear', verbose_name=_("Года обучения"), blank=True, related_name="levels")
     class Meta:
         verbose_name = 'Образовательный уровень'
         verbose_name_plural = 'Образовательные уровни'

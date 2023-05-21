@@ -15,13 +15,34 @@
         <div v-else>
           <div class="field-description">{{ fieldText.description }}</div>
           <div class="field-warning">{{ fieldText.warning }}</div>
-          <editor api-key="j30bef5hr2ipfdbu7b9lww7t4oez2v6f27c94otp9to2j9mk"
-            :init="{
-              plugins: 'lists link wordcount autoresize',
-              menubar: false,
-              toolbar: 'undo redo | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist '
-            }"
-            model-events="change keydown blur focus paste" output-format="html" v-model="editData[fieldName]"/>
+          <div v-show="tinyLoading">
+            <editor api-key="j30bef5hr2ipfdbu7b9lww7t4oez2v6f27c94otp9to2j9mk"
+              :init="{
+                plugins: 'lists link wordcount autoresize',
+                menubar: false,
+                toolbar: 'undo redo | bold italic | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist ',
+                setup: (ed) => {
+                  ed.on('init', () => { tinyLoading = true});
+                }
+              }"
+              model-events="change keydown blur focus paste" output-format="html" v-model="editData[fieldName]"/>
+          </div>
+          <div v-if="!tinyLoading" class="loader">
+            <div class="lds-spinner">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
           <div class="field-buttons">
             <button class="field-btn-done" @click="saveField">Сохранить</button>
             <button class="field-btn-cancel" @click="cancelField">Отмена</button>
@@ -53,6 +74,7 @@ export default {
     return {
       editMode: false,
       editData: {},
+      tinyLoading: false,
     }
   },
   methods: {

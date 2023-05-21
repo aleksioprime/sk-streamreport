@@ -11,24 +11,30 @@
         </div>
         <div v-else>
           <div class="field-description">Введите описание</div>
-          <div>Достижения студента по описаниям из гайда предметной группы <b>{{ report.subject.group_ib.name_eng }}</b></div>
-          <div class="achievement-description" v-if="report.achievements.length">
-            <span v-for="achieve in report.achievements" :key="achieve.id" class="description-item">
-              <span @click="translateSelected" v-if="achieve.achievement" class="popup">The student {{ achieve.achievement_description }}.&nbsp;<span class="popuptext"></span></span>
-              <span @click="translateSelected" class="popup" v-else>The student failed to do {{ achieve.objective_description }}.&nbsp;<span class="popuptext"></span></span>
-            </span>
+          <div v-if="report.subject">
+            <div>Достижения студента по описаниям из гайда предметной группы <b>{{ report.subject.group_ib.name_eng }}</b></div>
+            <div class="achievement-description" v-if="report.achievements.length">
+              <span v-for="achieve in report.achievements" :key="achieve.id" class="description-item">
+                <span @click="translateSelected" v-if="achieve.achievement" class="popup">The student {{ achieve.achievement_description }}.&nbsp;<span class="popuptext"></span></span>
+                <span @click="translateSelected" class="popup" v-else>The student failed to do {{ achieve.objective_description }}.&nbsp;<span class="popuptext"></span></span>
+              </span>
+            </div>
+            <div v-else  class="achievement-description">Не было выбрано ни одного достижения студента</div>
           </div>
-          <div v-else  class="achievement-description">Не было выбрано ни одного достижения студента</div>
-          <div v-if="!reportLoading">
-            <editor api-key="j30bef5hr2ipfdbu7b9lww7t4oez2v6f27c94otp9to2j9mk"
+          
+          <div v-show="!reportLoading && tinyLoading">
+              <editor api-key="j30bef5hr2ipfdbu7b9lww7t4oez2v6f27c94otp9to2j9mk"
               :init="{
                 plugins: 'lists link wordcount autoresize',
                 menubar: false,
-                toolbar: 'undo redo | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist '
+                toolbar: 'undo redo | bold italic | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist ',
+                setup: (ed) => {
+                    ed.on('init', () => { tinyLoading = true});
+                }
               }"
               model-events="change keydown blur focus paste" output-format="html" v-model="editData.text"/>
           </div>
-          <div v-else class="loader">
+          <div v-if="reportLoading || !tinyLoading" class="loader">
             <div class="lds-spinner">
               <div></div>
               <div></div>
@@ -94,9 +100,13 @@ export default {
       editMode: false,
       editData: {},
       reportLoading: false,
+      tinyLoading: false,
     }
   },
   methods: {
+    testTinyMCE() {
+      console.log('testing')
+    },
     saveField() {
       this.editMode = false;
       this.$emit('save', this.editData)

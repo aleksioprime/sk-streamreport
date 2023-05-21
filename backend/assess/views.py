@@ -9,8 +9,9 @@ from curriculum.serializers import ClassYearSerializer, SubjectSerializer
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
     ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad
-from member.models import ProfileTeacher, ProfileStudent, User
-from curriculum.models import ClassYear, Subject
+from member.models import ProfileTeacher, ProfileStudent, User, Department
+from curriculum.models import ClassYear, Subject, Criterion
+from django.http.response import StreamingHttpResponse
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -19,8 +20,16 @@ from django.db.models import Q
 import requests
 from datetime import datetime
 
-from googletrans import Translator
+from docxtpl import DocxTemplate
+from htmldocx import HtmlToDocx
+from docx import Document
+from docx.shared import Inches, Pt
 
+import io
+from django.conf import settings
+import os
+
+from googletrans import Translator
 import openai
 
 class StudyYearViewSet(viewsets.ModelViewSet):
@@ -494,3 +503,97 @@ class WorkLoadViewSet(viewsets.ModelViewSet):
         if study_year:
             workload = workload.filter(study_year=study_year)
         return workload
+    
+# Экспорт в docx-файл
+class ExportReportMentorDOCXAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        group_id = self.request.query_params.get("group", None)
+        period_id = self.request.query_params.get("period", None)
+        student_id = self.request.query_params.get("student", None)
+        report_id = self.request.query_params.get("report", None)
+        student = ProfileStudent.objects.filter(pk=student_id).first()
+        teacher_reports = ReportTeacher.objects.filter(student=student,
+                                                        period__id=period_id,
+                                                        year__group=group_id)
+        mentor_report = ReportMentor.objects.filter(pk=report_id).first()
+        # create an empty document object
+        document = self.build_document(mentor_report, teacher_reports)
+        # save document info
+        buffer = io.BytesIO()
+        document.save(buffer)  # save your memory stream
+        buffer.seek(0)  # rewind the stream
+        response = StreamingHttpResponse(
+            streaming_content=buffer,  # use the stream's content
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = 'attachment;filename=Test.docx'
+        response["Content-Encoding"] = 'UTF-8'
+        return response
+    def build_document(self, mentor_report, teacher_reports):
+        document = Document(os.path.join(settings.BASE_DIR, 'reports', 'temp_report_myp.docx'))
+        print(document._body._body.xml)
+        document.styles['Normal'].paragraph_format.space_after = Pt(0)
+        parser = HtmlToDocx()
+        heading_document = document.add_heading(f"Academic year report {mentor_report.period.study_year.name}", level=1)
+        heading_document.alignment = 1
+        if mentor_report:
+            document.add_paragraph(f"\nStudent name: {mentor_report.student.user.last_name} {mentor_report.student.user.first_name}").paragraph_format.space_after = None
+            document.add_paragraph(f"Grade: {mentor_report.year.year_ib}")
+            document.add_paragraph(f"Advisor: {mentor_report.author.user.last_name} {mentor_report.author.user.first_name} {mentor_report.author.user.middle_name}")
+            document.add_heading(f"REFLECTIONS", level=2)
+            title_mentor = document.add_heading(f"Homeroom Advisor (Наставник)", level=3)
+            for element in parser.parse_html_string(mentor_report.text)._element:
+                title_mentor._p.addnext(element)
+            title_psychologist = document.add_heading(f"Psychologist (Психолог)", level=3)
+            # Предметный блок
+            title_teacher = document.add_heading(f"Teachers (Учителя)", level=3)
+            departments = Department.objects.all()
+            for department in departments:
+                reports = teacher_reports.filter(subject__department=department)
+                if reports:
+                    table = document.add_table(rows=1, cols=5, style="Table Grid")
+                    table.rows[0].cells[0].text = f"{department.name.upper()}"
+                    table.rows[0].cells[0].paragraphs[0].runs[0].font.bold = True
+                    table.rows[0].cells[0].paragraphs[0].runs[0].font.size = Pt(16)
+                    table.cell(0, 0).merge(table.cell(0, 4))
+                    count = 1
+                    for j, report in enumerate(reports):
+                        criteria = Criterion.objects.filter(subject_group__subject=report.subject)
+                        table.add_row()
+                        table.rows[j + count].cells[0].text = f"Предмет"
+                        table.rows[j + count].cells[1].text = f"Критерии оценивания"
+                        table.rows[j + count].cells[1].width = Inches(200.0)
+                        table.rows[j + count].cells[2].text = f"Баллы"
+                        table.rows[j + count].cells[3].text = f"Сумма баллов"
+                        table.rows[j + count].cells[4].text = f"Оценка"
+                        table.add_row()
+                        count += 1
+                        table.rows[j + count].cells[0].text = f"{report.subject.name_rus}"
+                        for i, criterion in enumerate(criteria):
+                            table.rows[j + i + count].cells[1].text = f"{criterion.letter}. {criterion.name_eng}"
+                            if criterion.letter.lower() == 'a':
+                                table.rows[j + i + count].cells[2].text = f"{report.criterion_a}"
+                            elif criterion.letter.lower() == 'b':
+                                table.rows[j + i + count].cells[2].text = f"{report.criterion_b}"
+                            elif criterion.letter.lower() == 'c':
+                                table.rows[j + i + count].cells[2].text = f"{report.criterion_c}"
+                            elif criterion.letter.lower() == 'd':
+                                table.rows[j + i + count].cells[2].text = f"{report.criterion_d}"
+                            table.add_row()
+                        table.rows[j + count].cells[3].text = f"{report.criterion_summ}/{report.criterion_count * 8}"
+                        table.rows[j + count].cells[4].text = f"{report.criterion_rus}"
+                        table.cell(j + count, 0).merge(table.cell(j + count + len(criteria) - 1, 0))
+                        table.cell(j + count, 3).merge(table.cell(j + count + len(criteria) - 1, 3))
+                        table.cell(j + count, 4).merge(table.cell(j + count + len(criteria) - 1, 4))
+                        count += len(criteria)
+                        report_cell = table.cell(j + count, 0).paragraphs[0]
+                        report_cell.add_run(f'Комментарии учителя ({report.author.user.last_name} {report.author.user.first_name} {report.author.user.middle_name}):').bold = True
+                        for element in parser.parse_html_string(report.text)._element:
+                            report_cell._p.addnext(element)
+                        # self.delete_paragraph(report_cell)
+                        table.cell(j + count, 0).merge(table.cell(j + count, 4))
+                document.add_paragraph()     
+        return document
+    def delete_paragraph(self, paragraph):
+        temp_ = paragraph._element
+        temp_.getparent().remove(temp_)
+        temp_._p = temp_._element = None

@@ -243,6 +243,25 @@ class ReportTeacher(models.Model):
         ordering = ['period', 'student']
     def __str__(self):
         return '{} - {}'.format(self.period, self.student)
+    @property
+    def criterion_summ(self):
+        return sum([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if isinstance(x, int)])
+        # return self.criterion_a + self.criterion_b + self.criterion_c + self.criterion_d
+    @property
+    def criterion_count(self):
+        return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if x])
+    @property
+    def criterion_rus(self):
+        if self.criterion_summ >= GRADES[self.criterion_count][2]:
+            return 5
+        elif self.criterion_summ < GRADES[self.criterion_count][2] and self.criterion_summ >= GRADES[self.criterion_count][1]:
+            return 4
+        elif self.criterion_summ < GRADES[self.criterion_count][1] and self.criterion_summ >= GRADES[self.criterion_count][0]:
+            return 3
+        elif self.criterion_summ < GRADES[self.criterion_count][0] and self.criterion_summ > 0:
+            return 2
+        else:
+            return '-'
 
 class ReportAchievements(models.Model):
     """ Выбор уровней достижений и их предметных целей в репортах"""

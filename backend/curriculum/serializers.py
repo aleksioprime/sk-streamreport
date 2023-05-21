@@ -92,6 +92,7 @@ class CriterionSerializer(serializers.ModelSerializer):
         fields = ['id', 'letter', 'name_eng', 'name_rus', 'subject_group']
 
 class LevelSerializer(serializers.ModelSerializer):
+    # class_year = ClassYearSerializer(many=True, read_only=True)
     class Meta:
         model = Level
         fields = '__all__'

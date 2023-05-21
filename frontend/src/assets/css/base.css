@@ -130,6 +130,11 @@ a {
 .icon-export-pdf {
   background: url('@/assets/img/export_pdf.svg') no-repeat 50% / 95%;
 }
+.icon-export-doc {
+  background: url('@/assets/img/export_doc.svg') no-repeat 50% / 95%;
+  width: 45px;
+  height: 45px;
+}
 
 /* Критерии */
 
