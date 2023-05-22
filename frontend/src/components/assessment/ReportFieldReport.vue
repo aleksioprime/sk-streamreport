@@ -27,9 +27,9 @@
               :init="{
                 plugins: 'lists link wordcount autoresize',
                 menubar: false,
-                toolbar: 'undo redo | bold italic | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist ',
+                toolbar: 'removeformat | undo redo | bold italic | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist ',
                 setup: (ed) => {
-                    ed.on('init', () => { tinyLoading = true});
+                    ed.on('init', () => { tinyLoading = true });
                 }
               }"
               model-events="change keydown blur focus paste" output-format="html" v-model="editData.text"/>

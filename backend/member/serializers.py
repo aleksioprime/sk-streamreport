@@ -23,6 +23,7 @@ class ProfileTeacherSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name', read_only=True)
     middle_name = serializers.CharField(source='user.middle_name', read_only=True)
     groups = ClassGroupSerializer(many=True, required=False)
+    psycho_groups = ClassGroupSerializer(many=True, required=False)
     # units = UnitMYPSerializerListCreate(source='unitplan_myp', many=True, read_only=True)
     class Meta:
         model = ProfileTeacher

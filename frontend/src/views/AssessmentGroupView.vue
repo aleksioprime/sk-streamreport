@@ -100,7 +100,16 @@
                 </div>
               </div>
             </div>
-            <div v-if="showAllData || authUser.teacher && group.mentor.id == authUser.teacher.id" class="mentor-wrapper" >
+            <div v-if="showAllData || authUser.teacher && group.psychologist && group.psychologist.id == authUser.teacher.id" class="mentor-wrapper" >
+              <div class="report-title">Репорты психолога <span v-if="group.psychologist">({{ group.psychologist.user.last_name }} {{ group.psychologist.user.first_name }} {{ group.psychologist.user.middle_name }})</span>:</div>
+              <div class="psychologist-period">
+                <div class="period-item" v-for="period in reportPeriods" :key="period.id"  @click="$router.push(`/report/psychologist/group/${group.id}/period/${period.id}`)">
+                  <div class="period-title">Репорты за {{ period.name }}</div>
+                  <div class="period-info"></div>
+                </div>
+              </div>
+            </div>
+            <div v-if="showAllData || authUser.teacher && group.mentor && group.mentor.id == authUser.teacher.id" class="mentor-wrapper" >
               <div class="report-title">Репорты наставника <span v-if="group.mentor">({{ group.mentor.user.last_name }} {{ group.mentor.user.first_name }} {{ group.mentor.user.middle_name }})</span>:</div>
               <div class="mentor-period">
                 <div class="period-item" v-for="period in reportPeriods" :key="period.id"  @click="$router.push(`/report/mentor/group/${group.id}/period/${period.id}`)">
@@ -205,7 +214,7 @@ export default {
       });
     } else {
       this.fetchGetSubjects({ teacher: this.authUser.teacher.id, program: this.currentProgram });
-      this.fetchGetGroups({ teacher: this.authUser.teacher.id, study_year: this.currentStudyYear.id, program: this.currentProgram }).finally(() => {
+      this.fetchGetGroups({ study_year: this.currentStudyYear.id, program: this.currentProgram }).finally(() => {
         this.fetchGetClassYears({ teacher: this.authUser.teacher.id, program: this.currentProgram });
         this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
         this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id })
@@ -219,10 +228,10 @@ export default {
           if (this.showAllData) {
             return item.class_year.id == Number(this.queryYear) 
           } else {
-            return (item.class_year.id == Number(this.queryYear) ) && (item.mentor.id == this.authUser.teacher.id || this.currentSubject);
+            return (item.class_year.id == Number(this.queryYear) ) && (item.mentor.id == this.authUser.teacher.id || (item.psychologist.id == this.authUser.teacher.id) || this.currentSubject);
           }
         }
-        return (this.currentSubject) || (item.mentor.id == this.authUser.teacher.id);
+        return (this.currentSubject) || (item.mentor.id == this.authUser.teacher.id) || (item.psychologist.id == this.authUser.teacher.id);
       });
     },
     // подключение переменной авторизированного пользователя из store
@@ -292,7 +301,7 @@ export default {
 .assessment-title, .report-title {
   font-size: 0.8em;
 }
-.assessment-period, .report-period, .mentor-period{
+.assessment-period, .report-period, .mentor-period, .psychologist-period{
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;

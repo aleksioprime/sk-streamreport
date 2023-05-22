@@ -2,27 +2,20 @@
   <div>
     <base-header>
       <template v-slot:link><a href="#" @click="$router.push(`/assessment/group`)" >Вернуться к выбору класса</a></template>
-      <template v-slot:header>Репорты наставника</template>
+      <template v-slot:header>Репорты психолога</template>
     </base-header>
+    <!-- <report-filter @updateFetch="updateFetch"/> -->
     <div class="col-md mb-2">
       <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
-      <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b>  ({{ getWordStudent(currentGroup.count) }}) 
-      <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}</div>
+      <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> ({{ getWordStudent(currentGroup.count) }}) 
+        <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}
+        <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.user.last_name }} {{ currentGroup.psychologist.user.first_name }} {{ currentGroup.psychologist.user.middle_name }}</span> 
+      </div>
     </div>
-    <div v-if="!isStudentsReportLoading && !firstLoading">
-      <div v-if="studentsReport.length" class="report-wrapper">
-        <div class="student-list radiobutton">
-          <div v-for="student in studentsReport" :key="student.id" сlass="">
-            <input type="radio" name="student" :value="student" :id="'student-' + student.id"
-              v-model="currentStudent">
-            <label :for="'student-' + student.id">
-              <div>{{ student.user.last_name }} {{ student.user.first_name }}</div>
-            </label>
-          </div>
-        </div>
-        <report-mentor-item :period="currentReportPeriod" v-if="currentStudent" class="student-item" :criteria="criteriaMYP"
-        :student="currentStudent" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport"/>
-        <div v-else>Выберите студента</div>
+    <div v-if="!isReportsPsychologistLoading || !firstLoading">
+      <div v-if="reportsPsychologist.length" class="report-wrapper">
+        <report-psychologist-item v-for="report in reportsPsychologist" :key="report.id" :period="currentReportPeriod"
+        :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport"/>
       </div>
       <div v-else class="report-none">
         Пока нет данных
@@ -48,40 +41,39 @@
 </template>
 
 <script>
-import ReportMentorItem from "@/components/assessment/ReportMentorItem.vue";
-import { getStudentsReport, createReportMentor, updateReportMentor, getReportMentorJournal } from "@/hooks/assess/useReportMentor";
-import { getCriteriaMYP } from "@/hooks/unit/useCriterionMYP";
+import { Modal } from 'bootstrap';
+
+import ReportPsychologistItem from "@/components/assessment/ReportPsychologistItem.vue";
+import { getReportPsychologistJournal, getReportsPsychologist, createReportPsychologist, updateReportPsychologist } from "@/hooks/assess/useReportPsychologist";
 
 export default {
   components: {
-    ReportMentorItem
+    ReportPsychologistItem,
   },
   setup(props) {
-    const { currentGroup, currentReportPeriod, eventTypes, fetchGetReportMentorJournal } = getReportMentorJournal();
-    const { studentsReport, isStudentsReportLoading, fetchGetStudentsReport } = getStudentsReport();
-    const { createdReportMentor, fetchCreateReportMentor } = createReportMentor();
-    const { updatedReportMentor, fetchUpdateReportMentor } = updateReportMentor();
-    const { criteriaMYP, fetchGetCriteriaMYP } = getCriteriaMYP();
-
+    // const { studentsReport, isStudentsReportLoading, fetchGetStudentsReport } = getStudentsReport();
+    const { currentReportPeriod, currentSubject, currentGroup, eventTypes, fetchGetReportPsychologist } = getReportPsychologistJournal();
+    const { reportsPsychologist, isReportsPsychologistLoading, fetchGetReportsPsychologist } = getReportsPsychologist();
+    const { createdReportPsychologist, fetchCreateReportPsychologist } = createReportPsychologist();
+    const { updatedReportPsychologist, fetchUpdateReportPsychologist } = updateReportPsychologist();
     return {
-      currentGroup, currentReportPeriod, eventTypes, fetchGetReportMentorJournal,
-      studentsReport, isStudentsReportLoading, fetchGetStudentsReport,
-      createdReportMentor, fetchCreateReportMentor,
-      updatedReportMentor, fetchUpdateReportMentor,
-      criteriaMYP, fetchGetCriteriaMYP,
+      currentReportPeriod, currentSubject, currentGroup, eventTypes, fetchGetReportPsychologist,
+      reportsPsychologist, isReportsPsychologistLoading, fetchGetReportsPsychologist,
+      createdReportPsychologist, fetchCreateReportPsychologist,
+      updatedReportPsychologist, fetchUpdateReportPsychologist,
     }
   },
   data() {
     return {
-      currentStudent: null,
       currentReport: {},
+      currentFetchData: {},
+      currentPeriod: {},
       eventLevels: [
         { value: '0', name: 'Без уровня' },
         { value: '1', name: '1 уровень' },
         { value: '2', name: '2 уровень' },
         { value: '3', name: '3 уровень' },
       ],
-      currentFetchData: {},
       firstLoading: true,
     }
   },
@@ -110,10 +102,11 @@ export default {
     setStudentReportCreate(fetchData) {
       if (Object.keys(fetchData).length) {
         console.log("Запрос на добавление данных: ", fetchData);
-        this.fetchCreateReportMentor(fetchData).finally(() => {
-          this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
-            this.currentStudent = this.studentsReport.find(item => item.id == this.createdReportMentor.student.id);
-          });
+        this.fetchCreateReportPsychologist(fetchData).finally(() => {
+          const index = this.reportsPsychologist.findIndex(item => item.id == fetchData.student_id);
+          if (index != -1) {
+            this.reportsPsychologist[index].psycho_report = this.createdReportPsychologist
+          }
         });
       }
     },
@@ -121,16 +114,17 @@ export default {
     setStudentReportUpdate(fetchData) {
       if (Object.keys(fetchData).length) {
         console.log("Запрос на изменение данных: ", fetchData);
-        this.fetchUpdateReportMentor(fetchData).finally(() => {
-          this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
-            this.currentStudent = this.studentsReport.find(item => item.id == this.updatedReportMentor.student.id);
-          });
+        this.fetchUpdateReportPsychologist(fetchData).finally(() => {
+          const index = this.reportsPsychologist.findIndex(item => item.psycho_report.id == fetchData.id);
+          if (index != -1) {
+            this.reportsPsychologist[index].psycho_report = this.updatedReportPsychologist
+          }
         });
       }
     },
   },
   mounted() {
-    this.fetchGetReportMentorJournal({
+    this.fetchGetReportPsychologist({
       group: this.$route.params.id_group, 
       period: this.$route.params.id_period,
     }).finally(() => {
@@ -139,25 +133,30 @@ export default {
         class_year: this.currentGroup.class_year.id,
         period: this.currentReportPeriod.id,
       }
-      this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
-        this.currentStudent = this.studentsReport[0];
+      this.fetchGetReportsPsychologist(this.currentFetchData).finally(() => {
         this.firstLoading = false;
-        this.fetchGetCriteriaMYP({});
       });
     })
   },
 }
 </script>
 
-<style>
+<style scoped>
 @import '@/assets/css/spinner.css';
 
-.student-list {
+.loader {
   display: flex;
-  flex-wrap: wrap;
-  column-gap: 5px;
-  row-gap: 5px;
-  margin-bottom: 20px;
+  height: calc(100vh - 200px);
+  align-items: center;
+  justify-content: center;
 }
-
+.report-wrapper {
+  margin-top: 20px;
+}
+.report-none {
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

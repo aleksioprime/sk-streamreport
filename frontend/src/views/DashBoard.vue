@@ -8,11 +8,15 @@
       <div v-if="authUser && authUser.teacher">
         <div class="my-3">Вы находитесь в экспериментальной системе <b>Stream Report</b> Международной Гимназии Сколково</div>
         <div>Ваша должность: {{ authUser.teacher.position }}</div>
-        <div v-if="authUser.teacher.groups.length">Вы наставник в классах: <span v-for="group in authUser.teacher.groups" :key="group.id"><b>{{ group.class_year }}{{ group.letter }}</b> </span></div>
-        <div class="mt-2">В <b>{{currentStudyYear.name}}</b> учебном году вы преподаёте следующие предметы: </div>
-        <ul>
-          <li v-for="work in workLoads" :key="work.id">{{ work.subject.name_rus }} в {{ work.group.class_year }}{{ work.group.letter }} классе</li>
-        </ul>
+        <div v-if="authUser.teacher.groups.length">Вы наставник в классах: <span v-for="group, index in authUser.teacher.groups" :key="group.id"><b>{{ group.class_year }}{{ group.letter }}</b><span v-if="++index !== authUser.teacher.groups.length">,&nbsp;</span></span></div>
+        <div v-if="authUser.teacher.psycho_groups.length">Вы психолог в классах: <span v-for="group, index in authUser.teacher.psycho_groups" :key="group.id"><b>{{ group.class_year }}{{ group.letter }}</b><span v-if="++index !== authUser.teacher.psycho_groups.length">,&nbsp;</span></span></div>
+        <div v-if="workLoads.length">
+          <div class="mt-2">В <b>{{currentStudyYear.name}}</b> учебном году вы преподаёте следующие предметы: </div>
+          <ul>
+            <li v-for="work in workLoads" :key="work.id">{{ work.subject.name_rus }} в {{ work.group.class_year }}{{ work.group.letter }} классе</li>
+          </ul>
+        </div>
+        <div v-else>Вам в нагрузку не добавлены дисциплины</div>
         <div class="mt-3"><b>Stream Report</b> в настоящий момент находится в разработке, но некоторые функции уже доступны. Если вы обнаружили ошибки в работе программы, просим вас <a href="#" @click="showFeedback">оставить нам сообщение</a></div>
         <div class="mb-3" v-if="showForm">
           <textarea v-model="feedback.message" class="form-control mt-2" id="exampleFormControlTextarea1" rows="3"></textarea>

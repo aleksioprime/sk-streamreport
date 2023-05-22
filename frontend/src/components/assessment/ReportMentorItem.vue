@@ -17,15 +17,16 @@
       aria-expanded="false" :aria-controls="`collapse-events-${student.id}`">Участие в мероприятиях</div>
       <div class="events-wrapper collapse" :id="`collapse-events-${student.id}`">
         <div class="events-teacher" v-if="student.events.length">
-          <div class="events-teacher-title">Мероприятия от учителей-предметников</div>
+          <div class="events-teacher-title">Мероприятия от учителей-предметников и психолога</div>
           <div v-for="event in student.events" :key="event.id" class="event-item">
             <div>{{ event.title }} ({{ event.type_name }}, {{ event.level_name }})</div>
             <div>Результаты: {{ event.result }}</div>
-            <div v-if="event.teacher_report && event.teacher_report.author">{{ event.teacher_report.subject.name_rus }} ({{ event.teacher_report.author.user.last_name }} {{ event.teacher_report.author.user.first_name }} {{ event.teacher_report.author.user.middle_name }})</div>
+            <div v-if="event.teacher_report && event.teacher_report.author">Учитель: {{ event.teacher_report.author.user.last_name }} {{ event.teacher_report.author.user.first_name }} {{ event.teacher_report.author.user.middle_name }} ({{ event.teacher_report.subject.name_rus }})</div>
+            <div v-if="event.psycho_report && event.psycho_report.author">Психолог: {{ event.psycho_report.author.user.last_name }} {{ event.psycho_report.author.user.first_name }} {{ event.psycho_report.author.user.middle_name }}</div>
           </div>
         </div>
         <div v-else class="events-no">
-          Данных о мероприятиях от учителей-предметников пока нет
+          Данных о мероприятиях от учителей-предметников и психолога пока нет
         </div>
         <report-field-blocks :fieldData="student.mentor_report.events" :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport"  v-if="student.mentor_report.text">
           <!-- Слот для блоков показа записей -->
@@ -64,6 +65,15 @@
       </div>
     </div>
     <div class="subject-reports">
+      <div class="subject-reports-title">Репорт психолога</div>
+      <div v-if="student.psycho_report">
+        <div class="subject-report">
+          <div v-html="student.psycho_report.text"></div>
+        </div>
+        <div class="subject-teacher">
+          <div class="teacher-name" v-if="student.psycho_report.author">{{ student.psycho_report.author.user.last_name }} {{ student.psycho_report.author.user.first_name }} {{ student.psycho_report.author.user.middle_name }}</div>
+        </div>
+      </div>
       <div class="subject-reports-title">Репорты учителей-предметников</div>
       <div class="accordion" id="accordionPanelsSubject">
         <div class="subject-item accordion-item" v-for="subject in student.subject_reports" :key="subject.id">
@@ -321,9 +331,10 @@ export default {
   padding: 10px;
 }
 .event-item {
+  margin-top: 5px;
   padding: 10px;
   border: 0.5px solid #a7a7a78a;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 .events-teacher-title {
   margin: 10px 0;

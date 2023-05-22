@@ -4,11 +4,11 @@ from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassG
     WorkAssessmentSerializer, WorkCriteriaMarkSerializer, ProfileStudentSerializer, WorkGroupDateItemSerializer, \
     PeriodAssessmentSerializer, StudentWorkSerializer, ReportPeriodSerializer, StudentReportTeacherSerializer, ReportTeacherSerializer, \
     EventTypeSerializer, EventParticipationSerializer, StudentReportMentorSerializer, ReportMentorSerializer, ClassGroupStudentsSerializer, \
-    WorkLoadSerializer, TextTranslateSerailizer, GenerateReportSerailizer
+    WorkLoadSerializer, TextTranslateSerailizer, GenerateReportSerailizer, StudentReportPsychologistSerializer, ReportPsychologistSerializer
 from curriculum.serializers import ClassYearSerializer, SubjectSerializer      
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
-    ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad
+    ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad, ReportPsychologist
 from member.models import ProfileTeacher, ProfileStudent, User, Department
 from curriculum.models import ClassYear, Subject, Criterion
 from django.http.response import StreamingHttpResponse
@@ -330,6 +330,19 @@ class ReportTeacherJournalAPIView(APIView):
             'event_types': EventTypeSerializer(types, many=True).data
             })
 
+class ReportPsychologistJournalAPIView(APIView):
+    def get(self, request):
+        group_id = request.query_params.get("group", None)
+        period_id = request.query_params.get("period", None)
+        period = ReportPeriod.objects.filter(id=period_id).first()
+        group = ClassGroup.objects.filter(id=group_id).first()
+        types = EventType.objects.all()
+        return Response({
+            'group': ClassGroupSerializer(group).data,
+            'period': ReportPeriodSerializer(period).data,
+            'event_types': EventTypeSerializer(types, many=True).data
+            })
+
 class ReportMentorJournalAPIView(APIView):
     def get(self, request):
         group_id = request.query_params.get("group", None)
@@ -439,6 +452,20 @@ class StudentReportTeacherViewSet(viewsets.ModelViewSet):
             context.update({"class_year": class_year})
         return context
 
+class StudentReportPsychologistViewSet(viewsets.ModelViewSet):
+    queryset = ProfileStudent.objects.all()
+    serializer_class = StudentReportPsychologistSerializer
+    def get_queryset(self):
+        group = self.request.query_params.get("group", None)
+        students = ProfileStudent.objects.all()
+        if group:
+            students = students.filter(groups__in=[group]).distinct()
+        return students
+
+class ReportPsychologistViewSet(viewsets.ModelViewSet):
+    queryset = ReportPsychologist.objects.all()
+    serializer_class = ReportPsychologistSerializer
+
 class StudentReportMentorViewSet(viewsets.ModelViewSet):
     queryset = ProfileStudent.objects.all()
     serializer_class = StudentReportMentorSerializer
@@ -515,9 +542,12 @@ class ExportReportMentorDOCXAPIView(APIView):
         teacher_reports = ReportTeacher.objects.filter(student=student,
                                                         period__id=period_id,
                                                         year__group=group_id)
+        psycho_report = ReportPsychologist.objects.filter(student=student,
+                                                            period__id=period_id,
+                                                            year__group=group_id).first()
         mentor_report = ReportMentor.objects.filter(pk=report_id).first()
         # create an empty document object
-        document = self.build_document(mentor_report, teacher_reports)
+        document = self.build_document(mentor_report, teacher_reports, psycho_report)
         # save document info
         buffer = io.BytesIO()
         document.save(buffer)  # save your memory stream
@@ -528,14 +558,14 @@ class ExportReportMentorDOCXAPIView(APIView):
         response['Content-Disposition'] = 'attachment;filename=Test.docx'
         response["Content-Encoding"] = 'UTF-8'
         return response
-    def build_document(self, mentor_report, teacher_reports):
+    def build_document(self, mentor_report, teacher_reports, psycho_report):
         document = Document(os.path.join(settings.BASE_DIR, 'reports', 'temp_report_myp.docx'))
         print(document._body._body.xml)
         document.styles['Normal'].paragraph_format.space_after = Pt(0)
         parser = HtmlToDocx()
-        heading_document = document.add_heading(f"Academic year report {mentor_report.period.study_year.name}", level=1)
-        heading_document.alignment = 1
         if mentor_report:
+            heading_document = document.add_heading(f"Academic year report {mentor_report.period.study_year.name}", level=1)
+            heading_document.alignment = 1
             document.add_paragraph(f"\nStudent name: {mentor_report.student.user.last_name} {mentor_report.student.user.first_name}").paragraph_format.space_after = None
             document.add_paragraph(f"Grade: {mentor_report.year.year_ib}")
             document.add_paragraph(f"Advisor: {mentor_report.author.user.last_name} {mentor_report.author.user.first_name} {mentor_report.author.user.middle_name}")
@@ -544,6 +574,9 @@ class ExportReportMentorDOCXAPIView(APIView):
             for element in parser.parse_html_string(mentor_report.text)._element:
                 title_mentor._p.addnext(element)
             title_psychologist = document.add_heading(f"Psychologist (Психолог)", level=3)
+            if psycho_report:
+                for element in parser.parse_html_string(psycho_report.text)._element:
+                    title_psychologist._p.addnext(element)
             # Предметный блок
             title_teacher = document.add_heading(f"Teachers (Учителя)", level=3)
             departments = Department.objects.all()

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkGroupDate, WorkAssessment, WorkCriteriaMark, \
-    PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType, ReportMentor, GRADES, WorkLoad, ReportAchievements
+    PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType, ReportMentor, GRADES, WorkLoad, ReportAchievements, \
+    ReportPsychologist
 from curriculum.serializers import SubjectSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.serializers import UserSerializer
 from member.models import ProfileTeacher, User, ProfileStudent
@@ -567,6 +568,83 @@ class StudentReportTeacherSerializer(serializers.ModelSerializer):
                 result['avg_assessment']['criterion_d'] = math.ceil(avg_criteria['criteria_d_sum'] / avg_criteria['criteria_d_num'])
         return result
 
+
+#####################
+# РЕПОРТЫ ПСИХОЛОГА #
+#####################
+
+class ReportPsychologistSerializer(serializers.ModelSerializer):
+    student = ProfileStudentSerializer(read_only=True)
+    period = ReportPeriodSerializer(read_only=True)
+    year = ClassYearSerializer(read_only=True)
+    events = EventParticipationSerializer(many=True, required=False)
+    author = ProfileTeacherSerializer(read_only=True)
+    class Meta:
+        model = ReportPsychologist
+        fields = ['id', 'student', 'student_id', 'period', 'period_id',
+                  'year', 'year_id', 'text', 'events', 'author', 'author_id']
+        extra_kwargs = {
+            'student_id': {'source': 'student', 'write_only': True},
+            'period_id': {'source': 'period', 'write_only': True},
+            'year_id': {'source': 'year', 'write_only': True},
+            'author_id': {'source': 'author', 'write_only': True},
+        }
+    def create_or_update_events(self, events):
+        events_ids = []
+        for event in events:
+            event_instance, created = EventParticipation.objects.update_or_create(pk=event.get('id'), defaults=event)
+            events_ids.append(event_instance.pk)
+        return events_ids
+    def create(self, validated_data):
+        print('Валидированные данные: ', validated_data)
+        events = validated_data.pop('events', None)
+        if events is not None:
+            instance = ReportPsychologist.objects.create(**validated_data)
+            original = EventParticipation.objects.filter(psycho_reports=instance)
+            original.filter(~Q(id__in=[item.get('id') for item in events if 'id' in item])).delete()
+            instance.events.set(self.create_or_update_events(events))
+            instance.save()
+            return instance
+        return super().create(validated_data)
+    def update(self, instance, validated_data):
+        print('Валидированные данные: ', validated_data)
+        events = validated_data.pop('events', None)
+        if events is not None:
+            original = EventParticipation.objects.filter(psycho_reports=instance)
+            original.filter(~Q(id__in=[item.get('id') for item in events if 'id' in item])).delete()
+            instance.events.set(self.create_or_update_events(events))
+            instance.save()
+        return super().update(instance, validated_data)
+
+class StudentReportPsychologistSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    psycho_report = serializers.SerializerMethodField('get_psycho_report')
+    events = serializers.SerializerMethodField('get_events')
+    class Meta:
+        model = ProfileStudent
+        fields = '__all__'
+    def get_psycho_report(self, instance):
+        report_queryset = ReportPsychologist.objects.filter(student=instance)
+        period = self.context.get("period", None)
+        class_year = self.context.get("class_year", None)
+        author = self.context.get("author", None)
+        if period:
+            report_queryset = report_queryset.filter(period=period)
+        if author:
+            report_queryset = report_queryset.filter(author=author)
+        if class_year:
+            report_queryset = report_queryset.filter(year=class_year)
+        serializer = ReportPsychologistSerializer(instance=report_queryset.first(), context=self.context)
+        return serializer.data
+    def get_events(self, instance):
+        period_id = self.context.get("period", None)
+        class_year_id = self.context.get("class_year", None)
+        events_queryset = EventParticipation.objects.filter(teacher_reports__student=instance, 
+                                                            teacher_reports__period=period_id,
+                                                            teacher_reports__year=class_year_id)
+        serializer = EventParticipationDetailSerializer(instance=events_queryset, many=True, context=self.context)
+        return serializer.data
+
 ######################
 # РЕПОРТЫ НАСТАВНИКА #
 ######################
@@ -593,6 +671,17 @@ class ReportMentorSerializer(serializers.ModelSerializer):
             event_instance, created = EventParticipation.objects.update_or_create(pk=event.get('id'), defaults=event)
             events_ids.append(event_instance.pk)
         return events_ids
+    def create(self, validated_data):
+        print('Валидированные данные: ', validated_data)
+        events = validated_data.pop('events', None)
+        if events is not None:
+            instance = ReportMentor.objects.create(**validated_data)
+            original = EventParticipation.objects.filter(mentor_reports=instance)
+            original.filter(~Q(id__in=[item.get('id') for item in events if 'id' in item])).delete()
+            instance.events.set(self.create_or_update_events(events))
+            instance.save()
+            return instance
+        return super().create(validated_data)
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
         events = validated_data.pop('events', None)
@@ -610,18 +699,29 @@ class ReportTeacherSmallSerializer(serializers.ModelSerializer):
         model = ReportTeacher
         fields = ['subject', 'author']
 
+class ReportPsychologistSmallSerializer(serializers.ModelSerializer):
+    author = ProfileTeacherSerializer(read_only=True)
+    class Meta:
+        model = ReportPsychologist
+        fields = ['author']
+
 class EventParticipationDetailSerializer(serializers.ModelSerializer):
     type = EventTypeSerializer(read_only=True)
     type_name = serializers.CharField(source='type.name', read_only=True)
     level_name = serializers.CharField(source='get_level_display', read_only=True)
     # teacher_reports = ReportTeacherSmallSerializer(many=True, read_only=True)
-    teacher_report = serializers.SerializerMethodField('get_report')
+    teacher_report = serializers.SerializerMethodField('get_teacher_report')
+    psycho_report = serializers.SerializerMethodField('get_psycho_report')
     class Meta:
         model = EventParticipation
-        fields = ['id', 'type', 'type_name', 'level', 'level_name', 'type', 'title', 'result', 'teacher_report']
-    def get_report(self, instance):
+        fields = ['id', 'type', 'type_name', 'level', 'level_name', 'type', 'title', 'result', 'teacher_report', 'psycho_report']
+    def get_teacher_report(self, instance):
         report_queryset = ReportTeacher.objects.filter(events__in=[instance])
         serializer = ReportTeacherSmallSerializer(instance=report_queryset.first(), context=self.context)
+        return serializer.data
+    def get_psycho_report(self, instance):
+        report_queryset = ReportPsychologist.objects.filter(events__in=[instance])
+        serializer = ReportPsychologistSmallSerializer(instance=report_queryset.first(), context=self.context)
         return serializer.data
 
 class StudentReportMentorSerializer(serializers.ModelSerializer):
@@ -647,9 +747,12 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
     def get_events(self, instance):
         period_id = self.context.get("period", None)
         class_year_id = self.context.get("class_year", None)
-        events_queryset = EventParticipation.objects.filter(teacher_reports__student=instance, 
+        events_queryset = EventParticipation.objects.filter(Q(teacher_reports__student=instance, 
                                                             teacher_reports__period=period_id,
-                                                            teacher_reports__year=class_year_id)
+                                                            teacher_reports__year=class_year_id) | 
+                                                            Q(psycho_reports__student=instance,
+                                                              psycho_reports__period=period_id,
+                                                              psycho_reports__year=class_year_id,))
         serializer = EventParticipationDetailSerializer(instance=events_queryset, many=True, context=self.context)
         return serializer.data
     def to_representation(self, instance):
@@ -661,11 +764,11 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
         # subject_queryset = Subject.objects.filter(group_ib__program=class_year.program)
         subject_reports = list(subject_queryset.values('id', 'name_rus'))
         subjects = list(subject_queryset.values_list('id', flat=True))
-        report_queryset = ReportTeacher.objects.filter(student=instance,
+        report_teacher_queryset = ReportTeacher.objects.filter(student=instance,
                                                period=period_id,
                                                year=class_year_id,
                                                subject__in=subjects)
-        reports = list(report_queryset.values('subject__id', 'subject__group_ib', 'text', 'author_id', 
+        reports = list(report_teacher_queryset.values('subject__id', 'subject__group_ib', 'text', 'author_id', 
                                               'author__user__first_name', 'author__user__last_name', 'author__user__middle_name', 
                                               'criterion_a', 'criterion_b', 'criterion_c', 'criterion_d')) 
         for subject in subject_reports:
@@ -682,6 +785,10 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
                     break
         
         result['subject_reports'] = subject_reports
+        report_psycho_queryset = ReportPsychologist.objects.filter(student=instance,
+                                                                    period=period_id,
+                                                                    year=class_year_id).first()
+        result['psycho_report'] = ReportPsychologistSerializer(instance=report_psycho_queryset, context=self.context).data
         return result
     
 

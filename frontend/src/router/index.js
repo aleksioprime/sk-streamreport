@@ -13,6 +13,7 @@ import UnitMYPIDView from '@/views/UnitMYPIDView.vue'
 import UnitDP from '@/views/UnitDP.vue'
 import UnitDPView from '@/views/UnitDPView.vue'
 import ReportTeacher from '@/views/ReportTeacher.vue'
+import ReportPsychologist from '@/views/ReportPsychologist.vue' 
 import ReportMentor from '@/views/ReportMentor.vue'
 import AssessSchedule from '@/views/AssessSchedule.vue'
 import AssessList from '@/views/AssessList.vue'
@@ -127,6 +128,11 @@ const routes = [
     path: '/report/teacher/group/:id_group/period/:id_period/subject/:id_subject',
     name: 'reportTeacher',
     component: ReportTeacher,
+  },
+  {
+    path: '/report/psychologist/group/:id_group/period/:id_period',
+    name: 'reportPsychologist',
+    component: ReportPsychologist,
   },
   {
     path: '/report/mentor/group/:id_group/period/:id_period',

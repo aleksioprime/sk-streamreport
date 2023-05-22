@@ -295,6 +295,7 @@ class ReportPsychologist(models.Model):
     period = models.ForeignKey('assess.ReportPeriod', verbose_name=_("Период репорта"), on_delete=models.SET_NULL, null=True, related_name="psycho_reports")
     year = models.ForeignKey('curriculum.ClassYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="psycho_reports")
     text = models.TextField(verbose_name=_("Текст репорта"), null=True, blank=True)
+    events = models.ManyToManyField('assess.EventParticipation', verbose_name=_("Участие в мероприятиях"), blank=True, related_name="psycho_reports")
     author = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Автор репорта"), on_delete=models.SET_NULL, null=True, related_name="psycho_reports")
     class Meta:
         verbose_name = 'Репорт психолога'
