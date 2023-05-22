@@ -255,7 +255,7 @@ export default {
     setValidMark(rawMark) {
       if (rawMark > 8) {
         return 8
-      } else if (rawMark > 0 && rawMark < 8) {
+      } else if (rawMark >= 0 && rawMark <= 8) {
         return Number(rawMark)
       } else if (rawMark < 0) {
         return 0
