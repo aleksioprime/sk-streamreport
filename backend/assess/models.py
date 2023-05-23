@@ -192,6 +192,8 @@ class PeriodAssessment(models.Model):
         return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if x])
     @property
     def prediction_criterion(self):
+        if self.criterion_count not in GRADES:
+            return "N/A"
         if self.summ_criterion >= GRADES[self.count_criterion][2]:
             return 5
         elif self.summ_criterion < GRADES[self.count_criterion][2] and self.summ_criterion >= GRADES[self.count_criterion][1]:
@@ -252,6 +254,8 @@ class ReportTeacher(models.Model):
         return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if x])
     @property
     def criterion_rus(self):
+        if self.criterion_count not in GRADES:
+            return "N/A"
         if self.criterion_summ >= GRADES[self.criterion_count][2]:
             return 5
         elif self.criterion_summ < GRADES[self.criterion_count][2] and self.criterion_summ >= GRADES[self.criterion_count][1]:
