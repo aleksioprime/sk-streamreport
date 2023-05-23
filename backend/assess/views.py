@@ -555,7 +555,7 @@ class ExportReportMentorDOCXAPIView(APIView):
         response = StreamingHttpResponse(
             streaming_content=buffer,  # use the stream's content
             content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-        response['Content-Disposition'] = 'attachment;filename=Test.docx'
+        response['Content-Disposition'] = f'attachment;filename={student.user.username}.docx'
         response["Content-Encoding"] = 'UTF-8'
         return response
     def build_document(self, mentor_report, teacher_reports, psycho_report):
@@ -624,7 +624,7 @@ class ExportReportMentorDOCXAPIView(APIView):
                             report_cell._p.addnext(element)
                         # self.delete_paragraph(report_cell)
                         table.cell(j + count, 0).merge(table.cell(j + count, 4))
-                document.add_paragraph()     
+                    document.add_paragraph()     
         return document
     def delete_paragraph(self, paragraph):
         temp_ = paragraph._element
