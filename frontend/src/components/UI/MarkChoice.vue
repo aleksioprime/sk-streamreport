@@ -1,7 +1,7 @@
 <template>
   <div class="mark">
     <div class="mark-item">
-      <input :id="`mark-${name}-null`" type="radio" :name="`mark-${name}`" :value="`${null}`" v-model="modelValue" @change="changeOption">
+      <input :id="`mark-${name}-null`" type="radio" :name="`mark-${name}`" :value="null" v-model="modelValue" @change="changeOption">
       <label :for="`mark-${name}-null`">-</label>
     </div>
     <div class="mark-item" v-for="mark, index in getRange(max_mark)" :key="index">
@@ -27,7 +27,7 @@ export default {
       return [...Array(value + 1).keys()]
     },
     changeOption(event) {
-      this.$emit('update:modelValue', event.target.value);
+      this.$emit('update:modelValue', this.modelValue);
     }
   },
 }
