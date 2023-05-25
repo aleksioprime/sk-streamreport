@@ -189,7 +189,7 @@ class PeriodAssessment(models.Model):
         # return self.criterion_a + self.criterion_b + self.criterion_c + self.criterion_d
     @property
     def count_criterion(self):
-        return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if x])
+        return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if  x is not None])
     @property
     def prediction_criterion(self):
         if self.criterion_count not in GRADES:
@@ -239,6 +239,8 @@ class ReportTeacher(models.Model):
     criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True, blank=True)
     criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True, blank=True)
     criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True, blank=True)
+    final_grade = models.SmallIntegerField(verbose_name=_("Итоговая оценка по шкале 1-5"), default=None, null=True, blank=True)
+    final_grade_ib = models.SmallIntegerField(verbose_name=_("Итоговая оценка по шкале 1-7"), default=None, null=True, blank=True)
     class Meta:
         verbose_name = 'Репорт учителя'
         verbose_name_plural = 'Репорты учителя'
@@ -251,7 +253,7 @@ class ReportTeacher(models.Model):
         # return self.criterion_a + self.criterion_b + self.criterion_c + self.criterion_d
     @property
     def criterion_count(self):
-        return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if x])
+        return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if x is not None])
     @property
     def criterion_rus(self):
         if self.criterion_count not in GRADES:

@@ -385,7 +385,8 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
         model = ReportTeacher
         fields = ['id', 'student', 'student_id', 'period', 'period_id', 'subject', 'subject_id',
                   'year', 'year_id', 'text', 'events', 'author', 'author_id', 'achievements', 
-                  'criterion_a', 'criterion_b', 'criterion_c', 'criterion_d']
+                  'criterion_a', 'criterion_b', 'criterion_c', 'criterion_d', 'criterion_rus',
+                  'criterion_summ', 'criterion_count', 'final_grade', 'final_grade_ib']
         extra_kwargs = {
             'student_id': {'source': 'student', 'write_only': True},
             'period_id': {'source': 'period', 'write_only': True},
@@ -810,3 +811,4 @@ class GenerateReportSerailizer(serializers.Serializer):
     name = serializers.CharField()
     subject = serializers.CharField()
     text = serializers.CharField()
+    final_grade = serializers.IntegerField()

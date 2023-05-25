@@ -8,9 +8,9 @@
         <div class="student-name">{{ report.student.user.last_name }} {{ report.student.user.first_name }}</div>
       </div>
     </div>
-    <div class="assess-title selected" data-bs-toggle="collapse" :href="`#collapse-assessment-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-assessment-${report.id}`">
+    <div class="assess-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-assessment-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-assessment-${report.id}`">
       <!-- Результаты студента за <span v-for="(asper, index) in period.assessment_periods" :key="asper.id">{{ asper.number }} {{ asper.type }}<span v-if="++index != period.assessment_periods.length">, </span></span>. -->
-      Результаты студента по <b>Stream Report</b>
+      Результаты студента по&nbsp;<b>Stream Report</b>
     </div>
     <div :id="`collapse-assessment-${report.id}`" class="collapse">
       <div class="student-assessment">
@@ -86,25 +86,47 @@
             </div>
           </div>
         </div>
-        
+        <button class="field-btn-done" @click="autoFieldPeriodStreamReport">Выставить в итог</button>
       </div>
     </div>
-    <div class="dnevnik-title selected" data-bs-toggle="collapse" :href="`#collapse-dnevnik-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-dnevnik-${report.id}`">
-      Результаты студента по <b>Дневник.ру</b>
+    <div class="dnevnik-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-dnevnik-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-dnevnik-${report.id}`">
+      Результаты студента по&nbsp;<b>Дневник.ру</b>
     </div>
     <div :id="`collapse-dnevnik-${report.id}`" class="collapse">
-      <div class="dnevnik-wrapper">В разработке</div>
+      <div class="dnevnik-wrapper">
+        <div class="dnevnik-assessment">
+          <div v-if="isDnevnik">
+            <div v-if="isDataDnevnikLoading" class="dnevnik-wrapper">
+              <div class="mb-2">Итоговые оценки текущего студента:</div>
+              <div v-for="mark in gradesDnevnik.marks" :key="mark.id_str" class="dnevnik-item">
+                <div>{{ mark.work_full.type }}</div>
+                <div>{{ mark.work_full.periodNumber + 1 }} {{ mark.work_full.periodType }}</div>
+                <div>{{ new Date(mark.work_full.targetDate).toLocaleDateString() }}</div>
+                <div>Оценка: {{ mark.value }}</div>
+              </div>
+              <!-- <button class="field-btn-done" @click="autoFieldPeriodDnevnik">Выставить в итог</button> -->
+            </div>
+            <div v-else class="loader-wrapper">
+              <span class="loader-simple"></span>
+            </div>
+          </div>
+          <div v-else>Вы не синхронизированы с Дневник.ру</div>
+        </div>
+      </div>
     </div>
-    <div class="student-criteria">
-      <report-field-criteria id="student-criteria" :report="report" @save="fetchSaveReport" :avg_criteria="report.avg_assessment"
+    <div class="student-assessment" v-if="program == 'MYP'">
+      <report-field-criteria id="student-assessment-myp" :report="report" @save="fetchSaveReport" :avg_criteria="report.avg_assessment"
       :criteria="criteriaObject"/>
+    </div>
+    <div class="student-assessment" >
+      <report-field-final-grade id="student-assessment-final" :report="report" @save="fetchSaveReport" :program="program"/>
     </div>
     <div class="student-report">
       <report-field-report id="student-report" :report="report" :dataField="report" :generate="true"
       :criteria="criteriaObject" @save="fetchSaveReport"/>
     </div>
     <div class="student-events">
-      <div class="events-title selected" data-bs-toggle="collapse" :href="`#collapse-events-${report.id}`" role="button" 
+      <div class="events-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-events-${report.id}`" role="button" 
       aria-expanded="false" :aria-controls="`collapse-events-${report.id}`">Участие в мероприятиях</div>
       <report-field-blocks class="collapse" :id="`collapse-events-${report.id}`" :fieldData="report.events" 
       :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport">
@@ -146,21 +168,25 @@
 </template>
   
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import ReportFieldReport from "@/components/assessment/ReportFieldReport.vue";
 import ReportFieldCriteria from "@/components/assessment/ReportFieldCriteria.vue";
+import ReportFieldFinalGrade from "@/components/assessment/ReportFieldFinalGrade.vue";
 import ReportFieldBlocks from "@/components/assessment/ReportFieldBlocks.vue";
+
+import { getFinalGradeDnevnik } from "@/hooks/assess/useReportTeacher";
+
 export default {
   name: 'ReportTeacherItem',
   components: {
-    ReportFieldReport, ReportFieldBlocks, ReportFieldCriteria
+    ReportFieldReport, ReportFieldBlocks, ReportFieldCriteria, ReportFieldFinalGrade
   },
   props: {
     report: {
       type: Object,
       default: {
         group: {},
-        user: {},
+        student: {},
         assessment: {
           criteria_a: {},
           criteria_b: {},
@@ -185,6 +211,20 @@ export default {
       type: Array,
       default: [],
     },
+    program: {
+      type: String,
+      default: null,
+    },
+    group: {
+      type: Object,
+      default: {},
+    }
+  },
+  setup(props) {
+    const { gradesDnevnik, isDataDnevnikLoading, fetchGetFinalGradeDnevnik } = getFinalGradeDnevnik();
+    return {
+      gradesDnevnik, isDataDnevnikLoading, fetchGetFinalGradeDnevnik
+    }
   },
   data() {
     return {
@@ -195,6 +235,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['clearDnevnikToken']),
     getMarkFromAssessment(assess, period) {
       if (assess) {
         const assessMark = assess.find(item => item.period == period)
@@ -211,6 +252,32 @@ export default {
       editReportStudents.id = this.report.id || null
       this.$emit('updateReport', editReportStudents);
     },
+    autoFieldPeriodStreamReport() {
+      const data = {
+        criterion_a: this.report.avg_assessment.criterion_a,
+        criterion_b: this.report.avg_assessment.criterion_b,
+        criterion_c: this.report.avg_assessment.criterion_c,
+        criterion_d: this.report.avg_assessment.criterion_d,
+      }
+      this.fetchSaveReport(data);
+    },
+    autoFieldPeriodDnevnik() {
+
+    },
+    showDnevnikResults(event) {
+      console.log('Запрос данных из Дневника.ру');
+      this.fetchGetFinalGradeDnevnik({
+        group_dnevnik: this.group.id_dnevnik, 
+        // period_dnevnik: this.currentPeriod.id_dnevnik,
+        subject_dnevnik: this.report.subject.id_dnevnik,
+        student_dnevnik: this.report.student.id_dnevnik,
+        user: this.authUser.id,
+      }).finally(() => {
+        if (!this.gradesDnevnik.isTokenValid) {
+          this.clearDnevnikToken();
+        }
+      })
+    }
   },
   computed: {
     criteriaObject() {
@@ -222,12 +289,17 @@ export default {
       }
     },
     // подключение переменной авторизированного пользователя из store
-    ...mapGetters(['authUser', 'isAdmin']),
+    ...mapGetters(['authUser', 'isAdmin', 'isDnevnik']),
+  },
+  mounted() {
+    const dnevnikCollapsible = document.getElementById(`collapse-dnevnik-${this.report.id}`)
+    dnevnikCollapsible.addEventListener('show.bs.collapse', this.showDnevnikResults)
   }
 }
 </script>
   
 <style scoped>
+@import '@/assets/css/loaders.css';
 .report-item {
   padding: 10px;
   display: flex;
@@ -332,13 +404,21 @@ export default {
   border-radius: 10px;
 }
 .dnevnik-wrapper {
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
-.student-criteria {
+.dnevnik-item {
+  display: flex;
+  column-gap: 10px;
+}
+.student-assessment {
   margin-top: 10px;
 }
 .student-report {
   margin-top: 10px;
+}
+.dnevnik-assessment {
+  padding: 10px;
 }
 .events-title {
   margin-top: 10px;
@@ -347,5 +427,9 @@ export default {
 }
 .accordion-button{
   padding: 10px;
+}
+.field-btn-done {
+  max-width: 200px;
+  align-self: flex-end;
 }
 </style>

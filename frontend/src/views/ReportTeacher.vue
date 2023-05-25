@@ -16,8 +16,8 @@
     <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
     <div v-if="!isReportsTeacherLoading || !firstLoading">
       <div v-if="reportsTeacher.length" class="report-wrapper">
-        <report-teacher-item v-for="report in reportsTeacher" :key="report.id" :period="currentReportPeriod"
-        :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :criteria="criteriaMYP"/>
+        <report-teacher-item v-for="report in reportsTeacher" :key="report.id" :period="currentReportPeriod" :program="currentSubject.group_ib.program"
+        :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :criteria="criteriaMYP" :group="currentGroup"/>
       </div>
       <div v-else class="report-none">
         Пока нет данных
@@ -48,6 +48,7 @@
 
 <script>
 import { Modal } from 'bootstrap';
+import { mapGetters } from 'vuex';
 
 import ReportFilter from "@/components/assessment/ReportFilter.vue";
 import ReportTeacherItem from "@/components/assessment/ReportTeacherItem.vue";
@@ -207,6 +208,8 @@ export default {
     });
   },
   computed: {
+    // подключение переменной авторизированного пользователя из store
+    ...mapGetters(['authUser', 'isAdmin', 'isDnevnik']),
   }
 }
 </script>

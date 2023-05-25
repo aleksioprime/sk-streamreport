@@ -79,6 +79,31 @@ a {
   font-size: 0.8em;
   color: #646464;
 }
+.collapse-title {
+  background-color: var(--bs-primary);
+  display: flex;
+  align-items: center;
+}
+.collapse-title:after {
+  content: '\2796';
+  font-size: 13px;
+  color: white;
+  margin-left: auto;
+}
+.collapse-title.collapsed {
+  background-color: var(--my-focus);
+  transition: 0.3s ease-in-out;
+}
+.collapse-title.collapsed:after {
+  content: "\2795"; 
+  font-size: 13px;
+  color: white;
+  margin-left: auto;
+}
+.collapse-title.collapsed:hover {
+  background-color: var(--bs-primary);
+}
+
 .icon-admin {
   position: absolute;
   top: 0;
@@ -86,6 +111,23 @@ a {
   width: 10px;
   height: 10px;
   background: url('@/assets/img/admin.svg');
+}
+
+.icon-online-dnevnik, .icon-offline-dnevnik {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  background-color: #37c200;
+}
+.icon-online-dnevnik {
+  /* background: url('@/assets/img/dnevnik_small.svg'); */
+  background-color: #37c200;
+}
+.icon-offline-dnevnik {
+  background: #ff0000;
+  cursor: pointer;
 }
 
 /* Общий стиль кнопки-иконки */

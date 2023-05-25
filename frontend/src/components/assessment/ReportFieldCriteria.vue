@@ -24,11 +24,18 @@
               <div class="criteria-d">{{ criteria.criterion_d.letter }}. {{ criteria.criterion_d.name_eng }}</div>
               <div class="criteria-value">{{ this.report.criterion_d || '-' }}</div>
             </div>
+            <div class="criteria-item">
+              <div class="criteria-d">Сумма баллов: </div>
+              <div class="criteria-value">{{ this.report.criterion_summ || '-' }} / {{ this.report.criterion_count * 8 || '-' }}</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-d">Оценка РФ: </div>
+              <div class="criteria-value">{{ this.report.criterion_rus || '-' }}</div>
+            </div>
           </div>
         </div>
         <div v-else>
-          <div class="field-description">Выставите итоговые баллы по критериям вашей предметной области <b>{{ report.subject.group_ib.name_eng }}</b></div>
-          <div class="achievements-title selected" data-bs-toggle="collapse" :href="`#collapse-achievements-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-achievements-${report.id}`">
+          <div class="achievements-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-achievements-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-achievements-${report.id}`">
             Выставление баллов по предметным достижениям
           </div>
           <div :id="`collapse-achievements-${report.id}`" class="collapse">
@@ -101,7 +108,7 @@
                       </div> 
                     </div>
                   </div>
-                  <button class="field-btn-done mt-2" @click="saveAchievementField">Сохранить и рассчитать</button>
+                  <button class="field-btn-done mt-2" @click="saveAchievementField">Рассчитать</button>
                 </div>
               </div>
             </div>         
@@ -123,29 +130,30 @@
                 <div class="criteria-d">{{ criteria.criterion_d.letter }}: </div>
                 <div class="criteria-value">{{ getPredictCriteriaMark('D') }}</div>
               </div>
-            </div>       
+            </div> 
+            <button class="field-btn-done mt-2" @click="autoFieldAchievement">Выставить</button>      
           </div>
-          <div class="criteria-wrapper edit">
-            <div class="criteria-item">
-              <label for="criteria-a">{{ criteria.criterion_a.letter }}. {{ criteria.criterion_a.name_eng }}</label>
-              <input id="criteria-a" class="form-control" type="number" v-model="editData.criterion_a" inputmode="decimal" maxlength="1" min="0" max="8">
+          <div class="field-description mt-2">Выставите итоговые баллы по критериям вашей предметной области <b>{{ report.subject.group_ib.name_eng }}</b></div>
+          <div class="assessment-mark-wrapper edit">
+            <div class="assessment-mark-item">
+              <div class="letter">{{ criteria.criterion_a.letter }}: </div>
+              <mark-choice v-model="editData.criterion_a" :max_mark="8" :name="'a'"/>
             </div>
-            <div class="criteria-item">
-              <label for="criteria-b">{{ criteria.criterion_b.letter }}. {{ criteria.criterion_b.name_eng }}</label>
-              <input id="criteria-b" class="form-control" type="number" v-model="editData.criterion_b" inputmode="decimal" maxlength="1" min="0" max="8">
+            <div class="assessment-mark-item">
+              <div class="letter">{{ criteria.criterion_b.letter }}: </div>
+              <mark-choice v-model="editData.criterion_b" :max_mark="8" :name="'b'"/>
             </div>
-            <div class="criteria-item">
-              <label for="criteria-c">{{ criteria.criterion_c.letter }}. {{ criteria.criterion_c.name_eng }}</label>
-              <input id="criteria-c" class="form-control" type="number" v-model="editData.criterion_c" inputmode="decimal" maxlength="1" min="0" max="8">
+            <div class="assessment-mark-item">
+              <div class="letter">{{ criteria.criterion_c.letter }}: </div>
+              <mark-choice v-model="editData.criterion_c" :max_mark="8" :name="'c'"/>
             </div>
-            <div class="criteria-item">
-              <label for="criteria-d">{{ criteria.criterion_d.letter }}. {{ criteria.criterion_d.name_eng }}</label>
-              <input id="criteria-d" class="form-control" type="number" v-model="editData.criterion_d" inputmode="decimal" maxlength="1" min="0" max="8">
+            <div class="assessment-mark-item">
+              <div class="letter">{{ criteria.criterion_d.letter }}: </div>
+              <mark-choice v-model="editData.criterion_d" :max_mark="8" :name="'d'"/>
             </div>
           </div>
           <div class="field-buttons">
-            <button class="field-btn-done" @click="autoFieldPeriod">Auto: периоды</button>
-            <button class="field-btn-done" @click="autoFieldAchievement">Auto: достижения</button>
+            <!-- <button class="field-btn-done" @click="autoFieldPeriod">Auto: периоды</button> -->
             <button class="field-btn-done" @click="saveField">Сохранить</button>
             <button class="field-btn-cancel" @click="cancelField">Отмена</button>
           </div>
@@ -158,8 +166,10 @@
 <script>
 import { getObjectives } from "@/hooks/unit/useObjective";
 import { getLevels } from "@/hooks/unit/useLevel";
+import MarkChoice from '../UI/MarkChoice.vue';
 
 export default {
+  components: { MarkChoice },
   name: 'ReportFieldCriteria',
   props: {
     report: { 
@@ -194,13 +204,13 @@ export default {
     getPredictCriteriaMark(criterion) {
       let answer = null
       if (criterion == 'A') {
-        answer = this.report.predict[this.criteria.criterion_a.id].sum_points / this.report.predict[this.criteria.criterion_a.id].all_strands
+        answer = this.report.predict[this.criteria.criterion_a.id].sum_points / this.report.predict[this.criteria.criterion_a.id].count_points
       } else if (criterion == 'B') {
-        answer = this.report.predict[this.criteria.criterion_b.id].sum_points / this.report.predict[this.criteria.criterion_b.id].all_strands
+        answer = this.report.predict[this.criteria.criterion_b.id].sum_points / this.report.predict[this.criteria.criterion_b.id].count_points
       } else if (criterion == 'C') {
-        answer = this.report.predict[this.criteria.criterion_c.id].sum_points / this.report.predict[this.criteria.criterion_c.id].all_strands
+        answer = this.report.predict[this.criteria.criterion_c.id].sum_points / this.report.predict[this.criteria.criterion_c.id].count_points
       } else if (criterion == 'D') {
-        answer = this.report.predict[this.criteria.criterion_d.id].sum_points / this.report.predict[this.criteria.criterion_d.id].all_strands
+        answer = this.report.predict[this.criteria.criterion_d.id].sum_points / this.report.predict[this.criteria.criterion_d.id].count_points
       } else {
         return 'E'
       }
@@ -250,6 +260,7 @@ export default {
       this.objectives = [];
       this.currentAchievement = {};
       this.currentCriterion = {};
+      this.editData = {};
       this.editMode = false;
     },
     setValidMark(rawMark) {
@@ -306,7 +317,6 @@ export default {
   flex-wrap: wrap;
   column-gap: 10px;
   row-gap: 10px;
-  justify-content: space-between;
 }
 .criteria-wrapper.edit {
   border: 1px solid var(--bs-secondary);
@@ -322,7 +332,6 @@ export default {
   flex-wrap: nowrap;
 }
 .criteria-item {
-  flex-basis: 23%;
   display: flex;
   align-items: center;
 }
@@ -330,17 +339,17 @@ export default {
   margin-left: 10px;
   width: 100%;
 }
-.criteria-item input {
+/* .criteria-item input {
   width: 70px;
 }
 .criteria-item label {
   width: 100%;
   margin-right: 10px;
-}
+} */
 .criteria-value {
   border: 1px solid #a7a7a78a;
   padding: 5px 10px;
-  margin-left: auto;
+  margin-left: 10px;
   min-height: 40px;
   border-radius: 5px;
   min-width: 30px;
@@ -353,6 +362,12 @@ export default {
   .criteria-item {
     flex-basis: 45%;
   }
+  .criteria-value {
+    margin-left: auto;
+  }
+  .criteria-wrapper {
+    justify-content: space-between;
+  }
 }
 .criterion-wrapper {
   display: flex;
@@ -361,6 +376,35 @@ export default {
 .criterion-wrapper div:hover {
   background: var(--my-focus) !important;
   cursor: pointer;
+}
+.assessment-mark-wrapper {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  column-gap: 10px;
+  justify-content: space-between;
+}
+
+.assessment-mark-item {
+  display: flex;
+  align-items: center;
+  flex-basis: 23%;
+}
+@media screen and (max-width: 992px) {
+  .assessment-mark-item  {
+    flex-basis: 45%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .assessment-mark-item  {
+    flex-basis: 100%;
+  }
+}
+.assessment-mark-item .letter {
+  font-size: 1.2em;
+  font-weight: 700;
+  margin-right: 10px;
 }
 .accordion-button{
   padding: 10px;
@@ -444,10 +488,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   row-gap: 5px;
-}
-@media screen and (max-width: 992px) {
-  .field-buttons button {
-    flex-basis: 45%;
-  }
+  margin-top: 20px;
 }
 </style>

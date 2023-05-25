@@ -28,9 +28,11 @@ from docx.shared import Inches, Pt
 import io
 from django.conf import settings
 import os
+import json
 
 from googletrans import Translator
 import openai
+
 
 class StudyYearViewSet(viewsets.ModelViewSet):
     queryset = StudyYear.objects.all()
@@ -294,9 +296,16 @@ class GenerateReportAPIView(APIView):
         serializer_class = GenerateReportSerailizer(data=request.data)
         if serializer_class.is_valid():
             data = serializer_class.validated_data
+            print(data)
             model_engine = "text-davinci-003"
             openai.api_key = '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'
-            request_text = f"Напиши на русском языке отзыв по студенту по имени {data['name']} по {data['subject']}, который достиг плохих результатов: {data['text']}"
+            if data['final_grade'] == 5:
+                mood = 'хороших'
+            elif data['final_grade'] == 4:
+                mood = 'средних'
+            else:
+                mood = 'плохих'
+            request_text = f"Напиши на русском языке отзыв по студенту по имени {data['name']} по {data['subject']}, который достиг {mood} результатов: {data['text']}"
             completion = openai.Completion.create(
                 engine=model_engine,
                 prompt=request_text,
@@ -630,3 +639,62 @@ class ExportReportMentorDOCXAPIView(APIView):
         temp_ = paragraph._element
         temp_.getparent().remove(temp_)
         temp_._p = temp_._element = None
+
+
+def get_final_marks_dnevnik(token, student, group):
+    url_dnevnik_api = 'https://api.dnevnik.ru/v2/'
+    headers = {
+        'Access-Token': f'{token}',
+        'Content-Type': 'application/json'
+        }
+    url = f'{url_dnevnik_api}persons/{student}/edu-groups/{group}/final-marks'
+    return requests.get(url, headers=headers)
+
+def get_list_works_dnevnik(token, data):
+    url_dnevnik_api = 'https://api.dnevnik.ru/v2/'
+    headers = {
+        'Access-Token': f'{token}',
+        'Content-Type': 'application/json'
+        }
+    url = f'{url_dnevnik_api}works/many'
+    print(data)
+    return requests.post(url, data=json.dumps(data), headers=headers)
+    
+class FinalMarksDnevnikAPIView(APIView):
+    def get(self, request):
+        period_dnevnik = request.query_params.get("period_dnevnik", None)
+        group_dnevnik = request.query_params.get("group_dnevnik", None)
+        subject_dnevnik = request.query_params.get("subject_dnevnik", None)
+        student_dnevnik = request.query_params.get("student_dnevnik", None)
+        user = request.query_params.get("user", None)
+        user_queryset = User.objects.filter(id=user).first()
+        response_marks = get_final_marks_dnevnik(user_queryset.access_token_dnevnik,
+                                                student_dnevnik,
+                                                group_dnevnik)
+        data = {
+            'isResult': False,
+            'isTokenValid': True,
+        }
+        marks = {}
+        works = []
+        if response_marks.status_code == 200:
+            for mark in response_marks.json():
+                if mark['subject_str'] == subject_dnevnik:
+                    marks[mark['final-mark']['work_str']] = mark['final-mark']
+                    works.append(mark['final-mark']['work_str'])
+            data['isResult'] = True
+            data['marks'] = marks
+            response_works = get_list_works_dnevnik(user_queryset.access_token_dnevnik, works)
+            if response_works.status_code == 200:
+                for work in response_works.json():
+                    data['marks'][work['id_str']]['work_full'] = work
+            else:
+                print(f'Ошибка запроса: {response_works.json()}')   
+        elif response_marks.json()['type'] == 'invalidToken':
+            print('Ошибка токена доступа. Токен сброшен')
+            user_queryset.access_token_dnevnik = ''
+            user_queryset.save()
+            data['isTokenValid'] = False
+        else:
+            print(f'Ошибка запроса: {response_marks.json()}')
+        return Response(data)

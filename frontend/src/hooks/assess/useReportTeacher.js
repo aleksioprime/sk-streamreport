@@ -54,6 +54,32 @@ export function getReportTeacherJournal() {
   }
 }
 
+export function getFinalGradeDnevnik() {
+  const gradesDnevnik = ref({
+    marks: {}
+  });
+  const isDataDnevnikLoading = ref(true);
+  const fetchGetFinalGradeDnevnik = async (data) => {
+    const config = {
+      params: {
+        period_dnevnik: data.period_dnevnik || null,
+        group_dnevnik: data.group_dnevnik || null,
+        subject_dnevnik: data.subject_dnevnik || null,
+        student_dnevnik: data.student_dnevnik || null,
+        user: data.user || null,
+      }
+    }
+    isDataDnevnikLoading.value = false;
+    await axiosAPI.get('/assessment/report/teacher/dnevnik', config).then((response) => {
+      console.log("Загрузка данных для журнала из Дневника: ", response.data)
+      gradesDnevnik.value = response.data;
+      isDataDnevnikLoading.value = true;
+    });
+  };
+  return {
+    gradesDnevnik, isDataDnevnikLoading, fetchGetFinalGradeDnevnik
+  }
+}
 
 export function getReportsTeacher() {
   const reportsTeacher = ref([]);

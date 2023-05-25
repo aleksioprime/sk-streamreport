@@ -132,6 +132,7 @@ export default {
           name: this.report.student.user.first_name,
           subject: this.report.subject.name_rus,
           text: phraseList.join('. '),
+          final_grade: this.report.final_grade,
         }
         this.reportLoading = true;
         await this.axios.post('/generate/report', data).then((response) => {

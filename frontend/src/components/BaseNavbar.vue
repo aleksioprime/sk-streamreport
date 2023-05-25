@@ -66,6 +66,8 @@
         <div class="navbar-text d-flex align-items-center" v-if="authUser">
           <div class="navbar-user">
             <img :src='authUser.photo ? authUser.photo : require("@/assets/img/teacher.svg")' alt="" width="30" class="me-2">
+            <div class="icon-online-dnevnik" v-if="isDnevnik"></div>
+            <div v-else class="icon-offline-dnevnik" @click="getDataDnevnik"></div>
             <span v-if="authUser.last_name && authUser.first_name">
               {{ authUser.first_name }} {{ authUser.last_name }}
             </span>
@@ -80,6 +82,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+const CLIEND_ID = '3097117bc2af450db4de47abe50d22ba'
 
 export default {
   name: 'BaseNavbar',
@@ -93,11 +96,15 @@ export default {
         this.$router.push({ name: 'login' })
       });
     },
+    getDataDnevnik() {
+      window.location.href = `https://login.dnevnik.ru/oauth2?response_type=token&client_id=${CLIEND_ID}&scope=CommonInfo,ContactInfo,EducationalInfo&redirect_uri=${window.location.href}&state=`;
+    },
   },
   mounted() {
+     
   },
   computed: {
-    ...mapGetters(['authUser', 'isAdmin']),
+    ...mapGetters(['authUser', 'isAdmin', 'isDnevnik']),
   }
 }
 </script>
@@ -106,6 +113,7 @@ export default {
 .navbar-user {
   display: flex;
   justify-content: flex-end;
+  position: relative;
   align-items: center;
   min-width: 130px;
   margin-right: 5px;
