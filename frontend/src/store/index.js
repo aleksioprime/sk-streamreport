@@ -52,7 +52,7 @@ export default createStore({
     userLogin(context, data) {
       return new Promise((resolve, reject) => {
         axiosAPI.post('token/', {
-          username: data.username,
+          username: data.username.toLowerCase(),
           password: data.password
         }).then((response) => {
           context.commit('updateToken', { access: response.data.access, refresh: response.data.refresh });

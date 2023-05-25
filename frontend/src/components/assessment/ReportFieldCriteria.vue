@@ -10,19 +10,19 @@
           <div class="criteria-wrapper">
             <div class="criteria-item">
               <div class="criteria-a">{{ criteria.criterion_a.letter }}. {{ criteria.criterion_a.name_eng }}</div>
-              <div class="criteria-value">{{ this.report.criterion_a || '-' }}</div>
+              <div class="criteria-value">{{ this.report.criterion_a }}</div>
             </div>
             <div class="criteria-item">
               <div class="criteria-b">{{ criteria.criterion_b.letter }}. {{ criteria.criterion_b.name_eng }}</div>
-              <div class="criteria-value">{{ this.report.criterion_b || '-' }}</div>
+              <div class="criteria-value">{{ this.report.criterion_b }}</div>
             </div>
             <div class="criteria-item">
               <div class="criteria-c">{{ criteria.criterion_c.letter }}. {{ criteria.criterion_c.name_eng }}</div>
-              <div class="criteria-value">{{ this.report.criterion_c || '-' }}</div>
+              <div class="criteria-value">{{ this.report.criterion_c }}</div>
             </div>
             <div class="criteria-item">
               <div class="criteria-d">{{ criteria.criterion_d.letter }}. {{ criteria.criterion_d.name_eng }}</div>
-              <div class="criteria-value">{{ this.report.criterion_d || '-' }}</div>
+              <div class="criteria-value">{{ this.report.criterion_d }}</div>
             </div>
             <div class="criteria-item">
               <div class="criteria-d">Сумма баллов: </div>
@@ -30,7 +30,7 @@
             </div>
             <div class="criteria-item">
               <div class="criteria-d">Оценка РФ: </div>
-              <div class="criteria-value">{{ this.report.criterion_rus || '-' }}</div>
+              <div class="criteria-value">{{ this.report.criterion_rus }}</div>
             </div>
           </div>
         </div>
@@ -238,7 +238,7 @@ export default {
     saveField() {
       this.editMode = false;
       for (let key in this.editData) {
-        this.editData[key] = this.setValidMark(this.editData[key])
+        this.editData[key] = this.editData[key]
       }
       this.$emit('save', this.editData);
     },
