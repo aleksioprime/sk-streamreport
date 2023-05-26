@@ -4,7 +4,7 @@
       <div v-for="item in fieldData" :key="item.id">
         <div class="block-item">
           <slot name="show" :data="item"></slot>
-          <div class="field-btn-wrapper" v-if="!createMode && !editingItemID && !deletingItemID">
+          <div class="field-btn-wrapper" v-if="editable && !createMode && !editingItemID && !deletingItemID">
             <button class="icon icon-edit" @click="showEditForm(item.id)"></button>
             <button class="icon icon-del" @click="showDeleteForm(item.id)"></button>
           </div>
@@ -35,7 +35,7 @@
       Нет записей
     </div>
     <button class="my-2 btn btn-primary" @click="showAddForm"
-      v-if="!createMode && !editingItemID && !deletingItemID">Добавить</button>
+      v-if="editable && !createMode && !editingItemID && !deletingItemID">Добавить</button>
     <transition name="slide-fade">
       <div class="mt-2 p-2 border" v-if="createMode">
         <div class="block-heading">Добавление записи</div>
@@ -58,6 +58,7 @@ export default {
     fieldData: { type: Array },
     checkLine: { type: Boolean, default: false },
     defaultItem: { type: Object, default: {} },
+    editable: { type: Boolean, default: false },
   },
   setup(props) {
     return {

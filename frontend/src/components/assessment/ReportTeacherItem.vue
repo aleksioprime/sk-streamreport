@@ -86,7 +86,7 @@
             </div>
           </div>
         </div>
-        <button class="field-btn-done" @click="autoFieldPeriodStreamReport">Выставить в итог</button>
+        <button v-if="editable" class="field-btn-done" @click="autoFieldPeriodStreamReport">Выставить в итог</button>
       </div>
     </div>
     <div class="dnevnik-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-dnevnik-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-dnevnik-${report.id}`">
@@ -115,20 +115,20 @@
       </div>
     </div>
     <div class="student-assessment" v-if="program == 'MYP'">
-      <report-field-criteria id="student-assessment-myp" :report="report" @save="fetchSaveReport" :avg_criteria="report.avg_assessment"
+      <report-field-criteria id="student-assessment-myp" :report="report" @save="fetchSaveReport" :avg_criteria="report.avg_assessment" :editable="editable"
       :criteria="criteriaObject"/>
     </div>
     <div class="student-assessment" >
-      <report-field-final-grade id="student-assessment-final" :report="report" @save="fetchSaveReport" :program="program"/>
+      <report-field-final-grade id="student-assessment-final" :report="report" @save="fetchSaveReport" :program="program" :editable="editable"/>
     </div>
     <div class="student-report">
-      <report-field-report id="student-report" :report="report" :dataField="report" :generate="true"
+      <report-field-report id="student-report" :report="report" :dataField="report" :generate="true" :editable="editable"
       :criteria="criteriaObject" @save="fetchSaveReport"/>
     </div>
     <div class="student-events">
       <div class="events-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-events-${report.id}`" role="button" 
       aria-expanded="false" :aria-controls="`collapse-events-${report.id}`">Участие в мероприятиях</div>
-      <report-field-blocks class="collapse" :id="`collapse-events-${report.id}`" :fieldData="report.events" 
+      <report-field-blocks class="collapse" :id="`collapse-events-${report.id}`" :fieldData="report.events" :editable="editable"
       :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport">
         <!-- Слот для блоков показа записей -->
         <template v-slot:show="field">
@@ -164,6 +164,8 @@
         </template>
       </report-field-blocks>
     </div>
+    <div class="author">Автор репорта: {{ report.author.user.last_name }} {{ report.author.user.first_name }} {{ report.author.user.middle_name }}</div>
+    <div>Время редактирования: {{ new Date(report.updated).toLocaleDateString("ru-RU", {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</div>
   </div>
 </template>
   
@@ -215,10 +217,8 @@ export default {
       type: String,
       default: null,
     },
-    group: {
-      type: Object,
-      default: {},
-    }
+    group: { type: Object, default: {} },
+    editable: { type: Boolean, default: false },
   },
   setup(props) {
     const { gradesDnevnik, isDataDnevnikLoading, fetchGetFinalGradeDnevnik } = getFinalGradeDnevnik();
@@ -265,18 +265,20 @@ export default {
 
     },
     showDnevnikResults(event) {
-      console.log('Запрос данных из Дневника.ру');
-      this.fetchGetFinalGradeDnevnik({
-        group_dnevnik: this.group.id_dnevnik, 
-        // period_dnevnik: this.currentPeriod.id_dnevnik,
-        subject_dnevnik: this.report.subject.id_dnevnik,
-        student_dnevnik: this.report.student.id_dnevnik,
-        user: this.authUser.id,
-      }).finally(() => {
-        if (!this.gradesDnevnik.isTokenValid) {
-          this.clearDnevnikToken();
-        }
-      })
+      if (this.isDnevnik) {
+        console.log('Запрос данных из Дневника.ру');
+        this.fetchGetFinalGradeDnevnik({
+          group_dnevnik: this.group.id_dnevnik, 
+          // period_dnevnik: this.currentPeriod.id_dnevnik,
+          subject_dnevnik: this.report.subject.id_dnevnik,
+          student_dnevnik: this.report.student.id_dnevnik,
+          user: this.authUser.id,
+        }).finally(() => {
+          if (!this.gradesDnevnik.isTokenValid) {
+            this.clearDnevnikToken();
+          }
+        })
+      }
     }
   },
   computed: {
@@ -431,5 +433,8 @@ export default {
 .field-btn-done {
   max-width: 200px;
   align-self: flex-end;
+}
+.author {
+  margin-top: 10px;
 }
 </style>

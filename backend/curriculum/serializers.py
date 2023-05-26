@@ -52,7 +52,7 @@ class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = '__all__'
-
+    
 class DepartmentSerializer(serializers.ModelSerializer):
     subject = SubjectSerializer(many=True)
     class Meta:

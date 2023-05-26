@@ -241,10 +241,12 @@ class ReportTeacher(models.Model):
     criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True, blank=True)
     final_grade = models.SmallIntegerField(verbose_name=_("Итоговая оценка по шкале 1-5"), default=None, null=True, blank=True)
     final_grade_ib = models.SmallIntegerField(verbose_name=_("Итоговая оценка по шкале 1-7"), default=None, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_("Дата и время создания"))
+    updated = models.DateTimeField(auto_now=True, null=True, verbose_name=_("Дата и время редактирования"))
     class Meta:
         verbose_name = 'Репорт учителя'
         verbose_name_plural = 'Репорты учителя'
-        ordering = ['period', 'student']
+        ordering = ['period', 'subject__name_rus', 'author']
     def __str__(self):
         return '{} - {}'.format(self.period, self.student)
     @property

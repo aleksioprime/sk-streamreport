@@ -51,7 +51,7 @@ class ReportPeriodAdmin(ImportExportModelAdmin):
 
 @admin.register(ReportTeacher)
 class ReportTeacherAdmin(ImportExportModelAdmin):
-    list_display = ("student", "period", "subject", "author")
+    list_display = ("student", "period", "subject", "author", "created", "updated")
 
 @admin.register(ReportAchievements)
 class ReportAchievementsAdmin(ImportExportModelAdmin):

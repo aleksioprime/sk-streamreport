@@ -37,7 +37,7 @@
               Оценивание
             </a>
             <div class="dropdown-menu">
-              <router-link to="/assessment" class="dropdown-item">Итоговые работы</router-link>
+              <!-- <router-link to="/assessment" class="dropdown-item">Итоговые работы</router-link> -->
               <!-- <router-link to="/schedule" class="dropdown-item">График работ</router-link> -->
               <router-link to="/assessment/group" class="dropdown-item">Итоговое оценивание</router-link>
               <!-- <router-link to="/report/teacher" class="dropdown-item">Репорты учителя</router-link>
@@ -65,13 +65,17 @@
         </ul>
         <div class="navbar-text d-flex align-items-center" v-if="authUser">
           <div class="navbar-user">
-            <img :src='authUser.photo ? authUser.photo : require("@/assets/img/teacher.svg")' alt="" width="30" class="me-2">
+            <img :src='authUser.photo ? authUser.photo : require("@/assets/img/teacher.svg")' alt="" width="35" class="me-2">
             <div class="icon-online-dnevnik" v-if="isDnevnik"></div>
-            <div v-else class="icon-offline-dnevnik" @click="getDataDnevnik"></div>
-            <span v-if="authUser.last_name && authUser.first_name">
-              {{ authUser.first_name }} {{ authUser.last_name }}
-            </span>
-            <span v-else>{{ authUser.username }}</span>
+            <div v-else class="icon-offline-dnevnik"></div>
+            <div class="navbar-user-name">
+              <div v-if="authUser.last_name && authUser.first_name">
+                {{ authUser.first_name }} {{ authUser.last_name }}
+              </div>
+              <div v-else>{{ authUser.username }}</div>
+              <div class="navbar-user-sync" @click="getDataDnevnik" v-if="!isDnevnik" title="Нажмите и залогиньтесь в системе Дневник.ру">Синхронизировать с Дневник.ру</div>
+            </div>
+            
           </div>
           <button class="icon icon-logout" @click="logout"></button>
         </div>
@@ -109,7 +113,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .navbar-user {
   display: flex;
   justify-content: flex-end;
@@ -122,7 +126,20 @@ export default {
   cursor: pointer;
   font-family: 'Fira Sans', sans-serif;
 }
-
+.navbar-user-name {
+  display: flex;
+  flex-direction: column;
+}
+.navbar-user-sync {
+  font-size: 0.6em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.navbar-user-sync:hover {
+  color: #674A9E;
+  text-decoration: underline;
+  cursor: pointer;
+}
 @media screen and (max-width: 768px) {
   .navbar-user {
     justify-content: flex-start;

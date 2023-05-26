@@ -4,8 +4,8 @@ from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassG
     WorkAssessmentSerializer, WorkCriteriaMarkSerializer, ProfileStudentSerializer, WorkGroupDateItemSerializer, \
     PeriodAssessmentSerializer, StudentWorkSerializer, ReportPeriodSerializer, StudentReportTeacherSerializer, ReportTeacherSerializer, \
     EventTypeSerializer, EventParticipationSerializer, StudentReportMentorSerializer, ReportMentorSerializer, ClassGroupStudentsSerializer, \
-    WorkLoadSerializer, TextTranslateSerailizer, GenerateReportSerailizer, StudentReportPsychologistSerializer, ReportPsychologistSerializer
-from curriculum.serializers import ClassYearSerializer, SubjectSerializer      
+    WorkLoadSerializer, TextTranslateSerailizer, GenerateReportSerailizer, StudentReportPsychologistSerializer, ReportPsychologistSerializer, \
+        ProfileTeacherSerializer, SubjectSerializer   
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
     ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad, ReportPsychologist
@@ -328,16 +328,23 @@ class ReportTeacherJournalAPIView(APIView):
         group_id = request.query_params.get("group", None)
         period_id = request.query_params.get("period", None)
         subject_id = request.query_params.get("subject", None)
-        period = ReportPeriod.objects.filter(id=period_id).first()
-        subject = Subject.objects.filter(id=subject_id).first()
-        group = ClassGroup.objects.filter(id=group_id).first()
+        author_id = request.query_params.get("author", None)
+        data = {}
+        if period_id:
+            period = ReportPeriod.objects.filter(id=period_id).first()
+            data['period'] = ReportPeriodSerializer(period).data
+        if group_id:
+            group = ClassGroup.objects.filter(id=group_id).first()
+            data['group'] = ClassGroupStudentsSerializer(group).data
+        if subject_id:
+            subject = Subject.objects.filter(id=subject_id).first()
+            data['subject'] = SubjectSerializer(subject).data
+        if author_id:
+            author = ProfileTeacher.objects.filter(id=author_id).first()
+            data['author'] = ProfileTeacherSerializer(author).data
         types = EventType.objects.all()
-        return Response({
-            'group': ClassGroupStudentsSerializer(group).data,
-            'subject': SubjectSerializer(subject).data,
-            'period': ReportPeriodSerializer(period).data,
-            'event_types': EventTypeSerializer(types, many=True).data
-            })
+        data['event_types'] = EventTypeSerializer(types, many=True).data
+        return Response(data)
 
 class ReportPsychologistJournalAPIView(APIView):
     def get(self, request):
@@ -383,6 +390,7 @@ class ReportTeacherViewSet(viewsets.ModelViewSet):
         group_id = self.request.query_params.get("group", None)
         period_id = self.request.query_params.get("period", None)
         subject_id = self.request.query_params.get("subject", None)
+        author_id = self.request.query_params.get("author", None)
         report_teacher = ReportTeacher.objects.all()
         if group_id:
             report_teacher = report_teacher.filter(student__groups__in=[group_id]).distinct()
@@ -390,12 +398,14 @@ class ReportTeacherViewSet(viewsets.ModelViewSet):
             report_teacher = report_teacher.filter(period=period_id)
         if subject_id:
             report_teacher = report_teacher.filter(subject=subject_id)
+        if author_id:
+            report_teacher = report_teacher.filter(author=author_id)
         return report_teacher
     def create(self, request, *args, **kwargs): 
         # Если пришли данные с названием bulk_create, то срабатывает алгоритм массового создания записей репортов
         data = request.data.pop('bulk_create', None)
         if data:
-            reports = ReportTeacher.objects.filter(student__groups__id=data['group_id'], subject=data['subject_id'], period=data['period_id'], year=data['year_id'])
+            reports = ReportTeacher.objects.filter(student__groups__id=data['group_id'], subject=data['subject_id'], period=data['period_id'], year=data['year_id'], author=data['author_id'])
             print(f"Отфильтровано записей: {reports}")
             reports_delete = reports.filter(~Q(id__in=[item['id'] for item in data['students'] if 'id' in item]))
             print(f"Записи на удаление: {reports_delete}")
@@ -410,7 +420,8 @@ class ReportTeacherViewSet(viewsets.ModelViewSet):
                         student=ProfileStudent.objects.filter(pk=item['student_id']).first(),
                         subject=subject,
                         period=period,
-                        year=year))
+                        year=year,
+                        author = self.request.user.teacher))
             print(f"Записи на создание: {new_students}")
             created_students = ReportTeacher.objects.bulk_create(new_students)
             serializer = self.get_serializer(instance=created_students, many=True)

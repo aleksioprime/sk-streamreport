@@ -125,8 +125,13 @@ const routes = [
     component: AssessPeriodView,
   },
   {
+    path: '/report/teacher/group/:id_group/period/:id_period/subject/:id_subject/author/:id_author',
+    name: 'reportTeacherId',
+    component: ReportTeacher,
+  },
+  {
     path: '/report/teacher/group/:id_group/period/:id_period/subject/:id_subject',
-    name: 'reportTeacher',
+    name: 'reportTeacherAll',
     component: ReportTeacher,
   },
   {
@@ -152,6 +157,10 @@ const routes = [
 ]
 
 const router = createRouter({
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 }
+  },
   routes,
   history: createWebHistory(),
 })

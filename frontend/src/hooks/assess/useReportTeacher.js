@@ -31,6 +31,7 @@ export function getStudentsReport() {
 export function getReportTeacherJournal() {
   const currentReportPeriod = ref({});
   const currentSubject = ref({ group_ib: {} });
+  const currentAuthor = ref({ user: {} });
   const currentGroup = ref({ mentor: { user: {} }, class_year: {} });
   const eventTypes = ref([]);  
   const fetchGetReportTeacher = async (data) => {
@@ -39,6 +40,7 @@ export function getReportTeacherJournal() {
         period: data.period || null,
         group: data.group || null,
         subject: data.subject || null,
+        author: data.author || null
       }
     }
     await axiosAPI.get('/assessment/report/teacher/journal', config).then((response) => {
@@ -47,10 +49,14 @@ export function getReportTeacherJournal() {
       currentSubject.value = response.data.subject;
       currentGroup.value = response.data.group;
       eventTypes.value = response.data.event_types;
+      if (response.data.author) {
+        currentAuthor.value = response.data.author;
+      }
+
     });
   };
   return {
-    currentReportPeriod, currentSubject, currentGroup, eventTypes, fetchGetReportTeacher
+    currentReportPeriod, currentSubject, currentAuthor, currentGroup, eventTypes, fetchGetReportTeacher
   }
 }
 
@@ -91,6 +97,7 @@ export function getReportsTeacher() {
         period: data.period || null,
         subject: data.subject || null,
         class_year: data.class_year || null,
+        author: data.author || null,
       }
     }
     isReportsTeacherLoading.value = true;

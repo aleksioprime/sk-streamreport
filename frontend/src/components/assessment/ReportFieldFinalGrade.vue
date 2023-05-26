@@ -2,7 +2,7 @@
   <div class="unit-field">
     <div class="field-title">
       <div class="field-label">Итоговые оценки</div>
-      <button v-if="!editMode" class="field-btn-edit" @click="editField">Редактировать</button>
+      <button v-if="editable && !editMode" class="field-btn-edit" @click="editField">Редактировать</button>
     </div>
     <div class="field-data" :class="{ 'field-editing': editMode }">
       <transition name="slide-fade">
@@ -48,6 +48,7 @@ export default {
       type: Object, 
       default: {}
     },
+    editable: { type: Boolean, default: false },
   },
   data() {
     return {

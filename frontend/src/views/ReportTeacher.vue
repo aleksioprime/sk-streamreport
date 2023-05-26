@@ -2,25 +2,28 @@
   <div>
     <base-header>
       <template v-slot:link><a href="#" @click="$router.push(`/assessment/group`)" >Вернуться к выбору класса</a></template>
-      <template v-slot:header>Репорты учителя</template>
+      <div></div>
+      <template v-slot:header>Репорты <span v-if="currentAuthor.id">учителя</span><span v-else>учителей</span></template>
+      <template v-slot:extra><h4>{{ currentAuthor.user.last_name }} {{ currentAuthor.user.first_name }} {{ currentAuthor.user.middle_name }}</h4></template>
     </base-header>
     <!-- <report-filter @updateFetch="updateFetch"/> -->
     <div class="col-md mb-2">
       <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
       <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> ({{ getWordStudent(currentGroup.count) }}) 
-      <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}
-      <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.user.last_name }} {{ currentGroup.psychologist.user.first_name }} {{ currentGroup.psychologist.user.middle_name }}</span> 
-    </div>
+        <!-- <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}
+        <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.user.last_name }} {{ currentGroup.psychologist.user.first_name }} {{ currentGroup.psychologist.user.middle_name }}</span>  -->
+      </div>
       <div>Предмет: <b>{{ currentSubject.name_rus }} ({{ currentSubject.group_ib.name_eng }})</b></div>
     </div>
-    <button class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
+    <button v-if="isAuthor" class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
     <div v-if="!isReportsTeacherLoading || !firstLoading">
       <div v-if="reportsTeacher.length" class="report-wrapper">
         <report-teacher-item v-for="report in reportsTeacher" :key="report.id" :period="currentReportPeriod" :program="currentSubject.group_ib.program"
-        :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :criteria="criteriaMYP" :group="currentGroup"/>
+        :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :criteria="criteriaMYP" :group="currentGroup" :editable="report.author.id == authUser.teacher.id"/>
       </div>
       <div v-else class="report-none">
-        Пока нет данных
+        <span v-if="isAuthor">Нет добавленных студентов в репорты выбранного класса и предмета. Чтобы добавить студентов нажмите на кнопку "Изменить список группы"</span>
+        <span v-else>Нет данных для отображения</span>
       </div>
     </div>
     <div v-else class="loader">
@@ -62,14 +65,14 @@ export default {
   },
   setup(props) {
     // const { studentsReport, isStudentsReportLoading, fetchGetStudentsReport } = getStudentsReport();
-    const { currentReportPeriod, currentSubject, currentGroup, eventTypes, fetchGetReportTeacher } = getReportTeacherJournal();
+    const { currentReportPeriod, currentSubject, currentAuthor, currentGroup, eventTypes, fetchGetReportTeacher } = getReportTeacherJournal();
     const { reportsTeacher, isReportsTeacherLoading, fetchGetReportsTeacher } = getReportsTeacher();
     const { createdReportTeacher, fetchCreateReportTeacher } = createReportTeacher();
     const { updatedReportTeacher, fetchUpdateReportTeacher } = updateReportTeacher();
     const { criteriaMYP, fetchGetCriteriaMYP } = getCriteriaMYP();
     return {
       // studentsReport, isStudentsReportLoading, fetchGetStudentsReport,
-      currentReportPeriod, currentSubject, currentGroup, eventTypes, fetchGetReportTeacher,
+      currentReportPeriod, currentSubject, currentAuthor, currentGroup, eventTypes, fetchGetReportTeacher,
       reportsTeacher, isReportsTeacherLoading, fetchGetReportsTeacher,
       createdReportTeacher, fetchCreateReportTeacher,
       updatedReportTeacher, fetchUpdateReportTeacher,
@@ -110,6 +113,7 @@ export default {
           'year_id': this.currentFetchData.class_year, 
           'period_id': this.currentFetchData.period,
           'subject_id': this.currentFetchData.subject,
+          'author_id': this.currentAuthor.id,
         }
         
       }
@@ -131,19 +135,6 @@ export default {
       if (number == 1) return `${count} студент`;
       return `${count} студентов`;
     },
-    // updateFetch(data) {
-    //   console.log('Обновление данных: ', data)
-    //   this.currentFetchData = data;
-    //   this.currentPeriod = data.period;
-    //   this.currentFetchData.period = data.period.id;
-    //   if (Object.values(this.currentFetchData).every(item => item != null)) {
-    //     this.fetchGetCriteriaDetailMYP({ subject: this.currentFetchData.subject }).finally(() => {
-    //       // this.fetchGetStudentsReport(this.currentFetchData);
-    //     });
-    //   } else {
-    //     this.studentsReport = []
-    //   }
-    // },
     fetchUpdateReport(editingReport) {
       editingReport.period_id = this.currentFetchData.period;
       editingReport.subject_id = this.currentFetchData.subject;
@@ -156,34 +147,6 @@ export default {
         }
       });
     },
-    // Обновление данных до загрузки новых
-    // replaceTextReport(id, data) {
-    //   this.studentsReport.forEach((item) => {
-    //     if (item.id == id) {
-    //       item.teacher_report.text = data;
-    //     }
-    //   })
-    //   console.log(this.studentsReport);
-    // },
-    // setStudentReportCreate(fetchData) {
-    //   if (Object.keys(fetchData).length) {
-    //     console.log("Запрос на добавление данных: ", fetchData);
-    //     this.fetchCreateReportTeacher(fetchData).finally(() => {
-    //       this.fetchGetStudentsReport(this.currentFetchData);
-    //     });
-    //   }
-    // },
-    // setStudentReportUpdate(fetchData) {
-    //   if (Object.keys(fetchData).length) {
-    //     console.log("Запрос на изменение данных: ", fetchData);
-    //     this.fetchUpdateReportTeacher(fetchData).finally(() => {
-    //       const index = this.reportsTeacher.findIndex(item => item.id == fetchData.id);
-    //       if (index != -1) {
-    //         this.reportsTeacher[index] = this.updatedReportTeacher
-    //       }
-    //     });
-    //   }
-    // },
   },
   mounted() {
     this.modalClass = new Modal(`#modalClass`, { backdrop: 'static' });
@@ -191,12 +154,14 @@ export default {
       group: this.$route.params.id_group, 
       period: this.$route.params.id_period,
       subject: this.$route.params.id_subject, 
+      author: this.$route.params.id_author, 
     }).finally(() => {
       this.currentFetchData = {
         group: this.currentGroup.id,
         class_year: this.currentGroup.class_year.id,
         period: this.currentReportPeriod.id,
         subject: this.currentSubject.id,
+        author: this.currentAuthor.id,
       }
       this.fetchGetCriteriaMYP({ 
         subject: this.currentSubject.id
@@ -210,6 +175,9 @@ export default {
   computed: {
     // подключение переменной авторизированного пользователя из store
     ...mapGetters(['authUser', 'isAdmin', 'isDnevnik']),
+    isAuthor() {
+      return this.authUser.teacher.id == this.currentAuthor.id && this.currentSubject.workload.filter(item => item.group == this.currentGroup.id && item.teacher == this.authUser.teacher.id).length
+    }
   }
 }
 </script>
@@ -231,5 +199,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 </style>

@@ -47,6 +47,7 @@ export default createStore({
       if (context.getters.isAuthenticated) {
         context.commit('destroyToken');
         context.commit('clearUser');
+        localStorage.clear();
       }
     },
     userLogin(context, data) {
@@ -94,6 +95,7 @@ export default createStore({
           access_token_dnevnik: getValueFromHash(data.route.hash.slice(1)).access_token,
         }
         await axiosAPI.put(`/user/${updateUser.id}`, updateUser).then((response) => {
+          context.commit('setUser', response.data);
           console.log('Пользователь успешно обновлён');
         }).catch((error) => {
           console.log('Ошибка запроса: ', error);

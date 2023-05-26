@@ -2,7 +2,7 @@ from rest_framework import serializers
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkGroupDate, WorkAssessment, WorkCriteriaMark, \
     PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType, ReportMentor, GRADES, WorkLoad, ReportAchievements, \
     ReportPsychologist
-from curriculum.serializers import SubjectSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
+from curriculum.serializers import SubjectGroupIBSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.serializers import UserSerializer
 from member.models import ProfileTeacher, User, ProfileStudent
 from curriculum.models import Subject, ClassYear, Criterion
@@ -35,6 +35,27 @@ class ProfileTeacherSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = ProfileTeacher
+        fields = '__all__'
+
+class WorkLoadSmallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkLoad
+        fields = '__all__'
+
+class SubjectSerializer(serializers.ModelSerializer):
+    workload = WorkLoadSmallSerializer(many=True, read_only=True)
+    group_ib = SubjectGroupIBSerializer()
+    class Meta:
+        model = Subject
+        fields = '__all__'
+
+class WorkLoadSerializer(serializers.ModelSerializer):
+    study_year = StudyYearSerializer(read_only=True)
+    teacher = ProfileTeacherSerializer(read_only=True)
+    subject = SubjectSerializer(read_only=True)
+    group = ClassGroupSimpleSerializer(read_only=True)
+    class Meta:
+        model = WorkLoad
         fields = '__all__'
 
 class ClassGroupSerializer(serializers.ModelSerializer):
@@ -386,7 +407,7 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
         fields = ['id', 'student', 'student_id', 'period', 'period_id', 'subject', 'subject_id',
                   'year', 'year_id', 'text', 'events', 'author', 'author_id', 'achievements', 
                   'criterion_a', 'criterion_b', 'criterion_c', 'criterion_d', 'criterion_rus',
-                  'criterion_summ', 'criterion_count', 'final_grade', 'final_grade_ib']
+                  'criterion_summ', 'criterion_count', 'final_grade', 'final_grade_ib', 'updated']
         extra_kwargs = {
             'student_id': {'source': 'student', 'write_only': True},
             'period_id': {'source': 'period', 'write_only': True},
@@ -792,15 +813,6 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
         result['psycho_report'] = ReportPsychologistSerializer(instance=report_psycho_queryset, context=self.context).data
         return result
     
-
-class WorkLoadSerializer(serializers.ModelSerializer):
-    study_year = StudyYearSerializer(read_only=True)
-    teacher = ProfileTeacherSerializer(read_only=True)
-    subject = SubjectSerializer(read_only=True)
-    group = ClassGroupSimpleSerializer(read_only=True)
-    class Meta:
-        model = WorkLoad
-        fields = '__all__'
 
 
 class TextTranslateSerailizer(serializers.Serializer):
