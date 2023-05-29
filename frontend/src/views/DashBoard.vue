@@ -13,7 +13,7 @@
         <div v-if="workLoads.length">
           <div class="mt-2">В <b>{{currentStudyYear.name}}</b> учебном году вы преподаёте следующие предметы: </div>
           <ul>
-            <li v-for="work in workLoads" :key="work.id">{{ work.subject.name_rus }} в {{ work.group.class_year }}{{ work.group.letter }} классе</li>
+            <li v-for="work in workLoads" :key="work.id">{{ work.subject_name }} в <span v-for="gr in work.groups" :key="gr.id">{{ gr.group_name }}</span> классах</li>
           </ul>
         </div>
         <div v-else>Вам в нагрузку не добавлены дисциплины</div>

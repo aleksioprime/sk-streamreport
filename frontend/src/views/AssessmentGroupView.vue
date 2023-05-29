@@ -3,13 +3,13 @@
     <base-header>
       <template v-slot:header>Итоговое оценивание</template>
       <template v-slot:extra>
-        <div class="toggle" v-if="isAdmin" @click="changeView">
+        <div class="toggle" v-if="isAdmin">
           <div class="toggle-item my">
-            <input id="show-my" type="radio" :value="false" v-model="showAllData">
+            <input id="show-my" type="radio" :value="false" v-model="showAllData" @change="changeView">
             <label for="show-my">Мои оценки и репорты</label>
           </div>
           <div class="toggle-item all">
-            <input id="show-all" type="radio" :value="true" v-model="showAllData">
+            <input id="show-all" type="radio" :value="true" v-model="showAllData" @change="changeView">
             <label for="show-all">Просмотр всех оценок и репортов</label>
           </div>
         </div>
@@ -26,9 +26,9 @@
       </div>
       <!-- Выбор программы -->
       <div class="col-md my-2">
-        <select id="programs" class="form-select me-3 mb-2" v-model="currentProgram" @change="choiceProgram">
-          <option v-for="(pr, i) in programs" :key="i" :value="pr.value">
-            {{ pr.name }}
+        <select id="levels" class="form-select me-3 mb-2" v-model="currentLevel" @change="choiceProgram">
+          <option v-for="(lvl, i) in levels" :key="i" :value="lvl.value">
+            {{ lvl.name }}
           </option>
         </select>
       </div>
@@ -161,12 +161,11 @@ export default {
   data() {
     return {
       currentSubjectId: null,
-      currentProgram: 'MYP',
-      programs: [
-        { value: 'PYP', name: 'Программа начальной школы' },
-        { value: 'MYP', name: 'Программа средней школы' },
-        { value: 'DP', name: 'Программа старшей школы IB' },
-        { value: 'FGOS', name: 'Программа старшей школы ФГОС' },
+      currentLevel: 'ooo',
+      levels: [
+        { value: 'noo', name: 'Начальная школа' },
+        { value: 'ooo', name: 'Средняя школа' },
+        { value: 'soo', name: 'Старшая школа' },
       ],
       showAllData: false,
       currentYearId: null,
@@ -177,16 +176,16 @@ export default {
       return word.charAt(0).toUpperCase() + word.slice(1)
     },
     choiceProgram() {
-      localStorage.setItem('assessment_program', this.currentProgram);
-      this.fetchGetGroups({ study_year: this.currentStudyYear.id, program: this.currentProgram }).finally(() => {
+      localStorage.setItem('assessment_level', this.currentLevel);
+      this.fetchGetGroups({ study_year: this.currentStudyYear.id, level: this.currentLevel }).finally(() => {
         this.fetchGetPeriods({ study_year: this.currentStudyYear.id });
         this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id });
         if (this.showAllData) {
-          this.fetchGetSubjects({ program: this.currentProgram });
-          this.fetchGetClassYears({ program: this.currentProgram });
+          this.fetchGetSubjects({ level: this.currentLevel, need_report: 1 });
+          this.fetchGetClassYears({ level: this.currentLevel });
         } else {
-          this.fetchGetSubjects({ teacher: this.authUser.teacher.id, program: this.currentProgram });
-          this.fetchGetClassYears({ teacher: this.authUser.teacher.id, program: this.currentProgram });
+          this.fetchGetSubjects({ teacher: this.authUser.teacher.id, level: this.currentLevel, need_report: 1 });
+          this.fetchGetClassYears({ teacher: this.authUser.teacher.id, level: this.currentLevel });
         }
         this.currentSubjectId = null;
         localStorage.removeItem('assessment_subject');
@@ -214,7 +213,11 @@ export default {
       localStorage.removeItem('assessment_subject');
       this.currentYearId = null;
       localStorage.removeItem('assessment_year');
-      localStorage.setItem('assessment_all', this.showAllData);
+      if (this.showAllData) {
+        localStorage.setItem('assessment_all', true);
+      } else {
+        localStorage.removeItem('assessment_all');
+      }
     },
     openReportTeacher(group_id, period_id) {
       if (this.showAllData) {
@@ -236,8 +239,9 @@ export default {
     },
     recoveryDataFromLocalStorage() {
       this.currentSubjectId = Number(localStorage.getItem('assessment_subject')) || null;
-      this.currentProgram = localStorage.getItem('assessment_program') || 'MYP';
+      this.currentLevel = localStorage.getItem('assessment_level') || 'MYP';
       this.currentYearId = Number(localStorage.getItem('assessment_year')) || null;
+      this.showAllData = Boolean(localStorage.getItem('assessment_all')) || false;
     }
   },
   mounted() {
@@ -245,18 +249,18 @@ export default {
     //   this.showAllData = true;
     // }
     this.fetchGetStudyYears();
-    this.showAllData = Boolean(localStorage.getItem('assessment_all')) || false;
+    this.recoveryDataFromLocalStorage();
     if (this.showAllData) {
-      this.fetchGetSubjects({ program: this.currentProgram }).finally(this.recoveryDataFromLocalStorage);
-      this.fetchGetGroups({ study_year: this.currentStudyYear.id, program: this.currentProgram }).finally(() => {
-        this.fetchGetClassYears({ program: this.currentProgram });
+      this.fetchGetSubjects({ level: this.currentLevel, need_report: 1 }).finally();
+      this.fetchGetGroups({ study_year: this.currentStudyYear.id, level: this.currentLevel }).finally(() => {
+        this.fetchGetClassYears({ level: this.currentLevel });
         this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
         this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id })
       });
     } else {
-      this.fetchGetSubjects({ teacher: this.authUser.teacher.id, program: this.currentProgram }).finally(this.recoveryDataFromLocalStorage);
-      this.fetchGetGroups({ study_year: this.currentStudyYear.id, program: this.currentProgram }).finally(() => {
-        this.fetchGetClassYears({ teacher: this.authUser.teacher.id, program: this.currentProgram });
+      this.fetchGetSubjects({ teacher: this.authUser.teacher.id, level: this.currentLevel, need_report: 1 }).finally();
+      this.fetchGetGroups({ study_year: this.currentStudyYear.id, level: this.currentLevel }).finally(() => {
+        this.fetchGetClassYears({ teacher: this.authUser.teacher.id, level: this.currentLevel });
         this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
         this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id })
       });
@@ -284,16 +288,16 @@ export default {
   watch: {
     showAllData() {
       if (this.showAllData) {
-        this.fetchGetSubjects({ program: this.currentProgram });
-        this.fetchGetGroups({ study_year: this.currentStudyYear.id, program: this.currentProgram }).finally(() => {
-          this.fetchGetClassYears({ program: this.currentProgram });
+        this.fetchGetSubjects({ level: this.currentLevel, need_report: 1 });
+        this.fetchGetGroups({ study_year: this.currentStudyYear.id, level: this.currentLevel }).finally(() => {
+          this.fetchGetClassYears({ level: this.currentLevel });
           this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
           this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id })
         });
       } else {
-        this.fetchGetSubjects({ teacher: this.authUser.teacher.id, program: this.currentProgram });
-        this.fetchGetGroups({ teacher: this.authUser.teacher.id, study_year: this.currentStudyYear.id, program: this.currentProgram }).finally(() => {
-          this.fetchGetClassYears({ teacher: this.authUser.teacher.id, program: this.currentProgram });
+        this.fetchGetSubjects({ teacher: this.authUser.teacher.id, level: this.currentLevel, need_report: 1 });
+        this.fetchGetGroups({ teacher: this.authUser.teacher.id, study_year: this.currentStudyYear.id, level: this.currentLevel }).finally(() => {
+          this.fetchGetClassYears({ teacher: this.authUser.teacher.id, level: this.currentLevel });
           this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
           this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id })
         });

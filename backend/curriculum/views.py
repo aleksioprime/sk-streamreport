@@ -1,10 +1,12 @@
 from curriculum.models import UnitPlannerMYP, ClassYear, Subject, Criterion, LearnerProfileIB, SkillATL, Objective, Aim, GlobalContext, \
-    ExplorationToDevelop, KeyConcept, RelatedConcept, InquiryQuestionMYP, ATLMappingMYP, ReflectionMYP, Strand, Level, UnitPlannerMYPID, DevelopProfileMYP
+    ExplorationToDevelop, KeyConcept, RelatedConcept, InquiryQuestionMYP, ATLMappingMYP, ReflectionMYP, Strand, Level, UnitPlannerMYPID, \
+        DevelopProfileMYP, AcademicPlan, HoursSubjectInYear, SubjectGroupIB, SubjectGroupFGOS
 from member.models import ProfileTeacher, Department
 from curriculum.serializers import UnitMYPSerializerViewEdit, UnitMYPSerializerListCreate, ProfileTeacherSerializer, ClassYearSerializer, \
     SubjectSerializer, CriterionSerializer, DepartmentSerializer, LearnerProfileIBSerializer, SkillATLSerializer, ObjectiveSerializer, \
     AimSerializer, GlobalContextSerializer, ExplorationToDevelopSerializer, KeyConceptSerializer, RelatedConceptSerializer, InQuestionMYPSerializer, \
-    ATLMappingMYPSerializer, ReflectionMYPSerializer, StrandSerializer, LevelSerializer, UnitPlannerMYPIDListCreate, UnitPlannerMYPIDViewEdit, CriterionViewSerializer
+    ATLMappingMYPSerializer, ReflectionMYPSerializer, StrandSerializer, LevelSerializer, UnitPlannerMYPIDListCreate, UnitPlannerMYPIDViewEdit, \
+        CriterionViewSerializer, AcademicPlanSerializer, HoursSubjectInYearSerializer, SubjectGroupIBSerializer, SubjectGroupFGOSSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -19,6 +21,29 @@ from htmldocx import HtmlToDocx
 from docx import Document
 import tempfile
 
+
+class AcademicPlanViewSet(viewsets.ModelViewSet):
+    queryset = AcademicPlan.objects.all()
+    serializer_class = AcademicPlanSerializer
+    def get_queryset(self):
+        study_year = self.request.query_params.get("study_year", None)
+        academic_plan = AcademicPlan.objects.all()
+        if study_year:
+            academic_plan = academic_plan.filter(study_year=study_year)
+        return academic_plan
+
+class HoursSubjectInYearViewSet(viewsets.ModelViewSet):
+    queryset = HoursSubjectInYear.objects.all()
+    serializer_class = HoursSubjectInYearSerializer
+
+class CriteriaGroupsViewSet(viewsets.ModelViewSet):
+    queryset = SubjectGroupIB.objects.all()
+    serializer_class = SubjectGroupIBSerializer
+
+class SubjectGroupFGOSViewSet(viewsets.ModelViewSet):
+    queryset = SubjectGroupFGOS.objects.all()
+    serializer_class = SubjectGroupFGOSSerializer
+    
 # Набор методов для просмотра, редактирования и удаления текущей записи UnitPlannerMYP
 class UnitPlannerMYPViewEdit(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated]
@@ -102,12 +127,15 @@ class ClassYearViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         class_year = ClassYear.objects.all()
         program = self.request.query_params.get("program", None)
+        level = self.request.query_params.get("level", None)
         subject = self.request.query_params.get("subject", None)
         department = self.request.query_params.getlist("department", None)
         author = self.request.query_params.get("author", None)
         teacher = self.request.query_params.get("teacher", None)
         if program:
             class_year = class_year.filter(program=program)
+        if level:
+            class_year = class_year.filter(level=level)
         if author:
             class_year = class_year.filter(unitplan_myp__authors__in=[author]).distinct()
         if subject:
@@ -134,23 +162,26 @@ class SubjectViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         subjects = Subject.objects.all()
         level = self.request.query_params.get("level", None)
-        type_subject = self.request.query_params.get("type", None)
+        type_string = self.request.query_params.get("type", None)
         author = self.request.query_params.get("author", None)
         department = self.request.query_params.get("department", None)
         program = self.request.query_params.get("program", None)
         teacher = self.request.query_params.get("teacher", None)
+        need_report = self.request.query_params.get("need_report", None)
         if department:
             subjects = subjects.filter(department=department)
         if level:
-            subjects = subjects.filter(group_fgos__level=level)
-        if type_subject:
-            subjects = subjects.filter(type_subject=type_subject)
+            subjects = subjects.filter(level=level)
+        if type_string:
+            subjects = subjects.filter(Q(type__icontains=type_string))
         if program:
             subjects = subjects.filter(group_ib__program=program)
         if author:
             subjects = subjects.filter(unitplan_myp__authors__in=[author]).distinct()
         if teacher:
             subjects = subjects.filter(workload__teacher=teacher).distinct()
+        if need_report:
+            subjects = subjects.filter(need_report=need_report)
         return subjects
     
 # class SubjectLevelMYPViewSet(viewsets.ModelViewSet):

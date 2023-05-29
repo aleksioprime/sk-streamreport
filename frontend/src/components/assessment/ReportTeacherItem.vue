@@ -114,7 +114,7 @@
         </div>
       </div>
     </div>
-    <div class="student-assessment" v-if="program == 'MYP'">
+    <div class="student-assessment" v-if="program == 'myp'">
       <report-field-criteria id="student-assessment-myp" :report="report" @save="fetchSaveReport" :avg_criteria="report.avg_assessment" :editable="editable"
       :criteria="criteriaObject"/>
     </div>

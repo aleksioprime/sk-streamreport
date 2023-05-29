@@ -5,7 +5,7 @@ from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassG
     PeriodAssessmentSerializer, StudentWorkSerializer, ReportPeriodSerializer, StudentReportTeacherSerializer, ReportTeacherSerializer, \
     EventTypeSerializer, EventParticipationSerializer, StudentReportMentorSerializer, ReportMentorSerializer, ClassGroupStudentsSerializer, \
     WorkLoadSerializer, TextTranslateSerailizer, GenerateReportSerailizer, StudentReportPsychologistSerializer, ReportPsychologistSerializer, \
-        ProfileTeacherSerializer, SubjectSerializer   
+        ProfileTeacherSerializer, SubjectSerializer, WorkLoadSubjectSerializer
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
     ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad, ReportPsychologist
@@ -49,6 +49,7 @@ class ClassGroupViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         class_year = self.request.query_params.get("class_year", None)
         study_year = self.request.query_params.get("study_year", None)
+        level = self.request.query_params.get("level", None)
         program = self.request.query_params.get("program", None)
         teacher = self.request.query_params.get("teacher", None)
         groups = ClassGroup.objects.all()
@@ -56,6 +57,8 @@ class ClassGroupViewSet(viewsets.ModelViewSet):
             groups = groups.filter(class_year=class_year)
         if study_year:
             groups = groups.filter(study_year=study_year)
+        if level:
+            groups = groups.filter(class_year__level=level)
         if program:
             groups = groups.filter(class_year__program=program)
         if teacher:
@@ -709,3 +712,13 @@ class FinalMarksDnevnikAPIView(APIView):
         else:
             print(f'Ошибка запроса: {response_marks.json()}')
         return Response(data)
+    
+class WorkLoadSubjectViewSet(viewsets.ModelViewSet):
+    queryset = Subject.objects.all()
+    serializer_class = WorkLoadSubjectSerializer
+    def get_queryset(self):
+        subjects = Subject.objects.all()
+        department = self.request.query_params.get("department", None)
+        if department:
+            subjects = subjects.filter(department=department)
+        return subjects

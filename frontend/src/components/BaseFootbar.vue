@@ -24,7 +24,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 15px 0 30px;
-  flex-wrap: wrap
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 @media (max-width: 576px) {

@@ -5,7 +5,7 @@ from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, Wor
 from curriculum.serializers import SubjectGroupIBSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.serializers import UserSerializer
 from member.models import ProfileTeacher, User, ProfileStudent
-from curriculum.models import Subject, ClassYear, Criterion
+from curriculum.models import Subject, ClassYear, Criterion, SubjectGroupFGOS
 from django.db.models import Q
 import math
 
@@ -33,6 +33,8 @@ class StudyYearSerializer(serializers.ModelSerializer):
 
 class ProfileTeacherSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    full_name = serializers.CharField(source='user.get_full_name', read_only=True)
+    short_name = serializers.CharField(source='user.get_short_name', read_only=True)
     class Meta:
         model = ProfileTeacher
         fields = '__all__'
@@ -47,15 +49,6 @@ class SubjectSerializer(serializers.ModelSerializer):
     group_ib = SubjectGroupIBSerializer()
     class Meta:
         model = Subject
-        fields = '__all__'
-
-class WorkLoadSerializer(serializers.ModelSerializer):
-    study_year = StudyYearSerializer(read_only=True)
-    teacher = ProfileTeacherSerializer(read_only=True)
-    subject = SubjectSerializer(read_only=True)
-    group = ClassGroupSimpleSerializer(read_only=True)
-    class Meta:
-        model = WorkLoad
         fields = '__all__'
 
 class ClassGroupSerializer(serializers.ModelSerializer):
@@ -782,7 +775,7 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
         class_year_id = self.context.get("class_year", None)
         period_id = self.context.get("period", None)
         class_year = ClassYear.objects.filter(pk=class_year_id).first()
-        subject_queryset = Subject.objects.filter(plan__class_year=class_year_id, group_ib__program=class_year.program)
+        subject_queryset = Subject.objects.filter(subject_year__academic_plan__id=period_id, subject_year__class_year__in=[class_year_id], group_ib__program=class_year.program)
         # subject_queryset = Subject.objects.filter(group_ib__program=class_year.program)
         subject_reports = list(subject_queryset.values('id', 'name_rus'))
         subjects = list(subject_queryset.values_list('id', flat=True))
@@ -824,3 +817,54 @@ class GenerateReportSerailizer(serializers.Serializer):
     subject = serializers.CharField()
     text = serializers.CharField()
     final_grade = serializers.IntegerField()
+
+class SubjectGroupFGOSSerializer(serializers.ModelSerializer):
+    level_name = serializers.CharField(source='get_level_display', read_only=True)
+    type_name = serializers.CharField(source='get_type_display', read_only=True)
+    class Meta:
+        model = SubjectGroupFGOS
+        fields = '__all__'
+
+class ClassGroupWLSerializer(serializers.ModelSerializer):
+    class_year = ClassYearSerializer(read_only=True)
+    class Meta:
+        model = ClassGroup
+        fields = ['id', 'group_name', 'class_year']
+
+class WorkLoadSerializer(serializers.ModelSerializer):
+    study_year = StudyYearSerializer(read_only=True)
+    teacher = ProfileTeacherSerializer(read_only=True)
+    # group = ClassGroupWLSerializer(read_only=True)
+    groups = ClassGroupWLSerializer(many=True, read_only=True)
+    subject_name = serializers.CharField(source='subject.name_rus', read_only=True)
+    class Meta:
+        model = WorkLoad
+        fields = ['id', 'study_year', 'study_year_id', 'teacher', 'teacher_id', 'groups', 'groups_ids', 'hours', 'subject_name', 'subject', 'subject_id']
+        extra_kwargs = {
+            'study_year_id': {'source': 'study_year', 'write_only': True},
+            'groups_ids': {'source': 'groups', 'write_only': True},
+            'subject_id': {'source': 'subject', 'write_only': True},
+            'teacher_id': {'source': 'teacher', 'write_only': True},
+        }
+    def create(self, validated_data):
+        print('Валидированные данные: ', validated_data)
+        return super().create(validated_data)
+
+class WorkLoadSubjectSerializer(serializers.ModelSerializer):
+    # workload = WorkLoadSerializer(many=True, read_only=True)
+    group_fgos = SubjectGroupFGOSSerializer()
+    group_ib = SubjectGroupIBSerializer()
+    workload = serializers.SerializerMethodField('get_workload')
+    type_name = serializers.CharField(source='get_type_display', read_only=True)
+    level_name = serializers.CharField(source='get_level_display', read_only=True)
+    class Meta:
+        model = Subject
+        fields = '__all__'
+    def get_workload(self, instance):
+        study_year = self.context.get("study_year", None)
+        if study_year is None:
+            workload_queryset = WorkLoad.objects.filter(subject=instance, study_year=StudyYear.objects.last())
+        else:
+            workload_queryset = WorkLoad.objects.filter(subject=instance, study_year__id=study_year).distinct()
+        serializer = WorkLoadSerializer(instance=workload_queryset, many=True, context=self.context)
+        return serializer.data

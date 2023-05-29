@@ -12,6 +12,7 @@ h3,
 h4,
 h4 {
   font-family: 'Fira Sans', sans-serif;
+  margin: 0;
 }
 
 a {
@@ -83,6 +84,9 @@ a {
   background-color: var(--bs-primary);
   display: flex;
   align-items: center;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
 }
 .collapse-title:after {
   content: '\2796';
@@ -139,7 +143,7 @@ a {
 }
 .icon:hover {
   transform: scale(1.1);
-  transition: 0.3s;
+  transition: transform 0.3s;
   cursor: pointer;
 }
 /* Картинки на разные виды кнопок-иконок */
@@ -330,6 +334,34 @@ table .editable {
 }
 
 .radiobutton label:hover {
+	color: #666;
+}
+
+/* Кнопки из радиокнопок */
+.checkbutton input[type=checkbox] {
+	display: none;
+}
+.checkbutton label {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* justify-content: space-between; */
+	cursor: pointer;
+	padding: 10px;
+	border: 1px solid #999;
+	border-radius: 6px;
+	user-select: none;
+  font-size: 0.8em;
+}
+ 
+.checkbutton input[type=checkbox]:checked + label {
+	background: var(--my-focus);
+  color: #000
+}
+
+.checkbutton label:hover {
 	color: #666;
 }
 

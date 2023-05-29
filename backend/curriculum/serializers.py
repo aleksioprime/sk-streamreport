@@ -2,7 +2,7 @@ from rest_framework import serializers
 from curriculum.models import UnitPlannerMYP, KeyConcept, SubjectGroupIB, RelatedConcept, SubjectDirectionRC, Subject, \
     SubjectGroupIB, ClassYear, GlobalContext, ExplorationToDevelop, Aim, Objective, Strand, Criterion, Level, SkillATL, \
     ClusterATL, CategoryATL, LearnerProfileIB, InquiryQuestionMYP, ATLMappingMYP, ReflectionMYP, UnitPlannerMYPID, \
-    DevelopProfileMYP, AchievementLevel
+    DevelopProfileMYP, AchievementLevel, AcademicPlan, HoursSubjectInYear, SubjectGroupFGOS
 from member.models import ProfileTeacher, User, Department
 from django.db.models import Q
 
@@ -47,8 +47,17 @@ class SubjectGroupIBSerializer(serializers.ModelSerializer):
         model = SubjectGroupIB
         fields = '__all__'
 
+class SubjectGroupFGOSSerializer(serializers.ModelSerializer):
+    type_name = serializers.CharField(source='get_type_display', read_only=True)
+    class Meta:
+        model = SubjectGroupFGOS
+        fields = '__all__'
+
 class SubjectSerializer(serializers.ModelSerializer):
+    level_name = serializers.CharField(source='get_level_display', read_only=True)
+    type_name = serializers.CharField(source='get_type_display', read_only=True)
     group_ib = SubjectGroupIBSerializer()
+    group_fgos = SubjectGroupFGOSSerializer()
     class Meta:
         model = Subject
         fields = '__all__'
@@ -60,9 +69,12 @@ class DepartmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ClassYearSerializer(serializers.ModelSerializer):
+    level_name = serializers.CharField(source='get_level_display', read_only=True)
+    program_name = serializers.CharField(source='get_program_display', read_only=True)
     class Meta:
         model = ClassYear
         fields = '__all__'
+
 
 class GlobalContextSerializer(serializers.ModelSerializer):
     class Meta:
@@ -526,4 +538,33 @@ class CriterionViewSerializer(serializers.ModelSerializer):
     strand = StrandViewSerializer(many=True, read_only=True)
     class Meta:
         model = Criterion
+        fields = '__all__'
+
+
+#################
+# УЧЕБНЫЕ ПЛАНЫ #
+#################
+
+class HoursSubjectInYearSerializer(serializers.ModelSerializer):
+    subject = SubjectSerializer(read_only=True)
+    years = ClassYearSerializer(many=True, read_only=True)
+    class Meta:
+        model = HoursSubjectInYear
+        fields = ['id', 'years', 'subject', 'hours', 'subject_id', 'academic_plan_id', 'years_ids']
+        extra_kwargs = {
+            'subject_id': {'source': 'subject', 'write_only': True},
+            'academic_plan_id': {'source': 'academic_plan', 'write_only': True},
+            'years_ids': {'source': 'years', 'write_only': True},
+            }
+    def update(self, instance, validated_data):
+        print('Валидированные данные: ', validated_data)
+        return super().update(instance, validated_data)
+    def create(self, validated_data):
+        print('Валидированные данные: ', validated_data)
+        return super().create(validated_data)
+
+class AcademicPlanSerializer(serializers.ModelSerializer):
+    subject_year = HoursSubjectInYearSerializer(many=True, read_only=True)
+    class Meta:
+        model = AcademicPlan
         fields = '__all__'

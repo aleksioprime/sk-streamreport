@@ -199,7 +199,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 @import '@/assets/css/spinner.css';
 .loader {
   height: 200px;

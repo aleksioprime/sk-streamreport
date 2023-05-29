@@ -1,18 +1,25 @@
 from django.db import models
 from django.utils.translation import gettext as _
 
+PROGRAM_IB_CHOICES = [
+    ('pyp', 'Primary Years Programme'),
+    ('myp', 'Middle Years Programme'),
+    ('dp', 'Diploma Programme'),
+    (None, 'No program')
+]
+
+LEVEL_NATION_CHOICES = [
+    ('noo', 'Начальная школа'),
+    ('ooo', 'Средняя школа'),
+    ('soo', 'Старшая школа'),
+]
+
 class SubjectGroupIB(models.Model):
     """ Предметные группы IB """
-    PROGRAM_TYPE = [
-        ('PYP', 'Primary Years Programme'),
-        ('MYP', 'Middle Years Programme'),
-        ('DP', 'Diploma Programme'),
-        ('FGOS', 'ФГОС'),
-    ]
     name_eng = models.CharField(max_length=128, verbose_name=_("Название на англ. языке"))
     name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"), null=True, blank=True)
     picture = models.ImageField(upload_to='subjectgroup_pic', blank=True, verbose_name=_("Картинка"), null=True)
-    program = models.CharField(choices=PROGRAM_TYPE, default='FGOS', max_length=4)
+    program = models.CharField(choices=PROGRAM_IB_CHOICES, default=None, max_length=4)
     class Meta:
         verbose_name = 'Предметная группа IB'
         verbose_name_plural = 'Предметные группы IB'
@@ -22,50 +29,40 @@ class SubjectGroupIB(models.Model):
 
 class ClassYear(models.Model):
     """ Года обучения / учебная параллель """
-    PROGRAM_TYPE = [
-        ('PYP', 'Primary Years Programme'),
-        ('MYP', 'Middle Years Programme'),
-        ('DP', 'Diploma Programme'),
-        ('FGOS', 'ФГОС'),
-    ]
     year_rus = models.PositiveIntegerField(verbose_name=_("Год обучения в РФ"), blank=False)
     year_ib = models.CharField(max_length=12, verbose_name=_("Год обучения в IB"), null=True, blank=True)
-    program = models.CharField(choices=PROGRAM_TYPE, default='FGOS', max_length=4)
+    program = models.CharField(choices=PROGRAM_IB_CHOICES, verbose_name=_("IB-программа"), default=None, max_length=4)
+    level = models.CharField(choices=LEVEL_NATION_CHOICES, verbose_name=_("Национальные уровни образования"), default='ooo', max_length=3)
     class Meta:
         verbose_name = 'Год обучения'
         verbose_name_plural = 'Года обучения'
     def __str__(self):
         if self.year_ib is not None:
-            return "{} {} ({} класс)".format(self.program, self.year_ib, self.year_rus)
+            return f"{self.year_rus} класс ({self.year_ib} {self.program})"
         else:
-            return "{} класс ({})".format(self.year_rus, self.program)
+            return f"{self.year_rus} класс ({self.program})"
 
 class SubjectGroupFGOS(models.Model):
     """ Предметная группа ФГОС """
-    LEVEL_CHOICES = [
-        ('noo', 'Начальная школа'),
-        ('ooo', 'Средняя школа'),
-        ('soo', 'Старшая школа'),
-        ('dpsoo', 'DP в старшей школе')
-    ]
     TYPE_CHOICES = [
         ('area', 'Предметная область'),
         ('direction', 'Направление'),
     ]
     name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"))
-    type_group = models.CharField(choices=TYPE_CHOICES, max_length=9, default='area', verbose_name=_("Тип группы"))
-    level = models.CharField(choices=LEVEL_CHOICES, default='ooo', max_length=5, verbose_name=_("Уровень образования"))
+    type = models.CharField(choices=TYPE_CHOICES, max_length=9, default='area', verbose_name=_("Тип группы"))
     class Meta:
         verbose_name = 'Предметная группа ФГОС'
         verbose_name_plural = 'Предметные группы ФГОС'
-        ordering = ['level', 'type_group', 'name_rus']
+        ordering = ['type', 'name_rus']
     def __str__(self):
-        return "{} ({})".format(self.name_rus, self.level)
+        return f"{self.name_rus}"
 
 class Subject(models.Model):
     """ Учебные дисциплины """
     TYPE_CHOICES = [
-        ('base', 'Обязательная часть'),
+        ('base', 'Обязательная часть ФГОС'),
+        ('base_fgos', 'Обязательная часть ФГОС в IB'),
+        ('base_ib', 'Обязательная часть IB'),
         ('extra', 'Внеурочная деятельность'),
     ]
     name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"))
@@ -74,16 +71,52 @@ class Subject(models.Model):
                                  on_delete=models.SET_NULL, null=True, blank=True, related_name="subject")
     group_fgos = models.ForeignKey('curriculum.SubjectGroupFGOS', verbose_name=_("Предметная область в РФ"), 
                                  on_delete=models.SET_NULL, null=True, blank=True, related_name="subject")
-    type_subject = models.CharField(choices=TYPE_CHOICES, max_length=5, default='base', verbose_name=_("Тип предмета"))
+    type = models.CharField(choices=TYPE_CHOICES, max_length=10, default='base', verbose_name=_("Тип предмета"))
     id_dnevnik = models.CharField(verbose_name=_('ID системы Дневник.РУ'), max_length=40, blank=True, null=True)
     department = models.ForeignKey('member.Department', verbose_name=_("Учебное подразделение"), 
                                  on_delete=models.SET_NULL, null=True, blank=True, related_name="subject")
+    level = models.CharField(choices=LEVEL_NATION_CHOICES, verbose_name=_("Уровень образования"), default='ooo', max_length=3)
+    need_report = models.BooleanField(verbose_name=_('Поддержка репорта'), default=False)
     class Meta:
         verbose_name = 'Предмет'
         verbose_name_plural = 'Предметы'
-        ordering = ['group_ib', 'name_rus']
+        ordering = ['type', 'group_ib', 'name_rus']
     def __str__(self):
-        return "{} ({}, {})".format(self.name_rus, self.group_fgos.get_level_display(), self.get_type_subject_display())
+        return "{} ({}, {})".format(self.name_rus, self.get_level_display(), self.get_type_display())
+
+
+class AcademicPlan(models.Model):
+    """ Учебные планы """
+    study_year = models.ForeignKey('assess.StudyYear', verbose_name=_("Учебный год"), 
+                                   on_delete=models.CASCADE,
+                                   null=True, blank=True, related_name="academic_plan")
+    name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"), null=True, blank=True)
+    name_short = models.CharField(max_length=128, verbose_name=_("Сокращённое название"), null=True, blank=True)
+    level = models.CharField(choices=LEVEL_NATION_CHOICES, verbose_name=_("Уровень образования"), default='ooo', max_length=3)
+    class Meta:
+        verbose_name = 'Учебный план'
+        verbose_name_plural = 'Учебные планы'
+        ordering = ['study_year', 'name_rus']
+    def __str__(self):
+        return f"{self.study_year} {self.name_rus}"
+
+class HoursSubjectInYear(models.Model):
+    """ Нагрузка по учебному плану """
+    academic_plan = models.ForeignKey('curriculum.AcademicPlan', verbose_name=_("Учебный план"),
+                                      on_delete=models.CASCADE,
+                                      null=True, blank=True, related_name="subject_year")
+    subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"),
+                                      on_delete=models.CASCADE,
+                                      null=True, blank=True, related_name="subject_year")
+    years = models.ManyToManyField('curriculum.ClassYear', verbose_name=_("Года обучения"), blank=True, related_name="subject_year")
+    hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=1)
+    class Meta:
+        verbose_name = 'Учебные планы: нагрузка'
+        verbose_name_plural = 'Учебные планы: нагрузка'
+        ordering = ['subject__name_rus', 'years__year_rus']
+    def __str__(self):
+        return f"{self.academic_plan} ({self.subject} - {self.hours})"
+
 
 class Criterion(models.Model):
     """ Критерии оценивания """

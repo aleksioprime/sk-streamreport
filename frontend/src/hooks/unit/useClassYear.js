@@ -11,6 +11,7 @@ export function getClassYears() {
         department: data.department || null,
         author: data.author || null,
         teacher: data.teacher || null,
+        level: data.level || null,
       }
     }
     await axiosAPI.get('myp/years', config).then((response) => {

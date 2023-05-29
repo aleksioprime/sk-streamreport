@@ -31,11 +31,15 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
         ordering = ['last_name', 'first_name', 'is_active']
     def get_full_name(self):
-        full_name = "{} {} {}".format(self.last_name, self.first_name, self.middle_name)
+        full_name = f"{self.last_name} {self.first_name} {self.middle_name}"
         return full_name.strip()
     def get_short_name(self):
-        if self.first_name:
-            return "{} {}.".format(self.last_name, self.first_name[0])
+        if self.first_name and self.middle_name:
+            return f"{self.last_name} {self.first_name[0]}. {self.middle_name[0]}."
+        elif self.first_name:
+            return f"{self.last_name} {self.first_name[0]}."
+        else:
+            return f"{self.last_name} {self.first_name}"
     def __str__(self):
         return '{} {}'.format(self.last_name, self.first_name)
 
@@ -56,7 +60,7 @@ class ProfileTeacher(models.Model):
     user = models.OneToOneField('member.User', verbose_name=_("Пользователь"), related_name='teacher', null=True, on_delete=models.CASCADE)
     id_dnevnik = models.CharField(verbose_name=_('ID системы Дневник.РУ'), max_length=40, blank=True, null=True)
     position = models.CharField(max_length=255, verbose_name=_("Должность"), blank=True, null=True)
-    admin = models.BooleanField(verbose_name=_("Администрация"),null=True, default=False)
+    admin = models.BooleanField(verbose_name=_("Администрация"), null=True, default=False)
     class Meta:
         verbose_name = 'Профиль учителя'
         verbose_name_plural = 'Профили учителей'

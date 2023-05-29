@@ -18,9 +18,10 @@
             <div class="dropdown-menu">
               <router-link to="/employee" class="dropdown-item">Сотрудники</router-link>
               <router-link to="/student" class="dropdown-item">Студенты</router-link>
-              <router-link to="/group" class="dropdown-item">Учебные классы</router-link>
-              <!-- <router-link to="/syllabus" class="dropdown-item">Учебные планы</router-link>
-              <router-link to="/load" class="dropdown-item">Нагрузка</router-link> -->
+              <router-link to="/group" class="dropdown-item">Классы</router-link>
+              <router-link to="/subject" class="dropdown-item">Предметы</router-link>
+              <router-link to="/syllabus" class="dropdown-item">Учебные планы</router-link>
+              <router-link to="/workload" class="dropdown-item">Нагрузка</router-link>
             </div>
           </li>
           <li class="nav-item dropdown">

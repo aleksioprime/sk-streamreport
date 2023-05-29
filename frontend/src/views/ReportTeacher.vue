@@ -176,7 +176,7 @@ export default {
     // подключение переменной авторизированного пользователя из store
     ...mapGetters(['authUser', 'isAdmin', 'isDnevnik']),
     isAuthor() {
-      return this.authUser.teacher.id == this.currentAuthor.id && this.currentSubject.workload.filter(item => item.group == this.currentGroup.id && item.teacher == this.authUser.teacher.id).length
+      return this.authUser.teacher.id == this.currentAuthor.id && this.currentSubject.workload.filter(item => item.groups.includes(this.currentGroup.id) && item.teacher == this.authUser.teacher.id).length
     }
   }
 }

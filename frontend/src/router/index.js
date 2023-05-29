@@ -5,7 +5,8 @@ import DashBoard from '@/views/DashBoard.vue'
 import AdminEmployee from '@/views/AdminEmployee.vue'
 import AdminStudent from '@/views/AdminStudent.vue'
 import AdminGroup from '@/views/AdminGroup.vue'
-import AdminLoad from '@/views/AdminLoad.vue'
+import AdminSubject from '@/views/AdminSubject.vue'
+import AdminWorkLoad from '@/views/AdminWorkLoad.vue'
 import AdminSyllabus from '@/views/AdminSyllabus.vue'
 import UnitMYP from '@/views/UnitMYP.vue'
 import UnitMYPView from '@/views/UnitMYPView.vue'
@@ -22,6 +23,7 @@ import AssessPeriodView from '@/views/AssessPeriodView.vue'
 import ExtraContest from '@/views/ExtraContest.vue'
 import ExtraTeaching from '@/views/ExtraTeaching.vue'
 import AssessmentGroup from '@/views/AssessmentGroupView.vue'
+
 
 const routes = [
   {
@@ -90,14 +92,19 @@ const routes = [
     component: AdminGroup
   },
   {
-    path: '/load',
-    name: 'load',
-    component: AdminLoad
+    path: '/workload',
+    name: 'workload',
+    component: AdminWorkLoad
   },
   {
     path: '/syllabus',
     name: 'syllabus',
     component: AdminSyllabus
+  },
+  {
+    path: '/subject',
+    name: 'subject',
+    component: AdminSubject
   },
   {
     path: '/assessment',

@@ -4,7 +4,15 @@ from curriculum.models import SubjectGroupIB, ClassYear, SubjectGroupFGOS, Subje
     Level, Objective, AchievementLevel, KeyConcept, RecommendSubjectKC, SubjectDirectionRC, RelatedConcept, \
     GlobalContext, ExplorationToDevelop, CategoryATL, ClusterATL, SkillATL, ReflectionMYP, \
     InquiryQuestionMYP, Aim, LearnerProfileIB, UnitPlannerMYP, UnitPlannerMYPID, UnitPlannerDP, \
-        ReflectionDP, InquiryQuestionDP, ATLMappingMYP, DevelopProfileMYP
+        ReflectionDP, InquiryQuestionDP, ATLMappingMYP, DevelopProfileMYP, AcademicPlan, HoursSubjectInYear
+
+@admin.register(AcademicPlan)
+class AcademicPlanAdmin(ImportExportModelAdmin):
+    list_display = ("study_year", "name_rus")
+
+@admin.register(HoursSubjectInYear)
+class HoursSubjectInYearAdmin(ImportExportModelAdmin):
+    list_display = ("subject", "hours")
 
 @admin.register(SubjectGroupIB)
 class SubjectGroupIBAdmin(ImportExportModelAdmin):
@@ -12,15 +20,15 @@ class SubjectGroupIBAdmin(ImportExportModelAdmin):
     
 @admin.register(ClassYear)
 class ClassYearAdmin(ImportExportModelAdmin):
-    list_display = ("year_rus", "year_ib", "program")
+    list_display = ("year_rus", "year_ib", "program", "level")
     
 @admin.register(SubjectGroupFGOS)
 class SubjectGroupFGOSAdmin(ImportExportModelAdmin):
-    list_display = ("name_rus", "type_group", "level")
+    list_display = ("name_rus", "type")
     
 @admin.register(Subject)
 class SubjectAdmin(ImportExportModelAdmin):
-    list_display = ("name_rus", "id_dnevnik", "group_ib", "group_fgos", "type_subject")
+    list_display = ("name_rus", "id_dnevnik", "group_ib", "group_fgos", "type")
 
 @admin.register(Criterion)
 class CriterionAdmin(ImportExportModelAdmin):

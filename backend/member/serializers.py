@@ -22,13 +22,15 @@ class ProfileTeacherSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(source='user.last_name', read_only=True)
     first_name = serializers.CharField(source='user.first_name', read_only=True)
     middle_name = serializers.CharField(source='user.middle_name', read_only=True)
+    full_name = serializers.CharField(source='user.get_full_name', read_only=True)
+    short_name = serializers.CharField(source='user.get_short_name', read_only=True)
     groups = ClassGroupSerializer(many=True, required=False)
     psycho_groups = ClassGroupSerializer(many=True, required=False)
     # units = UnitMYPSerializerListCreate(source='unitplan_myp', many=True, read_only=True)
     class Meta:
         model = ProfileTeacher
         fields = ['id', 'id_dnevnik', 'position', 'admin', 'last_name', 'first_name', 
-                  'middle_name', 'groups', 'psycho_groups']
+                  'middle_name', 'groups', 'psycho_groups', 'full_name', 'short_name']
         extra_kwargs = {
             'groups': {'required': False, 'read_only': True},
             'psycho_groups': {'required': False, 'read_only': True},

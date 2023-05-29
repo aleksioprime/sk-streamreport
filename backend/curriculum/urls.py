@@ -3,7 +3,8 @@ from curriculum.views import UnitPlannerMYPViewEdit, UnitPlannerMYPListCreate, C
     SubjectViewSet, CriterionViewSet, DepartmentViewSet, LearnerProfileIBViewSet, SkillATLViewSet, ObjectiveViewSet, StrandViewSet, \
     AimViewSet, GlobalContextViewSet, ExplorationToDevelopViewSet, KeyConceptViewSet, RelatedConceptViewSet, \
     InQuestionMYPViewSet, ATLMappingMYPViewSet, ReflectionMYPViewSet, LevelViewSet, UnitPlannerMYPIDListCreateSet, \
-    UnitExport, UnitPlannerMYPList, UnitPlannerMYPIDViewEditSet, CriterionDetailViewSet
+    UnitExport, UnitPlannerMYPList, UnitPlannerMYPIDViewEditSet, CriterionDetailViewSet, AcademicPlanViewSet, HoursSubjectInYearViewSet, \
+    CriteriaGroupsViewSet, SubjectGroupFGOSViewSet
 
 urlpatterns = [
     path('myp/unit', UnitPlannerMYPListCreate.as_view({'get': 'list', 'post': 'create'})),
@@ -35,4 +36,10 @@ urlpatterns = [
     path('myp/interdisciplinary/<int:pk>', UnitPlannerMYPIDViewEditSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy' })),
     # path('unitplans/myp/subject', SubjectLevelMYPViewSet.as_view({'get': 'list', 'post': 'create'})),
     # path('unitplans/myp/subject/<int:pk>', SubjectLevelMYPViewSet.as_view({'put': 'update', 'delete': 'destroy' })),
+    path('curriculum/academicplans', AcademicPlanViewSet.as_view({'get': 'list'})),
+    path('curriculum/academicplans/<int:pk>', AcademicPlanViewSet.as_view({'get': 'retrieve'})),
+    path('curriculum/subjecthours', HoursSubjectInYearViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('curriculum/subjecthours/<int:pk>', HoursSubjectInYearViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('curriculum/criteriagroups', CriteriaGroupsViewSet.as_view({'get': 'list'})),
+    path('curriculum/subjectgroups', SubjectGroupFGOSViewSet.as_view({'get': 'list'})),
 ]

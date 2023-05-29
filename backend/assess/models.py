@@ -35,27 +35,11 @@ class ClassGroup(models.Model):
     @property
     def count(self):
         return self.students.count
+    @property
+    def group_name(self):
+        return f"{self.class_year.year_rus}{self.letter}"
     def __str__(self):
         return "{}{} класс".format(self.class_year, self.letter)
-
-class AcademicPlan(models.Model):
-    """ Учебный план """
-    study_year = models.ForeignKey('assess.StudyYear', verbose_name=_("Учебный год"), 
-                                   on_delete=models.CASCADE,
-                                   null=True, blank=True, related_name="plan")
-    subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"),
-                                      on_delete=models.CASCADE,
-                                      null=True, blank=True, related_name="plan")
-    class_year = models.ForeignKey('curriculum.ClassYear', verbose_name=_("Год обучения"),
-                                        on_delete=models.CASCADE,
-                                        null=True, blank=True, related_name="plan")
-    hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=1)
-    class Meta:
-        verbose_name = 'Учебный план'
-        verbose_name_plural = 'Учебные планы'
-        ordering = ['subject__name_rus', 'class_year']
-    def __str__(self):
-        return "{} ({})".format(self.subject, self.class_year)
     
 class WorkLoad(models.Model):
     """ Преподавательская нагрузка """
@@ -66,13 +50,14 @@ class WorkLoad(models.Model):
                               null=True, blank=True, related_name="workload")
     subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"), on_delete=models.CASCADE,
                                       null=True, blank=True, related_name="workload")
-    group = models.ForeignKey('assess.ClassGroup', verbose_name=_("Класс"), on_delete=models.CASCADE,
-                              null=True, blank=True, related_name="workload")
+    # group = models.ForeignKey('assess.ClassGroup', verbose_name=_("Класс"), on_delete=models.CASCADE,
+    #                           null=True, blank=True, related_name="workload")
+    groups = models.ManyToManyField('assess.ClassGroup', verbose_name=_("Классы"), blank=True, related_name="workload")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Часы"), default=1)
     class Meta:
         verbose_name = 'Рабочая нагрузка'
         verbose_name_plural = 'Рабочие нагрузки'
-        ordering = ['teacher']
+        ordering = ['study_year', 'subject', 'teacher']
     def __str__(self):
         return '{} ({} - {} ч.)'.format(self.teacher, self.subject, self.hours)
 

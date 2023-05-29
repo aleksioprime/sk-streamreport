@@ -14,10 +14,11 @@ import UnitFieldRadioSearch from "@/components/UI/UnitFieldRadioSearch";
 import UnitFieldCheckboxGrouped from "@/components/UI/UnitFieldCheckboxGrouped";
 import UnitFieldBlocks from "@/components/UI/UnitFieldBlocks";
 import MarkChoice from "@/components/UI/MarkChoice"
+import SearchOneChoice from "@/components/UI/SearchOneChoice"
 
 export default [
     ModalUser, ModalUnit, BaseHeader, ModalAssess, ModalClass, BasePagination, 
     UnitFieldString, UnitFieldSelect, UnitFieldCheckbox, UnitFieldText, UnitFieldRadio, 
     UnitFieldCheckboxGrouped, UnitFieldCheckboxSearch, UnitFieldBlocks, UnitFieldRadioSearch,
-    MarkChoice
+    MarkChoice, SearchOneChoice
 ];
