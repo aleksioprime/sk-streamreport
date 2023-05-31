@@ -55,11 +55,11 @@ class ReportAchievementsAdmin(ImportExportModelAdmin):
 
 @admin.register(ReportMentor)
 class ReportMentorAdmin(ImportExportModelAdmin):
-    list_display = ("student", "period", "text", "author")
+    list_display = ("student", "period", "text", "author", "created", "updated")
 
 @admin.register(ReportPsychologist)
 class ReportPsychologistAdmin(ImportExportModelAdmin):
-    list_display = ("student", "period", "text", "author")
+    list_display = ("student", "period", "text", "author", "created", "updated")
 
 @admin.register(EventType)
 class EventTypeAdmin(ImportExportModelAdmin):

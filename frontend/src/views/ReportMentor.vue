@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header>
-      <template v-slot:link><a href="#" @click="$router.push(`/assessment/group`)" >Вернуться к выбору класса</a></template>
+      <template v-slot:link><a href="#" @click="$router.push(`/report/mentor`)" >Вернуться к выбору класса</a></template>
       <template v-slot:header>Репорты наставника</template>
     </base-header>
     <div class="col-md mb-2">
@@ -21,7 +21,7 @@
           </div>
         </div>
         <report-mentor-item :period="currentReportPeriod" v-if="currentStudent" class="student-item" :criteria="criteriaMYP"
-        :student="currentStudent" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport"/>
+        :student="currentStudent" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :editable="currentGroup.mentor.id == authUser.teacher.id"/>
         <div v-else>Выберите студента</div>
       </div>
       <div v-else class="report-none">
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import ReportMentorItem from "@/components/assessment/ReportMentorItem.vue";
 import { getStudentsReport, createReportMentor, updateReportMentor, getReportMentorJournal } from "@/hooks/assess/useReportMentor";
 import { getCriteriaMYP } from "@/hooks/unit/useCriterionMYP";
@@ -146,6 +147,10 @@ export default {
       });
     })
   },
+  computed: {
+    // подключение переменной авторизированного пользователя из store
+    ...mapGetters(['authUser', 'isAdmin', 'isDnevnik']),
+  }
 }
 </script>
 

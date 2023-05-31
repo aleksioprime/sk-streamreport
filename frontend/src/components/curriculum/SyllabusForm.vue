@@ -15,18 +15,22 @@
               {{ sb.name_rus }}
             </option>
           </select> -->
-          <div>Выберите предмет</div>
-          <!-- <div class="radiobutton-wrapper">
-            <div v-for="sb in subjects" :key="sb.id" class="radiobutton">
-              <input type="radio" :value="sb.id" :id="'sb-' + sb.id" v-model="editableData.subject_id">
-              <label :for="'sb-' + sb.id">{{ sb.name_rus }}&nbsp;(<span v-if="sb.group_ib">{{ sb.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</label>
-            </div>
-          </div> -->
-          <search-one-choice :items="subjects" :searchedField="'name_rus'"
-            v-model:editableItem="editableData.subject_id">
-            <template v-slot:selected="data">{{ data.item.name_rus }}&nbsp;(<span v-if="data.item.group_ib">{{ data.item.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</template>
-            <template v-slot:found="data">{{ data.item.name_rus }}&nbsp;(<span v-if="data.item.group_ib">{{ data.item.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</template>
-          </search-one-choice>
+          <div  v-if="!disableSubject">
+            <div>Выберите предмет</div>
+            <!-- <div class="radiobutton-wrapper">
+              <div v-for="sb in subjects" :key="sb.id" class="radiobutton">
+                <input type="radio" :value="sb.id" :id="'sb-' + sb.id" v-model="editableData.subject_id">
+                <label :for="'sb-' + sb.id">{{ sb.name_rus }}&nbsp;(<span v-if="sb.group_ib">{{ sb.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</label>
+              </div>
+            </div> -->
+            
+            <search-one-choice :items="subjects" :searchedField="'name_rus'"
+              v-model:editableItem="editableData.subject_id">
+              <template v-slot:selected="data">{{ data.item.name_rus }}&nbsp;(<span v-if="data.item.group_ib">{{ data.item.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</template>
+              <template v-slot:found="data">{{ data.item.name_rus }}&nbsp;(<span v-if="data.item.group_ib">{{ data.item.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</template>
+            </search-one-choice>
+          </div>
+          <div v-else></div>
         </div>
         <!-- <div class="col-md-4">
         <select id="class_year" class="form-select my-1" v-model="editableData.class_year_id" :disabled="disableClassYear">

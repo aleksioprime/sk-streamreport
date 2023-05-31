@@ -13,6 +13,7 @@ export function getSubjects() {
         teacher: data.teacher || null,
         program: data.program || null,
         need_report: data.need_report || null,
+        plan: data.plan || null,
       }
     }
     await axiosAPI.get('myp/subjects', config).then((response) => {

@@ -22,8 +22,9 @@ import AssessWorkView from '@/views/AssessWorkView.vue'
 import AssessPeriodView from '@/views/AssessPeriodView.vue'
 import ExtraContest from '@/views/ExtraContest.vue'
 import ExtraTeaching from '@/views/ExtraTeaching.vue'
-import AssessmentGroup from '@/views/AssessmentGroupView.vue'
-
+import AssessReportTeacher from '@/views/AssessReportTeacher.vue'
+import AssessReportPsychologist from '@/views/AssessReportPsychologist.vue'
+import AssessReportMentor from '@/views/AssessReportMentor.vue'
 
 const routes = [
   {
@@ -112,9 +113,19 @@ const routes = [
     component: AssessList,
   },
   {
-    path: '/assessment/group',
-    name: 'assessgroup',
-    component: AssessmentGroup,
+    path: '/report/teacher',
+    name: 'assessReportTeacher',
+    component: AssessReportTeacher,
+  },
+  {
+    path: '/report/psychologist',
+    name: 'assessReportPsychologist',
+    component: AssessReportPsychologist,
+  },
+  {
+    path: '/report/mentor',
+    name: 'assessReportMentor',
+    component: AssessReportMentor,
   },
   {
     path: '/schedule',

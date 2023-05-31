@@ -5,7 +5,7 @@ from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, Wor
 from curriculum.serializers import SubjectGroupIBSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.serializers import UserSerializer
 from member.models import ProfileTeacher, User, ProfileStudent
-from curriculum.models import Subject, ClassYear, Criterion, SubjectGroupFGOS
+from curriculum.models import Subject, ClassYear, Criterion, SubjectGroupFGOS, AcademicPlan
 from django.db.models import Q
 import math
 
@@ -26,7 +26,13 @@ class ProfileStudentSerializer(serializers.ModelSerializer):
         model = ProfileStudent
         fields = '__all__'
 
+class AcademicPlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicPlan
+        fields = '__all__'
+
 class StudyYearSerializer(serializers.ModelSerializer):
+    academic_plan = AcademicPlanSerializer(many=True, read_only=True)
     class Meta:
         model = StudyYear
         fields = '__all__'
@@ -774,8 +780,8 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
         result = super(StudentReportMentorSerializer, self).to_representation(instance)
         class_year_id = self.context.get("class_year", None)
         period_id = self.context.get("period", None)
-        class_year = ClassYear.objects.filter(pk=class_year_id).first()
-        subject_queryset = Subject.objects.filter(subject_year__academic_plan__id=period_id, subject_year__class_year__in=[class_year_id], group_ib__program=class_year.program)
+        report_period = ReportPeriod.objects.filter(id=period_id).first()
+        subject_queryset = Subject.objects.filter(subject_year__academic_plan__study_year__in=[report_period.study_year], subject_year__years__in=[class_year_id])
         # subject_queryset = Subject.objects.filter(group_ib__program=class_year.program)
         subject_reports = list(subject_queryset.values('id', 'name_rus'))
         subjects = list(subject_queryset.values_list('id', flat=True))
@@ -868,3 +874,91 @@ class WorkLoadSubjectSerializer(serializers.ModelSerializer):
             workload_queryset = WorkLoad.objects.filter(subject=instance, study_year__id=study_year).distinct()
         serializer = WorkLoadSerializer(instance=workload_queryset, many=True, context=self.context)
         return serializer.data
+
+
+
+###########################################
+# Классы с результатами репортов учителей #
+###########################################
+
+class ProfileStudentForReportSerializer(serializers.ModelSerializer):
+    short_name = serializers.CharField(source='user.get_short_name', read_only=True)
+    class Meta:
+        model = ProfileStudent
+        fields = ['id', 'short_name']
+
+class ClassGroupForReportTeacherSerializer(serializers.ModelSerializer):
+    class_year = ClassYearSerializer(read_only=True)
+    students = ProfileStudentForReportSerializer(many=True, read_only=True)
+    class Meta:
+        model = ClassGroup
+        fields = ['id', 'group_name', 'class_year', 'count', 'students']
+    def to_representation(self, instance):
+        result = super(ClassGroupForReportTeacherSerializer, self).to_representation(instance)
+        subject_id = self.context.get("subject", None)
+        reports = ReportTeacher.objects.filter(student__in=instance.students.all(),
+                                               year=instance.class_year,
+                                               subject__id=subject_id)
+        result['reports'] = []
+        for report in reports:
+            if report:
+                result['reports'].append({
+                    'student_name': report.student.user.get_short_name(),
+                    'student_id': report.student.id,
+                    'check_text': bool(report.text),
+                    'period': report.period.id})
+        
+        teachers = ProfileTeacher.objects.filter(workload__groups__in=[instance], workload__subject__id=subject_id).distinct()
+        result['teachers'] = ProfileTeacherSerializer(instance=teachers, many=True, context=self.context).data
+        return result
+    
+
+#############################################
+# Классы с результатами репортов психологов #
+#############################################
+
+class ClassGroupForReportPsychoSerializer(serializers.ModelSerializer):
+    class_year = ClassYearSerializer(read_only=True)
+    students = ProfileStudentForReportSerializer(many=True, read_only=True)
+    psychologist = ProfileTeacherSerializer(read_only=True)
+    class Meta:
+        model = ClassGroup
+        fields = ['id', 'group_name', 'class_year', 'count', 'students', 'psychologist']
+    def to_representation(self, instance):
+        result = super(ClassGroupForReportPsychoSerializer, self).to_representation(instance)
+        reports = ReportPsychologist.objects.filter(student__in=instance.students.all(),
+                                                    year=instance.class_year)
+        result['reports'] = []
+        for report in reports:
+            if report:
+                result['reports'].append({
+                    'student_name': report.student.user.get_short_name(),
+                    'student_id': report.student.id,
+                    'check_text': bool(report.text),
+                    'period': report.period.id})
+        return result
+    
+##############################################
+# Классы с результатами репортов наставников #
+##############################################
+
+class ClassGroupForReportMentorSerializer(serializers.ModelSerializer):
+    class_year = ClassYearSerializer(read_only=True)
+    students = ProfileStudentForReportSerializer(many=True, read_only=True)
+    mentor = ProfileTeacherSerializer(read_only=True)
+    class Meta:
+        model = ClassGroup
+        fields = ['id', 'group_name', 'class_year', 'count', 'students', 'mentor']
+    def to_representation(self, instance):
+        result = super(ClassGroupForReportMentorSerializer, self).to_representation(instance)
+        reports = ReportMentor.objects.filter(student__in=instance.students.all(),
+                                                    year=instance.class_year)
+        result['reports'] = []
+        for report in reports:
+            if report:
+                result['reports'].append({
+                    'student_name': report.student.user.get_short_name(),
+                    'student_id': report.student.id,
+                    'check_text': bool(report.text),
+                    'period': report.period.id})
+        return result

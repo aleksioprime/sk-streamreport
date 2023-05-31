@@ -31,7 +31,10 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
         ordering = ['last_name', 'first_name', 'is_active']
     def get_full_name(self):
-        full_name = f"{self.last_name} {self.first_name} {self.middle_name}"
+        if not self.middle_name:
+            full_name = f"{self.last_name} {self.first_name}"
+        else:
+            full_name = f"{self.last_name} {self.first_name} {self.middle_name}"
         return full_name.strip()
     def get_short_name(self):
         if self.first_name and self.middle_name:

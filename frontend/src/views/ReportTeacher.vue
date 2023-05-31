@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header>
-      <template v-slot:link><a href="#" @click="$router.push(`/assessment/group`)" >Вернуться к выбору класса</a></template>
+      <template v-slot:link><a href="#" @click="$router.push(`/report/teacher`)" >Вернуться к выбору класса</a></template>
       <div></div>
       <template v-slot:header>Репорты <span v-if="currentAuthor.id">учителя</span><span v-else>учителей</span></template>
       <template v-slot:extra><h4>{{ currentAuthor.user.last_name }} {{ currentAuthor.user.first_name }} {{ currentAuthor.user.middle_name }}</h4></template>

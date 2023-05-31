@@ -6,7 +6,8 @@ from assess.views import StudyYearViewSet, ClassGroupViewSet, StudyPeriodViewSet
     ReportMentorViewSet, ReportMentorJournalAPIView, AssessmentDnevnikAPIView, ReportTeacherJournalAPIView, \
     ClassGroupStudentsViewSet, WorkLoadViewSet, WorkAssessmentGiveMarksAPIView, TextTranslateAPIView, \
     GenerateReportAPIView, ExportReportMentorDOCXAPIView, ReportPsychologistJournalAPIView, ReportPsychologistViewSet, \
-    StudentReportPsychologistViewSet, FinalMarksDnevnikAPIView, WorkLoadSubjectViewSet
+    StudentReportPsychologistViewSet, FinalMarksDnevnikAPIView, WorkLoadSubjectViewSet, ClassGroupForReportTeacherViewSet, \
+    ClassGroupForReportPsychoViewSet, ClassYearForReportViewSet, ClassGroupForReportMentorViewSet
 
 urlpatterns = [
     path('student', StudentViewSet.as_view({'get': 'list'})),
@@ -49,4 +50,9 @@ urlpatterns = [
     path('workload/subjects/<int:pk>', WorkLoadSubjectViewSet.as_view({'get': 'retrieve'})),
     path('workload', WorkLoadViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('workload/<int:pk>', WorkLoadViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('report/teacher/groups', ClassGroupForReportTeacherViewSet.as_view({'get': 'list'})),
+    path('report/psychologist/groups', ClassGroupForReportPsychoViewSet.as_view({'get': 'list'})),
+    path('report/mentor/groups', ClassGroupForReportMentorViewSet.as_view({'get': 'list'})),
+    path('report/years', ClassYearForReportViewSet.as_view({'get': 'list'})),
+
 ]

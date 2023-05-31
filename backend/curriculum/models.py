@@ -36,6 +36,7 @@ class ClassYear(models.Model):
     class Meta:
         verbose_name = 'Год обучения'
         verbose_name_plural = 'Года обучения'
+        ordering = ['year_rus']
     def __str__(self):
         if self.year_ib is not None:
             return f"{self.year_rus} класс ({self.year_ib} {self.program})"

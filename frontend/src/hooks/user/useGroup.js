@@ -27,6 +27,83 @@ export function getGroups() {
   }
 }
 
+export function getGroupsForReportTeacher() {
+  const groupsForReportTeacher = ref([]);
+  const isGroupLoading = ref(true)
+  const fetchGetGroupsForReportTeacher = async (data) => {
+    const config = {
+      params: {
+        study_year: data.study_year || null,
+        period: data.period || null,
+        level: data.level || null,
+        class_year: data.class_year || null,
+        teacher: data.teacher || null,
+        subject: data.subject || null,
+      }
+    }
+    isGroupLoading.value = true;
+    await axiosAPI.get('/report/teacher/groups', config).then((response) => {
+      console.log('Список групп для репортов учителей успешно получен: ', response.data);
+      groupsForReportTeacher.value = response.data;
+    }).finally(() => {
+      isGroupLoading.value = false;
+    });
+  };
+  return {
+    groupsForReportTeacher, isGroupLoading, fetchGetGroupsForReportTeacher
+  }
+}
+
+export function getGroupsForReportPsycho() {
+  const groupsForReportPsycho = ref([]);
+  const isGroupLoading = ref(true)
+  const fetchGetGroupsForReportPsycho = async (data) => {
+    const config = {
+      params: {
+        study_year: data.study_year || null,
+        period: data.period || null,
+        class_year: data.class_year || null,
+        psychologist: data.psychologist || null,
+      }
+    }
+    isGroupLoading.value = true;
+    await axiosAPI.get('/report/psychologist/groups', config).then((response) => {
+      console.log('Список групп для репортов психологов успешно получен: ', response.data);
+      groupsForReportPsycho.value = response.data;
+    }).finally(() => {
+      isGroupLoading.value = false;
+    });
+  };
+  return {
+    groupsForReportPsycho, isGroupLoading, fetchGetGroupsForReportPsycho
+  }
+}
+
+export function getGroupsForReportMentor() {
+  const groupsForReportMentor = ref([]);
+  const isGroupLoading = ref(true)
+  const fetchGetGroupsForReportMentor = async (data) => {
+    const config = {
+      params: {
+        study_year: data.study_year || null,
+        period: data.period || null,
+        class_year: data.class_year || null,
+        mentor: data.mentor || null,
+      }
+    }
+    isGroupLoading.value = true;
+    await axiosAPI.get('/report/mentor/groups', config).then((response) => {
+      console.log('Список групп для репортов наставников успешно получен: ', response.data);
+      groupsForReportMentor.value = response.data;
+    }).finally(() => {
+      isGroupLoading.value = false;
+    });
+  };
+  return {
+    groupsForReportMentor, isGroupLoading, fetchGetGroupsForReportMentor
+  }
+}
+
 export function getGroupsStudents() {
   const groupsStudents = ref([]);
   const isGroupStudentLoading = ref(true)

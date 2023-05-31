@@ -20,62 +20,33 @@
         </label>
       </div>
     </div>
-    <div class="wrapper-title"><h2>Обязательная часть</h2></div>
-    <div class="subject-wrapper" v-if="baseSubjects.length">
-      <syllabus-item v-for="(dataSubjects, subject) in groupedArrayData(baseSubjects, ['subject', 'id'])" :key="subject" 
-      :subject="getSubjectByAcademicPlan(subject)" :dataSubjects="dataSubjects" @deleteItem="showHoursDelete" v-model:editableItem="editableItem">
-        <template v-slot:form>
-          <button class="icon icon-add mt-2" @click="showHoursAdd(subject)" v-show="editableSubject != subject"></button>
-          <syllabus-form v-if="editableSubject == subject" :years="years" :subjects="subjects" 
+
+    <button v-show="currentPlan.id && !addSubjectAll" class="btn btn-primary mt-3" @click="showSubjectAdd()">Добавить новый предмет</button>
+      <syllabus-form v-if="addSubjectAll" :years="years" :subjects="filteredSubjects" 
             :editableData="editableData" :deletionMode="deletionMode"
             @apply="applyEditHours" @cancel="cancelEditHours"/>
-        </template>
-      </syllabus-item>
-    </div>
-    <div class="subject-wrapper area" v-else>Нет данных</div>
-    <button v-show="currentPlan.id && !addSubjectBase" class="btn btn-primary" @click="showSubjectAdd(type='base')">Добавить предмет c нагрузкой</button>
-    <syllabus-form v-if="addSubjectBase" :years="years" :subjects="filteredSubjects" 
-          :editableData="editableData" :deletionMode="deletionMode"
-          @apply="applyEditHours" @cancel="cancelEditHours"/>
-    <div class="wrapper-title"><h2>Внеурочная деятельность</h2></div>
-    <div class="subject-wrapper" v-if="extraSubjects.length">
-      <syllabus-item v-for="(dataSubjects, subject) in groupedArrayData(extraSubjects, ['subject', 'id'])" :key="subject" v-model:editableItem="editableItem"
-      :subject="getSubjectByAcademicPlan(subject)" :dataSubjects="dataSubjects" @deleteItem="showHoursDelete">
-        <template v-slot:form>
-          <button class="icon icon-add mt-2" @click="showHoursAdd(subject)" v-show="editableSubject != subject"></button>
-          <syllabus-form v-if="editableSubject == subject" :years="years" :subjects="subjects" 
+
+    <div v-for="(typeSubjects, type) in groupedArrayData(this.currentPlan.subject_year, ['subject', 'type'])" :key="type">
+      <div class="wrapper-title"><h2>{{ types[`${type}`] }}</h2></div>
+      <div class="subject-wrapper" v-if="typeSubjects.length">
+        <syllabus-item v-for="(dataSubjects, subject) in groupedArrayData(typeSubjects, ['subject', 'id'])" :key="subject" 
+        :subject="getSubjectByAcademicPlan(subject)" :dataSubjects="dataSubjects" @deleteItem="showHoursDelete" v-model:editableHour="editableHour">
+          <template v-slot:form>
+            <button class="icon icon-add mt-2" @click="showHoursAdd(subject)" v-show="editableSubject != subject"></button>
+            <syllabus-form v-if="editableSubject == subject" :years="years" :subjects="subjects" 
+              :editableData="editableData" :deletionMode="deletionMode"
+              @apply="applyEditHours" @cancel="cancelEditHours"/>
+          </template>
+        </syllabus-item>
+      </div>
+      <div class="subject-wrapper area" v-else>Нет данных</div>
+      <button v-show="currentPlan.id && !addSubject" class="btn btn-primary" @click="showSubjectAdd(type=type)">Добавить предмет в группу</button>
+      <syllabus-form v-if="addSubject && editableType == type" :years="years" :subjects="filteredSubjects" 
             :editableData="editableData" :deletionMode="deletionMode"
             @apply="applyEditHours" @cancel="cancelEditHours"/>
-        </template>
-      </syllabus-item>
-      <!-- <div v-for="(dataSubjects, subject) in groupedArrayData(extraSubjects, ['subject', 'id'])" :key="subject"
-        class="plan-item area">
-        <div class="subject-title">
-          <h3>{{ getSubjectByAcademicPlan(subject).name_rus }}</h3>
-          <div v-if="getSubjectByAcademicPlan(subject).group_fgos">{{ getSubjectByAcademicPlan(subject).group_fgos.type }}: {{
-            getSubjectByAcademicPlan(subject).group_fgos.name_rus }}</div>
-        </div>
-        <div class="subject-hours">
-          <div v-for="sb in dataSubjects" :key="sb.id" class="subject-hours-item popup" :class="{ 'editable-item':  editableData.id == sb.id }" @click="showEditButton(sb.id)">
-            <div><span v-for="year, index in sb.years" :key="year.id">{{ year.year_rus }}<span v-if="++index !== sb.years.length">,&nbsp;</span></span> класс:</div>
-            <div>{{ getWordHour(sb.hours) }}</div>
-            <div :id="`popup-icon-${sb.id}`" class="popuptext">
-              <button class="icon icon-edit" @click="showHoursEdit(sb)"></button>
-              <button class="icon icon-del" @click="showHoursDelete(sb)"></button>
-            </div>
-          </div>
-        </div>
-        <button class="icon icon-add mt-2" @click="showHoursAdd(subject)" v-show="editableSubject != subject"></button>
-        <syllabus-form v-if="editableSubject == subject" :years="years" :subjects="subjects" 
-          :editableData="editableData" :deletionMode="deletionMode"
-          @apply="applyEditHours" @cancel="cancelEditHours"/>
-      </div> -->
     </div>
-    <div class="subject-wrapper area" v-else>Нет данных</div>
-    <button v-show="currentPlan.id && !addSubjectExtra" class="btn btn-primary" @click="showSubjectAdd(type='extra')">Добавить предмет с нагрузкой</button>
-    <syllabus-form v-if="addSubjectExtra" :years="years" :subjects="filteredSubjects" 
-          :editableData="editableData" :deletionMode="deletionMode"
-          @apply="applyEditHours" @cancel="cancelEditHours"/>
+    
+    
   </div>
 </template>
 
@@ -125,21 +96,28 @@ export default {
       editableSubject: null,
       editableData: {},
       deletionMode: false,
-      addSubjectBase: false,
-      addSubjectExtra: false,
-      editableItem: null,
+      addSubject: false,
+      addSubjectAll: false,
+      editableHour: null,
+      types: {
+        'base': 'Обязательная часть',
+        'base_fgos': 'Обязательная часть ФГОС в IB',
+        'base_ib': 'Обязательная часть IB',
+        'extra': 'Внеурочная деятельность',
+      }
     }
   },
   methods: {
-    showSubjectAdd(type = null) {
+    showSubjectAdd(type) {
       this.cancelEditHours();
       this.fetchGetClassYears({ level: this.currentPlan.level });
       this.fetchGetSubjects({ level: this.currentPlan.level, type: type });
-      if (type == 'base') {
-        this.addSubjectBase = true;
-      } else if (type == 'extra') {
-        this.addSubjectExtra = true;
+      if (type) {
+        this.addSubject = true;
+      } else {
+        this.addSubjectAll = true;
       }
+      this.editableType = type;
       this.editableData = { years_ids: [], subject_id: null }
     },
     showHoursAdd(id = null) {
@@ -147,7 +125,7 @@ export default {
       this.subjects = [ this.getSubjectByAcademicPlan(id) ]
       this.fetchGetClassYears({ level: this.currentPlan.level });
       this.editableSubject = id;
-      this.editableData = { years_ids: [], subject_id: id }
+      this.editableData = { years_ids: [], subject_id: Number(id) }
     },
     showHoursEdit(data) {
       this.years = [ data.years ]
@@ -197,9 +175,9 @@ export default {
       this.editableSubject = null;
       this.deletionMode = false;
       this.editableData = {}
-      this.addSubjectBase = false;
-      this.addSubjectExtra = false;
-      this.editableItem = null;
+      this.addSubject = false;
+      this.addSubjectAll = false;
+      this.editableHour = null;
     },
     // showEditButton(id) {
     //   document.querySelectorAll(`.popuptext`).forEach((item) => {
@@ -267,7 +245,7 @@ export default {
 }
 .wrapper-title {
   text-transform: uppercase;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 .plan-item {}
 

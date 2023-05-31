@@ -275,6 +275,8 @@ class ReportMentor(models.Model):
     events = models.ManyToManyField('assess.EventParticipation', verbose_name=_("Участие в мероприятиях"), blank=True, related_name="mentor_reports")
     text = models.TextField(verbose_name=_("Текст репорта"), null=True, blank=True)
     author = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Автор репорта"), on_delete=models.SET_NULL, null=True, related_name="mentor_reports")
+    created = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_("Дата и время создания"))
+    updated = models.DateTimeField(auto_now=True, null=True, verbose_name=_("Дата и время редактирования"))
     class Meta:
         verbose_name = 'Репорт наставника'
         verbose_name_plural = 'Репорты наставника'
@@ -290,6 +292,8 @@ class ReportPsychologist(models.Model):
     text = models.TextField(verbose_name=_("Текст репорта"), null=True, blank=True)
     events = models.ManyToManyField('assess.EventParticipation', verbose_name=_("Участие в мероприятиях"), blank=True, related_name="psycho_reports")
     author = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Автор репорта"), on_delete=models.SET_NULL, null=True, related_name="psycho_reports")
+    created = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_("Дата и время создания"))
+    updated = models.DateTimeField(auto_now=True, null=True, verbose_name=_("Дата и время редактирования"))
     class Meta:
         verbose_name = 'Репорт психолога'
         verbose_name_plural = 'Репорты психолога'

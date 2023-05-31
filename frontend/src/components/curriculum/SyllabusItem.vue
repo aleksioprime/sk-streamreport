@@ -1,14 +1,14 @@
 <template>
   <div class="plan-item area">
     <div class="subject-title">
-      <h3>{{ subject.name_rus }}&nbsp;(<span v-if="subject.group_ib">{{ subject.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</h3>
+      <h4>{{ subject.name_rus }}&nbsp;(<span v-if="subject.group_ib">{{ subject.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</h4>
       <div v-if="subject.group_fgos">{{ subject.group_fgos.type }}: {{ subject.group_fgos.name_rus }}</div>
     </div>
     <div class="subject-hours">
-      <div v-for="sb in dataSubjects" :key="sb.id" class="subject-hours-item" :class="{ 'editable-item': editableItem == sb.id }">
+      <div v-for="sb in dataSubjects" :key="sb.id" class="subject-hours-item" :class="{ 'editable-item': editableHour == sb.id }">
         <div><span v-for="year, index in sb.years" :key="year.id">{{ year.year_rus }}<span v-if="++index !== sb.years.length">,&nbsp;</span></span> класс:</div>
         <div>{{ getWordHour(sb.hours) }}</div>
-        <button class="icon icon-del" @click="handleDelete(sb)" v-if="editableItem != sb.id"></button>
+        <button class="icon icon-del" @click="handleDelete(sb)" v-if="editableHour != sb.id"></button>
       </div>
     </div>
     <slot name="form"></slot>
@@ -32,7 +32,7 @@ export default {
       type: Array,
       default: [],
     },
-    editableItem: {
+    editableHour: {
       type: Number,
       default: null,
     }
@@ -51,7 +51,7 @@ export default {
   methods: {
     handleDelete(sb) {
       this.$emit('deleteItem', sb);
-      this.$emit('update:editableItem', Number(sb.id));
+      this.$emit('update:editableHour', Number(sb.id));
     },
     getWordHour(count) {
       let value = Math.abs(count) % 100;

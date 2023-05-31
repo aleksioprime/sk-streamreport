@@ -168,6 +168,7 @@ class SubjectViewSet(viewsets.ModelViewSet):
         program = self.request.query_params.get("program", None)
         teacher = self.request.query_params.get("teacher", None)
         need_report = self.request.query_params.get("need_report", None)
+        plan = self.request.query_params.get("plan", None)
         if department:
             subjects = subjects.filter(department=department)
         if level:
@@ -182,6 +183,8 @@ class SubjectViewSet(viewsets.ModelViewSet):
             subjects = subjects.filter(workload__teacher=teacher).distinct()
         if need_report:
             subjects = subjects.filter(need_report=need_report)
+        if plan:
+            subjects = subjects.filter(subject_year__academic_plan__in=[plan]).distinct()
         return subjects
     
 # class SubjectLevelMYPViewSet(viewsets.ModelViewSet):

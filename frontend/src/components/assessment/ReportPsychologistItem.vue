@@ -9,13 +9,13 @@
       </div>
     </div>
     <div class="student-report">
-      <report-field-report id="student-report" :report="report" :dataField="report.psycho_report" @save="fetchSaveReport"/>
+      <report-field-report id="student-report" :report="report" :dataField="report.psycho_report" @save="fetchSaveReport" :editable="editable"/>
     </div>
     <div class="student-events">
       <div class="events-title selected" data-bs-toggle="collapse" :href="`#collapse-events-${report.id}`" role="button" 
       aria-expanded="false" :aria-controls="`collapse-events-${report.id}`">Участие в мероприятиях</div>
       <report-field-blocks class="collapse" :id="`collapse-events-${report.id}`" :fieldData="report.psycho_report.events" 
-      :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport">
+      :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport" :editable="editable">
         <!-- Слот для блоков показа записей -->
         <template v-slot:show="field">
           <div class="blocks-wrapper">
@@ -79,6 +79,7 @@ export default {
       type: Array,
       default: [],
     },
+    editable: { type: Boolean, default: false },
   },
   data() {
     return {

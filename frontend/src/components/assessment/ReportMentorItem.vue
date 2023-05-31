@@ -10,7 +10,7 @@
       <div class="ms-auto"><div class="icon icon-export-doc" @click="exportToPDF"></div></div>
     </div>
     <div class="student-report">
-      <report-field-report id="student-report" :student="student" :dataField="student.mentor_report" @save="fetchSaveReport"/>
+      <report-field-report id="student-report" :student="student" :dataField="student.mentor_report" @save="fetchSaveReport" :editable="editable"/>
     </div>
     <div class="student-events">
       <div class="events-title selected" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
@@ -28,7 +28,7 @@
         <div v-else class="events-no">
           Данных о мероприятиях от учителей-предметников и психолога пока нет
         </div>
-        <report-field-blocks :fieldData="student.mentor_report.events" :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport"  v-if="student.mentor_report.text">
+        <report-field-blocks :fieldData="student.mentor_report.events" :fieldName="'events'" :defaultItem="defaultEvent" @save="fetchSaveReport"  v-if="student.mentor_report.text" :editable="editable">
           <!-- Слот для блоков показа записей -->
           <template v-slot:show="field">
             <div class="blocks-wrapper">
@@ -154,6 +154,7 @@ export default {
       type: Array,
       default: [],
     },
+    editable: { type: Boolean, default: false },
   },
 
   data() {

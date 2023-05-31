@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header>
-      <template v-slot:link><a href="#" @click="$router.push(`/assessment/group`)" >Вернуться к выбору класса</a></template>
+      <template v-slot:link><a href="#" @click="$router.push(`/report/psychologist`)" >Вернуться к выбору класса</a></template>
       <template v-slot:header>Репорты психолога</template>
     </base-header>
     <!-- <report-filter @updateFetch="updateFetch"/> -->
@@ -15,7 +15,7 @@
     <div v-if="!isReportsPsychologistLoading || !firstLoading">
       <div v-if="reportsPsychologist.length" class="report-wrapper">
         <report-psychologist-item v-for="report in reportsPsychologist" :key="report.id" :period="currentReportPeriod"
-        :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport"/>
+        :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :editable="currentGroup.psychologist.id == authUser.teacher.id"/>
       </div>
       <div v-else class="report-none">
         Пока нет данных
@@ -42,7 +42,7 @@
 
 <script>
 import { Modal } from 'bootstrap';
-
+import { mapGetters } from 'vuex';
 import ReportPsychologistItem from "@/components/assessment/ReportPsychologistItem.vue";
 import { getReportPsychologistJournal, getReportsPsychologist, createReportPsychologist, updateReportPsychologist } from "@/hooks/assess/useReportPsychologist";
 
@@ -138,6 +138,10 @@ export default {
       });
     })
   },
+  computed: {
+    // подключение переменной авторизированного пользователя из store
+    ...mapGetters(['authUser', 'isAdmin', 'isDnevnik']),
+  }
 }
 </script>
 

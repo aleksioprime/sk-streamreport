@@ -5,7 +5,8 @@ from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassG
     PeriodAssessmentSerializer, StudentWorkSerializer, ReportPeriodSerializer, StudentReportTeacherSerializer, ReportTeacherSerializer, \
     EventTypeSerializer, EventParticipationSerializer, StudentReportMentorSerializer, ReportMentorSerializer, ClassGroupStudentsSerializer, \
     WorkLoadSerializer, TextTranslateSerailizer, GenerateReportSerailizer, StudentReportPsychologistSerializer, ReportPsychologistSerializer, \
-        ProfileTeacherSerializer, SubjectSerializer, WorkLoadSubjectSerializer
+        ProfileTeacherSerializer, SubjectSerializer, WorkLoadSubjectSerializer, ClassGroupForReportTeacherSerializer, ClassGroupForReportPsychoSerializer, \
+        ClassYearSerializer, ClassGroupForReportMentorSerializer
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
     ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad, ReportPsychologist
@@ -722,3 +723,81 @@ class WorkLoadSubjectViewSet(viewsets.ModelViewSet):
         if department:
             subjects = subjects.filter(department=department)
         return subjects
+    
+    
+class ClassYearForReportViewSet(viewsets.ModelViewSet):
+    queryset = ClassYear.objects.all()
+    serializer_class = ClassYearSerializer
+    def get_queryset(self):
+        class_year = ClassYear.objects.all()
+        study_year = self.request.query_params.get("study_year", None)
+        teacher = self.request.query_params.get("teacher", None)
+        psychologist = self.request.query_params.get("psychologist", None)
+        mentor = self.request.query_params.get("mentor", None)
+        level = self.request.query_params.get("level", None)
+        if teacher:
+            class_year = class_year.filter(group__workload__study_year=study_year, group__workload__teacher=teacher).distinct()
+        if psychologist:
+            class_year = class_year.filter(group__study_year=study_year, group__psychologist=psychologist).distinct()
+        if mentor:
+            class_year = class_year.filter(group__study_year=study_year, group__mentor=mentor).distinct()
+        if level:
+            class_year = class_year.filter(level=level)
+        return class_year
+
+class ClassGroupForReportTeacherViewSet(viewsets.ModelViewSet):
+    queryset = ClassGroup.objects.all()
+    serializer_class = ClassGroupForReportTeacherSerializer
+    def get_queryset(self):
+        class_group = ClassGroup.objects.all()
+        study_year = self.request.query_params.get("study_year", None)
+        class_year = self.request.query_params.get("class_year", None)
+        teacher = self.request.query_params.get("teacher", None)
+        level = self.request.query_params.get("level", None)
+        if study_year:
+            class_group = class_group.filter(study_year=study_year)
+        if class_year:
+            class_group = class_group.filter(class_year=class_year)
+        if level:
+            class_group = class_group.filter(class_year__level=level)
+        if teacher:
+            class_group = class_group.filter(workload__teacher=teacher).distinct()
+        return class_group
+    def get_serializer_context(self, *args, **kwargs):
+        subject = self.request.query_params.get("subject", None)
+        context = super().get_serializer_context()
+        if subject:
+            context.update({"subject": subject})
+        return context
+
+class ClassGroupForReportPsychoViewSet(viewsets.ModelViewSet):
+    queryset = ClassGroup.objects.all()
+    serializer_class = ClassGroupForReportPsychoSerializer
+    def get_queryset(self):
+        class_group = ClassGroup.objects.all()
+        study_year = self.request.query_params.get("study_year", None)
+        class_year = self.request.query_params.get("class_year", None)
+        psychologist = self.request.query_params.get("psychologist", None)
+        if study_year:
+            class_group = class_group.filter(study_year=study_year)
+        if class_year:
+            class_group = class_group.filter(class_year=class_year)
+        if psychologist:
+            class_group = class_group.filter(psychologist=psychologist)
+        return class_group
+
+class ClassGroupForReportMentorViewSet(viewsets.ModelViewSet):
+    queryset = ClassGroup.objects.all()
+    serializer_class = ClassGroupForReportMentorSerializer
+    def get_queryset(self):
+        class_group = ClassGroup.objects.all()
+        study_year = self.request.query_params.get("study_year", None)
+        class_year = self.request.query_params.get("class_year", None)
+        mentor = self.request.query_params.get("mentor", None)
+        if study_year:
+            class_group = class_group.filter(study_year=study_year)
+        if class_year:
+            class_group = class_group.filter(class_year=class_year)
+        if mentor:
+            class_group = class_group.filter(mentor=mentor)
+        return class_group

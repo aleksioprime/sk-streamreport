@@ -22,3 +22,24 @@ export function getClassYears() {
     years, fetchGetClassYears
   }
 }
+
+export function getClassYearsForReport() {
+  const years = ref([]);
+  const fetchGetClassYears = async (data) => {
+    const config = {
+      params: {
+        study_year: data.study_year || null,
+        teacher: data.teacher || null,
+        psychologist: data.psychologist || null,
+        mentor: data.mentor || null,
+        level: data.level || null,
+      }
+    }
+    await axiosAPI.get('report/years', config).then((response) => {
+        years.value = response.data;
+    });
+  };
+  return {
+    years, fetchGetClassYears
+  }
+}

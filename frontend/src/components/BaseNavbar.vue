@@ -40,7 +40,9 @@
             <div class="dropdown-menu">
               <!-- <router-link to="/assessment" class="dropdown-item">Итоговые работы</router-link> -->
               <!-- <router-link to="/schedule" class="dropdown-item">График работ</router-link> -->
-              <router-link to="/assessment/group" class="dropdown-item">Итоговое оценивание</router-link>
+              <router-link to="/report/teacher" class="dropdown-item">Репорты учителя</router-link>
+              <router-link to="/report/psychologist" class="dropdown-item">Репорты психолога</router-link>
+              <router-link to="/report/mentor" class="dropdown-item">Репорты наставника</router-link>
               <!-- <router-link to="/report/teacher" class="dropdown-item">Репорты учителя</router-link>
               <router-link to="/report/mentor" class="dropdown-item">Репорты наставника</router-link> -->
             </div>
