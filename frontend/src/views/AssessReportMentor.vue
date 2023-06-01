@@ -57,7 +57,7 @@
             <div class="mentor-period" v-if="group.mentor">
               <div class="period-item" v-for="period in reportPeriods.filter(item => !currentReportPeriod.id || item.id == currentReportPeriod.id)" :key="period.id">
                 <div class="period-title">Репорты за {{ period.name }}</div>
-                <div class="period-info">Психолог: {{ group.mentor.full_name }}</div>
+                <div class="period-info">Наставник: {{ group.mentor.full_name }}</div>
                 <div class="period-students">
                   <div v-for="student in group.students" :key="student.id" class="report-student" :class="getStyleForStudent(student, group.reports, period.id)">{{ student.short_name }}</div>
                 </div>

@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkGroupDate, WorkAssessment, WorkCriteriaMark, \
     PeriodAssessment, ReportPeriod, ReportTeacher, EventParticipation, EventType, ReportMentor, GRADES, WorkLoad, ReportAchievements, \
-    ReportPsychologist
+    ReportPsychologist, ReportCriteria
 from curriculum.serializers import SubjectGroupIBSerializer, ClassYearSerializer, UnitMYPSerializerListCreate, CriterionSerializer
 from member.serializers import UserSerializer
 from member.models import ProfileTeacher, User, ProfileStudent
-from curriculum.models import Subject, ClassYear, Criterion, SubjectGroupFGOS, AcademicPlan
+from curriculum.models import Subject, HoursSubjectInYear, Criterion, SubjectGroupFGOS, AcademicPlan
 from django.db.models import Q
 import math
 
@@ -374,6 +374,7 @@ class EventParticipationSerializer(serializers.ModelSerializer):
 
 
 class ProfileStudentSimpleSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source='user.get_full_name', read_only=True)
     user = UserSerializer(required=False)
     class Meta:
         model = ProfileStudent
@@ -394,6 +395,15 @@ class ReportAchievementsSerializer(serializers.ModelSerializer):
             'achievement_id': {'source': 'achievement', 'write_only': True},
         }
 
+class ReportCriteriaSerializer(serializers.ModelSerializer):
+    criterion = CriterionSerializer(read_only=True)
+    class Meta:
+        model = ReportCriteria
+        fields = ['id', 'criterion', 'criterion_id', 'mark']
+        extra_kwargs = {
+            'criterion_id': {'source': 'criterion', 'write_only': True},
+        }
+
 class ReportTeacherSerializer(serializers.ModelSerializer):
     student = ProfileStudentSimpleSerializer(read_only=True)
     subject = SubjectSerializer(read_only=True)
@@ -401,10 +411,11 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
     events = EventParticipationSerializer(many=True, required=False)
     author = ProfileTeacherSerializer(read_only=True)
     achievements = ReportAchievementsSerializer(many=True, required=False)
+    criteria = ReportCriteriaSerializer(many=True, source='report_criteria', required=False)
     class Meta:
         model = ReportTeacher
         fields = ['id', 'student', 'student_id', 'period', 'period_id', 'subject', 'subject_id',
-                  'year', 'year_id', 'text', 'events', 'author', 'author_id', 'achievements', 
+                  'year', 'year_id', 'text', 'events', 'author', 'author_id', 'achievements', 'criteria',
                   'criterion_a', 'criterion_b', 'criterion_c', 'criterion_d', 'criterion_rus',
                   'criterion_summ', 'criterion_count', 'final_grade', 'final_grade_ib', 'updated']
         extra_kwargs = {
@@ -427,6 +438,13 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
             achievement_instance, created = ReportAchievements.objects.update_or_create(pk=achievement.get('id'), defaults=achievement)
             achievements_ids.append(achievement_instance.pk)
         return achievements_ids
+    def create_or_update_criteria(self, criteria):
+        criteria_ids = []
+        for criterion in criteria:
+            criteria_instance, created = ReportCriteria.objects.update_or_create(pk=criterion.get('id'), defaults=criterion)
+            # Так как поле throught, то добавляем в массив не ключи, а экземпляры объекта
+            criteria_ids.append(criteria_instance)
+        return criteria_ids
     def update(self, instance, validated_data):
         print('Валидированные данные: ', validated_data)
         events = validated_data.pop('events', None)
@@ -441,12 +459,15 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
             original.filter(~Q(id__in=[item.get('id') for item in achievements if 'id' in item])).delete()
             instance.achievements.set(self.create_or_update_achievements(achievements))
             instance.save()
+        report_criteria = validated_data.pop('report_criteria', None)
+        if report_criteria:
+            instance_report_criteria = ReportCriteria.objects.filter(report_teacher=instance)
+            instance_report_criteria.filter(~Q(id__in=[item.get('id') for item in report_criteria if 'id' in item])).delete()  
+            instance.report_criteria.set(self.create_or_update_criteria(report_criteria))
+            instance.save()
         return super().update(instance, validated_data)
     def to_representation(self, instance):
         result = super(ReportTeacherSerializer, self).to_representation(instance)
-        # subject = self.context.get("subject", None)
-        # class_year = self.context.get("class_year", None)
-        # report_period = self.context.get("period", None)
         if result['subject'] is None and result['year'] is None and result['period'] is None:
             return result
         subject_id = result['subject']['id']
@@ -456,6 +477,8 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
                                                             subject=subject_id,
                                                             year=class_year_id,
                                                             period__report_period__in=[period_id]).distinct()
+        criteria_list = Criterion.objects.filter(subject_group=instance.subject.group_ib)
+        result['criteria_list'] = CriterionSerializer(instance=criteria_list, many=True, context=self.context).data
         criteria = {}
         avg_criteria = {}
         for assess in assessment:
@@ -499,16 +522,6 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
             if 'point' in item:
                 result['predict'][item['criterion']]['sum_points'] = result['predict'][item['criterion']].get('sum_points', 0) + item['point']
         return result
-    # def to_internal_value(self, data):
-    #     if 'criterion_a' in data and not data['criterion_a'].isdigit():
-    #         data.pop('criterion_a', None)
-    #     if 'criterion_b' in data and not data['criterion_b'].isdigit():
-    #         data.pop('criterion_b', None)
-    #     if 'criterion_c' in data and not data['criterion_c'].isdigit():
-    #         data.pop('criterion_c', None)
-    #     if 'criterion_d' in data and not data['criterion_d'].isdigit():
-    #         data.pop('criterion_d', None)
-    #     return super(ReportTeacherSerializer, self).to_internal_value(data)
 
 class PeriodAssessmentStudentReportSerializer(serializers.ModelSerializer):
     class Meta:
@@ -522,7 +535,8 @@ class StudyPeriodReportSerializer(serializers.ModelSerializer):
         fields = ['type', 'number']
     def get_type(self, obj):
         return obj.get_type_display()
-    
+
+# TODO: проверить на необходимость и удалить
 class StudentReportTeacherSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     teacher_report = serializers.SerializerMethodField('get_reports')
@@ -745,6 +759,23 @@ class EventParticipationDetailSerializer(serializers.ModelSerializer):
         serializer = ReportPsychologistSmallSerializer(instance=report_queryset.first(), context=self.context)
         return serializer.data
 
+class ReportTeacherForMentorSerializer(serializers.ModelSerializer):
+    student = ProfileStudentSimpleSerializer(read_only=True)
+    author = ProfileTeacherSerializer(read_only=True)
+    criteria = ReportCriteriaSerializer(many=True, source='report_criteria', required=False)
+    subject_name = serializers.CharField(source='subject.name_rus', read_only=True)
+    class Meta:
+        model = ReportTeacher
+        fields = ['id', 'student', 'text', 'author', 'criteria', 'subject_name',
+                 'criterion_rus', 'criterion_summ', 'criterion_count', 
+                 'final_grade', 'final_grade_ib', 'updated']
+
+class ReportPsychologistForMentorSerializer(serializers.ModelSerializer):
+    author = ProfileTeacherSerializer(read_only=True)
+    class Meta:
+        model = ReportPsychologist
+        fields = ['id', 'text', 'events', 'updated', 'author']
+
 class StudentReportMentorSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     mentor_report = serializers.SerializerMethodField('get_mentor_report')
@@ -789,27 +820,24 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
                                                period=period_id,
                                                year=class_year_id,
                                                subject__in=subjects)
-        reports = list(report_teacher_queryset.values('subject__id', 'subject__group_ib', 'text', 'author_id', 
-                                              'author__user__first_name', 'author__user__last_name', 'author__user__middle_name', 
-                                              'criterion_a', 'criterion_b', 'criterion_c', 'criterion_d')) 
-        for subject in subject_reports:
-            for report in reports:
-                if subject['id'] == report['subject__id']:
-                    subject['group'] = report['subject__group_ib']
-                    subject['text'] = report['text']
-                    subject['author_name'] = f"{report['author__user__last_name']} {report['author__user__first_name']} {report['author__user__middle_name']}"
-                    subject['author_id'] = report['author_id']
-                    subject['criteria'] = {'criterion_a': report['criterion_a'],
-                                           'criterion_b': report['criterion_b'],
-                                           'criterion_c': report['criterion_c'],
-                                           'criterion_d': report['criterion_d']}
-                    break
         
-        result['subject_reports'] = subject_reports
+        result['subject_reports'] = ReportTeacherForMentorSerializer(instance=report_teacher_queryset, many=True, context=self.context).data
+        # reports = list(report_teacher_queryset.values('subject__id', 'subject__group_ib', 'text', 'author_id', 
+        #                                       'author__user__first_name', 'author__user__last_name', 'author__user__middle_name', 'report_criteria')) 
+        # for subject in subject_reports:
+        #     for report in reports:
+        #         if subject['id'] == report['subject__id']:
+        #             subject['group'] = report['subject__group_ib']
+        #             subject['text'] = report['text']
+        #             subject['author_name'] = f"{report['author__user__last_name']} {report['author__user__first_name']} {report['author__user__middle_name']}"
+        #             subject['author_id'] = report['author_id']
+        #             subject['criteria'] = report['report_criteria']
+        #             break
+        # result['subject_reports'] = subject_reports
         report_psycho_queryset = ReportPsychologist.objects.filter(student=instance,
                                                                     period=period_id,
                                                                     year=class_year_id).first()
-        result['psycho_report'] = ReportPsychologistSerializer(instance=report_psycho_queryset, context=self.context).data
+        result['psycho_report'] = ReportPsychologistForMentorSerializer(instance=report_psycho_queryset, context=self.context).data
         return result
     
 
@@ -856,6 +884,12 @@ class WorkLoadSerializer(serializers.ModelSerializer):
         print('Валидированные данные: ', validated_data)
         return super().create(validated_data)
 
+class HoursSubjectInYearSerializer(serializers.ModelSerializer):
+    years = ClassYearSerializer(many=True, read_only=True)
+    class Meta:
+        model = HoursSubjectInYear
+        fields = ['id', 'years', 'hours']
+
 class WorkLoadSubjectSerializer(serializers.ModelSerializer):
     # workload = WorkLoadSerializer(many=True, read_only=True)
     group_fgos = SubjectGroupFGOSSerializer()
@@ -863,6 +897,7 @@ class WorkLoadSubjectSerializer(serializers.ModelSerializer):
     workload = serializers.SerializerMethodField('get_workload')
     type_name = serializers.CharField(source='get_type_display', read_only=True)
     level_name = serializers.CharField(source='get_level_display', read_only=True)
+    syllabus = serializers.SerializerMethodField('get_years')
     class Meta:
         model = Subject
         fields = '__all__'
@@ -874,8 +909,18 @@ class WorkLoadSubjectSerializer(serializers.ModelSerializer):
             workload_queryset = WorkLoad.objects.filter(subject=instance, study_year__id=study_year).distinct()
         serializer = WorkLoadSerializer(instance=workload_queryset, many=True, context=self.context)
         return serializer.data
-
-
+    def get_years(self, instance):
+        study_year = self.context.get("study_year", None)
+        if study_year is None:
+            syllabus_queryset = HoursSubjectInYear.objects.filter(subject=instance, academic_plan__study_year=StudyYear.objects.last()).distinct()
+        else:
+            syllabus_queryset = HoursSubjectInYear.objects.filter(subject=instance, academic_plan__study_year__id=study_year).distinct()
+        serializer = HoursSubjectInYearSerializer(instance=syllabus_queryset, many=True, context=self.context)
+        return serializer.data
+    def to_representation(self, instance):
+        result = super(WorkLoadSubjectSerializer, self).to_representation(instance)
+        
+        return result
 
 ###########################################
 # Классы с результатами репортов учителей #

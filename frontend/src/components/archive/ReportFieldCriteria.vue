@@ -8,12 +8,22 @@
       <transition name="slide-fade">
         <div v-if="!editMode">
           <div class="criteria-wrapper">
-            <div class="criteria-item" v-for="cr in report.criteria" :key="cr.id">
-              <div class="criterion">{{ cr.criterion.letter }}. {{ cr.criterion.name_eng }}</div>
-              <div class="criteria-value">{{ cr.mark }}</div>
+            <div class="criteria-item">
+              <div class="criteria-a">{{ criteria.criterion_a.letter }}. {{ criteria.criterion_a.name_eng }}</div>
+              <div class="criteria-value">{{ this.report.criterion_a }}</div>
             </div>
-          </div>
-          <div class="criteria-wrapper mt-2">
+            <div class="criteria-item">
+              <div class="criteria-b">{{ criteria.criterion_b.letter }}. {{ criteria.criterion_b.name_eng }}</div>
+              <div class="criteria-value">{{ this.report.criterion_b }}</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-c">{{ criteria.criterion_c.letter }}. {{ criteria.criterion_c.name_eng }}</div>
+              <div class="criteria-value">{{ this.report.criterion_c }}</div>
+            </div>
+            <div class="criteria-item">
+              <div class="criteria-d">{{ criteria.criterion_d.letter }}. {{ criteria.criterion_d.name_eng }}</div>
+              <div class="criteria-value">{{ this.report.criterion_d }}</div>
+            </div>
             <div class="criteria-item">
               <div class="criteria-d">Сумма баллов: </div>
               <div class="criteria-value">{{ this.report.criterion_summ || '-' }} / {{ this.report.criterion_count * 8 || '-' }}</div>
@@ -31,9 +41,21 @@
           <div :id="`collapse-achievements-${report.id}`" class="collapse">
             <div class="row">
               <div class="criterion-wrapper col-sm mt-2">
-                <div class="radiobutton" v-for="criterion in report.criteria_list" :key="criterion.id">
-                  <input type="radio" name="criteria" :value="criterion" :id="`${criterion.id}`" v-model="currentCriterion" @change="changeCriterion">
-                  <label :for="`${criterion.id}`" class="criterion">{{ criterion.letter }}</label>
+                <div class="radiobutton">
+                  <input type="radio" name="criteria" :value="criteria.criterion_a" id="criterion_a" v-model="currentCriterion" @change="changeCriterion">
+                  <label for="criterion_a" class="criterion-a">A</label>
+                </div>
+                <div class="radiobutton">
+                  <input type="radio" name="criteria" :value="criteria.criterion_b" id="criterion_b" v-model="currentCriterion" @change="changeCriterion">
+                  <label for="criterion_b" class="criterion-b">B</label>
+                </div>
+                <div class="radiobutton">
+                  <input type="radio" name="criteria" :value="criteria.criterion_c" id="criterion_c" v-model="currentCriterion" @change="changeCriterion">
+                  <label for="criterion_c" class="criterion-c">C</label>
+                </div>
+                <div class="radiobutton">
+                  <input type="radio" name="criteria" :value="criteria.criterion_d" id="criterion_d" v-model="currentCriterion" @change="changeCriterion">
+                  <label for="criterion_d" class="criterion-d">D</label>
                 </div>
               </div>
               <div class="col-sm-4 mt-2">
@@ -52,7 +74,7 @@
                   <div class="accordion-item" v-for="objective in filteredObjectivesByYearAndCriterion" :key="objective.id">
                     <h2 class="accordion-header">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-objective-${objective.id}`" aria-expanded="true" :aria-controls="`collapse-objective-${objective.id}`">
-                        <div>{{ objective.strand.letter_i }}. {{ objective.name_eng }}: <div class="objective-check" v-if="currentAchievement[`${objective.id}`] != null">{{ getMarkInAchievement(`${currentAchievement[`${objective.id}`]}`)}}</div></div>
+                        {{ objective.strand.letter_i }}. {{ objective.name_eng }}
                       </button>
                     </h2>
                     <div :id="`collapse-objective-${objective.id}`" class="accordion-collapse collapse" :data-bs-parent="`#accordion-${currentCriterion.id}`">
@@ -89,25 +111,49 @@
                   <button class="field-btn-done mt-2" @click="saveAchievementField">Рассчитать</button>
                 </div>
               </div>
-              <div v-else class="mt-2">Выберите критерий оценивания и уровень</div>
             </div>         
             <div>Рассчитанные баллы по предметным достижениям:</div>
             <div class="criteria-wrapper predict">
-              <div class="criteria-item" v-for="criterion in report.criteria_list" :key="criterion.id">
-                <div class="criteria">{{ criterion.letter }}: </div>
-                <div class="criteria-value">{{ getPredictCriteriaMark(criterion.id) }}</div>
+              <div class="criteria-item predict">
+                <div class="criteria-a">{{ criteria.criterion_a.letter }}: </div>
+                <div class="criteria-value">{{ getPredictCriteriaMark('A') }}</div>
+              </div>
+              <div class="criteria-item">
+                <div class="criteria-b">{{ criteria.criterion_b.letter }}: </div>
+                <div class="criteria-value">{{ getPredictCriteriaMark('B') }}</div>
+              </div>
+              <div class="criteria-item">
+                <div class="criteria-c">{{ criteria.criterion_c.letter }}: </div>
+                <div class="criteria-value">{{ getPredictCriteriaMark('C') }}</div>
+              </div>
+              <div class="criteria-item">
+                <div class="criteria-d">{{ criteria.criterion_d.letter }}: </div>
+                <div class="criteria-value">{{ getPredictCriteriaMark('D') }}</div>
               </div>
             </div> 
             <button class="field-btn-done mt-2" @click="autoFieldAchievement">Выставить</button>      
           </div>
           <div class="field-description mt-2">Выставите итоговые баллы по критериям вашей предметной области <b>{{ report.subject.group_ib.name_eng }}</b></div>
           <div class="assessment-mark-wrapper edit">
-            <div class="assessment-mark-item" v-for="criterion in report.criteria_list" :key="criterion">
-              <div class="letter">{{ criterion.letter }}: </div>
-              <mark-choice v-model="editCriteria[`${criterion.id}`]" :max_mark="8" :name="`${criterion.id}`"/>
+            <div class="assessment-mark-item">
+              <div class="letter">{{ criteria.criterion_a.letter }}: </div>
+              <mark-choice v-model="editData.criterion_a" :max_mark="8" :name="'a'"/>
+            </div>
+            <div class="assessment-mark-item">
+              <div class="letter">{{ criteria.criterion_b.letter }}: </div>
+              <mark-choice v-model="editData.criterion_b" :max_mark="8" :name="'b'"/>
+            </div>
+            <div class="assessment-mark-item">
+              <div class="letter">{{ criteria.criterion_c.letter }}: </div>
+              <mark-choice v-model="editData.criterion_c" :max_mark="8" :name="'c'"/>
+            </div>
+            <div class="assessment-mark-item">
+              <div class="letter">{{ criteria.criterion_d.letter }}: </div>
+              <mark-choice v-model="editData.criterion_d" :max_mark="8" :name="'d'"/>
             </div>
           </div>
           <div class="field-buttons">
+            <!-- <button class="field-btn-done" @click="autoFieldPeriod">Auto: периоды</button> -->
             <button class="field-btn-done" @click="saveField">Сохранить</button>
             <button class="field-btn-cancel" @click="cancelField">Отмена</button>
           </div>
@@ -120,13 +166,21 @@
 <script>
 import { getObjectives } from "@/hooks/unit/useObjective";
 import { getLevels } from "@/hooks/unit/useLevel";
+import MarkChoice from '../UI/MarkChoice.vue';
 
 export default {
+  components: { MarkChoice },
   name: 'ReportFieldCriteria',
   props: {
     report: { 
       type: Object, 
       default: {}
+    },
+    criteria: {
+      type: Object,
+    },
+    avg_criteria: {
+      type: Object,
     },
     editable: { type: Boolean, default: false },
   },
@@ -141,27 +195,27 @@ export default {
   data() {
     return {
       editMode: false,
-      editData: {
-        criteria: {}
-      },
-      editCriteria: {},
+      editData: {},
       currentYear: {},
       currentCriterion: {},
       currentAchievement: {}
     }
   },
   methods: {
-    getPredictCriteriaMark(id) {
-      const answer = this.report.predict[id].sum_points / this.report.predict[id].count_points
-      return answer ? Math.round(answer) : null
-    },
-    getMarkInAchievement(key) {
-      if (key == 0) {
-        return 0
+    getPredictCriteriaMark(criterion) {
+      let answer = null
+      if (criterion == 'A') {
+        answer = this.report.predict[this.criteria.criterion_a.id].sum_points / this.report.predict[this.criteria.criterion_a.id].count_points
+      } else if (criterion == 'B') {
+        answer = this.report.predict[this.criteria.criterion_b.id].sum_points / this.report.predict[this.criteria.criterion_b.id].count_points
+      } else if (criterion == 'C') {
+        answer = this.report.predict[this.criteria.criterion_c.id].sum_points / this.report.predict[this.criteria.criterion_c.id].count_points
+      } else if (criterion == 'D') {
+        answer = this.report.predict[this.criteria.criterion_d.id].sum_points / this.report.predict[this.criteria.criterion_d.id].count_points
       } else {
-        const achievement = this.report.achievements.find(obj => obj.achievement == key)
-        return achievement ? `${achievement.point - 1} - ${achievement.point}` : null
+        return 'E'
       }
+      return answer ? Math.round(answer) : null
     },
     getCurrentAchievement() {
       this.filteredObjectivesByYear.forEach((item) => {
@@ -182,21 +236,11 @@ export default {
     },
     changeCriterion() {
     },
-    
     saveField() {
       this.editMode = false;
-      this.editData.criteria = []
-      for (const key in this.editCriteria) {
-        if (this.editCriteria[key]) {
-          const findedCriterion = this.report.criteria.find(item => item.criterion.id == Number(key))
-          if (findedCriterion) {
-            this.editData.criteria.push({ id: findedCriterion.id, criterion_id: Number(key), mark: this.editCriteria[key] })
-          } else {
-            this.editData.criteria.push({ criterion_id: Number(key), mark: this.editCriteria[key] })
-          }
-        } 
+      for (let key in this.editData) {
+        this.editData[key] = this.editData[key]
       }
-      console.log(this.editData)
       this.$emit('save', this.editData);
     },
     saveAchievementField() {
@@ -210,6 +254,7 @@ export default {
           fetchData.achievements.push({ objective_id: key, achievement_id: this.currentAchievement[key] })
         }
       }
+      console.log(fetchData);
       this.$emit('save', fetchData);
     },
     cancelField() {
@@ -219,27 +264,42 @@ export default {
       this.editData = {};
       this.editMode = false;
     },
+    setValidMark(rawMark) {
+      if (rawMark > 8) {
+        return 8
+      } else if (rawMark >= 0 && rawMark <= 8) {
+        return Number(rawMark)
+      } else if (rawMark < 0) {
+        return 0
+      } else {
+        return null
+      }
+    },
     editField() {
       this.editMode = true;
-      this.report.criteria_list.forEach((item) => {
-        const findedCriterion = this.report.criteria.find(obj => obj.criterion.id == item.id);
-        if (findedCriterion) {
-          this.editCriteria[`${item.id}`] = findedCriterion.mark;
-        } else {
-          this.editCriteria[`${item.id}`] = null;
-        }   
-      })
+      this.editData.criterion_a = this.report.criterion_a;
+      this.editData.criterion_b = this.report.criterion_b
+      this.editData.criterion_c = this.report.criterion_c;
+      this.editData.criterion_d = this.report.criterion_d;
       this.fetchGetLevels({ subject: this.$route.params.id_subject }).finally(() => {
         this.currentYear = this.levels.find(item => item.class_year.includes(this.report.year.id))
         this.fetchGetObjectives({ subject: this.$route.params.id_subject }).finally(() => {
           this.getCurrentAchievement();
+          this.currentCriterion = this.criteria.criterion_a
         })
       });
     },
+    autoFieldPeriod() {
+      this.editData.criterion_a = this.avg_criteria.criterion_a;
+      this.editData.criterion_b = this.avg_criteria.criterion_b;
+      this.editData.criterion_c = this.avg_criteria.criterion_c;
+      this.editData.criterion_d = this.avg_criteria.criterion_d;
+    },
     autoFieldAchievement() {
-      for (const key in this.report.predict) {
-        this.editCriteria[key] = this.getPredictCriteriaMark(key);
-      }
+      this.editData.criterion_a = this.getPredictCriteriaMark('A');
+      this.editData.criterion_b = this.getPredictCriteriaMark('B');
+      this.editData.criterion_c = this.getPredictCriteriaMark('C');
+      this.editData.criterion_d = this.getPredictCriteriaMark('D');
     }
   },
   computed: {
@@ -253,15 +313,6 @@ export default {
 }
 </script>
 <style scoped>
-
-.objective-check {
-  display: inline-block;
-  padding: 5px;
-  color: #fff;
-  background: #5C2D85;
-  margin: 0 5px;
-  border-radius: 5px;
-}
 .criteria-wrapper {
   display: flex;
   flex-wrap: wrap;

@@ -13,12 +13,12 @@
         <!-- <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}
         <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.user.last_name }} {{ currentGroup.psychologist.user.first_name }} {{ currentGroup.psychologist.user.middle_name }}</span>  -->
       </div>
-      <div>Предмет: <b>{{ currentSubject.name_rus }} ({{ currentSubject.group_ib.name_eng }})</b></div>
+      <div>Предмет: <b>{{ currentSubject.name_rus }} (<span v-if="currentSubject.group_ib">{{ currentSubject.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</b></div>
     </div>
     <button v-if="isAuthor" class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
     <div v-if="!isReportsTeacherLoading || !firstLoading">
       <div v-if="reportsTeacher.length" class="report-wrapper">
-        <report-teacher-item v-for="report in reportsTeacher" :key="report.id" :period="currentReportPeriod" :program="currentSubject.group_ib.program"
+        <report-teacher-item v-for="report in reportsTeacher" :key="report.id" :period="currentReportPeriod" :subject="currentSubject"
         :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :criteria="criteriaMYP" :group="currentGroup" :editable="report.author.id == authUser.teacher.id"/>
       </div>
       <div v-else class="report-none">
@@ -115,7 +115,6 @@ export default {
           'subject_id': this.currentFetchData.subject,
           'author_id': this.currentAuthor.id,
         }
-        
       }
       console.log('Отправка запроса на добавление студентов в репорты: ', dataStudents);
       await this.axios.post('/assessment/report/teacher', dataStudents).then((response) => {

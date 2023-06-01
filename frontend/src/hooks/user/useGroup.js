@@ -3,7 +3,7 @@ import { axiosAPI } from '@/axios'
 
 export function getGroups() {
   const groups = ref([]);
-  const isGroupLoading = ref(true)
+  const isGroupLoading = ref(false)
   const fetchGetGroups = async (data) => {
     const config = {
       params: {
@@ -29,7 +29,7 @@ export function getGroups() {
 
 export function getGroupsForReportTeacher() {
   const groupsForReportTeacher = ref([]);
-  const isGroupLoading = ref(true)
+  const isGroupLoading = ref(false)
   const fetchGetGroupsForReportTeacher = async (data) => {
     const config = {
       params: {
@@ -56,7 +56,7 @@ export function getGroupsForReportTeacher() {
 
 export function getGroupsForReportPsycho() {
   const groupsForReportPsycho = ref([]);
-  const isGroupLoading = ref(true)
+  const isGroupLoading = ref(false)
   const fetchGetGroupsForReportPsycho = async (data) => {
     const config = {
       params: {
@@ -81,7 +81,7 @@ export function getGroupsForReportPsycho() {
 
 export function getGroupsForReportMentor() {
   const groupsForReportMentor = ref([]);
-  const isGroupLoading = ref(true)
+  const isGroupLoading = ref(false)
   const fetchGetGroupsForReportMentor = async (data) => {
     const config = {
       params: {
@@ -106,7 +106,7 @@ export function getGroupsForReportMentor() {
 
 export function getGroupsStudents() {
   const groupsStudents = ref([]);
-  const isGroupStudentLoading = ref(true)
+  const isGroupStudentLoading = ref(false)
   const fetchGetGroupsStudents = async (data) => {
     const config = {
       params: {

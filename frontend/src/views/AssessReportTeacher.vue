@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header>
-      <template v-slot:header>Репорты учителя</template>
+      <template v-slot:header>Репорты учителей</template>
       <template v-slot:extra>
         <div class="toggle" v-if="isAdmin">
           <div class="toggle-item my">
@@ -92,7 +92,7 @@
                   <div class="period-students">
                     <div v-for="student in group.students" :key="student.id" class="report-student" :class="getStyleForStudent(student, group.reports, period.id)">{{ student.short_name }}</div>
                   </div>
-                  <button @click="openReportTeacher(group.id, period.id)" class="btn btn-primary period-button mt-2">Выставить</button>
+                  <button @click="openReportTeacher(group.id, period.id)" class="btn btn-primary period-button mt-2">Перейти к репортам</button>
                 </div>
               </div>
             </div>
@@ -205,21 +205,21 @@ export default {
     choicePlan() {
       this.getDataForReports();
       this.currentSubjectId = null;
-      localStorage.removeItem('assessment_subject');
+      localStorage.removeItem('report_teacher_subject');
       this.currentYearId = null;
-      localStorage.removeItem('assessment_year');
-      localStorage.setItem('assessment_plan', this.currentPlan.id);
+      localStorage.removeItem('report_teacher_year');
+      localStorage.setItem('report_teacher_plan', this.currentPlan.id);
     },
     changeView() {
       this.currentSubjectId = null;
-      localStorage.removeItem('assessment_subject');
+      localStorage.removeItem('report_teacher_subject');
       this.currentYearId = null;
-      localStorage.removeItem('assessment_year');
+      localStorage.removeItem('report_teacher_year');
       this.getDataForReports();
       if (this.showAllData) {
-        localStorage.setItem('assessment_all', true);
+        localStorage.setItem('report_teacher_all', true);
       } else {
-        localStorage.removeItem('assessment_all');
+        localStorage.removeItem('report_teacher_all');
       }
     },
     openReportTeacher(group_id, period_id) {
@@ -238,45 +238,43 @@ export default {
       return `${count} студентов`;
     },
     recoveryDataFromLocalStorage() {
-      this.currentSubjectId = Number(localStorage.getItem('assessment_subject')) || null;
-      this.currentYearId = Number(localStorage.getItem('assessment_year')) || null;
-      this.showAllData = Boolean(localStorage.getItem('assessment_all')) || false;
-      if (Number(localStorage.getItem('assessment_plan'))) {
-        this.currentPlan = this.currentStudyYear.academic_plan.find(item => item.id == Number(localStorage.getItem('assessment_plan')));
+      this.currentSubjectId = Number(localStorage.getItem('report_teacher_subject')) || null;
+      this.currentYearId = Number(localStorage.getItem('report_teacher_year')) || null;
+      this.showAllData = Boolean(localStorage.getItem('report_teacher_all')) || false;
+      if (Number(localStorage.getItem('report_teacher_plan'))) {
+        this.currentPlan = this.currentStudyYear.academic_plan.find(item => item.id == Number(localStorage.getItem('report_teacher_plan')));
       } else {
-        this.getDataForReports();
+        this.currentPlan = this.currentStudyYear.academic_plan[1]
       }
     },
     getDataForReports() {
+      console.log(this.currentPlan)
       if (this.showAllData) {
         this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id });
         this.fetchGetClassYears({ level: this.currentPlan.level });
           // this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
         this.fetchGetSubjects({ plan: this.currentPlan.id, need_report: 1 }).finally(() => {
-          if (this.currentSubjectId) {
-            this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId });
-          }
+        if (this.currentSubjectId) {
+          this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId });
+        }
         });
       } else {
         this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id });
         this.fetchGetClassYears({ study_year: this.currentStudyYear.id, teacher: this.authUser.teacher.id, level: this.currentPlan.level });
           // this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
         this.fetchGetSubjects({ teacher: this.authUser.teacher.id, plan: this.currentPlan.id, need_report: 1 }).finally(() => {
-          if (this.currentSubjectId) {
-            this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId, teacher: this.authUser.teacher.id });
-          }
+        if (this.currentSubjectId) {
+          this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId, teacher: this.authUser.teacher.id });
+        }
         });
       }
     }
   },
   mounted() {
     this.fetchGetStudyYears().finally(() => {
-      this.currentPlan = this.currentStudyYear.academic_plan[1]
       this.recoveryDataFromLocalStorage();
       this.getDataForReports();
-    });
-    
-    
+    });  
   },
   computed: {
     filteredGroups() {
@@ -297,18 +295,18 @@ export default {
   watch: {
     currentSubjectId() {
       if (this.currentSubjectId) {
-        localStorage.setItem('assessment_subject', this.currentSubjectId);
+        localStorage.setItem('report_teacher_subject', this.currentSubjectId);
         this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId });
       } else {
         this.groupsForReportTeacher = []
-        localStorage.removeItem('assessment_subject');
+        localStorage.removeItem('report_teacher_subject');
       }
     },
     currentYearId() {
       if (this.currentYearId) {
-        localStorage.setItem('assessment_year', this.currentYearId);
+        localStorage.setItem('report_teacher_year', this.currentYearId);
       } else {
-        localStorage.removeItem('assessment_year');
+        localStorage.removeItem('report_teacher_year');
       }
     }    
   }

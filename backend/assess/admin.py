@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, \
     PeriodAssessment, WorkGroupDate, ReportPeriod, ReportTeacher, ReportMentor, EventType, \
-        EventParticipation, ReportPsychologist, WorkLoad, ReportAchievements
+        EventParticipation, ReportPsychologist, WorkLoad, ReportAchievements, ReportCriteria
 
 # Register your models here.
 @admin.register(StudyYear)
@@ -48,6 +48,10 @@ class ReportPeriodAdmin(ImportExportModelAdmin):
 @admin.register(ReportTeacher)
 class ReportTeacherAdmin(ImportExportModelAdmin):
     list_display = ("student", "period", "subject", "author", "created", "updated")
+
+@admin.register(ReportCriteria)
+class ReportCriteriaAdmin(ImportExportModelAdmin):
+    list_display = ("report_teacher", "criterion", "mark")
 
 @admin.register(ReportAchievements)
 class ReportAchievementsAdmin(ImportExportModelAdmin):

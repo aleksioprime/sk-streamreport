@@ -13,7 +13,7 @@
       Результаты студента по&nbsp;<b>Stream Report</b>
     </div>
     <div :id="`collapse-assessment-${report.id}`" class="collapse">
-      <div class="student-assessment">
+      <!-- <div class="student-assessment">
         <div class="assess-wrapper" v-if="report.assessment">
           <div class="assess-item">
             <div class="assess-criterion">{{ criteriaObject.criterion_a.letter }}. {{ criteriaObject.criterion_a.name_eng }}</div>
@@ -21,7 +21,6 @@
               <div class="mark" :class="{'criterion-a' : getMarkFromAssessment(report.assessment.criteria_b, asper.number)}"
                 v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(report.assessment.criteria_a, asper.number) }}
-                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
@@ -31,7 +30,6 @@
               <div class="mark" :class="{'criterion-b' : getMarkFromAssessment(report.assessment.criteria_b, asper.number)}"
                 v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(report.assessment.criteria_b, asper.number) }}
-                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
@@ -41,7 +39,6 @@
               <div class="mark" :class="{'criterion-c' : getMarkFromAssessment(report.assessment.criteria_c, asper.number)}"
                 v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(report.assessment.criteria_c, asper.number) }}
-                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
@@ -51,7 +48,6 @@
               <div class="mark" :class="{'criterion-d' : getMarkFromAssessment(report.assessment.criteria_d, asper.number)}"
                 v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(report.assessment.criteria_d, asper.number) }}
-                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
@@ -61,7 +57,6 @@
               <div class="mark" :class="{'grade' : getMarkFromAssessment(report.assessment.summ_grades, asper.number) }"
                 v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(report.assessment.summ_grades, asper.number) }}
-                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
@@ -71,7 +66,6 @@
               <div class="mark" :class="{'grade' : getMarkFromAssessment(report.assessment.form_grades, asper.number) }"
                 v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(report.assessment.form_grades, asper.number) }}
-                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
@@ -81,13 +75,13 @@
               <div class="mark" :class="{'grade' : getMarkFromAssessment(report.assessment.final_grades, asper.number) }"
                 v-for="(asper, index) in period.assessment_periods" :key="asper.id">
                 {{ getMarkFromAssessment(report.assessment.final_grades, asper.number) }}
-                <!-- <span v-if="++index != period.assessment_periods.length">- </span> -->
               </div>
             </div>
           </div>
         </div>
         <button v-if="editable" class="field-btn-done" @click="autoFieldPeriodStreamReport">Выставить в итог</button>
-      </div>
+      </div> -->
+      <div class="p-2">Модуль временно отключен</div>
     </div>
     <div class="dnevnik-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-dnevnik-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-dnevnik-${report.id}`">
       Результаты студента по&nbsp;<b>Дневник.ру</b>
@@ -95,35 +89,48 @@
     <div :id="`collapse-dnevnik-${report.id}`" class="collapse">
       <div class="dnevnik-wrapper">
         <div class="dnevnik-assessment">
-          <div v-if="isDnevnik">
-            <div v-if="isDataDnevnikLoading" class="dnevnik-wrapper">
-              <div class="mb-2">Итоговые оценки текущего студента:</div>
-              <div v-for="mark in gradesDnevnik.marks" :key="mark.id_str" class="dnevnik-item">
-                <div>{{ mark.work_full.type }}</div>
-                <div>{{ mark.work_full.periodNumber + 1 }} {{ mark.work_full.periodType }}</div>
-                <div>{{ new Date(mark.work_full.targetDate).toLocaleDateString() }}</div>
-                <div>Оценка: {{ mark.value }}</div>
+          <div class="dnevnik-wrapper">
+            <div class="mb-2">Итоговые оценки студента <b>{{ report.student.full_name }}</b> по предмету <b>{{ report.subject.name_rus }}</b>:</div>
+            <div class="description">Внимание! Модуль работает в тестовом режиме</div>
+            <div v-if="isDnevnik">
+              <div v-if="isDataDnevnikLoading">
+                <table class="table table-sm mt-2">
+                  <thead>
+                    <tr>
+                      <td>Тип оценки</td>
+                      <td>Номер периода</td>
+                      <td>Дата окончания периода</td>
+                      <td>Оценка</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="mark in gradesDnevnik.marks" :key="mark.id_str">
+                      <td>{{ mark.work_full.type }}</td>
+                      <td>{{ mark.work_full.periodNumber + 1 }} {{ mark.work_full.periodType }}</td>
+                      <td>{{ new Date(mark.work_full.targetDate).toLocaleDateString() }}</td>
+                      <td>{{ mark.value }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div v-else class="loader-wrapper">
+                <span class="loader-simple"></span>
               </div>
               <!-- <button class="field-btn-done" @click="autoFieldPeriodDnevnik">Выставить в итог</button> -->
             </div>
-            <div v-else class="loader-wrapper">
-              <span class="loader-simple"></span>
-            </div>
+            <div v-else>Вы не синхронизированы с Дневник.ру</div>
           </div>
-          <div v-else>Вы не синхронизированы с Дневник.ру</div>
         </div>
       </div>
     </div>
     <div class="student-assessment" v-if="program == 'myp'">
-      <report-field-criteria id="student-assessment-myp" :report="report" @save="fetchSaveReport" :avg_criteria="report.avg_assessment" :editable="editable"
-      :criteria="criteriaObject"/>
+      <report-field-criteria id="student-assessment-myp" :report="report" @save="fetchSaveReport" :editable="editable"/>
     </div>
     <div class="student-assessment" >
       <report-field-final-grade id="student-assessment-final" :report="report" @save="fetchSaveReport" :program="program" :editable="editable"/>
     </div>
     <div class="student-report">
-      <report-field-report id="student-report" :report="report" :dataField="report" :generate="true" :editable="editable"
-      :criteria="criteriaObject" @save="fetchSaveReport"/>
+      <report-field-report id="student-report" :report="report" :dataField="report" :generate="true" :editable="editable" @save="fetchSaveReport"/>
     </div>
     <div class="student-events">
       <div class="events-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-events-${report.id}`" role="button" 
@@ -190,10 +197,6 @@ export default {
         group: {},
         student: {},
         assessment: {
-          criteria_a: {},
-          criteria_b: {},
-          criteria_c: {},
-          criteria_d: {},
           sum_grades: {},
           form_grades: {},
           final_grades: {},
@@ -205,18 +208,9 @@ export default {
       default: []
     },
     period: { Object },
-    types: { 
-      type: Array,
-      default: [],
-    },
-    levels: { 
-      type: Array,
-      default: [],
-    },
-    program: {
-      type: String,
-      default: null,
-    },
+    types: { type: Array, default: [] },
+    levels: { type: Array, default: [] },
+    subject: { type: Object, default: null },
     group: { type: Object, default: {} },
     editable: { type: Boolean, default: false },
   },
@@ -289,6 +283,12 @@ export default {
         criterion_c: this.criteria.find(item => item.letter == 'C'),
         criterion_d: this.criteria.find(item => item.letter == 'D'),
       }
+    },
+    program() {
+      if (this.subject.group_ib) {
+        return this.subject.group_ib.program
+      }
+      return null
     },
     // подключение переменной авторизированного пользователя из store
     ...mapGetters(['authUser', 'isAdmin', 'isDnevnik']),

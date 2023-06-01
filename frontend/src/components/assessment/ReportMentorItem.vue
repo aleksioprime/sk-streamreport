@@ -13,7 +13,7 @@
       <report-field-report id="student-report" :student="student" :dataField="student.mentor_report" @save="fetchSaveReport" :editable="editable"/>
     </div>
     <div class="student-events">
-      <div class="events-title selected" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
+      <div class="events-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-events-${student.id}`" role="button" 
       aria-expanded="false" :aria-controls="`collapse-events-${student.id}`">Участие в мероприятиях</div>
       <div class="events-wrapper collapse" :id="`collapse-events-${student.id}`">
         <div class="events-teacher" v-if="student.events.length">
@@ -66,57 +66,65 @@
     </div>
     <div class="subject-reports">
       <div class="subject-reports-title">Репорт психолога</div>
-      <div v-if="student.psycho_report">
+      <div v-if="student.psycho_report.text">
         <div class="subject-report">
           <div v-html="student.psycho_report.text"></div>
         </div>
-        <div class="subject-teacher">
-          <div class="teacher-name" v-if="student.psycho_report.author">{{ student.psycho_report.author.user.last_name }} {{ student.psycho_report.author.user.first_name }} {{ student.psycho_report.author.user.middle_name }}</div>
-        </div>
+        <div v-if="student.psycho_report.author">{{ student.psycho_report.author.user.last_name }} {{ student.psycho_report.author.user.first_name }} {{ student.psycho_report.author.user.middle_name }}</div>
+        <div v-if="student.psycho_report.updated">Время редактирования: {{ new Date(student.psycho_report.updated).toLocaleDateString("ru-RU", {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</div>
       </div>
+      <div v-else>Психолог пока не написал репорт</div>
       <div class="subject-reports-title">Репорты учителей-предметников</div>
-      <div class="accordion" id="accordionPanelsSubject">
+      <div class="accordion" id="accordionPanelsSubject" v-if="student.subject_reports.length">
         <div class="subject-item accordion-item" v-for="subject in student.subject_reports" :key="subject.id">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed" 
-            :class="{'check-yes': subject.text && subject.criteria }" type="button" data-bs-toggle="collapse" :data-bs-target="`#panels-subject-${subject.id}`" aria-expanded="true" :aria-controls="`panels-subject-${subject.id}`">
-              <div class="subject-title">{{ subject.name_rus }}</div>
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="`#panels-subject-${subject.id}`" aria-expanded="true" :aria-controls="`panels-subject-${subject.id}`">
+              <div class="subject-title"><h4>{{ subject.subject_name }}</h4></div>
             </button>
           </h2>
           <div :id="`panels-subject-${subject.id}`" class="accordion-collapse collapse">
             <div class="accordion-body">
               <div v-if="subject.text">
               <div class="subject-criteria">
-                <div class="criteria-item">
-                  <div class="criteria-name">{{ getCriteriaBySubject(subject.group, 'A') }}</div>
-                  <div class="criteria-value">{{ subject.criteria.criterion_a }}</div>
+                <div class="criteria-wrapper mb-3" v-if="program == 'myp'">
+                  <div class="criteria-item" v-for="cr in subject.criteria" :key="cr.id">
+                    <div class="criterion">{{ cr.criterion.letter }}. {{ cr.criterion.name_eng }}</div>
+                    <div class="criteria-value">{{ cr.mark }}</div>
+                  </div>
                 </div>
-                <div class="criteria-item">
-                  <div class="criteria-name">{{ getCriteriaBySubject(subject.group, 'B') }}</div>
-                  <div class="criteria-value">{{ subject.criteria.criterion_b }}</div>
+                <div class="criteria-wrapper">
+                  <div class="criteria-item">
+                    <div class="criteria-d">Сумма баллов: </div>
+                    <div class="criteria-value">{{ subject.criterion_summ || '-' }} / {{ subject.criterion_count * 8 || '-' }}</div>
+                  </div>
+                  <div class="criteria-item">
+                    <div class="criteria-d">Оценка РФ: </div>
+                    <div class="criteria-value">{{ subject.criterion_rus }}</div>
+                  </div>
                 </div>
-                <div class="criteria-item">
-                  <div class="criteria-name">{{ getCriteriaBySubject(subject.group, 'C') }}</div>
-                  <div class="criteria-value">{{ subject.criteria.criterion_c }}</div>
+              </div>
+              <div class="subject-criteria  mt-2">
+                <div class="grade-item">
+                  <div class="grade-title">Итоговая оценка РФ: </div>
+                  <div class="grade-value">{{ subject.final_grade }}</div>
                 </div>
-                <div class="criteria-item">
-                  <div class="criteria-name">{{ getCriteriaBySubject(subject.group, 'D') }}</div>
-                  <div class="criteria-value">{{ subject.criteria.criterion_d }}</div>
+                <div class="grade-item" v-if="program == 'dp'">
+                  <div class="grade-title">Итоговая оценка IB: </div>
+                  <div class="grade-value">{{ subject.final_grade_ib }}</div>
                 </div>
               </div>
               <div class="subject-report">
                 <div v-html="subject.text"></div>
               </div>
-              <div class="subject-teacher">
-                <div class="teacher-name">{{ subject.author_name }}</div>
-              </div>
+              <div class="teacher-name">{{ subject.author.full_name }}</div>
+              <div>Время редактирования: {{ new Date(subject.updated).toLocaleDateString("ru-RU", {hour: 'numeric', minute: 'numeric', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</div>
               </div>
               <div v-else>Нет данных</div>
             </div>
           </div>
         </div>
       </div>
-      
+      <div v-else>Учителя пока не написали репорты</div>
     </div>
   </div>
 </template>
@@ -141,20 +149,11 @@ export default {
         user: {},
       }
     },
-    criteria: {
-      type: Array,
-      default: []
-    },
     period: { Object },
-    types: { 
-      type: Array,
-      default: [],
-    },
-    levels: { 
-      type: Array,
-      default: [],
-    },
+    types: { type: Array, default: [] },
+    levels: { type: Array, default: [] },
     editable: { type: Boolean, default: false },
+    program: { type: String }
   },
 
   data() {
@@ -166,12 +165,6 @@ export default {
     }
   },
   methods: {
-    getCriteriaBySubject(id, letter) {
-      const criterion = this.criteria.find(item => item.subject_group == id && item.letter == letter)
-      if (criterion) {
-        return `${criterion.letter}. ${criterion.name_eng}`
-      } 
-    },
     fetchSaveReport(data) {
       console.log('Сохранение репорта: ', data);
       let editReportStudents = { ...data }
@@ -239,6 +232,36 @@ export default {
 </script>
   
 <style scoped>
+.grade-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.grade-item {
+  flex-basis: 23%;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+.grade-value {
+  border: 1px solid #a7a7a78a;
+  padding: 5px 10px;
+  min-height: 40px;
+  border-radius: 5px;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+.criteria-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 10px;
+}
 .report-item {
   padding: 10px;
   display: flex;
@@ -359,22 +382,16 @@ export default {
   color: #000000;
 }
 .check-yes {
-  background: #f8fccc;
+  background: #d3dd67;
 }
 .subject-criteria{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
   border: 1px solid #a7a7a78a;
   border-radius: 5px;
   padding: 10px;
-  row-gap: 5px;
 }
 .criteria-item {
-  flex-basis: 45%;
   display: flex;
-  justify-content: space-between;
-  margin-top: 0
+  align-items: center;
 }
 .criteria-value {
   border: 1px solid #a7a7a78a;

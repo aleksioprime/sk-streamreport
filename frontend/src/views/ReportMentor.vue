@@ -7,12 +7,13 @@
     <div class="col-md mb-2">
       <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
       <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b>  ({{ getWordStudent(currentGroup.count) }}) 
-      <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}</div>
+      <br><span v-if="currentGroup.mentor">Наставник: {{ currentGroup.mentor.full_name }}</span> 
+      <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.full_name }}</span></div>
     </div>
-    <div v-if="!isStudentsReportLoading && !firstLoading">
+    <div v-if="!isStudentsReportLoading || !firstLoading">
       <div v-if="studentsReport.length" class="report-wrapper">
         <div class="student-list radiobutton">
-          <div v-for="student in studentsReport" :key="student.id" сlass="">
+          <div v-for="student in studentsReport" :key="student.id" :class="getStyleForStudent(student)">
             <input type="radio" name="student" :value="student" :id="'student-' + student.id"
               v-model="currentStudent">
             <label :for="'student-' + student.id">
@@ -20,7 +21,7 @@
             </label>
           </div>
         </div>
-        <report-mentor-item :period="currentReportPeriod" v-if="currentStudent" class="student-item" :criteria="criteriaMYP"
+        <report-mentor-item :period="currentReportPeriod" v-if="currentStudent" class="student-item" :program="currentGroup.class_year.program"
         :student="currentStudent" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :editable="currentGroup.mentor.id == authUser.teacher.id"/>
         <div v-else>Выберите студента</div>
       </div>
@@ -51,7 +52,6 @@
 import { mapGetters } from 'vuex';
 import ReportMentorItem from "@/components/assessment/ReportMentorItem.vue";
 import { getStudentsReport, createReportMentor, updateReportMentor, getReportMentorJournal } from "@/hooks/assess/useReportMentor";
-import { getCriteriaMYP } from "@/hooks/unit/useCriterionMYP";
 
 export default {
   components: {
@@ -62,14 +62,12 @@ export default {
     const { studentsReport, isStudentsReportLoading, fetchGetStudentsReport } = getStudentsReport();
     const { createdReportMentor, fetchCreateReportMentor } = createReportMentor();
     const { updatedReportMentor, fetchUpdateReportMentor } = updateReportMentor();
-    const { criteriaMYP, fetchGetCriteriaMYP } = getCriteriaMYP();
 
     return {
       currentGroup, currentReportPeriod, eventTypes, fetchGetReportMentorJournal,
       studentsReport, isStudentsReportLoading, fetchGetStudentsReport,
       createdReportMentor, fetchCreateReportMentor,
       updatedReportMentor, fetchUpdateReportMentor,
-      criteriaMYP, fetchGetCriteriaMYP,
     }
   },
   data() {
@@ -87,6 +85,14 @@ export default {
     }
   },
   methods: {
+    getStyleForStudent(student) {
+      if (student.mentor_report.id) {
+        if (student.mentor_report.text) {
+          return 'check-text'
+        }
+        return 'check-student'
+      }
+    },
     getWordStudent(count) {
       let value = Math.abs(count) % 100;
       let number = value % 10;
@@ -143,7 +149,6 @@ export default {
       this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
         this.currentStudent = this.studentsReport[0];
         this.firstLoading = false;
-        this.fetchGetCriteriaMYP({});
       });
     })
   },
@@ -154,7 +159,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @import '@/assets/css/spinner.css';
 
 .student-list {
@@ -163,6 +168,18 @@ export default {
   column-gap: 5px;
   row-gap: 5px;
   margin-bottom: 20px;
+}
+.check-text {
+  /* color: #fff; */
+  color: var(--bs-secondary);
+  font-weight: 700;
+  /* border: 1px solid var(--bs-secondary);
+  border-radius: 5px; */
+}
+.check-student {
+  color: var(--bs-secondary);
+  /* border: 1px solid var(--bs-secondary);
+  border-radius: 5px; */
 }
 
 </style>

@@ -11,7 +11,7 @@
         </div>
         <div v-else>
           <div class="field-description">Введите описание</div>
-          <div v-if="report.subject">
+          <div v-if="report.subject && report.subject.group_ib">
             <div>Достижения студента по описаниям из гайда предметной группы <b>{{ report.subject.group_ib.name_eng }}</b></div>
             <div class="achievement-description" v-if="report.achievements.length">
               <span v-for="achieve in report.achievements" :key="achieve.id" class="description-item">
@@ -51,7 +51,8 @@
             </div>
           </div>
           <div class="field-buttons">
-            <button class="field-btn-generate" v-if="generate" @click="generateField">Сгенерировать</button>
+            <!-- Генератор отключен, так как превышена квота -->
+            <!-- <button class="field-btn-generate" v-if="generate" @click="generateField">Сгенерировать</button> -->
             <button class="field-btn-done" @click="saveField">Сохранить</button>
             <button class="field-btn-cancel" @click="cancelField">Отмена</button>
           </div>
@@ -76,18 +77,8 @@ export default {
       type: Object, 
       default: {}
     },
-    dataField: {
-      type: Object,
-      default: {}
-    },
-    generate: {
-      type: Boolean,
-      default: false,
-    },
-    criteria: {
-      type: Object,
-      default: {}
-    },
+    dataField: { type: Object, default: {} },
+    generate: { type: Boolean, default: false },
     editable: { type: Boolean, default: false },
   },
   setup(props) {
@@ -143,38 +134,34 @@ export default {
           }
           this.reportLoading = false;
         });
-        // this.fetchChatGPTReport(data).finally(() => {
-        //   this.editData.text = this.generatedGPTText;
-        // });
       } else {
         console.log('Нет данных')
       }
     },
-    async translateGoogle(text) {
-      const API_KEY = 'AIzaSyCBFVvqme-1gwz5bJhE59jsFRicX5Ao93s'
-      let res = await axios.post(`https://translation.googleapis.com/language/translate/v2?key=${API_KEY}`, { q: text, target: "ru" });
-      let translation = res.data.data.translations[0].translatedText;
-      return translation;
-    },
-    async translateYandex(text) {
-      const idCat = 'b1g77n8c28300fhesa8s';
-      const IAM = 't1.9euelZqVkImUmInPmsuelIrNnJWJkO3rnpWamZPMmpiUi47Gx5vPj4vLjovl8_c0ZmZc-e9BPEAA_t3z93QUZFz570E8QAD-.-6-IJaKpb16RsQy7ME-6SZ5tyvYagxKyE0dsnmktb9_sVEfRsXiAmrfLV0j75fFgwyFlczToTJA1Ol5ydAmtCw'
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${IAM}`
-        },
-        body: {
-          "targetLanguageCode": 'ru',
-          "texts": text,
-          "folderId": idCat,
-        }
-      }
-      let res = await axios.post(`https://translate.api.cloud.yandex.net/translate/v2/translate`, config);
-      let translation = res.data.ranslations;
-      return translation;
-    },
-
+    // async translateGoogle(text) {
+    //   const API_KEY = 'AIzaSyCBFVvqme-1gwz5bJhE59jsFRicX5Ao93s'
+    //   let res = await axios.post(`https://translation.googleapis.com/language/translate/v2?key=${API_KEY}`, { q: text, target: "ru" });
+    //   let translation = res.data.data.translations[0].translatedText;
+    //   return translation;
+    // },
+    // async translateYandex(text) {
+    //   const idCat = 'b1g77n8c28300fhesa8s';
+    //   const IAM = 't1.9euelZqVkImUmInPmsuelIrNnJWJkO3rnpWamZPMmpiUi47Gx5vPj4vLjovl8_c0ZmZc-e9BPEAA_t3z93QUZFz570E8QAD-.-6-IJaKpb16RsQy7ME-6SZ5tyvYagxKyE0dsnmktb9_sVEfRsXiAmrfLV0j75fFgwyFlczToTJA1Ol5ydAmtCw'
+    //   const config = {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer ${IAM}`
+    //     },
+    //     body: {
+    //       "targetLanguageCode": 'ru',
+    //       "texts": text,
+    //       "folderId": idCat,
+    //     }
+    //   }
+    //   let res = await axios.post(`https://translate.api.cloud.yandex.net/translate/v2/translate`, config);
+    //   let translation = res.data.ranslations;
+    //   return translation;
+    // },
     async translateSelected(event) {
       // TODO: Сделать автоподмену name_rus, если есть, иначе перевод google
       const popup = event.target.lastChild;

@@ -30,7 +30,7 @@ export function getStudentsReport() {
 // Запрос на получение информации о текущем периоде, предмете, группе и типах мероприятий 
 export function getReportTeacherJournal() {
   const currentReportPeriod = ref({});
-  const currentSubject = ref({ group_ib: {} });
+  const currentSubject = ref({ });
   const currentAuthor = ref({ user: {} });
   const currentGroup = ref({ mentor: { user: {} }, class_year: {} });
   const eventTypes = ref([]);  

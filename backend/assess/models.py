@@ -57,7 +57,7 @@ class WorkLoad(models.Model):
     class Meta:
         verbose_name = 'Рабочая нагрузка'
         verbose_name_plural = 'Рабочие нагрузки'
-        ordering = ['study_year', 'subject', 'teacher']
+        ordering = ['study_year', 'subject', 'groups__class_year', 'teacher']
     def __str__(self):
         return '{} ({} - {} ч.)'.format(self.teacher, self.subject, self.hours)
 
@@ -224,6 +224,7 @@ class ReportTeacher(models.Model):
     criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True, blank=True)
     criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True, blank=True)
     criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True, blank=True)
+    criteria = models.ManyToManyField('curriculum.Criterion', verbose_name=_("Критерии "), through='assess.ReportCriteria', blank=True, related_name="teacher_reports")
     final_grade = models.SmallIntegerField(verbose_name=_("Итоговая оценка по шкале 1-5"), default=None, null=True, blank=True)
     final_grade_ib = models.SmallIntegerField(verbose_name=_("Итоговая оценка по шкале 1-7"), default=None, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_("Дата и время создания"))
@@ -236,11 +237,13 @@ class ReportTeacher(models.Model):
         return '{} - {}'.format(self.period, self.student)
     @property
     def criterion_summ(self):
-        return sum([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if isinstance(x, int)])
+        return sum([item.report_criteria.filter(report_teacher=self.id).first().mark for item in self.criteria.all()])
+        # return sum([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if isinstance(x, int)])
         # return self.criterion_a + self.criterion_b + self.criterion_c + self.criterion_d
     @property
     def criterion_count(self):
-        return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if x is not None])
+        return len(self.criteria.all())
+        # return len([x for x in [self.criterion_a, self.criterion_b, self.criterion_c, self.criterion_d] if x is not None])
     @property
     def criterion_rus(self):
         if self.criterion_count not in GRADES:
@@ -266,6 +269,18 @@ class ReportAchievements(models.Model):
         ordering = ['objective']
     def __str__(self):
         return '{}: {}'.format(self.objective, self.achievement)
+
+class ReportCriteria(models.Model):
+    """ Выбор критериев и выставление баллов в репортах """
+    report_teacher = models.ForeignKey('assess.ReportTeacher', verbose_name=_("Репорт учителя"), on_delete=models.CASCADE, null=True, related_name="report_criteria")
+    criterion = models.ForeignKey('curriculum.Criterion', verbose_name=_("Критерий оценки"), on_delete=models.SET_NULL, null=True, related_name="report_criteria")
+    mark = models.SmallIntegerField(verbose_name=_("Балл по критерию"), default=None, null=True)
+    class Meta:
+        verbose_name = 'Репорты: баллы за критерии'
+        verbose_name_plural = 'Репорты: баллы за критерии'
+        ordering = ['report_teacher__student', 'criterion']
+    def __str__(self):
+        return '{}: {} ({})'.format(self.report_teacher, self.criterion, self.mark)
 
 class ReportMentor(models.Model):
     """ Репорты наставника """
