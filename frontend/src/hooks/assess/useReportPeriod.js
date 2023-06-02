@@ -21,7 +21,7 @@ export function getReportPeriods() {
 				// console.log(currentDate, startDate, endDate);
 				return currentDate > startDate && currentDate < endDate;
 			  })
-			if (!currentReportPeriod.value) {currentReportPeriod.value = reportPeriods.value.slice(-1)}
+			if (!currentReportPeriod.value) {currentReportPeriod.value = reportPeriods.value.slice(-1)[0]}
 			console.log("Текущие период репортов: ", currentReportPeriod.value)
 		});
 	};
