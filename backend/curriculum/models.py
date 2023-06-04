@@ -19,7 +19,7 @@ class SubjectGroupIB(models.Model):
     name_eng = models.CharField(max_length=128, verbose_name=_("Название на англ. языке"))
     name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"), null=True, blank=True)
     picture = models.ImageField(upload_to='subjectgroup_pic', blank=True, verbose_name=_("Картинка"), null=True)
-    program = models.CharField(choices=PROGRAM_IB_CHOICES, default=None, max_length=4)
+    program = models.CharField(choices=PROGRAM_IB_CHOICES, null=True, default=None, max_length=4)
     class Meta:
         verbose_name = 'IB: Предметная группа'
         verbose_name_plural = 'IB: Предметные группы'
@@ -31,7 +31,6 @@ class ClassYear(models.Model):
     """ Года обучения / учебная параллель """
     year_rus = models.PositiveIntegerField(verbose_name=_("Год обучения в РФ"), blank=False)
     year_ib = models.CharField(max_length=12, verbose_name=_("Год обучения в IB"), null=True, blank=True)
-    program = models.CharField(choices=PROGRAM_IB_CHOICES, verbose_name=_("IB-программа"), default=None, max_length=4)
     level = models.CharField(choices=LEVEL_NATION_CHOICES, verbose_name=_("Национальные уровни образования"), default='ooo', max_length=3)
     class Meta:
         verbose_name = 'Год обучения'
@@ -39,9 +38,9 @@ class ClassYear(models.Model):
         ordering = ['year_rus']
     def __str__(self):
         if self.year_ib is not None:
-            return f"{self.year_rus} класс ({self.year_ib} {self.program})"
+            return f"{self.year_rus} класс ({self.year_ib})"
         else:
-            return f"{self.year_rus} класс ({self.program})"
+            return f"{self.year_rus} класс"
 
 class SubjectGroupFGOS(models.Model):
     """ Предметная группа ФГОС """
@@ -52,8 +51,8 @@ class SubjectGroupFGOS(models.Model):
     name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"))
     type = models.CharField(choices=TYPE_CHOICES, max_length=9, default='area', verbose_name=_("Тип группы"))
     class Meta:
-        verbose_name = 'Предметная группа ФГОС'
-        verbose_name_plural = 'Предметные группы ФГОС'
+        verbose_name = 'ФГОС: Предметная группа'
+        verbose_name_plural = 'ФГОС: Предметные группы'
         ordering = ['type', 'name_rus']
     def __str__(self):
         return f"{self.name_rus}"
@@ -95,8 +94,8 @@ class AcademicPlan(models.Model):
     name_short = models.CharField(max_length=128, verbose_name=_("Сокращённое название"), null=True, blank=True)
     level = models.CharField(choices=LEVEL_NATION_CHOICES, verbose_name=_("Уровень образования"), default='ooo', max_length=3)
     class Meta:
-        verbose_name = 'Учебный план'
-        verbose_name_plural = 'Учебные планы'
+        verbose_name = 'ФГОС: Учебный план'
+        verbose_name_plural = 'ФГОС: Учебные планы'
         ordering = ['study_year', 'name_rus']
     def __str__(self):
         return f"{self.study_year} {self.name_rus}"
@@ -112,8 +111,8 @@ class HoursSubjectInYear(models.Model):
     years = models.ManyToManyField('curriculum.ClassYear', verbose_name=_("Года обучения"), blank=True, related_name="subject_year")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=1)
     class Meta:
-        verbose_name = 'Учебные планы: нагрузка'
-        verbose_name_plural = 'Учебные планы: нагрузка'
+        verbose_name = 'ФГОС: Учебные планы - нагрузка'
+        verbose_name_plural = 'ФГОС: Учебные планы - нагрузка'
         ordering = ['subject__name_rus', 'years__year_rus']
     def __str__(self):
         return f"{self.academic_plan} ({self.subject} - {self.hours})"
@@ -135,8 +134,8 @@ class Criterion(models.Model):
     subject_group = models.ForeignKey('curriculum.SubjectGroupIB', verbose_name=_("Предметная группа"), on_delete=models.SET_NULL, \
         null=True, blank=False, related_name="criterion")
     class Meta:
-        verbose_name = 'IB: Критерий оценивания'
-        verbose_name_plural = 'IB: Критерии оценивания'
+        verbose_name = 'Assessment: Критерий оценивания'
+        verbose_name_plural = 'Assessment: Критерии оценивания'
         ordering = ['subject_group', 'letter']
     def __str__(self):
         return "{} | {}".format(self.letter, self.subject_group)
@@ -158,8 +157,8 @@ class Strand(models.Model):
     criterion = models.ForeignKey('curriculum.Criterion', verbose_name=_("Критерий"), on_delete=models.SET_NULL, \
         null=True, blank=False, related_name="strand")
     class Meta:
-        verbose_name = 'IB: Стрэнд'
-        verbose_name_plural = 'IB: Стрэнды'
+        verbose_name = 'Assessment: Стрэнд'
+        verbose_name_plural = 'Assessment: Стрэнды'
         ordering = ['criterion', 'number', 'letter']
     def __str__(self):
         return "{} ({}). {}... | {}".format(self.number, self.get_letter_display(), self.name_eng[:15], self.criterion)
@@ -175,8 +174,8 @@ class Level(models.Model):
     number = models.PositiveIntegerField(verbose_name=_("Номер"), default=1)
     class_year = models.ManyToManyField('curriculum.ClassYear', verbose_name=_("Года обучения"), blank=True, related_name="levels")
     class Meta:
-        verbose_name = 'IB: Образовательный уровень'
-        verbose_name_plural = 'IB: Образовательные уровни'
+        verbose_name = 'Assessment: Образовательный уровень'
+        verbose_name_plural = 'Assessment: Образовательные уровни'
         ordering = ['name_eng']
     def __str__(self):
         return "{}".format(self.name_eng)
@@ -190,8 +189,8 @@ class Objective(models.Model):
     name_eng = models.CharField(max_length=255,verbose_name=_("Описание на англ. языке"), null=True, blank=False)
     name_rus = models.CharField(max_length=255,verbose_name=_("Описание на рус. языке"), null=True, blank=True)
     class Meta:
-        verbose_name = 'IB: Образовательная цель'
-        verbose_name_plural = 'IB: Образовательные цели'
+        verbose_name = 'Assessment: Образовательная цель'
+        verbose_name_plural = 'Assessment: Образовательные цели'
         ordering = ['level', 'strand']
     def __str__(self):
         return "{} | {}. {}...".format(self.level, self.strand.letter, self.name_eng[:10])
@@ -204,8 +203,8 @@ class AchievementLevel(models.Model):
     name_rus = models.TextField(verbose_name=_("Описание на рус. языке"), null=True, blank=True)
     point = models.PositiveIntegerField(verbose_name=_("Баллы"), default=0)
     class Meta:
-        verbose_name = 'IB: Уровень достижений'
-        verbose_name_plural = 'IB: Уровни достижений'
+        verbose_name = 'Assessment: Уровень достижений'
+        verbose_name_plural = 'Assessment: Уровни достижений'
         ordering = ['objective', 'point']
     def __str__(self):
         return "{}... - {}".format(self.name_eng[:30], self.point)

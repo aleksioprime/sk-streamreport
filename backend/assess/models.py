@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
+from curriculum.models import PROGRAM_IB_CHOICES
 
 GRADES = { 1: [3, 5, 7], 2: [6, 10, 14], 3: [8, 14, 20], 4: [11, 19, 28] }
 
@@ -28,6 +28,7 @@ class ClassGroup(models.Model):
     students = models.ManyToManyField('member.ProfileStudent', verbose_name=_("Студенты"), blank=True, related_name="groups")
     mentor = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Наставник"), related_name='groups', null=True, blank=True, on_delete=models.SET_NULL)
     psychologist = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Психолог"), related_name='psycho_groups', null=True, blank=True, on_delete=models.SET_NULL)
+    program = models.CharField(choices=PROGRAM_IB_CHOICES, verbose_name=_("IB-программа"), default=None, null=True, max_length=4)
     class Meta:
         verbose_name = 'Учебный класс'
         verbose_name_plural = 'Учебные классы'
@@ -220,10 +221,10 @@ class ReportTeacher(models.Model):
     events = models.ManyToManyField('assess.EventParticipation', verbose_name=_("Участие в мероприятиях"), blank=True, related_name="teacher_reports")
     author = models.ForeignKey('member.ProfileTeacher', verbose_name=_("Автор репорта"), on_delete=models.SET_NULL, null=True, related_name="teacher_reports")
     achievements = models.ManyToManyField('assess.ReportAchievements', verbose_name=_("Уровни достижений"), blank=True, related_name="teacher_reports")
-    criterion_a = models.SmallIntegerField(verbose_name=_("Оценка по критерию A"), default=None, null=True, blank=True)
-    criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True, blank=True)
-    criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True, blank=True)
-    criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True, blank=True)
+    # criterion_a = models.SmallIntegerField(verbose_name=_("Оценка по критерию A"), default=None, null=True, blank=True)
+    # criterion_b = models.SmallIntegerField(verbose_name=_("Оценка по критерию B"), default=None, null=True, blank=True)
+    # criterion_c = models.SmallIntegerField(verbose_name=_("Оценка по критерию C"), default=None, null=True, blank=True)
+    # criterion_d = models.SmallIntegerField(verbose_name=_("Оценка по критерию D"), default=None, null=True, blank=True)
     criteria = models.ManyToManyField('curriculum.Criterion', verbose_name=_("Критерии "), through='assess.ReportCriteria', blank=True, related_name="teacher_reports")
     final_grade = models.SmallIntegerField(verbose_name=_("Итоговая оценка по шкале 1-5"), default=None, null=True, blank=True)
     final_grade_ib = models.SmallIntegerField(verbose_name=_("Итоговая оценка по шкале 1-7"), default=None, null=True, blank=True)
