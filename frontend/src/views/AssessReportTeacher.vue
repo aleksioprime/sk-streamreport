@@ -252,8 +252,8 @@ export default {
       if (this.showAllData) {
         this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id });
         this.fetchGetClassYears({ level: this.currentPlan.level });
-          // this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
-        this.fetchGetSubjects({ plan: this.currentPlan.id, need_report: 1 }).finally(() => {
+        // this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
+        this.fetchGetSubjects({ plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId }).finally(() => {
         if (this.currentSubjectId) {
           this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId });
         }
@@ -261,8 +261,8 @@ export default {
       } else {
         this.fetchGetReportPeriods({ study_year: this.currentStudyYear.id });
         this.fetchGetClassYears({ study_year: this.currentStudyYear.id, teacher: this.authUser.teacher.id, level: this.currentPlan.level });
-          // this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
-        this.fetchGetSubjects({ teacher: this.authUser.teacher.id, plan: this.currentPlan.id, need_report: 1 }).finally(() => {
+        // this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
+        this.fetchGetSubjects({ teacher: this.authUser.teacher.id, plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId }).finally(() => {
         if (this.currentSubjectId) {
           this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId, teacher: this.authUser.teacher.id });
         }
@@ -286,6 +286,9 @@ export default {
         }
       });
     },
+    filterdSubject() {
+
+    },
     // подключение переменной авторизированного пользователя из store
     ...mapGetters(['authUser', 'isAdmin']),
     currentSubject() {
@@ -308,7 +311,12 @@ export default {
       } else {
         localStorage.removeItem('report_teacher_year');
       }
-    }    
+      if (this.showAllData) {
+        this.fetchGetSubjects({ plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId })
+      } else {
+        this.fetchGetSubjects({ teacher: this.authUser.teacher.id, plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId })
+      }
+    }, 
   }
 }
 </script>
