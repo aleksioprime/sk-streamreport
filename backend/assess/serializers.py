@@ -86,10 +86,11 @@ class ClassGroupExtraSerializer(serializers.ModelSerializer):
     students = ProfileStudentSerializer(many=True, read_only=True)
     mentor = ProfileTeacherSerializer(read_only=True)
     psychologist = ProfileTeacherSerializer(read_only=True)
+    # group_name = serializers.CharField(source='group_name', read_only=True)
     class Meta:
         model = ClassGroup
         fields = ['id', 'class_year', 'letter', 'id_dnevnik', 'students', 'students_ids', 
-                  'mentor', 'mentor_id', 'psychologist', 'psychologist_id', 'program']
+                  'mentor', 'mentor_id', 'psychologist', 'psychologist_id', 'program', 'group_name', 'count']
         extra_kwargs = {
             'students_ids': {'source': 'students', 'write_only': True},
             'mentor_id': {'source': 'mentor', 'write_only': True},
@@ -608,7 +609,7 @@ class StudentReportTeacherSerializer(serializers.ModelSerializer):
 #####################
 
 class ReportPsychologistSerializer(serializers.ModelSerializer):
-    student = ProfileStudentSerializer(read_only=True)
+    student = ProfileStudentSimpleSerializer(read_only=True)
     period = ReportPeriodSerializer(read_only=True)
     year = ClassYearSerializer(read_only=True)
     events = EventParticipationSerializer(many=True, required=False)
@@ -683,8 +684,18 @@ class StudentReportPsychologistSerializer(serializers.ModelSerializer):
 # РЕПОРТЫ НАСТАВНИКА #
 ######################
 
+
+class ClassGroupForMentorSerializer(serializers.ModelSerializer):
+    students = ProfileStudentSimpleSerializer(many=True, read_only=True)
+    mentor = ProfileTeacherSerializer(read_only=True)
+    psychologist = ProfileTeacherSerializer(read_only=True)
+    class Meta:
+        model = ClassGroup
+        fields = ['id', 'class_year', 'letter', 'id_dnevnik', 'students', 
+                  'mentor', 'psychologist', 'program', 'group_name', 'count']
+
 class ReportMentorSerializer(serializers.ModelSerializer):
-    student = ProfileStudentSerializer(read_only=True)
+    student = ProfileStudentSimpleSerializer(read_only=True)
     period = ReportPeriodSerializer(read_only=True)
     year = ClassYearSerializer(read_only=True)
     events = EventParticipationSerializer(many=True, required=False)
@@ -813,7 +824,7 @@ class StudentReportMentorSerializer(serializers.ModelSerializer):
         report_period = ReportPeriod.objects.filter(id=period_id).first()
         subject_queryset = Subject.objects.filter(subject_year__academic_plan__study_year__in=[report_period.study_year], subject_year__years__in=[class_year_id])
         # subject_queryset = Subject.objects.filter(group_ib__program=class_year.program)
-        subject_reports = list(subject_queryset.values('id', 'name_rus'))
+        # subject_reports = list(subject_queryset.values('id', 'name_rus'))
         subjects = list(subject_queryset.values_list('id', flat=True))
         report_teacher_queryset = ReportTeacher.objects.filter(student=instance,
                                                period=period_id,

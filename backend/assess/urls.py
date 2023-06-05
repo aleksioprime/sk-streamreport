@@ -20,6 +20,7 @@ urlpatterns = [
     path('assessment/student/report/teacher', StudentReportTeacherViewSet.as_view({'get': 'list'})),
     path('assessment/student/report/psychologist', StudentReportPsychologistViewSet.as_view({'get': 'list'})),
     path('assessment/student/report/mentor', StudentReportMentorViewSet.as_view({'get': 'list'})),
+    path('assessment/student/report/mentor/<int:pk>', StudentReportMentorViewSet.as_view({'get': 'retrieve'})),
     path('assessment/student', StudentWorkViewSet.as_view({'get': 'list'})),
     path('assessment/sumwork', SummativeWorkViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('assessment/sumwork/<int:pk>', SummativeWorkViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),

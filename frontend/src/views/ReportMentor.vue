@@ -6,23 +6,23 @@
     </base-header>
     <div class="col-md mb-2">
       <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
-      <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b>  ({{ getWordStudent(currentGroup.count) }}) 
+      <div>Класс: <b>{{ currentGroup.group_name }}</b>  ({{ getWordStudent(currentGroup.count) }}) 
       <br><span v-if="currentGroup.mentor">Наставник: {{ currentGroup.mentor.full_name }}</span> 
       <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.full_name }}</span></div>
     </div>
-    <div v-if="!isStudentsReportLoading || !firstLoading">
-      <div v-if="studentsReport.length" class="report-wrapper">
+    <div v-if="!isStudentReportLoading || !firstLoading">
+      <div v-if="currentStudentId" class="report-wrapper">
         <div class="student-list radiobutton">
-          <div v-for="student in studentsReport" :key="student.id" :class="getStyleForStudent(student)">
-            <input type="radio" name="student" :value="student" :id="'student-' + student.id"
-              v-model="currentStudent">
-            <label :for="'student-' + student.id">
-              <div>{{ student.user.last_name }} {{ student.user.first_name }}</div>
+          <div v-for="student in currentGroup.students" :key="student.id">
+            <input type="radio" name="student" :value="student.id" :id="'student-' + student.id"
+              v-model="currentStudentId" @change="choiceStudent">
+            <label :for="'student-' + student.id" :class="getStyleForStudent(student)">
+              <div>{{ student.short_name }}</div>
             </label>
           </div>
         </div>
-        <report-mentor-item :period="currentReportPeriod" v-if="currentStudent" class="student-item" :program="currentGroup.program"
-        :student="currentStudent" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :editable="currentGroup.mentor.id == authUser.teacher.id"/>
+        <report-mentor-item :period="currentReportPeriod" v-if="studentReport.id" class="student-item" :program="currentGroup.program" :subjects="subjects"
+        :student="studentReport" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :editable="currentGroup.mentor.id == authUser.teacher.id"/>
         <div v-else>Выберите студента</div>
       </div>
       <div v-else class="report-none">
@@ -51,28 +51,28 @@
 <script>
 import { mapGetters } from 'vuex';
 import ReportMentorItem from "@/components/assessment/ReportMentorItem.vue";
-import { getStudentsReport, createReportMentor, updateReportMentor, getReportMentorJournal } from "@/hooks/assess/useReportMentor";
+import { getStudentReport, createReportMentor, updateReportMentor, getReportMentorJournal } from "@/hooks/assess/useReportMentor";
 
 export default {
   components: {
     ReportMentorItem
   },
   setup(props) {
-    const { currentGroup, currentReportPeriod, eventTypes, fetchGetReportMentorJournal } = getReportMentorJournal();
-    const { studentsReport, isStudentsReportLoading, fetchGetStudentsReport } = getStudentsReport();
+    const { currentGroup, subjects, currentReportPeriod, eventTypes, fetchGetReportMentorJournal } = getReportMentorJournal();
+    const { studentReport, isStudentReportLoading,  fetchGetStudentReport } = getStudentReport();
     const { createdReportMentor, fetchCreateReportMentor } = createReportMentor();
     const { updatedReportMentor, fetchUpdateReportMentor } = updateReportMentor();
 
     return {
-      currentGroup, currentReportPeriod, eventTypes, fetchGetReportMentorJournal,
-      studentsReport, isStudentsReportLoading, fetchGetStudentsReport,
+      currentGroup, subjects, currentReportPeriod, eventTypes, fetchGetReportMentorJournal,
+      studentReport, isStudentReportLoading, fetchGetStudentReport,
       createdReportMentor, fetchCreateReportMentor,
       updatedReportMentor, fetchUpdateReportMentor,
     }
   },
   data() {
     return {
-      currentStudent: null,
+      currentStudentId: null,
       currentReport: {},
       eventLevels: [
         { value: '0', name: 'Без уровня' },
@@ -86,12 +86,16 @@ export default {
   },
   methods: {
     getStyleForStudent(student) {
-      if (student.mentor_report.id) {
-        if (student.mentor_report.text) {
+      const studentInReport = this.currentGroup.reports.find(item => item.student_id == student.id && item.period == this.currentReportPeriod.id)
+      if (studentInReport) {
+        if (studentInReport.check_text) {
           return 'check-text'
         }
-        return 'check-student'
+        // return 'check-student'
       }
+    },
+    choiceStudent() {
+      this.fetchGetStudentReport(this.currentStudentId, this.currentFetchData)
     },
     getWordStudent(count) {
       let value = Math.abs(count) % 100;
@@ -118,9 +122,7 @@ export default {
       if (Object.keys(fetchData).length) {
         console.log("Запрос на добавление данных: ", fetchData);
         this.fetchCreateReportMentor(fetchData).finally(() => {
-          this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
-            this.currentStudent = this.studentsReport.find(item => item.id == this.createdReportMentor.student.id);
-          });
+          this.fetchGetStudentReport(this.currentStudentId, this.currentFetchData);
         });
       }
     },
@@ -129,9 +131,7 @@ export default {
       if (Object.keys(fetchData).length) {
         console.log("Запрос на изменение данных: ", fetchData);
         this.fetchUpdateReportMentor(fetchData).finally(() => {
-          this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
-            this.currentStudent = this.studentsReport.find(item => item.id == this.updatedReportMentor.student.id);
-          });
+          this.fetchGetStudentReport(this.currentStudentId, this.currentFetchData);
         });
       }
     },
@@ -146,10 +146,8 @@ export default {
         class_year: this.currentGroup.class_year.id,
         period: this.currentReportPeriod.id,
       }
-      this.fetchGetStudentsReport(this.currentFetchData).finally(() => {
-        this.currentStudent = this.studentsReport[0];
-        this.firstLoading = false;
-      });
+      this.currentStudentId = this.currentGroup.students[0].id
+      this.fetchGetStudentReport(this.currentStudentId, this.currentFetchData);
     })
   },
   computed: {

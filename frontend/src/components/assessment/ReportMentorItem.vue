@@ -75,6 +75,10 @@
       </div>
       <div v-else>Психолог пока не написал репорт</div>
       <div class="subject-reports-title">Репорты учителей-предметников</div>
+      <div class="description mb-1">Предметы по учебному плану: 
+        <span v-for="sb, index in subjects" :key="sb.id">{{ sb.name_rus }}<span v-if="++index !== subjects.length">,&nbsp; </span>
+        </span>
+      </div>
       <div class="accordion" id="accordionPanelsSubject" v-if="student.subject_reports.length">
         <div class="subject-item accordion-item" v-for="subject in student.subject_reports" :key="subject.id">
           <h2 class="accordion-header">
@@ -153,7 +157,8 @@ export default {
     types: { type: Array, default: [] },
     levels: { type: Array, default: [] },
     editable: { type: Boolean, default: false },
-    program: { type: String }
+    program: { type: String },
+    subjects: { type: Array, default: [] },
   },
 
   data() {

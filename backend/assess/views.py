@@ -6,7 +6,7 @@ from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassG
     EventTypeSerializer, EventParticipationSerializer, StudentReportMentorSerializer, ReportMentorSerializer, ClassGroupStudentsSerializer, \
     WorkLoadSerializer, TextTranslateSerailizer, GenerateReportSerailizer, StudentReportPsychologistSerializer, ReportPsychologistSerializer, \
         ProfileTeacherSerializer, SubjectSerializer, WorkLoadSubjectSerializer, ClassGroupForReportTeacherSerializer, ClassGroupForReportPsychoSerializer, \
-        ClassYearSerializer, ClassGroupForReportMentorSerializer
+        ClassYearSerializer, ClassGroupForReportMentorSerializer, ClassGroupForMentorSerializer
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
     ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad, ReportPsychologist
@@ -370,9 +370,11 @@ class ReportMentorJournalAPIView(APIView):
         period = ReportPeriod.objects.filter(id=period_id).first()
         group = ClassGroup.objects.filter(id=group_id).first()
         types = EventType.objects.all()
+        subjects = Subject.objects.filter(subject_year__years__group=group).distinct()
         return Response({
-            'group': ClassGroupSerializer(group).data,
+            'group': ClassGroupForReportMentorSerializer(group).data,
             'period': ReportPeriodSerializer(period).data,
+            'subjects': SubjectSerializer(subjects, many=True).data,
             'event_types': EventTypeSerializer(types, many=True).data
             })
 

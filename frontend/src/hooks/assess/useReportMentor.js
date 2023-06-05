@@ -3,6 +3,7 @@ import { axiosAPI } from '@/axios'
 
 export function getReportMentorJournal() {
   const currentReportPeriod = ref({});
+  const subjects = ref([]);
   const currentGroup = ref({ mentor: { user: {} }, class_year: {} });  const eventTypes = ref([]);
   const fetchGetReportMentorJournal = async (data) => {
     const config = {
@@ -15,12 +16,13 @@ export function getReportMentorJournal() {
       console.log("Загрузка данных для журнала")
       currentReportPeriod.value = response.data.period;
       currentGroup.value = response.data.group;
+      subjects.value = response.data.subjects;
       eventTypes.value = response.data.event_types
       console.log(response.data)
     });
   };
   return {
-    currentGroup, currentReportPeriod, eventTypes, fetchGetReportMentorJournal
+    currentGroup, subjects, currentReportPeriod, eventTypes, fetchGetReportMentorJournal
   }
 }
 
@@ -46,6 +48,31 @@ export function getStudentsReport() {
   };
   return {
     studentsReport, isStudentsReportLoading, fetchGetStudentsReport
+  }
+}
+
+export function getStudentReport() {
+  const studentReport = ref({});
+  const isStudentReportLoading = ref(false);
+  const fetchGetStudentReport = async (id, data) => {
+    const config = {
+      params: {
+        group: data.group || null,
+        class_year: data.class_year || null,
+        period: data.period || null,
+        study_year: data.study_year || null,
+      }
+    }
+    isStudentReportLoading.value = true;
+    await axiosAPI.get(`/assessment/student/report/mentor/${id}`, config).then((response) => {
+      console.log('Получен студент для репорта: ', response.data)
+      studentReport.value = response.data;
+    }).finally(() => {
+      isStudentReportLoading.value = false;
+    });
+  };
+  return {
+    studentReport, fetchGetStudentReport
   }
 }
 
