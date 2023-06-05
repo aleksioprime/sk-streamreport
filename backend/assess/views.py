@@ -811,6 +811,7 @@ class ClassGroupForReportTeacherViewSet(viewsets.ModelViewSet):
         study_year = self.request.query_params.get("study_year", None)
         class_year = self.request.query_params.get("class_year", None)
         teacher = self.request.query_params.get("teacher", None)
+        subject = self.request.query_params.get("subject", None)
         level = self.request.query_params.get("level", None)
         if study_year:
             class_group = class_group.filter(study_year=study_year)
@@ -818,6 +819,8 @@ class ClassGroupForReportTeacherViewSet(viewsets.ModelViewSet):
             class_group = class_group.filter(class_year=class_year)
         if level:
             class_group = class_group.filter(class_year__level=level)
+        if subject:
+            class_group = class_group.filter(workload__subject=subject).distinct()
         if teacher:
             class_group = class_group.filter(workload__teacher=teacher).distinct()
         return class_group
