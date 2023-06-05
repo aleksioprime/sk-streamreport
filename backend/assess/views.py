@@ -659,17 +659,18 @@ class ExportReportMentorDOCXAPIView(APIView):
                         table.rows[j + count].cells[0].text = f"{report.subject.name_rus}"
                         if group.program == 'myp':
                             criteria = report.report_criteria.all()
-                            for i, item in enumerate(criteria):
-                                table.rows[j + i + count].cells[1].text = f"{item.criterion.letter}. {item.criterion.name_eng}"
-                                table.rows[j + i + count].cells[2].text = f"{item.mark}"
-                                table.add_row()
-                            table.rows[j + count].cells[3].text = f"{report.criterion_summ}/{report.criterion_count * 8}"
-                            table.rows[j + count].cells[4].text = f"{report.criterion_rus}"
-                            table.rows[j + count].cells[5].text = f"{report.final_grade}"
-                            table.cell(j + count, 0).merge(table.cell(j + count + len(criteria) - 1, 0))
-                            table.cell(j + count, 3).merge(table.cell(j + count + len(criteria) - 1, 3))
-                            table.cell(j + count, 4).merge(table.cell(j + count + len(criteria) - 1, 4))
-                            table.cell(j + count, 5).merge(table.cell(j + count + len(criteria) - 1, 5))
+                            if criteria:
+                                for i, item in enumerate(criteria):
+                                    table.rows[j + i + count].cells[1].text = f"{item.criterion.letter}. {item.criterion.name_eng}"
+                                    table.rows[j + i + count].cells[2].text = f"{item.mark}"
+                                    table.add_row()
+                                table.rows[j + count].cells[3].text = f"{report.criterion_summ}/{report.criterion_count * 8}"
+                                table.rows[j + count].cells[4].text = f"{report.criterion_rus}"
+                                table.rows[j + count].cells[5].text = f"{report.final_grade}"
+                                table.cell(j + count, 0).merge(table.cell(j + count + len(criteria) - 1, 0))
+                                table.cell(j + count, 3).merge(table.cell(j + count + len(criteria) - 1, 3))
+                                table.cell(j + count, 4).merge(table.cell(j + count + len(criteria) - 1, 4))
+                                table.cell(j + count, 5).merge(table.cell(j + count + len(criteria) - 1, 5))
                             count += len(criteria)
                         elif group.program == 'dp':
                             table.rows[j + count].cells[1].text = f"{report.final_grade}"
