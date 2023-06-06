@@ -1005,16 +1005,16 @@ class ClassGroupForReportMentorSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClassGroup
         fields = ['id', 'group_name', 'class_year', 'count', 'students', 'mentor', 'program', 'psychologist']
-    # def to_representation(self, instance):
-    #     result = super(ClassGroupForReportMentorSerializer, self).to_representation(instance)
-    #     reports = ReportMentor.objects.filter(student__in=instance.students.all(),
-    #                                                 year=instance.class_year)
-    #     result['reports'] = []
-    #     for report in reports:
-    #         if report:
-    #             result['reports'].append({
-    #                 'student_name': report.student.user.get_short_name(),
-    #                 'student_id': report.student.id,
-    #                 'check_text': bool(report.text),
-    #                 'period': report.period.id})
-    #     return result
+    def to_representation(self, instance):
+        result = super(ClassGroupForReportMentorSerializer, self).to_representation(instance)
+        reports = ReportMentor.objects.filter(student__in=instance.students.all(),
+                                                    year=instance.class_year)
+        result['reports'] = []
+        for report in reports:
+            if report:
+                result['reports'].append({
+                    'student_name': report.student.user.get_short_name(),
+                    'student_id': report.student.id,
+                    'check_text': bool(report.text),
+                    'period': report.period.id})
+        return result

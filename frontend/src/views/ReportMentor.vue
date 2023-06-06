@@ -18,7 +18,7 @@
               <div v-for="student in currentGroup.students" :key="student.id">
                 <input type="radio" name="student" :value="student.id" :id="'student-' + student.id"
                   v-model="currentStudentId" @change="choiceStudent">
-                <label :for="'student-' + student.id">
+                <label :for="'student-' + student.id" :class="getStyleForStudent(student)">
                   <div>{{ student.short_name }}</div>
                 </label>
               </div>
@@ -86,15 +86,15 @@ export default {
     }
   },
   methods: {
-    // getStyleForStudent(student) {
-    //   const studentInReport = this.currentGroup.reports.find(item => item.student_id == student.id && item.period == this.currentReportPeriod.id)
-    //   if (studentInReport) {
-    //     if (studentInReport.check_text) {
-    //       return 'check-text'
-    //     }
-    //     // return 'check-student'
-    //   }
-    // },
+    getStyleForStudent(student) {
+      const studentInReport = this.currentGroup.reports.find(item => item.student_id == student.id && item.period == this.currentReportPeriod.id)
+      if (studentInReport) {
+        if (studentInReport.check_text) {
+          return 'check-text'
+        }
+        // return 'check-student'
+      }
+    },
     choiceStudent() {
       this.fetchGetStudentReport(this.currentStudentId, this.currentFetchData)
     },
