@@ -1003,7 +1003,7 @@ class ClassGroupForReportMentorSerializer(serializers.ModelSerializer):
     mentor = ProfileTeacherSerializer(read_only=True)
     class Meta:
         model = ClassGroup
-        fields = ['id', 'group_name', 'class_year', 'count', 'students', 'mentor']
+        fields = ['id', 'group_name', 'class_year', 'count', 'students', 'mentor', 'program']
     def to_representation(self, instance):
         result = super(ClassGroupForReportMentorSerializer, self).to_representation(instance)
         reports = ReportMentor.objects.filter(student__in=instance.students.all(),
