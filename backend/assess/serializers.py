@@ -927,10 +927,6 @@ class WorkLoadSubjectSerializer(serializers.ModelSerializer):
             syllabus_queryset = HoursSubjectInYear.objects.filter(subject=instance, academic_plan__study_year__id=study_year).distinct()
         serializer = HoursSubjectInYearSerializer(instance=syllabus_queryset, many=True, context=self.context)
         return serializer.data
-    def to_representation(self, instance):
-        result = super(WorkLoadSubjectSerializer, self).to_representation(instance)
-        
-        return result
 
 ###########################################
 # Классы с результатами репортов учителей #

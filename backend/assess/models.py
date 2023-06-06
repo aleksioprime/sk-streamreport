@@ -58,7 +58,7 @@ class WorkLoad(models.Model):
     class Meta:
         verbose_name = 'Рабочая нагрузка'
         verbose_name_plural = 'Рабочие нагрузки'
-        ordering = ['study_year', 'subject', 'groups__class_year', 'teacher']
+        ordering = ['study_year', 'subject', 'groups__class_year', 'groups__letter', 'teacher']
     def __str__(self):
         return '{} ({} - {} ч.)'.format(self.teacher, self.subject, self.hours)
 

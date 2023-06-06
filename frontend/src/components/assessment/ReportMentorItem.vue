@@ -90,7 +90,7 @@
             <div class="accordion-body">
               <div v-if="subject.text">
               <div class="subject-criteria" v-if="program == 'myp'">
-                <div class="criteria-wrapper mb-3">
+                <div class="criteria-wrapper">
                   <div class="criteria-item" v-for="cr in subject.criteria" :key="cr.id">
                     <div class="criterion">{{ cr.criterion.letter }}. {{ cr.criterion.name_eng }}</div>
                     <div class="criteria-value">{{ cr.mark }}</div>
@@ -107,7 +107,7 @@
                   </div>
                 </div>
               </div>
-              <div class="subject-criteria  mt-2">
+              <div class="subject-criteria">
                 <div class="grade-item">
                   <div class="grade-title">Итоговая оценка РФ: </div>
                   <div class="grade-value">{{ subject.final_grade }}</div>
@@ -394,6 +394,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: 10px;
 }
 .criteria-item {
   display: flex;

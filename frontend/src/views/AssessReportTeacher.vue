@@ -43,7 +43,7 @@
     </div>
     <div class="block-class mt-3">
       <div class="radiobutton">
-        <input type="radio" name="year" :value="null" id="year-null" v-model="currentYearId">
+        <input type="radio" name="year" :value="null" id="year-null" v-model="currentYearId" @change="choiceYear">
         <label for="year-null">Все классы</label>
       </div>
       <div v-for="year in years" :key="year.id" class="radiobutton">
@@ -54,7 +54,7 @@
     </div>
     <div class="block-subject mt-3">
       <div class="subject radiobutton">
-        <input type="radio" name="subject" :value="null" :id="'subject-x'" v-model="currentSubjectId">
+        <input type="radio" name="subject" :value="null" :id="'subject-x'" v-model="currentSubjectId" @change="choiceSubject">
         <label :for="'subject-x'">Предмет не выбран</label>
       </div>
       <div v-for="sb in subjects" :key="sb.id" class="subject radiobutton">
@@ -63,7 +63,7 @@
       </div>
     </div>
     <div v-if="!isGroupLoading">
-      <div v-for="(groupsByYear, year) in groupedArrayData(filteredGroups, ['class_year', 'year_rus'])" :key="year">
+      <div v-for="(groupsByYear, year) in groupedArrayData(groupsForReportTeacher, ['class_year', 'year_rus'])" :key="year">
         <div class="class-group"><h3>{{ year }} классы</h3></div>
         <div v-for="group in groupsByYear" :key="group.id" class="class-item area">
             <div class="row">
@@ -210,6 +210,43 @@ export default {
       localStorage.removeItem('report_teacher_year');
       localStorage.setItem('report_teacher_plan', this.currentPlan.id);
     },
+    choiceSubject() {
+      if (this.currentSubjectId) {
+        localStorage.setItem('report_teacher_subject', this.currentSubjectId);
+        this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId, class_year: this.currentYearId });
+      } else {
+        this.groupsForReportTeacher = []
+        localStorage.removeItem('report_teacher_subject');
+      }
+    },
+    choiceYear() {
+      if (this.currentYearId) {
+        localStorage.setItem('report_teacher_year', this.currentYearId);
+      } else {
+        localStorage.removeItem('report_teacher_year');
+      }
+      if (this.showAllData) {
+        this.fetchGetSubjects({ plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId }).finally(() => {
+          if (!this.subjects.map(item => item.id).includes(this.currentSubjectId)) {
+            this.groupsForReportTeacher = []
+            this.currentSubjectId = null;
+            localStorage.removeItem('report_teacher_subject');
+          } else {
+            this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId, class_year: this.currentYearId });
+          }
+        })
+      } else {
+        this.fetchGetSubjects({ teacher: this.authUser.teacher.id, plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId }).finally(() => {
+          if (!this.subjects.map(item => item.id).includes(this.currentSubjectId)) {
+            this.groupsForReportTeacher = []
+            this.currentSubjectId = null;
+            localStorage.removeItem('report_teacher_subject');
+          } else {
+            this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, teacher: this.authUser.teacher.id, subject: this.currentSubjectId, class_year: this.currentYearId });
+          }
+        })
+      }
+    }, 
     changeView() {
       this.currentSubjectId = null;
       localStorage.removeItem('report_teacher_subject');
@@ -255,7 +292,7 @@ export default {
         // this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
         this.fetchGetSubjects({ plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId }).finally(() => {
         if (this.currentSubjectId) {
-          this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId });
+          this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId, class_year: this.currentYearId });
         }
         });
       } else {
@@ -264,7 +301,7 @@ export default {
         // this.fetchGetPeriods({ study_year: this.currentStudyYear.id })
         this.fetchGetSubjects({ teacher: this.authUser.teacher.id, plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId }).finally(() => {
         if (this.currentSubjectId) {
-          this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId, teacher: this.authUser.teacher.id });
+          this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId, teacher: this.authUser.teacher.id, class_year: this.currentYearId });
         }
         });
       }
@@ -277,18 +314,6 @@ export default {
     });  
   },
   computed: {
-    filteredGroups() {
-      return this.groupsForReportTeacher.filter(item => {
-        if (this.currentYearId) {
-          return item.class_year.id == Number(this.currentYearId) 
-        } else {
-          return item
-        }
-      });
-    },
-    filterdSubject() {
-
-    },
     // подключение переменной авторизированного пользователя из store
     ...mapGetters(['authUser', 'isAdmin']),
     currentSubject() {
@@ -296,27 +321,7 @@ export default {
     }
   },
   watch: {
-    currentSubjectId() {
-      if (this.currentSubjectId) {
-        localStorage.setItem('report_teacher_subject', this.currentSubjectId);
-        this.fetchGetGroupsForReportTeacher({ study_year: this.currentStudyYear.id, level: this.currentPlan.level, subject: this.currentSubjectId });
-      } else {
-        this.groupsForReportTeacher = []
-        localStorage.removeItem('report_teacher_subject');
-      }
-    },
-    currentYearId() {
-      if (this.currentYearId) {
-        localStorage.setItem('report_teacher_year', this.currentYearId);
-      } else {
-        localStorage.removeItem('report_teacher_year');
-      }
-      if (this.showAllData) {
-        this.fetchGetSubjects({ plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId })
-      } else {
-        this.fetchGetSubjects({ teacher: this.authUser.teacher.id, plan: this.currentPlan.id, need_report: 1, class_year: this.currentYearId })
-      }
-    }, 
+    
   }
 }
 </script>
