@@ -4,47 +4,48 @@
       <template v-slot:link><a href="#" @click="$router.push(`/report/mentor`)" >Вернуться к выбору класса</a></template>
       <template v-slot:header>Репорты наставника</template>
     </base-header>
-    <div class="col-md mb-2">
-      <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
-      <div>Класс: <b>{{ currentGroup.group_name }}</b>  ({{ getWordStudent(currentGroup.count) }}) 
-      <br><span v-if="currentGroup.mentor">Наставник: {{ currentGroup.mentor.full_name }}</span> 
-      <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.full_name }}</span></div>
-    </div>
-    <div v-if="!isStudentReportLoading || !firstLoading">
-      <div v-if="currentStudentId" class="report-wrapper">
-        <div class="student-list radiobutton">
-          <div v-for="student in currentGroup.students" :key="student.id">
-            <input type="radio" name="student" :value="student.id" :id="'student-' + student.id"
-              v-model="currentStudentId" @change="choiceStudent">
-            <label :for="'student-' + student.id" :class="getStyleForStudent(student)">
-              <div>{{ student.short_name }}</div>
-            </label>
+    <transition name="fade">
+      <div>
+        <div class="col-md mb-2" v-if="currentReportPeriod.name">
+          <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
+          <div>Класс: <b>{{ currentGroup.group_name }}</b>  ({{ getWordStudent(currentGroup.count) }}) 
+          <br><span v-if="currentGroup.mentor">Наставник: {{ currentGroup.mentor.full_name }}</span> 
+          <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.full_name }}</span></div>
+        </div>
+        <div v-if="!isStudentReportLoading || !firstLoading">
+          <div v-if="currentStudentId" class="report-wrapper">
+            <div class="student-list radiobutton">
+              <div v-for="student in currentGroup.students" :key="student.id">
+                <input type="radio" name="student" :value="student.id" :id="'student-' + student.id"
+                  v-model="currentStudentId" @change="choiceStudent">
+                <label :for="'student-' + student.id">
+                  <div>{{ student.short_name }}</div>
+                </label>
+              </div>
+            </div>
+            <report-mentor-item :period="currentReportPeriod" v-if="studentReport.id" class="student-item" :program="currentGroup.program" :subjects="subjects"
+            :student="studentReport" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :editable="currentGroup.mentor.id == authUser.teacher.id"/>
+            <!-- <div v-else>Выберите студента</div> -->
           </div>
         </div>
-        <report-mentor-item :period="currentReportPeriod" v-if="studentReport.id" class="student-item" :program="currentGroup.program" :subjects="subjects"
-        :student="studentReport" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :editable="currentGroup.mentor.id == authUser.teacher.id"/>
-        <div v-else>Выберите студента</div>
+        <div v-else class="loader">
+          <div class="lds-spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
       </div>
-      <div v-else class="report-none">
-        Пока нет данных
-      </div>
-    </div>
-    <div v-else class="loader">
-      <div class="lds-spinner">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -85,15 +86,15 @@ export default {
     }
   },
   methods: {
-    getStyleForStudent(student) {
-      const studentInReport = this.currentGroup.reports.find(item => item.student_id == student.id && item.period == this.currentReportPeriod.id)
-      if (studentInReport) {
-        if (studentInReport.check_text) {
-          return 'check-text'
-        }
-        // return 'check-student'
-      }
-    },
+    // getStyleForStudent(student) {
+    //   const studentInReport = this.currentGroup.reports.find(item => item.student_id == student.id && item.period == this.currentReportPeriod.id)
+    //   if (studentInReport) {
+    //     if (studentInReport.check_text) {
+    //       return 'check-text'
+    //     }
+    //     // return 'check-student'
+    //   }
+    // },
     choiceStudent() {
       this.fetchGetStudentReport(this.currentStudentId, this.currentFetchData)
     },
