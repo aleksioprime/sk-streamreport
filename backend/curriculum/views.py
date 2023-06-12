@@ -126,14 +126,11 @@ class ClassYearViewSet(viewsets.ModelViewSet):
     serializer_class = ClassYearSerializer
     def get_queryset(self):
         class_year = ClassYear.objects.all()
-        program = self.request.query_params.get("program", None)
         level = self.request.query_params.get("level", None)
         subject = self.request.query_params.get("subject", None)
         department = self.request.query_params.getlist("department", None)
         author = self.request.query_params.get("author", None)
         teacher = self.request.query_params.get("teacher", None)
-        if program:
-            class_year = class_year.filter(program=program)
         if level:
             class_year = class_year.filter(level=level)
         if author:

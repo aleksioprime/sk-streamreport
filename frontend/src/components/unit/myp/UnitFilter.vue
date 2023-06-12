@@ -84,11 +84,11 @@ export default {
     changeDepartment() {
       this.querySubject = null;
       if (this.showAllUnits) {
-        this.fetchGetSubjects({ department: this.queryDepartment, program: 'MYP' }).finally(() => {
+        this.fetchGetSubjects({ department: this.queryDepartment, program: 'myp' }).finally(() => {
           this.changeSubject();
         });
       } else {
-        this.fetchGetSubjects({ author: this.user.teacher.id, program: 'MYP' }).finally(() => {
+        this.fetchGetSubjects({ author: this.user.teacher.id, program: 'myp' }).finally(() => {
           this.changeSubject();
         }); 
       }
@@ -97,16 +97,16 @@ export default {
       this.queryYears = [];
       if (this.showAllUnits) {
         if (this.querySubject) {
-          this.fetchGetClassYears({ subject: this.querySubject, program: 'MYP' }).finally(() => {
+          this.fetchGetClassYears({ subject: this.querySubject, level: 'ooo' }).finally(() => {
           this.handleQuery();
         });
         } else {
-          this.fetchGetClassYears({ department: this.queryDepartment, program: 'MYP' }).finally(() => {
+          this.fetchGetClassYears({ department: this.queryDepartment, level: 'ooo' }).finally(() => {
           this.handleQuery();
         });
         }
       } else {
-        this.fetchGetClassYears({ author: this.user.teacher.id, subject: this.querySubject, program: 'MYP' }).finally(() => {
+        this.fetchGetClassYears({ author: this.user.teacher.id, subject: this.querySubject, level: 'ooo' }).finally(() => {
           this.handleQuery();
         });
       }
@@ -120,8 +120,8 @@ export default {
           }
           this.querySubject = null;
           this.queryYears = [];
-          this.fetchGetClassYears({ department: this.queryDepartment, program: 'MYP' });
-          this.fetchGetSubjects({ department: this.queryDepartment, program: 'MYP' }).finally(() => {
+          this.fetchGetClassYears({ department: this.queryDepartment, level: 'ooo' });
+          this.fetchGetSubjects({ department: this.queryDepartment, program: 'myp' }).finally(() => {
             this.handleQuery();
           }); 
         });
@@ -130,8 +130,8 @@ export default {
         this.queryDepartment = null;
         this.querySubject = null;
         this.queryYears = [];
-        this.fetchGetSubjects({ author: this.user.teacher.id, program: 'MYP' }).finally(() => {
-          this.fetchGetClassYears({ author: this.user.teacher.id, program: 'MYP' }).finally(() => {
+        this.fetchGetSubjects({ author: this.user.teacher.id, program: 'myp' }).finally(() => {
+          this.fetchGetClassYears({ author: this.user.teacher.id, level: 'ooo' }).finally(() => {
             this.handleQuery();
           });
         });

@@ -50,7 +50,6 @@
             <div class="progress-bar" role="progressbar" :style="`width: ${unit.fullness}%`" :aria-valuenow="unit.fullness" aria-valuemin="0" aria-valuemax="100">{{ unit.fullness }}%</div>
           </div>
         </div>
-        
       </div>
     </transition-group>
     <!-- Нумерация страниц -->

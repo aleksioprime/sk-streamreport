@@ -76,7 +76,7 @@
       <div v-else>Психолог пока не написал репорт</div>
       <div class="subject-reports-title">Репорты учителей-предметников</div>
       <div class="description mb-1">Предметы по учебному плану: 
-        <span v-for="sb, index in subjects" :key="sb.id">{{ sb.name_rus }}<span v-if="++index !== subjects.length">,&nbsp; </span>
+        <span v-for="sb, index in subjects" :key="sb.id" :class="{ 'subject-presence': student.subject_reports.map(item => item.subject_name).includes(sb.name_rus) }">{{ sb.name_rus }}<span v-if="++index !== subjects.length">,&nbsp; </span>
         </span>
       </div>
       <div class="accordion" id="accordionPanelsSubject" v-if="student.subject_reports.length">
@@ -395,6 +395,9 @@ export default {
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
+}
+.subject-presence {
+  font-weight: 700;
 }
 .criteria-item {
   display: flex;
