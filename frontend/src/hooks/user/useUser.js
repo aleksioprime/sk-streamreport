@@ -83,6 +83,19 @@ export function updateUser() {
   }
 }
 
+export function changePasswordUser() {
+  const fetchChangePasswordUser = async (user) => {
+    await axiosAPI.put(`/user/${user.id}/changepassword`, user).then((response) => {
+      console.log('Пользователь успешно обновлён');
+    }).catch((error) => {
+      console.log('Ошибка запроса: ', error);
+    });
+  };
+  return {
+    fetchChangePasswordUser
+  }
+}
+
 export function deleteUser() {
   const fetchDeleteUser = async (user) => {
     await axiosAPI.delete(`/user/${user.id}`, user).then((response) => {

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from member.models import User, Department, ProfileStudent, ProfileTeacher
 from assess.models import ClassGroup
+from django.contrib.auth.hashers import make_password
         
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,11 +40,12 @@ class ProfileTeacherSerializer(serializers.ModelSerializer):
 class UserCreateSerializer(serializers.ModelSerializer):
     student = ProfileStudentSerializer(required=False)
     teacher = ProfileTeacherSerializer(required=False)
+    full_name = serializers.CharField(source='get_full_name', read_only=True)
     class Meta:
         model = User
         fields = ["id", "username", "email", "first_name", "middle_name", 
                   "last_name", "last_login", "date_of_birth", "gender", "student", 
-                  "teacher", "photo", 'is_staff', 'password', 'is_active']
+                  "teacher", "photo", 'is_staff', 'password', 'is_active', 'full_name']
         read_only_fields = ['photo', 'is_staff']
         write_only_fields = ["password"]
         # extra_kwargs = {'username': {'required': False}, 'role': {'validators': []}}
@@ -82,11 +84,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     student = ProfileStudentSerializer(required=False)
     teacher = ProfileTeacherSerializer(required=False)
+    full_name = serializers.CharField(source='get_full_name', read_only=True)
     class Meta:
         model = User
         fields = ["id", "username", "email", "first_name", "middle_name", 
                   "last_name", "last_login", "date_of_birth", "gender", "student", 
-                  "teacher", "photo", 'is_staff', 'is_active', 'access_token_dnevnik']
+                  "teacher", "photo", 'is_staff', 'is_active', 'access_token_dnevnik',
+                  "full_name"]
         read_only_fields = ['photo', 'is_staff']
         extra_kwargs = {
             'username': {'required': True},
@@ -114,3 +118,16 @@ class ContactSerailizer(serializers.Serializer):
     name = serializers.CharField()
     email = serializers.CharField()
     message = serializers.CharField()
+
+class UserEditPasswordSerializer(serializers.ModelSerializer):
+    # old_password = serializers.CharField(required=True)
+    # new_password = serializers.CharField(required=True)
+    class Meta:
+        model = User
+        fields = ['id', 'password']
+    def update(self, instance, validated_data):
+        print('Валидированные данные: ', validated_data)
+        password = validated_data.pop('password')
+        instance.password = make_password(password)
+        return super().update(instance, validated_data)
+    

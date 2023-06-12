@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework import routers, viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
-from member.serializers import UserSerializer, DepartmentSerializer, UserCreateSerializer, ProfileTeacherSerializer, ContactSerailizer
+from member.serializers import UserSerializer, DepartmentSerializer, UserCreateSerializer, ProfileTeacherSerializer, ContactSerailizer, \
+                                UserEditPasswordSerializer
 from member.models import User, Department, ProfileStudent, ProfileTeacher
 from assess.models import ClassGroup
 from rest_framework.exceptions import AuthenticationFailed
@@ -95,6 +96,14 @@ class UserViewSet(viewsets.ModelViewSet):
         print('Переданные данные для удаления: ', pk)
         return super().destroy(request, pk=None, *args, **kwargs)
 
+class UserEditPasswordViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = UserEditPasswordSerializer
+    def update(self, request, pk=None, *args, **kwargs):
+        print('Переданные данные для редактирования пароля: ', request.data)
+        return super().update(request, pk=None, *args, **kwargs)
+
 # # Разлогинивание пользователя и удаление токенов
 # class Logout(APIView):
 #     def post(self, request):
@@ -111,7 +120,6 @@ class UserViewSet(viewsets.ModelViewSet):
 #     return router.urls
 
 # Экспорт пользователей через CSV
-
 
     
 class TeacherViewSet(viewsets.ModelViewSet):

@@ -17,6 +17,7 @@
           <button v-if="flagUser.edit" type="button" class="btn btn-primary" @click="$emit('update')">Сохранить</button>
           <button v-if="flagUser.delete" type="button" class="btn btn-primary" @click="$emit('delete')">Удалить</button>
           <button v-if="flagUser.import" type="button" class="btn btn-primary" @click="$emit('import')">Загрузить</button>
+          <button v-if="flagUser.password" type="button" class="btn btn-primary" @click="$emit('changePassword')">Изменить пароль</button>
         </div>
       </div>
     </div>

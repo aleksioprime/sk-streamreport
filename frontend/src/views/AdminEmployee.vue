@@ -8,8 +8,8 @@
       <button class="btn btn-primary" @click="showAddUser">Добавить сотрудника</button>
       <button class="btn btn-primary" @click="showImportUser" v-if="authUser.is_staff">Импорт</button>
       <div v-if="currentUser.id && !flagUser.add" class="icon-wrapper">
-        <!-- <button type="button" class="icon icon-photo ms-2" @click="showEditPhoto"></button>
-        <button type="button" class="icon icon-pass ms-2" @click="showEditPass"></button> -->
+        <!-- <button type="button" class="icon icon-photo ms-2" @click="showEditPhoto"></button> -->
+        <button type="button" class="icon icon-pass ms-2" @click="showChangePasswordUser"></button>
         <button type="button" class="icon icon-edit ms-4" @click="showEditUser"></button>
         <button type="button" class="icon icon-del ms-2" @click="showDelUser"></button>
         <!-- <button type="button" class="btn btn-primary ms-4" @click="showEditUser">Редактировать</button>
@@ -42,11 +42,13 @@
     </div>
     <!-- Модальное окно добавления/редактирования/удаления пользователя -->
     <modal-user :modalTitle="modalTitle" @cancel="hideUserModal" :flagUser="flagUser"
-      @create="userCreate" @update="userUpdate" @delete="userDelete" @import="userImport">
+      @create="userCreate" @update="userUpdate" @delete="userDelete" @import="userImport" @changePassword="userChangePassword">
       <template v-slot:body>
         <form-employee ref="formEmployee" v-if="flagUser.add || flagUser.edit" :addMode="flagUser.add"
           v-model:editedUser="editedUser" v-model:validFormEmployee="validFormEmployee"/>
         <form-import v-if="flagUser.import" v-model="newUsers" />
+        <form-change-password ref="formChangePassword" v-if="flagUser.password" 
+          v-model:editedUser="editedUser" v-model:validFormChangePassword="validFormChangePassword"/>
         <div v-if="flagUser.delete">
           <div>Вы действительно хотите отправить этого сотрудника в архив?</div>
           <div class="user-delete">
@@ -64,25 +66,27 @@
 import UserList from "@/components/user/UserList";
 import FormEmployee from "@/components/user/FormEmployee";
 import FormImport from "@/components/user/FormImport";
+import FormChangePassword from "@/components/user/FormChangePassword";
 import FilterEmployee from "@/components/user/FilterEmployee";
-import { getUsers, createUser, updateUser, archiveUser, importUsers } from "@/hooks/user/useUser";
+import { getUsers, createUser, updateUser, archiveUser, importUsers, changePasswordUser } from "@/hooks/user/useUser";
 import { Modal } from 'bootstrap';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'EmployeeBoard',
   components: {
-    UserList, FilterEmployee, FormEmployee, FormImport
+    UserList, FilterEmployee, FormEmployee, FormImport, FormChangePassword
   },
   setup(props) {
     const { users, isUserLoading, totalPages, totalUsers, fetchGetUsers } = getUsers()
     const { fetchCreateUser } = createUser()
     const { fetchUpdateUser } = updateUser()
     const { fetchArchiveUser } = archiveUser()
+    const { fetchChangePasswordUser } = changePasswordUser()
     const { usersUpdated, isImportLoading, totalNewPages, totalNewUsers, fetchImportUsers } = importUsers()
     return {
       users, isUserLoading, totalPages, totalUsers, fetchGetUsers,
-      fetchCreateUser, fetchUpdateUser, fetchArchiveUser,
+      fetchCreateUser, fetchUpdateUser, fetchArchiveUser, fetchChangePasswordUser,
       usersUpdated, isImportLoading, totalNewPages, totalNewUsers, fetchImportUsers
     }
   },
@@ -95,6 +99,7 @@ export default {
       flagUser: {},
       modalTitle: '',
       validFormEmployee: false,
+      validFormChangePassword: false,
       searchValue: null,
       newUsers: [],
     }
@@ -117,6 +122,13 @@ export default {
     showImportUser() {
       this.modalTitle = 'Импорт сотрудников';
       this.flagUser.import = true;
+      this.modalUser.show();
+    },
+    showChangePasswordUser() {
+      this.modalTitle = 'Смена пароля сотрудника';
+      this.editedUser = { ...this.currentUser }
+      this.editedUser.teacher = { ...this.currentUser.teacher }
+      this.flagUser.password = true;
       this.modalUser.show();
     },
     // Открытие модального окна для редактирования сотрудника 
@@ -181,6 +193,15 @@ export default {
           this.currentUser = {};
         });
       });
+    },
+    userChangePassword() {
+      this.$refs.formChangePassword.checkFieldsValidate();
+      if (this.validFormChangePassword) {
+        delete this.editedUser.student;
+        this.fetchChangePasswordUser(this.editedUser).then(() => {
+          this.hideUserModal();
+        })
+      }
     },
     userImport() {
       console.log(this.newUsers)
