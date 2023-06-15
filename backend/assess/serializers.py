@@ -407,7 +407,7 @@ class ReportCriteriaSerializer(serializers.ModelSerializer):
 
 class ReportTeacherSerializer(serializers.ModelSerializer):
     student = ProfileStudentSimpleSerializer(read_only=True)
-    subject = SubjectSerializer(read_only=True)
+    # subject = SubjectSerializer(read_only=True)
     year = ClassYearSerializer(read_only=True)
     events = EventParticipationSerializer(many=True, required=False)
     author = ProfileTeacherSerializer(read_only=True)
@@ -415,9 +415,10 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
     criteria = ReportCriteriaSerializer(many=True, source='report_criteria', required=False)
     class Meta:
         model = ReportTeacher
-        fields = ['id', 'student', 'student_id', 'period', 'period_id', 'subject', 'subject_id',
-                  'year', 'year_id', 'text', 'events', 'author', 'author_id', 'achievements', 'criteria', 'criterion_rus',
-                  'criterion_summ', 'criterion_count', 'final_grade', 'final_grade_ib', 'updated']
+        fields = ['id', 'student', 'student_id', 'period', 'period_id', 'subject_id', 
+                  'year', 'year_id', 'text', 'events', 'author', 'author_id', 'achievements', 'criteria', 
+                #   'criterion_rus', 'criterion_summ', 'criterion_count', 
+                  'final_grade', 'final_grade_ib', 'updated']
         extra_kwargs = {
             'student_id': {'source': 'student', 'write_only': True},
             'period_id': {'source': 'period', 'write_only': True},
@@ -468,59 +469,59 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
     def to_representation(self, instance):
         result = super(ReportTeacherSerializer, self).to_representation(instance)
-        if result['subject'] is None and result['year'] is None and result['period'] is None:
-            return result
-        subject_id = result['subject']['id']
-        class_year_id = result['year']['id']
-        period_id = result['period']
-        assessment = PeriodAssessment.objects.filter(student=instance.student,
-                                                            subject=subject_id,
-                                                            year=class_year_id,
-                                                            period__report_period__in=[period_id]).distinct()
+    #     if result['subject'] is None and result['year'] is None and result['period'] is None:
+    #         return result
+    #     subject_id = result['subject']['id']
+    #     class_year_id = result['year']['id']
+    #     period_id = result['period']
+    #     assessment = PeriodAssessment.objects.filter(student=instance.student,
+    #                                                         subject=subject_id,
+    #                                                         year=class_year_id,
+    #                                                         period__report_period__in=[period_id]).distinct()
         criteria_list = Criterion.objects.filter(subject_group=instance.subject.group_ib)
         result['criteria_list'] = CriterionSerializer(instance=criteria_list, many=True, context=self.context).data
-        criteria = {}
-        avg_criteria = {}
-        for assess in assessment:
-            criteria['criteria_a'] = criteria.get('criteria_a', []) + [ { 'mark': assess.criterion_a, 'period': assess.period.number } ]
-            if assess.criterion_a:
-                avg_criteria['criteria_a_sum'] = avg_criteria.get('criteria_a_sum', 0) + assess.criterion_a
-                avg_criteria['criteria_a_num'] = avg_criteria.get('criteria_a_num', 0) + 1
-            criteria['criteria_b'] = criteria.get('criteria_b', []) + [ { 'mark': assess.criterion_b, 'period': assess.period.number } ]
-            if assess.criterion_b:
-                avg_criteria['criteria_b_sum'] = avg_criteria.get('criteria_b_sum', 0) + assess.criterion_b
-                avg_criteria['criteria_b_num'] = avg_criteria.get('criteria_b_num', 0) + 1
-            criteria['criteria_c'] = criteria.get('criteria_c', []) + [ { 'mark': assess.criterion_c, 'period': assess.period.number } ]
-            if assess.criterion_c:
-                avg_criteria['criteria_c_sum'] = avg_criteria.get('criteria_c_sum', 0) + assess.criterion_c
-                avg_criteria['criteria_c_num'] = avg_criteria.get('criteria_c_num', 0) + 1
-            criteria['criteria_d'] = criteria.get('criteria_d', []) + [ { 'mark': assess.criterion_d, 'period': assess.period.number } ]
-            if assess.criterion_d:
-                avg_criteria['criteria_d_sum'] = avg_criteria.get('criteria_d_sum', 0) + assess.criterion_d
-                avg_criteria['criteria_d_num'] = avg_criteria.get('criteria_d_num', 0) + 1
-            criteria['summ_grades'] = criteria.get('summ_grades', []) + [ { 'mark': assess.summ_grade, 'period': assess.period.number } ]
-            criteria['form_grades'] = criteria.get('form_grades', []) + [ { 'mark': assess.form_grade, 'period': assess.period.number } ]
-            criteria['final_grades'] = criteria.get('final_grades', []) + [ { 'mark': assess.final_grade, 'period': assess.period.number } ]
-        result['assessment'] = criteria 
-        result['avg_assessment'] = {}
-        if avg_criteria:
-            if 'criteria_a_num' in avg_criteria:
-                result['avg_assessment']['criterion_a'] = math.ceil(avg_criteria['criteria_a_sum'] / avg_criteria['criteria_a_num'])
-            if 'criteria_b_num' in avg_criteria:
-                result['avg_assessment']['criterion_b'] = math.ceil(avg_criteria['criteria_b_sum'] / avg_criteria['criteria_b_num'])
-            if 'criteria_c_num' in avg_criteria:
-                result['avg_assessment']['criterion_c'] = math.ceil(avg_criteria['criteria_c_sum'] / avg_criteria['criteria_c_num'])
-            if 'criteria_d_num' in avg_criteria:
-                result['avg_assessment']['criterion_d'] = math.ceil(avg_criteria['criteria_d_sum'] / avg_criteria['criteria_d_num'])
-        criteria = Criterion.objects.filter(subject_group__subject__in=[result['subject']['id']]).distinct()
-        result['predict'] = {}
-        for criterion in criteria:
-            result['predict'][criterion.id] = {}
-            result['predict'][criterion.id]['all_strands'] = criterion.strand.count()
-        for item in result['achievements']:
-            result['predict'][item['criterion']]['count_points'] = result['predict'][item['criterion']].get('count_points', 0) + 1
-            if 'point' in item:
-                result['predict'][item['criterion']]['sum_points'] = result['predict'][item['criterion']].get('sum_points', 0) + item['point']
+    #     criteria = {}
+    #     avg_criteria = {}
+    #     for assess in assessment:
+    #         criteria['criteria_a'] = criteria.get('criteria_a', []) + [ { 'mark': assess.criterion_a, 'period': assess.period.number } ]
+    #         if assess.criterion_a:
+    #             avg_criteria['criteria_a_sum'] = avg_criteria.get('criteria_a_sum', 0) + assess.criterion_a
+    #             avg_criteria['criteria_a_num'] = avg_criteria.get('criteria_a_num', 0) + 1
+    #         criteria['criteria_b'] = criteria.get('criteria_b', []) + [ { 'mark': assess.criterion_b, 'period': assess.period.number } ]
+    #         if assess.criterion_b:
+    #             avg_criteria['criteria_b_sum'] = avg_criteria.get('criteria_b_sum', 0) + assess.criterion_b
+    #             avg_criteria['criteria_b_num'] = avg_criteria.get('criteria_b_num', 0) + 1
+    #         criteria['criteria_c'] = criteria.get('criteria_c', []) + [ { 'mark': assess.criterion_c, 'period': assess.period.number } ]
+    #         if assess.criterion_c:
+    #             avg_criteria['criteria_c_sum'] = avg_criteria.get('criteria_c_sum', 0) + assess.criterion_c
+    #             avg_criteria['criteria_c_num'] = avg_criteria.get('criteria_c_num', 0) + 1
+    #         criteria['criteria_d'] = criteria.get('criteria_d', []) + [ { 'mark': assess.criterion_d, 'period': assess.period.number } ]
+    #         if assess.criterion_d:
+    #             avg_criteria['criteria_d_sum'] = avg_criteria.get('criteria_d_sum', 0) + assess.criterion_d
+    #             avg_criteria['criteria_d_num'] = avg_criteria.get('criteria_d_num', 0) + 1
+    #         criteria['summ_grades'] = criteria.get('summ_grades', []) + [ { 'mark': assess.summ_grade, 'period': assess.period.number } ]
+    #         criteria['form_grades'] = criteria.get('form_grades', []) + [ { 'mark': assess.form_grade, 'period': assess.period.number } ]
+    #         criteria['final_grades'] = criteria.get('final_grades', []) + [ { 'mark': assess.final_grade, 'period': assess.period.number } ]
+    #     result['assessment'] = criteria 
+    #     result['avg_assessment'] = {}
+    #     if avg_criteria:
+    #         if 'criteria_a_num' in avg_criteria:
+    #             result['avg_assessment']['criterion_a'] = math.ceil(avg_criteria['criteria_a_sum'] / avg_criteria['criteria_a_num'])
+    #         if 'criteria_b_num' in avg_criteria:
+    #             result['avg_assessment']['criterion_b'] = math.ceil(avg_criteria['criteria_b_sum'] / avg_criteria['criteria_b_num'])
+    #         if 'criteria_c_num' in avg_criteria:
+    #             result['avg_assessment']['criterion_c'] = math.ceil(avg_criteria['criteria_c_sum'] / avg_criteria['criteria_c_num'])
+    #         if 'criteria_d_num' in avg_criteria:
+    #             result['avg_assessment']['criterion_d'] = math.ceil(avg_criteria['criteria_d_sum'] / avg_criteria['criteria_d_num'])
+    #     criteria = Criterion.objects.filter(subject_group__subject__in=[result['subject']['id']]).distinct()
+    #     result['predict'] = {}
+    #     for criterion in criteria:
+    #         result['predict'][criterion.id] = {}
+    #         result['predict'][criterion.id]['all_strands'] = criterion.strand.count()
+    #     for item in result['achievements']:
+    #         result['predict'][item['criterion']]['count_points'] = result['predict'][item['criterion']].get('count_points', 0) + 1
+    #         if 'point' in item:
+    #             result['predict'][item['criterion']]['sum_points'] = result['predict'][item['criterion']].get('sum_points', 0) + item['point']
         return result
 
 class PeriodAssessmentStudentReportSerializer(serializers.ModelSerializer):
@@ -777,7 +778,7 @@ class ReportTeacherForMentorSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportTeacher
         fields = ['id', 'student', 'text', 'author', 'criteria', 'subject_name',
-                 'criterion_rus', 'criterion_summ', 'criterion_count', 
+                #  'criterion_rus', 'criterion_summ', 'criterion_count', 
                  'final_grade', 'final_grade_ib', 'updated']
 
 class ReportPsychologistForMentorSerializer(serializers.ModelSerializer):
@@ -947,7 +948,7 @@ class ClassGroupForReportTeacherSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         result = super(ClassGroupForReportTeacherSerializer, self).to_representation(instance)
         subject_id = self.context.get("subject", None)
-        reports = ReportTeacher.objects.filter(student__in=instance.students.all(),
+        reports = ReportTeacher.objects.select_related("student").prefetch_related('criteria').filter(student__in=instance.students.all(),
                                                year=instance.class_year,
                                                subject__id=subject_id)
         result['reports'] = []
@@ -957,6 +958,9 @@ class ClassGroupForReportTeacherSerializer(serializers.ModelSerializer):
                     'student_name': report.student.user.get_short_name(),
                     'student_id': report.student.id,
                     'check_text': bool(report.text),
+                    'check_criteria': bool(len(report.criteria.all())),
+                    'check_final_grade': bool(report.final_grade),
+                    'check_final_grade_ib': bool(report.final_grade_ib),
                     'period': report.period.id})
         
         teachers = ProfileTeacher.objects.filter(workload__groups__in=[instance], workload__subject__id=subject_id).distinct()

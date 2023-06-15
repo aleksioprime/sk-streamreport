@@ -16,17 +16,17 @@
           <div class="criteria-wrapper mt-2">
             <div class="criteria-item">
               <div class="criteria-d">Сумма баллов: </div>
-              <div class="criteria-value">{{ this.report.criterion_summ || '-' }} / {{ this.report.criterion_count * 8 || '-' }}</div>
+              <div class="criteria-value">{{ calcSumMark(report.criteria) || '-' }} / {{ report.criteria.length * 8 || '-' }}</div>
             </div>
             <div class="criteria-item">
               <div class="criteria-d">Оценка РФ: </div>
-              <div class="criteria-value">{{ this.report.criterion_rus }}</div>
+              <div class="criteria-value">{{ calcFinalMark(report.criteria) }}</div>
             </div>
           </div>
         </div>
         <div v-else>
           <div class="achievements-title collapse-title collapsed" data-bs-toggle="collapse" :href="`#collapse-achievements-${report.id}`" role="button" aria-expanded="false" :aria-controls="`collapse-achievements-${report.id}`">
-            Выставление баллов по предметным достижениям
+            Предметные достижения
           </div>
           <div :id="`collapse-achievements-${report.id}`" class="collapse">
             <div class="row">
@@ -86,25 +86,25 @@
                       </div> 
                     </div>
                   </div>
-                  <button class="field-btn-done mt-2" @click="saveAchievementField">Рассчитать</button>
+                  <button class="field-btn-done mt-2" @click="saveAchievementField">Записать</button>
                 </div>
               </div>
               <div v-else class="mt-2">Выберите критерий оценивания и уровень</div>
             </div>         
-            <div>Рассчитанные баллы по предметным достижениям:</div>
+            <!-- <div>Рассчитанные баллы по предметным достижениям:</div>
             <div class="criteria-wrapper predict">
               <div class="criteria-item" v-for="criterion in report.criteria_list" :key="criterion.id">
                 <div class="criteria">{{ criterion.letter }}: </div>
                 <div class="criteria-value">{{ getPredictCriteriaMark(criterion.id) }}</div>
               </div>
-            </div> 
-            <button class="field-btn-done mt-2" @click="autoFieldAchievement">Выставить</button>      
+            </div>  -->
+            <!-- <button class="field-btn-done mt-2" @click="autoFieldAchievement">Выставить</button>       -->
           </div>
-          <div class="field-description mt-2">Выставите итоговые баллы по критериям вашей предметной области <b>{{ report.subject.group_ib.name_eng }}</b></div>
+          <div class="field-description mt-2">Выставите итоговые баллы по критериям вашей предметной области</div>
           <div class="assessment-mark-wrapper edit">
             <div class="assessment-mark-item" v-for="criterion in report.criteria_list" :key="criterion">
               <div class="letter">{{ criterion.letter }}: </div>
-              <mark-choice v-model="editCriteria[`${criterion.id}`]" :max_mark="8" :name="`${criterion.id}`"/>
+              <mark-choice v-model="editCriteria[`${criterion.id}`]" :max_mark="8" :name="`${report.id}-${criterion.id}`"/>
             </div>
           </div>
           <div class="field-buttons">
@@ -155,6 +155,29 @@ export default {
       const answer = this.report.predict[id].sum_points / this.report.predict[id].count_points
       return answer ? Math.round(answer) : null
     },
+    calcFinalMark(array) {
+      const sumMarks = this.calcSumMark(array)
+      const numMarks = array.length
+      const grades = { 1: [3, 5, 7], 2: [6, 10, 14], 3: [8, 14, 20], 4: [11, 19, 28] };
+      if (!numMarks) {
+        return '-'
+      } else if (sumMarks >= grades[numMarks][2]) {
+        return 5
+      } else if (sumMarks < grades[numMarks][2] && sumMarks >= grades[numMarks][1]) {
+        return 4
+      } else if (sumMarks < grades[numMarks][1] && sumMarks >= grades[numMarks][0]) {
+        return 3
+      } else if (sumMarks < grades[numMarks][0] && sumMarks > 0) {
+        return 2
+      } else {
+        return '-'
+      }
+    },
+    calcSumMark(array) {
+      return array.reduce((item, obj) => {
+        return item + obj.mark
+      }, 0)
+    },
     getMarkInAchievement(key) {
       if (key == 0) {
         return 0
@@ -182,7 +205,6 @@ export default {
     },
     changeCriterion() {
     },
-    
     saveField() {
       this.editMode = false;
       this.editData.criteria = []
@@ -236,11 +258,11 @@ export default {
         })
       });
     },
-    autoFieldAchievement() {
-      for (const key in this.report.predict) {
-        this.editCriteria[key] = this.getPredictCriteriaMark(key);
-      }
-    }
+    // autoFieldAchievement() {
+    //   for (const key in this.report.predict) {
+    //     this.editCriteria[key] = this.getPredictCriteriaMark(key);
+    //   }
+    // }
   },
   computed: {
     filteredObjectivesByYear() {

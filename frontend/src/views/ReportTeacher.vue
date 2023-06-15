@@ -7,41 +7,45 @@
       <template v-slot:extra><h4>{{ currentAuthor.user.last_name }} {{ currentAuthor.user.first_name }} {{ currentAuthor.user.middle_name }}</h4></template>
     </base-header>
     <!-- <report-filter @updateFetch="updateFetch"/> -->
-    <div class="col-md mb-2">
-      <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
-      <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> ({{ getWordStudent(currentGroup.count) }}) 
-        <!-- <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}
-        <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.user.last_name }} {{ currentGroup.psychologist.user.first_name }} {{ currentGroup.psychologist.user.middle_name }}</span>  -->
+    <transition name="fade">
+      <div>
+        <div class="col-md mb-2" v-if="currentReportPeriod.name">
+          <div>Период репорта: <b>{{ currentReportPeriod.name }}</b></div>
+          <div>Класс: <b>{{ currentGroup.class_year.year_rus }}{{ currentGroup.letter }}</b> ({{ getWordStudent(currentGroup.count) }}) 
+            <!-- <br>Наставник: {{ currentGroup.mentor.user.last_name }} {{ currentGroup.mentor.user.first_name }} {{ currentGroup.mentor.user.middle_name }}
+            <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.user.last_name }} {{ currentGroup.psychologist.user.first_name }} {{ currentGroup.psychologist.user.middle_name }}</span>  -->
+          </div>
+          <div>Предмет: <b>{{ currentSubject.name_rus }} (<span v-if="currentSubject.group_ib">{{ currentSubject.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</b></div>
+        </div>
+        <button v-if="isAuthor" class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
+        <div v-if="!isReportsTeacherLoading || !firstLoading">
+          <div v-if="reportsTeacher.length" class="report-wrapper">
+            <report-teacher-item v-for="report in reportsTeacher" :key="report.id" :period="currentReportPeriod" :subject="currentSubject"
+            :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :criteria="criteriaMYP" :group="currentGroup" :editable="authUser && report.author.id == authUser.teacher.id"/>
+          </div>
+          <div v-else class="report-none">
+            <span v-if="isAuthor">Нет добавленных студентов в репорты выбранного класса и предмета. Чтобы добавить студентов нажмите на кнопку "Изменить список группы"</span>
+            <span v-else>Нет данных для отображения</span>
+          </div>
+        </div>
+        <div v-else class="loader">
+          <div class="lds-spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
       </div>
-      <div>Предмет: <b>{{ currentSubject.name_rus }} (<span v-if="currentSubject.group_ib">{{ currentSubject.group_ib.program.toUpperCase() }}</span><span v-else>ФГОС</span>)</b></div>
-    </div>
-    <button v-if="isAuthor" class="btn btn-primary mt-2" @click="showClassModal">Изменить список группы</button>
-    <div v-if="!isReportsTeacherLoading || !firstLoading">
-      <div v-if="reportsTeacher.length" class="report-wrapper">
-        <report-teacher-item v-for="report in reportsTeacher" :key="report.id" :period="currentReportPeriod" :subject="currentSubject"
-        :report="report" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :criteria="criteriaMYP" :group="currentGroup" :editable="report.author.id == authUser.teacher.id"/>
-      </div>
-      <div v-else class="report-none">
-        <span v-if="isAuthor">Нет добавленных студентов в репорты выбранного класса и предмета. Чтобы добавить студентов нажмите на кнопку "Изменить список группы"</span>
-        <span v-else>Нет данных для отображения</span>
-      </div>
-    </div>
-    <div v-else class="loader">
-      <div class="lds-spinner">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
+    </transition>
     <modal-class @save="saveClassModal" @cancel="hideClassModal" :modalTitle="modalTitleClass">
       <report-teacher-form v-if="!isReportsTeacherLoading" v-model:reportStudents="reportStudents" :group="currentGroup"/>
       <div v-else>Данные загружаются</div>
@@ -120,8 +124,8 @@ export default {
       await this.axios.post('/assessment/report/teacher', dataStudents).then((response) => {
         console.log('Репорты успешно созданы: ', response.data)
         this.fetchGetReportsTeacher(this.currentFetchData);
+        this.hideClassModal();
       });
-      this.hideClassModal();
     },
     hideClassModal() {
       this.modalClass.hide();
@@ -175,7 +179,7 @@ export default {
     // подключение переменной авторизированного пользователя из store
     ...mapGetters(['authUser', 'isAdmin', 'isDnevnik']),
     isAuthor() {
-      return this.authUser.teacher.id == this.currentAuthor.id && this.currentSubject.workload.filter(item => item.groups.includes(this.currentGroup.id) && item.teacher == this.authUser.teacher.id).length
+      return this.authUser && this.authUser.teacher.id == this.currentAuthor.id && this.currentSubject.workload.filter(item => item.groups.includes(this.currentGroup.id) && item.teacher == this.authUser.teacher.id).length
     }
   }
 }

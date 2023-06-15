@@ -23,11 +23,11 @@
           <div class="assessment-mark-wrapper edit">
             <div class="assessment-mark-item">
               <div class="letter">РФ: </div>
-              <mark-choice v-model="editData.final_grade" :max_mark="5" :name="'final_grade'"/>
+              <mark-choice v-model="editData.final_grade" :max_mark="5" :name="`${report.id}-final_grade`"/>
             </div>
             <div class="assessment-mark-item" v-if="program == 'dp'">
               <div class="letter">IB: </div>
-              <mark-choice v-model="editData.final_grade_ib" :max_mark="7" :name="'final_grade_ib'"/>
+              <mark-choice v-model="editData.final_grade_ib" :max_mark="7" :name="`${report.id}-final_grade_ib`"/>
             </div>
           </div>
           <div class="field-buttons">

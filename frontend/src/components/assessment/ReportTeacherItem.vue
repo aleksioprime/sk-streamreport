@@ -90,7 +90,7 @@
       <div class="dnevnik-wrapper">
         <div class="dnevnik-assessment">
           <div class="dnevnik-wrapper">
-            <div class="mb-2">Итоговые оценки студента <b>{{ report.student.full_name }}</b> по предмету <b>{{ report.subject.name_rus }}</b>:</div>
+            <div class="mb-2">Итоговые оценки студента <b>{{ report.student.full_name }}</b> по предмету <b>{{ subject.name_rus }}</b>:</div>
             <div class="description">Внимание! Модуль работает в тестовом режиме</div>
             <div v-if="isDnevnik">
               <div v-if="isDataDnevnikLoading">
@@ -264,7 +264,7 @@ export default {
         this.fetchGetFinalGradeDnevnik({
           group_dnevnik: this.group.id_dnevnik, 
           // period_dnevnik: this.currentPeriod.id_dnevnik,
-          subject_dnevnik: this.report.subject.id_dnevnik,
+          subject_dnevnik: this.subject.id_dnevnik,
           student_dnevnik: this.report.student.id_dnevnik,
           user: this.authUser.id,
         }).finally(() => {

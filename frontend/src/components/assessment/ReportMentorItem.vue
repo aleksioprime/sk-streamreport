@@ -99,11 +99,11 @@
                 <div class="criteria-wrapper">
                   <div class="criteria-item">
                     <div class="criterion">Сумма баллов: </div>
-                    <div class="criteria-value">{{ subject.criterion_summ || '-' }} / {{ subject.criterion_count * 8 || '-' }}</div>
+                    <div class="criteria-value">{{ calcSumMark(subject.criteria) || '-' }} / {{ subject.criteria.length * 8 || '-' }}</div>
                   </div>
                   <div class="criteria-item">
                     <div class="criterion">Оценка РФ: </div>
-                    <div class="criteria-value">{{ subject.criterion_rus }}</div>
+                    <div class="criteria-value">{{ calcFinalMark(subject.criteria) }}</div>
                   </div>
                 </div>
               </div>
@@ -170,6 +170,29 @@ export default {
     }
   },
   methods: {
+    calcFinalMark(array) {
+      const sumMarks = this.calcSumMark(array)
+      const numMarks = array.length
+      const grades = { 1: [3, 5, 7], 2: [6, 10, 14], 3: [8, 14, 20], 4: [11, 19, 28] };
+      if (!numMarks) {
+        return '-'
+      } else if (sumMarks >= grades[numMarks][2]) {
+        return 5
+      } else if (sumMarks < grades[numMarks][2] && sumMarks >= grades[numMarks][1]) {
+        return 4
+      } else if (sumMarks < grades[numMarks][1] && sumMarks >= grades[numMarks][0]) {
+        return 3
+      } else if (sumMarks < grades[numMarks][0] && sumMarks > 0) {
+        return 2
+      } else {
+        return '-'
+      }
+    },
+    calcSumMark(array) {
+      return array.reduce((item, obj) => {
+        return item + obj.mark
+      }, 0)
+    },
     fetchSaveReport(data) {
       console.log('Сохранение репорта: ', data);
       let editReportStudents = { ...data }

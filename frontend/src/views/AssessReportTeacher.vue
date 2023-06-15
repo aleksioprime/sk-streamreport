@@ -193,8 +193,18 @@ export default {
     getStyleForStudent(student, reports, period) {
       const studentInReport = reports.find(item => item.student_id == student.id && item.period == period)
       if (studentInReport) {
-        if (studentInReport.check_text) {
-          return 'check-text'
+        if (this.currentSubject.group_ib && this.currentSubject.group_ib.program == 'myp' ) {
+          if (studentInReport.check_text && studentInReport.check_criteria && studentInReport.check_final_grade) {
+            return 'check-text'
+          }
+        } else if (this.currentSubject.group_ib && this.currentSubject.group_ib.program == 'dp' ) {
+          if (studentInReport.check_text && studentInReport.check_final_grade && studentInReport.check_final_grade_ib) {
+            return 'check-text'
+          }
+        } else {
+          if (studentInReport.check_text && studentInReport.check_final_grade) {
+            return 'check-text'
+          }
         }
         return 'check-student'
       }

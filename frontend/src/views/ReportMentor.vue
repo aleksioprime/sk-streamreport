@@ -12,6 +12,9 @@
           <br><span v-if="currentGroup.mentor">Наставник: {{ currentGroup.mentor.full_name }}</span> 
           <br><span v-if="currentGroup.psychologist">Психолог: {{ currentGroup.psychologist.full_name }}</span></div>
         </div>
+        <div v-else class="loader-wrapper">
+          <span class="loader-simple"></span>
+        </div>
         <div v-if="!isStudentReportLoading || !firstLoading">
           <div v-if="currentStudentId" class="report-wrapper">
             <div class="student-list radiobutton">
@@ -24,7 +27,7 @@
               </div>
             </div>
             <report-mentor-item :period="currentReportPeriod" v-if="studentReport.id" class="student-item" :program="currentGroup.program" :subjects="subjects"
-            :student="studentReport" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :editable="currentGroup.mentor.id == authUser.teacher.id"/>
+            :student="studentReport" :types="eventTypes" :levels="eventLevels" @updateReport="fetchUpdateReport" :editable="authUser && currentGroup.mentor.id == authUser.teacher.id"/>
             <!-- <div v-else>Выберите студента</div> -->
           </div>
         </div>

@@ -10,7 +10,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav me-auto">
+        <ul class="navbar-nav me-auto" v-if="authUser">
           <li class="nav-item dropdown" v-if="isAdmin">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Модерация
@@ -41,8 +41,8 @@
               <!-- <router-link to="/assessment" class="dropdown-item">Итоговые работы</router-link> -->
               <!-- <router-link to="/schedule" class="dropdown-item">График работ</router-link> -->
               <router-link to="/report/teacher" class="dropdown-item">Репорты учителя</router-link>
-              <router-link to="/report/psychologist" class="dropdown-item">Репорты психолога</router-link>
-              <router-link to="/report/mentor" class="dropdown-item">Репорты наставника</router-link>
+              <router-link to="/report/psychologist" class="dropdown-item" v-if="isAdmin || (authUser.teacher && authUser.teacher.psycho_groups.length)">Репорты психолога</router-link>
+              <router-link to="/report/mentor" class="dropdown-item" v-if="isAdmin || (authUser.teacher && authUser.teacher.groups.length)">Репорты наставника</router-link>
               <!-- <router-link to="/report/teacher" class="dropdown-item">Репорты учителя</router-link>
               <router-link to="/report/mentor" class="dropdown-item">Репорты наставника</router-link> -->
             </div>

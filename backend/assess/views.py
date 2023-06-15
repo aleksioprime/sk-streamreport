@@ -9,7 +9,7 @@ from assess.serializers import StudyYearSerializer, ClassGroupSerializer, ClassG
         ClassYearSerializer, ClassGroupForReportMentorSerializer, ClassGroupForMentorSerializer
  
 from assess.models import StudyYear, ClassGroup, StudyPeriod, SummativeWork, WorkAssessment, WorkCriteriaMark, WorkGroupDate, PeriodAssessment, \
-    ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad, ReportPsychologist
+    ReportPeriod, ReportTeacher, EventType, EventParticipation, ReportMentor, WorkLoad, ReportPsychologist, ReportAchievements
 from member.models import ProfileTeacher, ProfileStudent, User, Department
 from curriculum.models import ClassYear, Subject, Criterion
 from django.http.response import StreamingHttpResponse
@@ -415,6 +415,9 @@ class ReportTeacherViewSet(viewsets.ModelViewSet):
             print(f"Отфильтровано записей: {reports}")
             reports_delete = reports.filter(~Q(id__in=[item['id'] for item in data['students'] if 'id' in item]))
             print(f"Записи на удаление: {reports_delete}")
+            achievements_delete = ReportAchievements.objects.filter(teacher_reports__in=reports_delete)
+            print(f"Достижения на удаление: {achievements_delete}")
+            achievements_delete.delete()
             reports_delete.delete()
             subject = Subject.objects.filter(pk=data['subject_id']).first()
             period = ReportPeriod.objects.filter(pk=data['period_id']).first()
@@ -556,7 +559,22 @@ class WorkLoadViewSet(viewsets.ModelViewSet):
         if study_year:
             workload = workload.filter(study_year=study_year)
         return workload
-    
+
+def get_criterion_rus(criterion_count, criterion_summ):
+    GRADES = { 1: [3, 5, 7], 2: [6, 10, 14], 3: [8, 14, 20], 4: [11, 19, 28] }
+    if criterion_count not in GRADES:
+        return "N/A"
+    if criterion_summ >= GRADES[criterion_count][2]:
+        return 5
+    elif criterion_summ < GRADES[criterion_count][2] and criterion_summ >= GRADES[criterion_count][1]:
+        return 4
+    elif criterion_summ < GRADES[criterion_count][1] and criterion_summ >= GRADES[criterion_count][0]:
+        return 3
+    elif criterion_summ < GRADES[criterion_count][0] and criterion_summ > 0:
+        return 2
+    else:
+        return '-'
+
 # Экспорт в docx-файл
 class ExportReportMentorDOCXAPIView(APIView):
     def get(self, request, *args, **kwargs):
@@ -662,17 +680,22 @@ class ExportReportMentorDOCXAPIView(APIView):
                         if group.program == 'myp':
                             criteria = report.report_criteria.all()
                             if criteria:
+                                criterion_summ = 0
                                 for i, item in enumerate(criteria):
                                     table.rows[j + i + count].cells[1].text = f"{item.criterion.letter}. {item.criterion.name_eng}"
                                     table.rows[j + i + count].cells[2].text = f"{item.mark}"
                                     table.add_row()
-                                table.rows[j + count].cells[3].text = f"{report.criterion_summ}/{report.criterion_count * 8}"
-                                table.rows[j + count].cells[4].text = f"{report.criterion_rus}"
+                                    criterion_summ += item.mark
+                                table.rows[j + count].cells[3].text = f"{criterion_summ}/{len(criteria) * 8}"
+                                table.rows[j + count].cells[4].text = f"{get_criterion_rus(len(criteria), criterion_summ)}"
                                 table.rows[j + count].cells[5].text = f"{report.final_grade}"
                                 table.cell(j + count, 0).merge(table.cell(j + count + len(criteria) - 1, 0))
                                 table.cell(j + count, 3).merge(table.cell(j + count + len(criteria) - 1, 3))
                                 table.cell(j + count, 4).merge(table.cell(j + count + len(criteria) - 1, 4))
                                 table.cell(j + count, 5).merge(table.cell(j + count + len(criteria) - 1, 5))
+                            else:
+                                table.add_row()
+                                count += 1
                             count += len(criteria)
                         elif group.program == 'dp':
                             table.rows[j + count].cells[1].text = f"{report.final_grade}"
@@ -685,8 +708,9 @@ class ExportReportMentorDOCXAPIView(APIView):
                             count += 1
                         report_cell = table.cell(j + count, 0).paragraphs[0]
                         report_cell.add_run(f'Комментарии учителя ({report.author.user.last_name} {report.author.user.first_name} {report.author.user.middle_name}):').bold = True
-                        for element in parser.parse_html_string(report.text)._element:
-                            report_cell._p.addnext(element)
+                        if report.text:
+                            for element in parser.parse_html_string(report.text)._element:
+                                report_cell._p.addnext(element)
                         # self.delete_paragraph(report_cell)
                         if group.program == 'myp':
                             table.cell(0, 0).merge(table.cell(0, 5))
