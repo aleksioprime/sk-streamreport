@@ -2,13 +2,13 @@
 *.pyc
 
 # Ignore enviroment variables
-.env
+/backend/.env
 
 # Ignore the logs directory
 logs/
 
 # Ignore the staticfiles directory
-backend/staticfiles/
+backend/static/
 
 # Ignore the media directory
 backend/media/
