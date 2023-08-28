@@ -1,7 +1,6 @@
 # Ignore all compiled Python files
 *.pyc
-*.DS_Store
-*.DS_Store?
+.DS_Store
 
 # Ignore enviroment variables
 /backend/.env
