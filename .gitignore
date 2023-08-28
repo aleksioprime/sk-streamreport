@@ -1,9 +1,6 @@
 # Ignore all compiled Python files
 *.pyc
 
-# Ignore the virtual environment
-venv/
-
 # Ignore enviroment variables
 .env
 
@@ -11,7 +8,7 @@ venv/
 logs/
 
 # Ignore the staticfiles directory
-staticfiles/
+backend/staticfiles/
 
 # Ignore the media directory
-media/
+backend/media/
