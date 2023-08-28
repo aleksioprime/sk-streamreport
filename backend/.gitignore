@@ -1,18 +1,15 @@
 # Ignore all compiled Python files
 *.pyc
-
 .DS_Store
-.DS_Store?
-**/.DS_Store
 
 # Ignore enviroment variables
-/backend/.env
+.env
 
 # Ignore the logs directory
 logs/
 
 # Ignore the staticfiles directory
-backend/static/
+static/
 
 # Ignore the media directory
-backend/media/
+media/
