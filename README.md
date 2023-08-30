@@ -25,6 +25,15 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
+## Первый запуск
+```
+python manage.py createsuperuser
+docker-compose exec backend python manage.py createsuperuser
+superuser: admin
+email: aleksioprime@gmail.com
+password: A0Ru$$22
+```
+
 ## Работа с Docker
 ### Просмотр логов в docker-контейнере
 ```
@@ -45,6 +54,6 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ```
 ### Выполнение миграции в производственном файле
 ```
-docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+docker-compose -f docker-compose.prod.yml exec backend python manage.py migrate --noinput
 docker-compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --no-input --clear
 ```
