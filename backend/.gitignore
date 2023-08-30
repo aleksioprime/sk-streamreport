@@ -9,7 +9,7 @@
 logs/
 
 # Ignore the staticfiles directory
-static/
+staticfiles/
 
 # Ignore the media directory
-media/
+mediafiles/

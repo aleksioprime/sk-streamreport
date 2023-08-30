@@ -11,12 +11,28 @@ services:
       - POSTGRES_PASSWORD=Pox{@K
       - POSTGRES_DB=igskolkovo
     ports:
-      - "5432:5432"
+      - 54320:5432
+    networks:
+      - main
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@streamreport.com
+      PGADMIN_DEFAULT_PASSWORD: Admin#256
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - database
     networks:
       - main
 
   backend:
-    container_name: backend
+    container_name: develop-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -28,27 +44,26 @@ services:
     ports:
       - 8000:8000
     env_file:
-      - ./backend/env/.env.dev
+      - ./backend/.env/.env.dev
     networks:
       - main
 
-  # frontend:
-  #   container_name: frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   command: sh -c "npm rebuild esbuild && npm run dev"
-  #   environment:
-  #     PORT: '8080'
-  #     HOST: '0.0.0.0'
-  #   ports:
-  #     - '8080:8080'
-  #   volumes:
-  #     - ./frontend:/frontend
-  #     - /frontend/node_modules
+  frontend:
+    build:
+      context: ./frontend
+    container_name: develop-frontend
+    command: sh -c "npm rebuild esbuild && npm run dev -- --host"
+    environment:
+      PORT: '8080'
+      HOST: '0.0.0.0'
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./frontend:/frontend
 
 volumes:
   postgres_data:
+  pgadmin-data:
 
 networks:
   main:
