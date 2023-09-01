@@ -1,3 +1,120 @@
 from django.contrib import admin
+from apps.syllabus.models import (
+    Subject,
+    SubjectGroupFgos,
+    SubjectGroupIb,
+    Syllabus,
+    SyllabusSubjectHours,
+    TeachingLoad
+)
 
-# Register your models here.
+@admin.register(Subject)
+class SubjectModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "group_ib",
+        "group_fgos",
+        "type"
+    )
+    list_display_links = (
+        "name",
+    )
+    fields = (
+        "name",
+        "group_ib",
+        "group_fgos",
+        "type",
+        "dnevnik_id",
+        "department",
+        "level",
+        "need_report"
+    )
+
+@admin.register(SubjectGroupFgos)
+class SubjectGroupFgosModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "type"
+    )
+    list_display_links = (
+        "name",
+    )
+    fields = (
+        "name",
+        "type",
+    )
+
+@admin.register(SubjectGroupIb)
+class SubjectGroupIbModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "program",
+    )
+    list_display_links = (
+        "name",
+    )
+    fields = (
+        "name",
+        "name_rus",
+        "logo",
+        "program",
+    )
+
+@admin.register(Syllabus)
+class SyllabusModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name_short",
+        "level",
+        "year",
+    )
+    list_display_links = (
+        "name_short",
+    )
+    fields = (
+        "name",
+        "name_short",
+        "level",
+        "year",
+    )
+
+@admin.register(SyllabusSubjectHours)
+class SyllabusSubjectHoursModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "academic_plan",
+        "subject",
+        "hours",
+    )
+    list_display_links = (
+        "academic_plan",
+    )
+    fields = (
+        "academic_plan",
+        "subject",
+        "years",
+        "hours",
+    )
+
+@admin.register(TeachingLoad)
+class TeachingLoadModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "year",
+        "teacher",
+        "subject",
+        "hours",
+    )
+    list_display_links = (
+        "year",
+    )
+    fields = (
+        "year",
+        "teacher",
+        "subject",
+        "groups",
+        "hours",
+    )

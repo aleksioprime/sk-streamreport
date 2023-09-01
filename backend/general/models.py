@@ -17,9 +17,9 @@ class ProgramIbChoices(models.TextChoices):
         NONE = None, "No program"
 
 class LevelNationChoices(models.TextChoices):
-        PYP = "noo", "Начальная школа"
-        MYP = "ooo", "Средняя школа"
-        DP = "soo", "Старшая школа"
+        NOO = "noo", "Начальная школа"
+        OOO = "ooo", "Средняя школа"
+        SOO = "soo", "Старшая школа"
         NONE = None, "Не указано"
 
 class User(AbstractUser):
