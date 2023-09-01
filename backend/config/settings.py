@@ -30,7 +30,7 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 
 # ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*").split(" ")
-CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
+# CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -40,7 +40,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Дополнительные модули
+    'rangefilter',
+    'admin_auto_filters',
+    'django_admin_listfilter_dropdown',
+    'debug_toolbar',
+    'drf_spectacular',
+    'django_filters',
+    # Приложения
     'general',
+    'apps.syllabus',
+    'apps.assessment',
+    'apps.units',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -131,3 +143,4 @@ MEDIA_ROOT = BASE_DIR / "mediafiles"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'general.User'
