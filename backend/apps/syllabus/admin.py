@@ -85,15 +85,15 @@ class SyllabusModelAdmin(admin.ModelAdmin):
 class SyllabusSubjectHoursModelAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "academic_plan",
+        "syllabus",
         "subject",
         "hours",
     )
     list_display_links = (
-        "academic_plan",
+        "syllabus",
     )
     fields = (
-        "academic_plan",
+        "syllabus",
         "subject",
         "years",
         "hours",

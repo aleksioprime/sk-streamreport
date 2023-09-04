@@ -33,7 +33,7 @@ class SubjectGroupIb(models.Model):
     name = models.CharField(max_length=128, verbose_name=_("Название"))
     name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"), null=True)
     logo = models.ImageField(upload_to='subjectgroup_logos', verbose_name=_("Логотип"), null=True)
-    program = models.CharField(choices=ProgramIbChoices.choices, null=True, default=None, max_length=4)
+    program = models.CharField(verbose_name=_("Программа IB"), choices=ProgramIbChoices.choices, null=True, default=None, max_length=4)
     class Meta:
         verbose_name = 'Предметная группа IB'
         verbose_name_plural = 'Предметные группы IB'
@@ -63,7 +63,7 @@ class Syllabus(models.Model):
     """ Учебные планы """
     year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="academic_plan")
     name = models.CharField(max_length=128, verbose_name=_("Название"), null=True, blank=True)
-    name_short = models.CharField(max_length=128, verbose_name=_("Сокращённое название"), null=True, blank=True)
+    name_short = models.CharField(max_length=32, verbose_name=_("Сокращённое название"), null=True, blank=True)
     level = models.CharField(verbose_name=_("Уровень образования"), choices=LevelNationChoices.choices, default=None, max_length=4)
     class Meta:
         verbose_name = 'Учебный план'
@@ -74,7 +74,7 @@ class Syllabus(models.Model):
     
 class SyllabusSubjectHours(models.Model):
     """ Нагрузка учебных планов """
-    academic_plan = models.ForeignKey('syllabus.Syllabus', verbose_name=_("Учебный план"), on_delete=models.CASCADE, null=True, related_name="syllabus_subject_hours")
+    syllabus = models.ForeignKey('syllabus.Syllabus', verbose_name=_("Учебный план"), on_delete=models.CASCADE, null=True, related_name="syllabus_subject_hours")
     subject = models.ForeignKey('syllabus.Subject', verbose_name=_("Предмет"), on_delete=models.CASCADE, null=True, related_name="syllabus_subject_hours")
     years = models.ManyToManyField('general.StudyYear', verbose_name=_("Параллель"), related_name="syllabus_subject_hours")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=1)
@@ -83,7 +83,7 @@ class SyllabusSubjectHours(models.Model):
         verbose_name_plural = 'Учебные планы - нагрузка'
         ordering = ['subject__name', 'years__number']
     def __str__(self):
-        return f"{self.academic_plan} ({self.subject} - {self.hours})"
+        return f"{self.syllabus} ({self.subject} - {self.hours})"
     
 class TeachingLoad(models.Model):
     """ Преподавательская нагрузка """
