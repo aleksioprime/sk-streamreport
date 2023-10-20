@@ -25,7 +25,7 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # Копирование entrypoint.sh
-COPY entrypoint.sh ./
+COPY entrypoint.sh $APP_HOME
 RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.sh
 RUN chmod +x $APP_HOME/entrypoint.sh
 
