@@ -51,6 +51,7 @@ services:
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile.dev
     container_name: develop-frontend
     command: sh -c "npm rebuild esbuild && npm run dev -- --host"
     environment:
