@@ -11,5 +11,12 @@ then
     echo "PostgreSQL started"
 fi
 
+# Создание файлов миграций
+# python manage.py makemigrations
+# Очистка БД от данных
+# python manage.py flush --no-input
+# Применение миграций Django
+# python manage.py migrate
+
 # Запуск команды (обычно запуск сервера Django)
 exec "$@"

@@ -5,8 +5,15 @@ FROM python:3.10.11-alpine
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-# Устанавливаем рабочий каталог контейнера 
-WORKDIR /usr/src/backend
+# Устанавливаем рабочий каталог контейнера
+# create the appropriate directories
+RUN mkdir /home/app
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/backend
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/staticfiles
+RUN mkdir $APP_HOME/mediafiles
+WORKDIR $APP_HOME
 
 # install psycopg2 dependencies
 RUN apk update \
@@ -19,11 +26,11 @@ RUN pip install -r requirements.txt
 
 # Копирование entrypoint.sh
 COPY entrypoint.sh ./
-RUN sed -i 's/\r$//g' /usr/src/backend/entrypoint.sh
-RUN chmod +x /usr/src/backend/entrypoint.sh
+RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.sh
+RUN chmod +x $APP_HOME/entrypoint.sh
 
 # Копирование всех файлов из локального проекта в контейнер
 COPY . .
 
 # Запуск entrypoint.sh
-ENTRYPOINT ["/usr/src/backend/entrypoint.sh"]
+ENTRYPOINT ["/home/app/backend/entrypoint.sh"]

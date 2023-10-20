@@ -1,5 +1,30 @@
+# Проект StreamReport
 
-# 
+## Запуск у разработчика
+1. Скопировать репозиторий в локальную папку проекта
+2. В терминале перейти в папку проекта и выполнить:
+```
+docker-compose -f docker-compose.dev.yml up -d --build
+```
+3. Выполнить в контейнере подготовку миграций для базы данных
+```
+docker-compose -f docker-compose.dev.yml exec backend python manage.py makemigrations --noinput
+```
+4. Применить в контейнере миграцию базы данных
+```
+docker-compose -f docker-compose.dev.yml exec backend python manage.py migrate --noinput
+```
+5. Перезапустить контейнер backend:
+```
+docker-compose restart backend
+```
+
+## Запуск в продакте через Action GitHub
+1. Убедиться в корректности сборок контейнеров backend и frontend в GitHub
+2.
+
+
+# Разное
 Войти в базу данных через psql:
 ```
 docker-compose exec database psql --username=igadmin --dbname=igskolkovo
@@ -27,7 +52,6 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 
 ## Первый запуск
 ```
-python manage.py createsuperuser
 docker-compose exec backend python manage.py createsuperuser
 superuser: admin
 email: aleksioprime@gmail.com
