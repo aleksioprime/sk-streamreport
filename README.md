@@ -4,15 +4,15 @@
 1. Скопировать репозиторий в локальную папку проекта
 2. В терминале перейти в папку проекта и выполнить:
 ```
-docker-compose -f docker-compose.dev.yml up -d --build
+docker-compose up -d --build
 ```
 3. Выполнить в контейнере подготовку миграций для базы данных
 ```
-docker-compose -f docker-compose.dev.yml exec backend python manage.py makemigrations --noinput
+docker-compose exec backend python manage.py makemigrations --noinput
 ```
 4. Применить в контейнере миграцию базы данных
 ```
-docker-compose -f docker-compose.dev.yml exec backend python manage.py migrate --noinput
+docker-compose exec backend python manage.py migrate --noinput
 ```
 5. Перезапустить контейнер backend:
 ```
