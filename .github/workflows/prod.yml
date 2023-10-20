@@ -22,7 +22,7 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: aleksioprime/streamreport_backend
-        dockerfile: backend/Dockerfile
+        dockerfile: docker/prod_github/backend/Dockerfile
         tags: latest
 
   build-and-deploy-frontend:
@@ -38,5 +38,5 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: aleksioprime/streamreport_frontend
-        dockerfile: frontend/Dockerfile
+        dockerfile: docker/prod_github/frontend/Dockerfile
         tags: latest
