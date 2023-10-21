@@ -3,8 +3,6 @@ from django.contrib.auth.models import AbstractUser, Group
 
 from django.utils.translation import gettext_lazy as _
 
-Group.add_to_class('description', models.CharField(max_length=180,null=True, blank=True))
-
 class GenderChoices(models.TextChoices):
         MALE = "male", "Мужчина"
         FEMALE = "female", "Женщина"
@@ -112,3 +110,5 @@ class ClassGroup(models.Model):
         return f"{self.year_study.number}{self.letter}"
     def __str__(self):
         return "{}{} класс".format(self.year_study, self.letter)
+    
+Group.add_to_class('description', models.CharField(max_length=180,null=True, blank=True))
