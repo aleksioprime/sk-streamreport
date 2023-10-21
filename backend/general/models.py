@@ -111,4 +111,4 @@ class ClassGroup(models.Model):
     def __str__(self):
         return "{}{} класс".format(self.year_study, self.letter)
     
-Group.add_to_class('description', models.CharField(max_length=180,null=True, blank=True))
+# Group.add_to_class('description', models.CharField(max_length=180,null=True, blank=True))

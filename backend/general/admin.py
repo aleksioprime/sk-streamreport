@@ -101,14 +101,12 @@ class UserModelAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "name",
-        "description",
     )
     list_display_links = (
         "name",
     )
     fields = (
         "name",
-        "description",
         "permissions",
     )
 
