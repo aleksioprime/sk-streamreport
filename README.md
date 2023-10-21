@@ -21,7 +21,20 @@ docker-compose restart backend
 
 ## Запуск в продакте через Action GitHub
 1. Убедиться в корректности сборок контейнеров backend и frontend в GitHub
-2.
+2. Скопируйте файлы docker-compose.yaml и монтируемые папки на сервер
+3. Запустите docker-compose 
+```
+docker-compose up -d --build
+```
+4. 
+```
+docker-compose exec backend python manage.py collectstatic --no-input --clear
+```
+*Для удаления всех имеющихся контейнеров:
+```
+docker-compose down -v
+docker rmi $(docker images -q)
+```
 
 
 # Разное

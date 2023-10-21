@@ -94,7 +94,7 @@ class TeachingLoad(models.Model):
     hours = models.PositiveSmallIntegerField(verbose_name=_("Часы"), default=1)
     class Meta:
         verbose_name = 'Рабочая нагрузка учителя'
-        verbose_name_plural = 'Рабочие нагрузки учителей'
+        verbose_name_plural = 'Рабочие нагрузки учителей '
         ordering = ['year', 'subject', 'groups__year_study', 'groups__year_study', 'teacher']
     def __str__(self):
         return '{} ({} - {} ч.)'.format(self.teacher, self.subject, self.hours)
