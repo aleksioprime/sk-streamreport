@@ -1,6 +1,6 @@
 # Проект StreamReport
 
-## Запуск у разработчика
+## Запуск версии develop:
 1. Скопировать репозиторий в локальную папку проекта
 2. В терминале перейти в папку проекта и выполнить:
 ```
@@ -14,28 +14,54 @@ docker-compose exec backend python manage.py makemigrations --noinput
 ```
 docker-compose exec backend python manage.py migrate --noinput
 ```
-5. Перезапустить контейнер backend:
+Может потребоваться перезапуск контейнера backend:
 ```
 docker-compose restart backend
 ```
+6. Создайть суперпользователя
+```
+docker-compose exec backend python manage.py createsuperuser
+```
 
-## Запуск в продакте через Action GitHub
-1. Убедиться в корректности сборок контейнеров backend и frontend в GitHub
-2. Скопируйте файлы docker-compose.yaml и монтируемые папки на сервер
-3. Запустите docker-compose 
+## Запуск версии product через Action GitHub на сервере:
+1. На сервере Ubuntu 22.04 должен быть установлен Docker и Docker Compose
+2. Убедиться в корректности сборок контейнеров backend и frontend в GitHub и  DockerHub
+3. Скопировать файлы docker-compose.yaml и дополнительные зависимости проекта на сервер (нет в репозитории)
+4. Запустить docker-compose:
 ```
 docker-compose up -d --build
 ```
-4. 
+5. Собрать все статические файлы Django в папку static:
 ```
 docker-compose exec backend python manage.py collectstatic --no-input --clear
 ```
-*Для удаления всех имеющихся контейнеров:
+6. Выполнить миграции в БД:
+```
+docker-compose exec backend python manage.py migrate --noinput
+```
+7. Создать суперпользователя:
+```
+docker-compose exec backend python manage.py createsuperuser
+superuser: admin
+email: aleksioprime@gmail.com
+password: A0Ru$$22
+```
+
+* Применение изменений проекта на сервере:
+```
+docker-compose build
+docker-compose down
+docker-compose up -d
+```
+* Удаление всех неиспользуемых контейнеров:
+```
+docker system prune
+```
+* Удаление всех имеющихся контейнеров:
 ```
 docker-compose down -v
 docker rmi $(docker images -q)
 ```
-
 
 # Разное
 Войти в базу данных через psql:
@@ -53,44 +79,4 @@ docker-compose exec database psql --username=igadmin --dbname=igskolkovo
 Выход из базы данных
 ```
 \q
-```
-
-# Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Первый запуск
-```
-docker-compose exec backend python manage.py createsuperuser
-superuser: admin
-email: aleksioprime@gmail.com
-password: A0Ru$$22
-```
-
-## Работа с Docker
-### Просмотр логов в docker-контейнере
-```
-docker-compose logs -f
-docker-compose -f docker-compose.prod.yml logs -f
-```
-### Удаление образа 
-```
-docker-compose down -v 
-```
-### Запуск образа разработчика
-```
-docker-compose up -d --build
-```
-### Запуск производственного образа
-```
-docker-compose -f docker-compose.prod.yml up -d --build
-```
-### Выполнение миграции в производственном файле
-```
-docker-compose -f docker-compose.prod.yml exec backend python manage.py migrate --noinput
-docker-compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --no-input --clear
 ```
