@@ -46,9 +46,14 @@ superuser: admin
 email: aleksioprime@gmail.com
 password: A0Ru$$22
 ```
+8. Запросить бесплатный сертифкат let's encript
+```
+certbot certonly --standalone -d skreport.ru -d www.skreport.ru
+```
 
 * Применение изменений проекта на сервере:
 ```
+docker-compose pull
 docker-compose build
 docker-compose down
 docker-compose up -d
