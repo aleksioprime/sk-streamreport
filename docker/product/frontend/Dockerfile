@@ -4,11 +4,11 @@ FROM node:16 as build-stage
 WORKDIR /frontend
 
 # Копируем файлы пакетов в контейнер и устанавливаем их
-COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci
+COPY frontend/package*.json ./
+RUN npm install
 
 # Копируем все файлы фронтенда и запускаем фронтенд
-COPY frontend /frontend
+COPY frontend .
 RUN npm run build
 
 FROM nginx:alpine as production-stage
