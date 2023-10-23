@@ -5,16 +5,8 @@ WORKDIR /app
 
 # Копируем файлы пакетов в контейнер и устанавливаем их
 COPY frontend/package*.json ./
-RUN npm install
+RUN npm ci
 
-# Копируем все файлы фронтенда и запускаем фронтенд
+# Копируем все файлы фронтенда и собираем приложение
 COPY frontend ./
 RUN npm run build
-
-FROM nginx:alpine as production-stage
-
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-EXPOSE 80
-
-# Запуск сервера frontend
-CMD ["nginx", "-g", "daemon off;"]
