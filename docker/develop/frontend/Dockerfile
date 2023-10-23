@@ -1,4 +1,4 @@
-FROM node:16-slim
+FROM node:latest
 
 # Устанавливаем рабочий каталог контейнера 
 WORKDIR /frontend

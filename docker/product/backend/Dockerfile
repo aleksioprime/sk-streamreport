@@ -31,6 +31,11 @@ RUN chmod +x $APP_HOME/entrypoint.sh
 
 # Копирование всех файлов из локального проекта в контейнер
 COPY backend .
+#
+EXPOSE 8000
 
 # Запуск entrypoint.sh
 ENTRYPOINT ["/home/app/backend/entrypoint.sh"]
+
+# Запуск сервера backend
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]

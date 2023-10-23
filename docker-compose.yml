@@ -51,6 +51,7 @@ services:
     build:
       dockerfile: ./docker/develop/frontend/Dockerfile
     container_name: develop-frontend
+    mem_limit: 1024m
     command: sh -c "npm rebuild esbuild && npm run dev -- --host"
     environment:
       PORT: '8080'
