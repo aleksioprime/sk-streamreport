@@ -24,7 +24,7 @@ docker-compose exec backend python manage.py createsuperuser
 ```
 
 ## Запуск версии product через Action GitHub на сервере:
-1. На сервере Ubuntu 22.04 должен быть установлен Docker и Docker Compose
+1. Установить на сервер Ubuntu 22.04 Docker и Docker Compose
 2. Убедиться в корректности сборок контейнеров backend и frontend в GitHub и  DockerHub
 3. Скопировать файлы docker-compose.yaml и дополнительные зависимости проекта на сервер (нет в репозитории)
 4. Запустить docker-compose:
@@ -42,15 +42,48 @@ docker-compose exec backend python manage.py migrate --noinput
 7. Создать суперпользователя:
 ```
 docker-compose exec backend python manage.py createsuperuser
-superuser: admin
-email: aleksioprime@gmail.com
-password: A0Ru$$22
 ```
-8. Запросить бесплатный сертифкат let's encript
+8. Установить бесплатный сертификат Let's Encrypt (преимущественно делать в самом начале):
+* Установить на сервер Certbot
 ```
+sudo apt update
+sudo apt install snapd
+sudo snap install --classic certbot
 certbot certonly --standalone -d skreport.ru -d www.skreport.ru
 ```
+* Переместить файлы ключей в папку и перезапустить docker-compose
+```
+sudo cp -rp /etc/letsencrypt/* /root/certs
+docker-compose restart
+```
+* Сделать скрипт исполняемым и открыть CRON
+```
+sudo chmod +x /root/certbot_renew.sh
+crontab -e
+```
+* Добавить запись, которая будет обновлять сертификат каждые 30 дней в полночь:
+```
+0 0 * * * /root/certbot_renew.sh
+```
 
+## Разное
+* Работа с базами данных PostgreSQL
+Войти в базу данных через psql:
+```
+docker-compose exec database psql --username=igadmin --dbname=igskolkovo
+```
+Посмотреть базу данных и пользователя:
+```
+\c igskolkovo
+```
+Посмотреть таблицы текущей базы данных:
+```
+\dt
+```
+Выход из базы данных
+```
+\q
+```
 * Применение изменений проекта на сервере:
 ```
 docker-compose pull
@@ -67,21 +100,6 @@ docker system prune
 docker-compose down -v
 docker rmi $(docker images -q)
 ```
-
-# Разное
-Войти в базу данных через psql:
 ```
-docker-compose exec database psql --username=igadmin --dbname=igskolkovo
-```
-Посмотреть базу данных и пользователя:
-```
-\c igskolkovo
-```
-Посмотреть таблицы текущей базы данных:
-```
-\dt
-```
-Выход из базы данных
-```
-\q
+docker run nginx ls /etc/nginx/conf.d
 ```
