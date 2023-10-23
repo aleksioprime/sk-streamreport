@@ -61,7 +61,7 @@ docker-compose restart
 sudo chmod +x /root/certbot_renew.sh
 crontab -e
 ```
-* Добавить запись, которая будет обновлять сертификат каждые 30 дней в полночь:
+* Добавить запись, которая будет проверять сертификат каждую полночь:
 ```
 0 0 * * * /root/certbot_renew.sh
 ```
