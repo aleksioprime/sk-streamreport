@@ -31,7 +31,7 @@ RUN chmod +x $APP_HOME/entrypoint.sh
 
 # Копирование всех файлов из локального проекта в контейнер
 COPY backend .
-#
+# Сделать порт 8000 доступным
 EXPOSE 8000
 
 # Запуск entrypoint.sh

@@ -25,6 +25,9 @@ docker-compose exec backend python manage.py createsuperuser
 
 ## Запуск версии product через Action GitHub на сервере:
 1. Установить на сервер Ubuntu 22.04 Docker и Docker Compose
+```
+apt install make
+```
 2. Убедиться в корректности сборок контейнеров backend и frontend в GitHub и  DockerHub
 3. Скопировать файлы docker-compose.yaml и дополнительные зависимости проекта на сервер (нет в репозитории)
 4. Запустить docker-compose:
@@ -63,7 +66,7 @@ crontab -e
 ```
 * Добавить запись, которая будет проверять сертификат каждую полночь:
 ```
-0 0 * * * /root/certbot_renew.sh
+0 0 * * * /root/scripts/certbot_renew.sh
 ```
 
 ## Разное

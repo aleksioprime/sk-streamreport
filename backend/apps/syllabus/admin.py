@@ -1,8 +1,9 @@
 from django.contrib import admin
 from apps.syllabus.models import (
     Subject,
-    SubjectGroupFgos,
-    SubjectGroupIb,
+    FgosSubjectGroup,
+    IbSubjectGroup,
+    IbDisciplines,
     Syllabus,
     SyllabusSubjectHours,
     TeachingLoad
@@ -31,7 +32,7 @@ class SubjectModelAdmin(admin.ModelAdmin):
         "need_report"
     )
 
-@admin.register(SubjectGroupFgos)
+@admin.register(FgosSubjectGroup)
 class SubjectGroupFgosModelAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -46,7 +47,7 @@ class SubjectGroupFgosModelAdmin(admin.ModelAdmin):
         "type",
     )
 
-@admin.register(SubjectGroupIb)
+@admin.register(IbSubjectGroup)
 class SubjectGroupIbModelAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -61,6 +62,22 @@ class SubjectGroupIbModelAdmin(admin.ModelAdmin):
         "name_rus",
         "logo",
         "program",
+    )
+
+@admin.register(IbDisciplines)
+class SubjectGroupIbModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "group",
+    )
+    list_display_links = (
+        "name",
+    )
+    fields = (
+        "name",
+        "name_rus",
+        "group",
     )
 
 @admin.register(Syllabus)

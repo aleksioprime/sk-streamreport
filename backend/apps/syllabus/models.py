@@ -17,7 +17,7 @@ class SubjectTypeChoices(models.TextChoices):
         DIRECTION = "direction", "Направление"
         NONE = None, 'Не выбрано'
 
-class SubjectGroupFgos(models.Model):
+class FgosSubjectGroup(models.Model):
     """ Предметная группа ФГОС """
     name = models.CharField(max_length=128, verbose_name=_("Название"))
     type = models.CharField(choices=SubjectTypeChoices.choices, max_length=9, default='area', verbose_name=_("Тип группы"))
@@ -28,7 +28,7 @@ class SubjectGroupFgos(models.Model):
     def __str__(self):
         return f"{self.name}"
 
-class SubjectGroupIb(models.Model):
+class IbSubjectGroup(models.Model):
     """ Предметные группы IB """
     name = models.CharField(max_length=128, verbose_name=_("Название"))
     name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"), null=True)
@@ -41,12 +41,24 @@ class SubjectGroupIb(models.Model):
     def __str__(self):
         return "{} ({})".format(self.name, self.program)
 
+class IbDisciplines(models.Model):
+    """ Специальные дисцилины """
+    name = models.CharField(max_length=128, verbose_name=_("Название на англ. языке"))
+    name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"), null=True, blank=True)
+    group = models.ForeignKey('syllabus.IbSubjectGroup', verbose_name=_("Предметная группа"), on_delete=models.SET_NULL, null=True, related_name="specific_disciplines")
+    class Meta:
+        verbose_name = 'Специальная IB-дисциплина'
+        verbose_name_plural = 'Специальные IB-дисциплины'
+        ordering = ['group', 'name']
+    def __str__(self):
+        return "{}".format(self.name)
+
 class Subject(models.Model):
     """ Учебные дисциплины """
     name = models.CharField(max_length=128, verbose_name=_("Название"))
     name_eng = models.CharField(max_length=128, verbose_name=_("Название на англ. языке"), null=True)
-    group_ib = models.ForeignKey('syllabus.SubjectGroupIb', verbose_name=_("Предметная группа в IB"), on_delete=models.SET_NULL, null=True, related_name="subject")
-    group_fgos = models.ForeignKey('syllabus.SubjectGroupFgos', verbose_name=_("Предметная область в РФ"), on_delete=models.SET_NULL, null=True, related_name="subject")
+    group_ib = models.ForeignKey('syllabus.IbSubjectGroup', verbose_name=_("Предметная группа в IB"), on_delete=models.SET_NULL, null=True, related_name="subject")
+    group_fgos = models.ForeignKey('syllabus.FgosSubjectGroup', verbose_name=_("Предметная область в РФ"), on_delete=models.SET_NULL, null=True, related_name="subject")
     type = models.CharField(verbose_name=_("Тип предмета"), choices=ProgramTypeChoices.choices, max_length=10, default='base')
     dnevnik_id = models.CharField(verbose_name=_('ID системы Дневник.РУ'), max_length=40, null=True)
     department = models.ForeignKey('general.Department', verbose_name=_("Учебное подразделение"), on_delete=models.SET_NULL, null=True, related_name="subject")
