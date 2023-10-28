@@ -1,22 +1,44 @@
 from .common import (
-    CriterionChoices, 
+    ObjectiveLetterChoices, 
     StrandLetterChoices, 
-    QuestionTypeChoices, 
+    QuestionTypeMypChoices, 
+    QuestionTypeDpChoices, 
     PostTypeChoices, 
+    AimDpChoices,
+    LevelDpChoices,
+    LanguageLearningChoices,
+    TokConnectionsChoices,
+    CasConnectionsChoices,
+    LearningProcessChoices,
+    DifferentiationChoices,
     LearnerProfile, 
     AtlCategory, 
     AtlCluster
 )
+from .dp import (
+    DpAim,
+    DpObjective,
+    DpObjectiveItem,
+    CourseTopic,
+    CourseContent,
+    Criterion,
+    DpAtlSkill,
+    DpUnitPlanner,
+    DpInquiryQuestion,
+    DpAtlDevelop,
+    DpProfileDevelop,
+    DpReflectionPost
+)
 from .myp import (
-    Criterion, 
+    MypObjective, 
     Strand, 
     EducationalLevel, 
-    Objective, 
+    StrandLevel, 
     AchievementLevel, 
-    Aim, 
+    MypAim, 
     MypKeyConcept, 
     MypKeyConceptOfSubjects, 
-    RelatedConcept, 
+    MypRelatedConcept, 
     GlobalContext, 
     GlobalContextExploration,
     MypAtlSkill, 
@@ -25,7 +47,9 @@ from .myp import (
     MypAtlDevelop, 
     MypProfileDevelop, 
     MypReflectionPost,
-    MypUnitPlannerInterdisciplinary
+    MypUnitPlannerInterdisciplinary,
+    MypInquiryQuestionIdu,
+    MypReflectionPostIdu
 )
 from .pyp import (
     TransdisciplinaryTheme,

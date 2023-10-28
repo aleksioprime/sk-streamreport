@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 
 from django.utils.translation import gettext_lazy as _
 
@@ -20,14 +20,46 @@ class LevelNationChoices(models.TextChoices):
         SOO = "soo", "Старшая школа"
         NONE = None, "Не указано"
 
-class User(AbstractUser):
+# TODO: сделать вместо username - email
+# TODO: сделать поле, для записи времени онлайн
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, password, **extra_fields)
+
+class User(AbstractUser, PermissionsMixin):
     """ Расширеная модель пользователя """
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=32, null=True, blank=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     date_of_birth = models.DateField(max_length=10, null=True, blank=True)
     gender = models.CharField(max_length=6, choices=GenderChoices.choices, default='none', null=True, blank=True)
     photo = models.ImageField(upload_to="member_photos", blank=True, null=True)
     dnevnik_token = models.CharField(max_length=255, null=True, blank=True)
     dnevnik_id = models.CharField(max_length=40, blank=True, null=True)
+    last_activity = models.DateTimeField(auto_now=True)
+    
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'

@@ -1,13 +1,27 @@
+from .dp import (
+    DpAimModelAdmin,
+    DpObjectiveModelAdmin,
+    DpObjectiveItemModelAdmin,
+    CourseTopicModelAdmin,
+    CourseContentModelAdmin,
+    CriterionModelAdmin,
+    DpUnitPlannerModelAdmin,
+    DpInquiryQuestionModelAdmin,
+    DpAtlDevelopModelAdmin,
+    DpProfileDevelopModelAdmin,
+    DpReflectionPostModelAdmin,
+)
+
 from .myp import (
-    CriterionModelAdmin, 
+    MypObjectiveModelAdmin, 
     StrandModelAdmin, 
     EducationalLevelModelAdmin, 
-    ObjectivenModelAdmin,
+    StrandLevelModelAdmin,
     AchievementLevelModelAdmin,
-    AimModelAdmin,
+    MypAimModelAdmin,
     KeyConceptModelAdmin,
     KeyConceptOfSubjectsModelAdmin,
-    RelatedConceptModelAdmin,
+    MypRelatedConceptModelAdmin,
     GlobalContextModelAdmin,
     GlobalContextExplorationModelAdmin,
     AtlSkillMypModelAdmin,
@@ -15,7 +29,9 @@ from .myp import (
     MypInquiryQuestionModelAdmin,
     MypAtlDevelopModelAdmin,
     MypReflectionPostModelAdmin,
-    MypUnitPlannerInterdisciplinaryModelAdmin
+    MypUnitPlannerInterdisciplinaryModelAdmin,
+    MypInquiryQuestionIduModelAdmin,
+    MypReflectionPostIduModelAdmin
 )
 
 from .pyp import (

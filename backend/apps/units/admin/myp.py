@@ -1,14 +1,14 @@
 from django.contrib import admin
 from apps.units.models import (
-    Criterion, 
+    MypObjective, 
     Strand, 
     EducationalLevel, 
-    Objective, 
+    StrandLevel, 
     AchievementLevel,
-    Aim, 
+    MypAim, 
     MypKeyConcept,
     MypKeyConceptOfSubjects,
-    RelatedConcept,
+    MypRelatedConcept,
     GlobalContext,
     GlobalContextExploration,
     MypAtlSkill,
@@ -16,11 +16,13 @@ from apps.units.models import (
     MypInquiryQuestion,
     MypAtlDevelop,
     MypReflectionPost,
-    MypUnitPlannerInterdisciplinary
+    MypUnitPlannerInterdisciplinary,
+    MypInquiryQuestionIdu,
+    MypReflectionPostIdu
 )
 
-@admin.register(Criterion)
-class CriterionModelAdmin(admin.ModelAdmin):
+@admin.register(MypObjective)
+class MypObjectiveModelAdmin(admin.ModelAdmin):
     list_display = (
         "letter",
         "name",
@@ -36,7 +38,7 @@ class StrandModelAdmin(admin.ModelAdmin):
         "number",
         "letter",
         "name",
-        "criterion",
+        "objective",
     )
     list_display_links = (
         "name",
@@ -52,8 +54,8 @@ class EducationalLevelModelAdmin(admin.ModelAdmin):
         "name",
     )
 
-@admin.register(Objective)
-class ObjectivenModelAdmin(admin.ModelAdmin):
+@admin.register(StrandLevel)
+class StrandLevelModelAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "level",
@@ -67,15 +69,15 @@ class ObjectivenModelAdmin(admin.ModelAdmin):
 class AchievementLevelModelAdmin(admin.ModelAdmin):
     list_display = (
         "name",
-        "objective",
+        "strand_level",
         "point",
     )
     list_display_links = (
         "name",
     )
 
-@admin.register(Aim)
-class AimModelAdmin(admin.ModelAdmin):
+@admin.register(MypAim)
+class MypAimModelAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "group",
@@ -105,8 +107,8 @@ class KeyConceptOfSubjectsModelAdmin(admin.ModelAdmin):
         "key_concept",
     )
 
-@admin.register(RelatedConcept)
-class RelatedConceptModelAdmin(admin.ModelAdmin):
+@admin.register(MypRelatedConcept)
+class MypRelatedConceptModelAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "description",
@@ -162,7 +164,6 @@ class MypInquiryQuestionModelAdmin(admin.ModelAdmin):
         "question",
         "type",
         "unit",
-        "idu"
     )
     list_display_links = (
         "question",
@@ -186,7 +187,6 @@ class MypReflectionPostModelAdmin(admin.ModelAdmin):
         "type",
         "author",
         "unit",
-        "idu"
     )
     list_display_links = (
         "post",
@@ -200,4 +200,27 @@ class MypUnitPlannerInterdisciplinaryModelAdmin(admin.ModelAdmin):
     )
     list_display_links = (
         "title",
+    )
+
+@admin.register(MypInquiryQuestionIdu)
+class MypInquiryQuestionIduModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "question",
+        "type",
+        "unit",
+    )
+    list_display_links = (
+        "question",
+    )
+
+@admin.register(MypReflectionPostIdu)
+class MypReflectionPostIduModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "post",
+        "type",
+        "author",
+        "unit",
+    )
+    list_display_links = (
+        "post",
     )

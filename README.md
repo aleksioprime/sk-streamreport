@@ -70,6 +70,10 @@ crontab -e
 ```
 
 ## Разное
+* Получить список запланированных задач из контейнера celery-beat
+```
+docker-compose exec celery-beat celery -A config inspect scheduled
+```
 * Работа с базами данных PostgreSQL
 Войти в базу данных через psql:
 ```

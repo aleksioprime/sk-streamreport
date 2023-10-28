@@ -3,7 +3,7 @@ from apps.syllabus.models import (
     Subject,
     FgosSubjectGroup,
     IbSubjectGroup,
-    IbDisciplines,
+    IbDiscipline,
     Syllabus,
     SyllabusSubjectHours,
     TeachingLoad
@@ -64,7 +64,7 @@ class SubjectGroupIbModelAdmin(admin.ModelAdmin):
         "program",
     )
 
-@admin.register(IbDisciplines)
+@admin.register(IbDiscipline)
 class SubjectGroupIbModelAdmin(admin.ModelAdmin):
     list_display = (
         "id",

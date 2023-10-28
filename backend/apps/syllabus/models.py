@@ -41,7 +41,7 @@ class IbSubjectGroup(models.Model):
     def __str__(self):
         return "{} ({})".format(self.name, self.program)
 
-class IbDisciplines(models.Model):
+class IbDiscipline(models.Model):
     """ Специальные дисцилины """
     name = models.CharField(max_length=128, verbose_name=_("Название на англ. языке"))
     name_rus = models.CharField(max_length=128, verbose_name=_("Название на рус. языке"), null=True, blank=True)

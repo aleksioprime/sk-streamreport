@@ -55,7 +55,7 @@ class PypAtlSkillModelAdmin(admin.ModelAdmin):
 class PypUnitPlannerModelAdmin(admin.ModelAdmin):
     list_display = (
         "title",
-        "grade",
+        "year",
         "transdisciplinary_theme",
         "central_idea"
     )

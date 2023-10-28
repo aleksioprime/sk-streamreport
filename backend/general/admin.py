@@ -18,20 +18,20 @@ class UserModelAdmin(admin.ModelAdmin):
         "id",
         "first_name",
         "last_name",
-        "username",
         "email",
         "is_active",
-        "last_login",
+        "last_activity",
     )
     readonly_fields = (
         "date_joined",
         "last_login",
         "password",
+        "last_activity",
     )
     list_display_links = (
         "first_name",
         "last_name",
-        "username",
+        "email",
     )
     fieldsets = (
         (
@@ -40,7 +40,6 @@ class UserModelAdmin(admin.ModelAdmin):
                     "first_name",
                     "last_name",
                     "middle_name",
-                    "email",
                     "date_of_birth",
                     "gender",
                     "photo",
@@ -58,7 +57,7 @@ class UserModelAdmin(admin.ModelAdmin):
         (
             "Учетные данные", {
                 "fields": (
-                    "username",
+                    "email",
                     "password",
                     "groups",
                 )
@@ -81,13 +80,13 @@ class UserModelAdmin(admin.ModelAdmin):
                 "fields": (
                     "date_joined",
                     "last_login",
+                    "last_activity",
                 )
             }
         )
     )
     search_fields = (
         "last_name",
-        "username",
         "email",
     )
     list_filter = (

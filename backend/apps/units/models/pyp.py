@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 class TransdisciplinaryTheme(models.Model):
     """ Трансдисциплинарные темы """
     name = models.CharField(max_length=255, verbose_name=_("Название"))
-    name_rus = models.CharField(max_length=64, verbose_name=_("Название на рус. языке"), null=True)
+    name_rus = models.CharField(max_length=255, verbose_name=_("Название на рус. языке"), null=True)
     description = models.TextField(verbose_name=_("Описание"), null=True)
     description_rus = models.TextField(verbose_name=_("Описание на рус. языке"), null=True)
     class Meta:
@@ -57,8 +57,8 @@ class PypUnitPlanner(models.Model):
     """ ЮнитПланеры PYP """
     title = models.CharField(max_length=255, verbose_name=_("Название юнита"))
     order = models.PositiveSmallIntegerField(verbose_name=_("Номер"), default=0)
-    grade = models.ForeignKey('general.StudyYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="pyp_unitplans")
     teachers = models.ManyToManyField('general.User', verbose_name=_("Учителя"), related_name="pyp_unitplans")
+    year = models.ForeignKey('general.StudyYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="pyp_unitplans")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
     transdisciplinary_theme = models.ForeignKey('units.TransdisciplinaryTheme', verbose_name=_("Трансдисциплинарная тема"), on_delete=models.SET_NULL, null=True, related_name="pyp_unitplans")
     central_idea = models.TextField(verbose_name=_("Центральная идея"), null=True, blank=True)
@@ -84,12 +84,12 @@ class PypUnitPlanner(models.Model):
     class Meta:
         verbose_name = 'PYP: UnitPlan'
         verbose_name_plural = 'PYP: UnitPlans'
-        ordering = ['grade', 'order', 'title']
+        ordering = ['year', 'order', 'title']
     def __str__(self):
         return f"{self.title} ({self.grade})"
     
 class PypLinesOfInquiry(models.Model):
-    """ Линии исследования в рамках юнита """
+    """ Линии исследования в юните PYP """
     name = models.CharField(max_length=255, verbose_name=_("Линия исследования"))
     key_concept = models.ForeignKey('units.PypKeyConcept', verbose_name=_("Ключевой концепт"), on_delete=models.CASCADE, related_name="inquiry_lines")
     unit = models.ForeignKey('units.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="inquiry_lines")
@@ -101,7 +101,7 @@ class PypLinesOfInquiry(models.Model):
         return f"{self.name} ({self.key_concept})"
     
 class PypRelatedConcept(models.Model):
-    """ Сопутствующие понятия в рамках юнита """
+    """ Сопутствующие понятия в юните PYP """
     name = models.CharField(max_length=255, verbose_name=_("Название"))
     unit = models.ForeignKey('units.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="related_concepts")
     class Meta:
@@ -112,8 +112,8 @@ class PypRelatedConcept(models.Model):
         return f"{self.name} ({self.unit})"
     
 class PypProfileAttribute(models.Model):
-    """ Качества портрета студента в рамках юнита """
-    profile = models.ForeignKey('units.LearnerProfile', verbose_name=_("Профиль студента"), on_delete=models.CASCADE, related_name="profile_attributes")
+    """ Качества портрета студента в юните PYP """
+    profile = models.ForeignKey('units.LearnerProfile', verbose_name=_("Профиль студента"), on_delete=models.CASCADE, related_name="pyp_profiles")
     description = models.TextField(verbose_name=_("Описание"), null=True, blank=True)
     unit = models.ForeignKey('units.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="profile_attributes")
     class Meta:
@@ -121,10 +121,10 @@ class PypProfileAttribute(models.Model):
         verbose_name_plural = 'PYP: UnitPlans - Развитие профиля студента'
         ordering = ['unit', 'profile']
     def __str__(self):
-        return "{}".format(self.profile)
+        return f"{self.profile}"
     
 class PypAtlDevelop(models.Model):
-    """ Развитие ATL-навыков в рамках юнита """
+    """ Развитие ATL-навыков в юните PYP """
     atl = models.ForeignKey('units.PypAtlSkill', verbose_name=_("Навык ATL"), on_delete=models.CASCADE, related_name="atl_develops")
     action = models.TextField(verbose_name=_("Описание учебных действий"), null=True, blank=True)
     unit = models.ForeignKey('units.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="atl_develops")
