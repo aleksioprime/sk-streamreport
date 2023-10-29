@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class GenderChoices(models.TextChoices):
         MALE = "male", "Мужчина"
         FEMALE = "female", "Женщина"
-        NONE = None, 'No program'
+        NONE = None, "Не указан"
 
 class ProgramIbChoices(models.TextChoices):
         PYP = "pyp", "Primary Years Programme"
@@ -37,19 +37,15 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser, PermissionsMixin):
     """ Расширеная модель пользователя """
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
-    middle_name = models.CharField(max_length=32, null=True, blank=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    date_of_birth = models.DateField(max_length=10, null=True, blank=True)
-    gender = models.CharField(max_length=6, choices=GenderChoices.choices, default='none', null=True, blank=True)
-    photo = models.ImageField(upload_to="member_photos", blank=True, null=True)
-    dnevnik_token = models.CharField(max_length=255, null=True, blank=True)
-    dnevnik_id = models.CharField(max_length=40, blank=True, null=True)
-    last_activity = models.DateTimeField(auto_now=True)
+    email = models.EmailField(verbose_name=_("Электронная почта"), unique=True)
+    last_name = models.CharField(verbose_name=_("Фамилия"), max_length=30, blank=True)
+    first_name = models.CharField(verbose_name=_("Имя"), max_length=30, blank=True)
+    middle_name = models.CharField(verbose_name=_("Отчество"), max_length=32, null=True, blank=True)
+    gender = models.CharField(verbose_name=_("Пол"), max_length=6, choices=GenderChoices.choices, default='none', null=True, blank=True)
+    photo = models.ImageField(verbose_name=_("Фотография"), upload_to="member_photos", blank=True, null=True)
+    dnevnik_token = models.CharField(verbose_name=_("Токе доступа в Дневник"), max_length=255, null=True, blank=True)
+    dnevnik_id = models.CharField(verbose_name=_("ID пользователя Дневника"), max_length=40, blank=True, null=True)
+    last_activity = models.DateTimeField(verbose_name=_("Последняя активность"), auto_now=True)
 
     objects = CustomUserManager()
 

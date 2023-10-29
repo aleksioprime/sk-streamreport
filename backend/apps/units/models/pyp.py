@@ -78,9 +78,10 @@ class PypUnitPlanner(models.Model):
     peer_self_assessment = models.TextField(verbose_name=_("Самооценка учащихся и отзывы сверстников"), null=True, blank=True)
     reflections_ongoing = models.TextField(verbose_name=_("Текущая рефлексия для всех учителей"), null=True, blank=True)
     reflections_additional = models.TextField(verbose_name=_("Дополнительная рефлексия по предметам"), null=True, blank=True)
-    reflections_teachers = models.TextField(verbose_name=_("Рефлексия учителя"), null=True, blank=True)
+    reflections_teacher = models.TextField(verbose_name=_("Рефлексия учителя"), null=True, blank=True)
     reflections_students = models.TextField(verbose_name=_("Рефлексия студентов"), null=True, blank=True)
     reflections_assessment = models.TextField(verbose_name=_("Рефлексия оценивания"), null=True, blank=True)
+    notes = models.TextField(verbose_name=_("Замечания"), null=True, blank=True)
     class Meta:
         verbose_name = 'PYP: UnitPlan'
         verbose_name_plural = 'PYP: UnitPlans'
