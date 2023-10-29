@@ -20,10 +20,6 @@ class LevelNationChoices(models.TextChoices):
         SOO = "soo", "Старшая школа"
         NONE = None, "Не указано"
 
-# TODO: сделать вместо username - email
-# TODO: сделать поле, для записи времени онлайн
-
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -54,7 +50,7 @@ class User(AbstractUser, PermissionsMixin):
     dnevnik_token = models.CharField(max_length=255, null=True, blank=True)
     dnevnik_id = models.CharField(max_length=40, blank=True, null=True)
     last_activity = models.DateTimeField(auto_now=True)
-    
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'

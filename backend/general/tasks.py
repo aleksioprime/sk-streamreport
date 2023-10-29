@@ -1,4 +1,3 @@
-from celery import shared_task
 from .models import User
 from django.core.cache import cache
 from datetime import datetime
@@ -15,9 +14,3 @@ def update_user_activity():
             
             # После сохранения, можно удалить значение из кеша (необязательно)
             cache.delete(f'last_activity_{user.id}')
-
-# @shared_task
-# def update_last_activity(user_id):
-#     user = User.objects.get(id=user_id)
-#     user.last_activity = datetime.now()
-#     user.save()
