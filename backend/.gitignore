@@ -1,6 +1,8 @@
 # Ignore enviroment variables
 .env.prod*
 
+celerybeat-schedule*
+
 # Ignore the logs directory
 logs/
 
