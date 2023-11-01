@@ -3,7 +3,7 @@
 ## Запуск приложения у разработчика
 Клонировать репозиторий в выделенный для этого каталог
 ```
-git clone https://ASemochkin@scm.sk.ru/scm/gym/freshstream.git
+git clone git@gitlab.sk.ru:gymnasium/freshstream.git
 ```
 ### Запуск СУБД
 Выполняется через Docker один раз после клонирования репозитория
