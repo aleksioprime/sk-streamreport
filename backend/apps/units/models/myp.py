@@ -267,7 +267,8 @@ class MypUnitPlannerInterdisciplinary(models.Model):
     title = models.CharField(max_length=255, verbose_name=_("Название междисциплинарного юнита"))
     year = models.ForeignKey('general.StudyYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, blank=False, related_name="myp_iduplans")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
-    purpose_integration = models.TextField(verbose_name=_("Цель интеграции"), null=True, blank=True)
+    integrated_forms = models.TextField(verbose_name=_("Формы интеграции"), null=True, blank=True)
+    integrated_purpose = models.TextField(verbose_name=_("Цель интеграции"), null=True, blank=True)
     key_concepts = models.ManyToManyField('units.MypKeyConcept', verbose_name=_("Ключевые концепты"), blank=True, related_name="myp_iduplans")
     related_concepts = models.ManyToManyField('units.MypRelatedConcept', verbose_name=_("Сопутствующие концепты"), blank=True, related_name="myp_iduplans")
     conceptual_understanding = models.TextField(verbose_name=_("Концептуальное понимание"), null=True, blank=True)
@@ -283,6 +284,7 @@ class MypUnitPlannerInterdisciplinary(models.Model):
     formative_assessment = models.TextField(verbose_name=_("Формирующее оценивание"), null=True, blank=True)
     summative_assessment = models.TextField(verbose_name=_("Итоговое оценивание"), null=True, blank=True)
     differentiation = models.TextField(verbose_name=_("Дифференцированный подход"), null=True, blank=True)
+    resources = models.TextField(verbose_name=_("Ресурсы"), null=True, blank=True)
     class Meta:
         verbose_name = 'MYP: UnitPlan - Междисциплинарный юнит'
         verbose_name_plural = 'MYP: UnitPlans - Междисциплинарные юниты'
