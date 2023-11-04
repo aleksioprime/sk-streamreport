@@ -9,4 +9,4 @@ COPY frontend/package-lock.json ./
 RUN npm ci
 
 # Копируем все файлы фронтенда и запускаем фронтенд
-COPY frontend /frontend
+COPY frontend ./

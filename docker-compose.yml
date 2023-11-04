@@ -25,7 +25,7 @@ services:
       dockerfile: ./docker/develop/backend/Dockerfile
     command: celery -A config worker --loglevel=info
     volumes:
-      - ./backend/:/usr/src/backend/
+      - ./backend/:/backend
     env_file:
       - ./backend/.env/.env
     networks:
@@ -40,28 +40,12 @@ services:
       dockerfile: ./docker/develop/backend/Dockerfile
     command: celery -A config beat --loglevel=info
     volumes:
-      - ./backend/:/usr/src/backend/
+      - ./backend/:/backend
     networks:
       - main
     depends_on:
       - backend
       - redis
-
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   container_name: pgadmin4
-  #   restart: always
-  #   ports:
-  #     - "5050:80"
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@streamreport.com
-  #     PGADMIN_DEFAULT_PASSWORD: Admin#256
-  #   volumes:
-  #     - pgadmin-data:/var/lib/pgadmin
-  #   depends_on:
-  #     - database
-  #   networks:
-  #     - main
 
   backend:
     container_name: develop-backend
@@ -69,7 +53,7 @@ services:
       dockerfile: ./docker/develop/backend/Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./backend/:/usr/src/backend/
+      - ./backend/:/backend
     depends_on:
       - database
       - redis
@@ -85,6 +69,8 @@ services:
       dockerfile: ./docker/develop/frontend/Dockerfile
     container_name: develop-frontend
     command: sh -c "npm rebuild esbuild && npm run dev -- --host"
+    volumes:
+      - ./frontend:/frontend/
     environment:
       PORT: '8080'
       HOST: '0.0.0.0'
@@ -93,7 +79,6 @@ services:
 
 volumes:
   postgres_data:
-  pgadmin-data:
 
 networks:
   main:
