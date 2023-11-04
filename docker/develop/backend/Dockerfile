@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 # Устанавливаем рабочий каталог контейнера 
-WORKDIR /usr/src/backend
+WORKDIR /backend
 
 # install psycopg2 dependencies
 RUN apk update \
@@ -19,11 +19,8 @@ RUN pip install -r requirements.txt
 
 # Копирование entrypoint.sh
 COPY backend/entrypoint.sh ./
-RUN sed -i 's/\r$//g' /usr/src/backend/entrypoint.sh
-RUN chmod +x /usr/src/backend/entrypoint.sh
+RUN sed -i 's/\r$//g' ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 # Копирование всех файлов из локального проекта в контейнер
 COPY backend .
-
-# Запуск entrypoint.sh
-ENTRYPOINT ["/usr/src/backend/entrypoint.sh"]
