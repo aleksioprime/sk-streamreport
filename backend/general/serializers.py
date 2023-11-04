@@ -13,7 +13,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'middle_name': self.user.middle_name,
             'last_name': self.user.last_name,
         }
-
         return data
 
 # Регистрация пользователя

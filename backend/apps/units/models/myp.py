@@ -3,8 +3,6 @@ from django.utils.translation import gettext_lazy as _
 from apps.units.models import ObjectiveLetterChoices, StrandLetterChoices, QuestionTypeMypChoices, PostTypeChoices
 
 
-# TODO: исправить .format на f-строку, проверить все выводы
-
 class MypObjective(models.Model):
     """ Предметные цели/критерии оценивания """
     letter = models.CharField(verbose_name=_("Символ"), choices=ObjectiveLetterChoices.choices, max_length=1)

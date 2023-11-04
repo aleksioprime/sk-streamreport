@@ -43,5 +43,7 @@ from .pyp import (
     PypLinesOfInquiryModelAdmin,
     PypRelatedConceptModelAdmin,
     PypProfileAttributeModelAdmin,
-    PypAtlDevelopModelAdmin
+    PypAtlDevelopModelAdmin,
+    PypUnitTeacherRolesModelAdmin,
+    PypReflectionPostModelAdmin
 )

@@ -32,6 +32,12 @@ class PostTypeChoices(models.TextChoices):
         during = "during", "Во время юнита"
         after = "after", "После окончания юнита"
 
+
+class PypReflectionChoices(models.TextChoices):
+        teacher = "teacher", "Рефлексия учителя"
+        students = "students", "Рефлексия студентов"
+        assessment = "assessment", "Рефлексия оценивания"
+
 class AimDpChoices(models.TextChoices):
         group = "group", "Group"
         subject = "subject", "Subject"

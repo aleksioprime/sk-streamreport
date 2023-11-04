@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from apps.units.models import PypReflectionChoices
+
 
 class TransdisciplinaryTheme(models.Model):
     """ Трансдисциплинарные темы """
@@ -57,7 +59,7 @@ class PypUnitPlanner(models.Model):
     """ ЮнитПланеры PYP """
     title = models.CharField(max_length=255, verbose_name=_("Название юнита"))
     order = models.PositiveSmallIntegerField(verbose_name=_("Номер"), default=0)
-    teachers = models.ManyToManyField('general.User', verbose_name=_("Учителя"), related_name="pyp_unitplans")
+    teachers = models.ManyToManyField('general.User', verbose_name=_("Учителя"), through='units.PypUnitTeacherRoles', related_name="pyp_unitplans")
     year = models.ForeignKey('general.StudyYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="pyp_unitplans")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
     transdisciplinary_theme = models.ForeignKey('units.TransdisciplinaryTheme', verbose_name=_("Трансдисциплинарная тема"), on_delete=models.SET_NULL, null=True, related_name="pyp_unitplans")
@@ -78,17 +80,26 @@ class PypUnitPlanner(models.Model):
     peer_self_assessment = models.TextField(verbose_name=_("Самооценка учащихся и отзывы сверстников"), null=True, blank=True)
     reflections_ongoing = models.TextField(verbose_name=_("Текущая рефлексия для всех учителей"), null=True, blank=True)
     reflections_additional = models.TextField(verbose_name=_("Дополнительная рефлексия по предметам"), null=True, blank=True)
-    reflections_teacher = models.TextField(verbose_name=_("Рефлексия учителя"), null=True, blank=True)
-    reflections_students = models.TextField(verbose_name=_("Рефлексия студентов"), null=True, blank=True)
-    reflections_assessment = models.TextField(verbose_name=_("Рефлексия оценивания"), null=True, blank=True)
     notes = models.TextField(verbose_name=_("Замечания"), null=True, blank=True)
     class Meta:
         verbose_name = 'PYP: UnitPlan'
         verbose_name_plural = 'PYP: UnitPlans'
         ordering = ['year', 'order', 'title']
     def __str__(self):
-        return f"{self.title} ({self.grade})"
-    
+        return f"{self.title} ({self.year})"
+
+class PypUnitTeacherRoles(models.Model):
+    """ Роли авторов юнита PYP """
+    unit = models.ForeignKey('units.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="teacher_roles")
+    user = models.ForeignKey('general.User', verbose_name=_("Пользователь"), on_delete=models.CASCADE, related_name="pyp_unitroles")
+    role = models.CharField(max_length=32, verbose_name=_("Роль"), null=True)
+    class Meta:
+        verbose_name = 'PYP: Роль автора юнита'
+        verbose_name_plural = 'PYP: Роли автора юнита'
+        ordering = ['unit', 'user', 'role']
+    def __str__(self):
+        return f"{self.user} ({self.role})"
+
 class PypLinesOfInquiry(models.Model):
     """ Линии исследования в юните PYP """
     name = models.CharField(max_length=255, verbose_name=_("Линия исследования"))
@@ -135,3 +146,16 @@ class PypAtlDevelop(models.Model):
         ordering = ['unit', 'atl']
     def __str__(self):
         return f"{self.atl} ({self.action})"
+    
+class PypReflectionPost(models.Model):
+    """ Посты рефлексии по планеру PYP """
+    type = models.CharField(choices=PypReflectionChoices.choices, verbose_name=_("Тип рефлексии"), max_length=10)
+    post = models.TextField(verbose_name=_("Содержание рефлексии"), null=True, blank=True)
+    author = models.ForeignKey('general.User', verbose_name=_("Автор поста"), on_delete=models.SET_NULL, null=True, related_name="pyp_reflections")
+    unit = models.ForeignKey('units.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="pyp_reflections")
+    class Meta:
+        verbose_name = 'PYP: UnitPlan - Пост рефлексии'
+        verbose_name_plural = 'PYP: UnitPlans - Посты рефлексии'
+        ordering = ['type', 'post']
+    def __str__(self):
+        return f"{self.type}: {self.post[:15]}"

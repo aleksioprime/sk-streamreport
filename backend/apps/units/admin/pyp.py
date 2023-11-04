@@ -8,7 +8,9 @@ from apps.units.models import (
     PypLinesOfInquiry,
     PypRelatedConcept,
     PypProfileAttribute,
-    PypAtlDevelop
+    PypAtlDevelop,
+    PypUnitTeacherRoles,
+    PypReflectionPost
 )
 
 @admin.register(TransdisciplinaryTheme)
@@ -104,4 +106,27 @@ class PypAtlDevelopModelAdmin(admin.ModelAdmin):
     )
     list_display_links = (
         "atl",
+    )
+
+@admin.register(PypUnitTeacherRoles)
+class PypUnitTeacherRolesModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "unit",
+        "user",
+        "role",
+    )
+    list_display_links = (
+        "user",
+    )
+
+@admin.register(PypReflectionPost)
+class PypReflectionPostModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "post",
+        "type",
+        "author",
+        "unit",
+    )
+    list_display_links = (
+        "post",
     )

@@ -4,6 +4,7 @@ from .common import (
     QuestionTypeMypChoices, 
     QuestionTypeDpChoices, 
     PostTypeChoices, 
+    PypReflectionChoices,
     AimDpChoices,
     LevelDpChoices,
     LanguageLearningChoices,
@@ -60,5 +61,7 @@ from .pyp import (
     PypLinesOfInquiry,
     PypRelatedConcept,
     PypProfileAttribute,
-    PypAtlDevelop
+    PypAtlDevelop,
+    PypUnitTeacherRoles,
+    PypReflectionPost
 )
