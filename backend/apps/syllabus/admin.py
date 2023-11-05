@@ -5,7 +5,7 @@ from apps.syllabus.models import (
     IbSubjectGroup,
     IbDiscipline,
     Syllabus,
-    SyllabusSubjectHours,
+    SyllabusLoad,
     TeachingLoad
 )
 
@@ -98,8 +98,8 @@ class SyllabusModelAdmin(admin.ModelAdmin):
         "year",
     )
 
-@admin.register(SyllabusSubjectHours)
-class SyllabusSubjectHoursModelAdmin(admin.ModelAdmin):
+@admin.register(SyllabusLoad)
+class SyllabusLoadModelAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "syllabus",

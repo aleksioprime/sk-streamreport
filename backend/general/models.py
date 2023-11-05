@@ -43,7 +43,7 @@ class User(AbstractUser, PermissionsMixin):
     middle_name = models.CharField(verbose_name=_("Отчество"), max_length=32, null=True, blank=True)
     gender = models.CharField(verbose_name=_("Пол"), max_length=6, choices=GenderChoices.choices, default='none', null=True, blank=True)
     photo = models.ImageField(verbose_name=_("Фотография"), upload_to="member_photos", blank=True, null=True)
-    dnevnik_token = models.CharField(verbose_name=_("Токе доступа в Дневник"), max_length=255, null=True, blank=True)
+    dnevnik_token = models.CharField(verbose_name=_("Токен доступа в Дневник"), max_length=255, null=True, blank=True)
     dnevnik_id = models.CharField(verbose_name=_("ID пользователя Дневника"), max_length=40, blank=True, null=True)
     last_activity = models.DateTimeField(verbose_name=_("Последняя активность"), auto_now=True)
 
@@ -70,7 +70,7 @@ class User(AbstractUser, PermissionsMixin):
         else:
             return f"{self.last_name} {self.first_name}"
     def __str__(self):
-        return '{} {}'.format(self.last_name, self.first_name)
+        return f'{self.last_name} {self.first_name}'
 
 class Department(models.Model):
     """ Учебные подразделения / Кафедры """
@@ -82,7 +82,7 @@ class Department(models.Model):
         verbose_name_plural = 'Подразделения'
         ordering = ['name']
     def __str__(self):
-        return '{}'.format(self.name)
+        return f'{self.name}'
 
 class AcademicYear(models.Model):
     """ Учебные года """
@@ -94,10 +94,10 @@ class AcademicYear(models.Model):
         verbose_name_plural = 'Учебные года'
         ordering = ['date_start']
     def __str__(self):
-        return "{}".format(self.name)
+        return f"{self.name}"
 
 class StudyYear(models.Model):
-    """ Года обучения / учебная параллель """
+    """ Параллель обучения """
     number = models.PositiveIntegerField(verbose_name=_("Год обучения"))
     number_ib = models.CharField(max_length=12, verbose_name=_("Год обучения в IB"), null=True)
     level = models.CharField(verbose_name=_("Национальные уровни образования"), choices=LevelNationChoices.choices, default=None, max_length=4)
@@ -120,7 +120,7 @@ class ClassGroup(models.Model):
     dnevnik_id = models.CharField(max_length=255, verbose_name=_('ID системы Дневник.РУ'), null=True)
     students = models.ManyToManyField('general.user', verbose_name=_("Студенты"), related_name="classes")
     mentor = models.ForeignKey('general.user', verbose_name=_("Наставник"), related_name='mentor_classes', null=True, on_delete=models.SET_NULL)
-    psychologist = models.ForeignKey('general.user', verbose_name=_("Психолог/воспитатель"), related_name='psycho_classes', null=True, on_delete=models.SET_NULL)
+    extra = models.ManyToManyField('general.user', verbose_name=_("Сотрудники класса"), through='general.ClassGroupRole', related_name="extra_classes")
     program_ib = models.CharField(verbose_name=_("IB-программа"), choices=ProgramIbChoices.choices, default=None, null=True, max_length=4)
     class Meta:
         verbose_name = 'Учебный класс'
@@ -133,6 +133,18 @@ class ClassGroup(models.Model):
     def name(self):
         return f"{self.year_study.number}{self.letter}"
     def __str__(self):
-        return "{}{} класс".format(self.year_study, self.letter)
+        return f"{self.year_study}{self.letter} класс"
+    
+class ClassGroupRole(models.Model):
+    """ Роли сотрудников класса """
+    user = models.ForeignKey('general.user', verbose_name=_("Пользователь"), on_delete=models.CASCADE, null=True, related_name="group_roles")
+    group = models.ForeignKey('general.ClassGroup', verbose_name=_("Группа"), on_delete=models.SET_NULL, null=True, related_name="user_roles")
+    роль = models.CharField(max_length=255, verbose_name=_("Роль"), null=True)
+    class Meta:
+        verbose_name = 'Учебный класс: роль'
+        verbose_name_plural = 'Учебные классы: роли'
+        ordering = ['user', 'group', 'роль']
+    def __str__(self):
+        return f"{self.user}{self.роль}"
     
 # Group.add_to_class('description', models.CharField(max_length=180,null=True, blank=True))

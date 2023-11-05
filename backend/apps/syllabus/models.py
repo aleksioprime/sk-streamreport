@@ -39,7 +39,7 @@ class IbSubjectGroup(models.Model):
         verbose_name_plural = 'Предметные группы IB'
         ordering = ['program', 'name']
     def __str__(self):
-        return "{} ({})".format(self.name, self.program)
+        return f"{self.name} ({self.program})"
 
 class IbDiscipline(models.Model):
     """ Специальные дисцилины """
@@ -51,17 +51,17 @@ class IbDiscipline(models.Model):
         verbose_name_plural = 'Специальные IB-дисциплины'
         ordering = ['group', 'name']
     def __str__(self):
-        return "{}".format(self.name)
+        return f"{self.name}"
 
 class Subject(models.Model):
     """ Учебные дисциплины """
     name = models.CharField(max_length=128, verbose_name=_("Название"))
     name_eng = models.CharField(max_length=128, verbose_name=_("Название на англ. языке"), null=True)
-    group_ib = models.ForeignKey('syllabus.IbSubjectGroup', verbose_name=_("Предметная группа в IB"), on_delete=models.SET_NULL, null=True, related_name="subject")
-    group_fgos = models.ForeignKey('syllabus.FgosSubjectGroup', verbose_name=_("Предметная область в РФ"), on_delete=models.SET_NULL, null=True, related_name="subject")
+    group_ib = models.ForeignKey('syllabus.IbSubjectGroup', verbose_name=_("Предметная группа в IB"), on_delete=models.SET_NULL, null=True, related_name="subjects")
+    group_fgos = models.ForeignKey('syllabus.FgosSubjectGroup', verbose_name=_("Предметная область в РФ"), on_delete=models.SET_NULL, null=True, related_name="subjects")
     type = models.CharField(verbose_name=_("Тип предмета"), choices=ProgramTypeChoices.choices, max_length=10, default='base')
     dnevnik_id = models.CharField(verbose_name=_('ID системы Дневник.РУ'), max_length=40, null=True)
-    department = models.ForeignKey('general.Department', verbose_name=_("Учебное подразделение"), on_delete=models.SET_NULL, null=True, related_name="subject")
+    department = models.ForeignKey('general.Department', verbose_name=_("Учебное подразделение"), on_delete=models.SET_NULL, null=True, related_name="subjects")
     level = models.CharField(verbose_name=_("Уровень образования"), choices=LevelNationChoices.choices, default=None, max_length=4)
     need_report = models.BooleanField(verbose_name=_('Необходимость репорта'), default=False)
     class Meta:
@@ -69,11 +69,11 @@ class Subject(models.Model):
         verbose_name_plural = 'Предметы'
         ordering = ['type', 'group_ib', 'name']
     def __str__(self):
-        return "{} ({}, {})".format(self.name, self.get_level_display(), self.get_type_display())
+        return f"{self.name} ({self.get_level_display()}, {self.get_type_display()})"
 
 class Syllabus(models.Model):
     """ Учебные планы """
-    year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="academic_plan")
+    year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="syllabus")
     name = models.CharField(max_length=128, verbose_name=_("Название"), null=True, blank=True)
     name_short = models.CharField(max_length=32, verbose_name=_("Сокращённое название"), null=True, blank=True)
     level = models.CharField(verbose_name=_("Уровень образования"), choices=LevelNationChoices.choices, default=None, max_length=4)
@@ -84,11 +84,11 @@ class Syllabus(models.Model):
     def __str__(self):
         return f"{self.year} {self.name}"
     
-class SyllabusSubjectHours(models.Model):
+class SyllabusLoad(models.Model):
     """ Нагрузка учебных планов """
-    syllabus = models.ForeignKey('syllabus.Syllabus', verbose_name=_("Учебный план"), on_delete=models.CASCADE, null=True, related_name="syllabus_subject_hours")
-    subject = models.ForeignKey('syllabus.Subject', verbose_name=_("Предмет"), on_delete=models.CASCADE, null=True, related_name="syllabus_subject_hours")
-    years = models.ManyToManyField('general.StudyYear', verbose_name=_("Параллель"), related_name="syllabus_subject_hours")
+    syllabus = models.ForeignKey('syllabus.Syllabus', verbose_name=_("Учебный план"), on_delete=models.CASCADE, null=True, related_name="syllabus_loads")
+    subject = models.ForeignKey('syllabus.Subject', verbose_name=_("Предмет"), on_delete=models.CASCADE, null=True, related_name="syllabus_loads")
+    years = models.ManyToManyField('general.StudyYear', verbose_name=_("Параллель"), related_name="syllabus_loads")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=1)
     class Meta:
         verbose_name = 'Учебный план - нагрузка'
@@ -99,14 +99,14 @@ class SyllabusSubjectHours(models.Model):
     
 class TeachingLoad(models.Model):
     """ Преподавательская нагрузка """
-    year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="teaching_load")
-    teacher = models.ForeignKey('general.User', verbose_name=_("Учитель"), on_delete=models.CASCADE, null=True, blank=True, related_name="teaching_load")
-    subject = models.ForeignKey('syllabus.Subject', verbose_name=_("Предмет"), on_delete=models.CASCADE, null=True, related_name="teaching_load")
-    groups = models.ManyToManyField('general.ClassGroup', verbose_name=_("Классы"), blank=True, related_name="teaching_load")
+    year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="teaching_loads")
+    teacher = models.ForeignKey('general.User', verbose_name=_("Учитель"), on_delete=models.CASCADE, null=True, blank=True, related_name="teaching_loads")
+    subject = models.ForeignKey('syllabus.Subject', verbose_name=_("Предмет"), on_delete=models.CASCADE, null=True, related_name="teaching_loads")
+    groups = models.ManyToManyField('general.ClassGroup', verbose_name=_("Классы"), blank=True, related_name="teaching_loads")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Часы"), default=1)
     class Meta:
         verbose_name = 'Рабочая нагрузка учителя'
         verbose_name_plural = 'Рабочие нагрузки учителей '
         ordering = ['year', 'subject', 'groups__year_study', 'groups__year_study', 'teacher']
     def __str__(self):
-        return '{} ({} - {} ч.)'.format(self.teacher, self.subject, self.hours)
+        return f'{self.teacher} ({self.subject} - {self.hours} ч.)'
