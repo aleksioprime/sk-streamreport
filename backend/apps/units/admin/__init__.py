@@ -31,6 +31,7 @@ from .myp import (
     MypReflectionPostModelAdmin,
     MypUnitPlannerInterdisciplinaryModelAdmin,
     MypInquiryQuestionIduModelAdmin,
+    MypAtlDevelopIduModelAdmin,
     MypReflectionPostIduModelAdmin
 )
 

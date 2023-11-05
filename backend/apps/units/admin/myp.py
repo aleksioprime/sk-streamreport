@@ -18,6 +18,7 @@ from apps.units.models import (
     MypReflectionPost,
     MypUnitPlannerInterdisciplinary,
     MypInquiryQuestionIdu,
+    MypAtlDevelopIdu,
     MypReflectionPostIdu
 )
 
@@ -211,6 +212,17 @@ class MypInquiryQuestionIduModelAdmin(admin.ModelAdmin):
     )
     list_display_links = (
         "question",
+    )
+
+@admin.register(MypAtlDevelopIdu)
+class MypAtlDevelopIduModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "atl",
+        "strand",
+        "unit",
+    )
+    list_display_links = (
+        "atl",
     )
 
 @admin.register(MypReflectionPostIdu)

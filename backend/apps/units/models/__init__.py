@@ -50,6 +50,7 @@ from .myp import (
     MypReflectionPost,
     MypUnitPlannerInterdisciplinary,
     MypInquiryQuestionIdu,
+    MypAtlDevelopIdu,
     MypReflectionPostIdu
 )
 from .pyp import (
