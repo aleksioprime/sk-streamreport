@@ -37,6 +37,7 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser, PermissionsMixin):
     """ Расширеная модель пользователя """
+    username = None
     email = models.EmailField(verbose_name=_("Электронная почта"), unique=True)
     last_name = models.CharField(verbose_name=_("Фамилия"), max_length=30, blank=True)
     first_name = models.CharField(verbose_name=_("Имя"), max_length=30, blank=True)

@@ -167,7 +167,44 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', 
+    'PAGE_SIZE': 10,
+
+}
+
+import logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'main': {
+            'format': "{asctime} - {levelname} - {module} - {filename} - {message}",
+            'style': "{"
+        }
+    },
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'main',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'info.log'),
+            'formatter': 'main',
+        }
+    },
+
+    'loggers': {
+        'main': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO' if not DEBUG else 'DEBUG',
+            'propagate': True,
+        },
+    },
 }
 
 # Настройки Spectacular (API-документации)
@@ -179,6 +216,10 @@ SPECTACULAR_SETTINGS = {
     'TAGS': [
         # {'name': 'users', 'description': 'Операции с пользователями'},
     ],
+    'SWAGGER_UI_SETTINGS': {
+        'displayOperationId': True,
+        'defaultModelsExpandDepth': -1,
+    }
 }
 
 SIMPLE_JWT = {
