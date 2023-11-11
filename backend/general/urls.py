@@ -1,9 +1,15 @@
 from rest_framework.routers import SimpleRouter
-from general.views import UserViewSet, CustomTokenObtainPairView, CustomTokenRefreshView
+from general.views import (
+    UserViewSet,
+    ClassGroupViewSet,
+    CustomTokenObtainPairView,
+    CustomTokenRefreshView
+    )
 from django.urls import path, include
 
 router = SimpleRouter()
 router.register(r'users', UserViewSet, basename="users")
+router.register(r'groups', ClassGroupViewSet, basename="groups")
 
 extra_paths = [
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),

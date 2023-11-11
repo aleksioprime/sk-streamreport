@@ -3,6 +3,10 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from general.models import (
     User,
     Department,
+    ClassGroup,
+    AcademicYear,
+    StudyYear,
+    StudyYearIb
     )
 
 # Кастомный сериализатор для ответа при JWT-аутентификации
@@ -51,9 +55,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "first_name", "last_name")
+        fields = (
+            "id", 
+            "first_name", 
+            "last_name"
+            )
 
-# Информация о конкретном пользователей
+# Информация о пользователе
 class UserRetrieveSerializer(serializers.ModelSerializer):
     myp_unitplans_count = serializers.SerializerMethodField()
     departments = DepartmentListSerializer(many=True)
@@ -71,3 +79,89 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
         
     def get_myp_unitplans_count(self, obj) -> int:
         return obj.myp_unitplans.count()
+
+# Импорт пользователей
+class UserImportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "email",
+            "gender",
+            "password",
+            "position",
+            "departments",
+            "groups",
+            "classes",
+            "dnevnik_id",
+            "dnevnik_user_id",
+        )
+        extra_kwargs = {
+            'departments': {'required': False, 'allow_null': True},
+            'classes': {'required': False, 'allow_null': True},
+        }
+
+# Учебные года
+class AcademicYearListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicYear
+        fields = (
+            "id",
+            "name",
+            "date_start",
+            "date_end"
+            )
+
+# Параллели в IB
+class StudyYearIbListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudyYearIb
+        fields = (
+            "id",
+            "name",
+            "program_ib",
+            )
+        
+# Параллели обучения
+class StudyYearListSerializer(serializers.ModelSerializer):
+    ib = StudyYearIbListSerializer()
+    class Meta:
+        model = StudyYear
+        fields = (
+            "id",
+            "number",
+            "level",
+            "ib",
+            )
+
+# Список групп
+class ClassGroupListSerializer(serializers.ModelSerializer):
+    year_academic = AcademicYearListSerializer()
+    year_study = StudyYearListSerializer()
+    class Meta:
+        model = ClassGroup
+        fields = (
+            "id",
+            "year_academic",
+            "year_study",
+            "letter",
+            )
+
+# Информация о группе
+class ClassGroupCRUDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClassGroup
+        fields = (
+            "id",
+            "year_academic",
+            "year_study",
+            "year_study_ib",
+            "letter",
+            "dnevnik_id",
+            "students",
+            "mentor",
+            "extra",
+        )

@@ -1,11 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from import_export.admin import ImportExportModelAdmin
+
 from general.models import (
     User,
     Department,
     AcademicYear,
+    StudyYearIb,
     StudyYear,
-    ClassGroup
+    ClassGroup,
+    ClassGroupRole
 )
 
 from django import forms
@@ -82,6 +86,7 @@ class CustomUserAdmin(BaseUserAdmin):
                     "middle_name",
                     "gender",
                     "photo",
+                    "groups",
                 )
             }
         ),
@@ -90,6 +95,7 @@ class CustomUserAdmin(BaseUserAdmin):
                 "fields": (
                     "dnevnik_token",
                     "dnevnik_id", 
+                    "dnevnik_user_id",
                 )
             }
         ),
@@ -128,79 +134,6 @@ class CustomUserAdmin(BaseUserAdmin):
     ordering = ('email',)
     exclude = ('username',)
 
-# @admin.register(User)
-# class UserModelAdmin(admin.ModelAdmin):
-#     list_display = (
-#         "id",
-#         "first_name",
-#         "last_name",
-#         "email",
-#         "is_active",
-#         "last_activity",
-#     )
-#     readonly_fields = (
-#         "date_joined",
-#         "last_login",
-#         "last_activity",
-#     )
-#     list_display_links = (
-#         "first_name",
-#         "last_name",
-#         "email",
-#     )
-#     fieldsets = (
-#         (None, {'fields': ('email', 'password')}),
-#         (
-#             "Личные данные", {
-#                 "fields": (
-#                     "last_name",
-#                     "first_name",
-#                     "middle_name",
-#                     "gender",
-#                     "photo",
-#                 )
-#             }
-#         ),
-#         (
-#             "Связь с Дневник.РУ", {
-#                 "fields": (
-#                     "dnevnik_token",
-#                     "dnevnik_id", 
-#                 )
-#             }
-#         ),
-#         (
-#             "Статусы", {
-#                 "classes": (
-#                     "collapse",
-#                 ),
-#                 "fields": (
-#                     "is_staff",
-#                     "is_superuser",
-#                     "is_active",
-#                 )
-#             }
-#         ),
-#         (
-#             "Даты", {
-#                 "fields": (
-#                     "date_joined",
-#                     "last_login",
-#                     "last_activity",
-#                 )
-#             }
-#         )
-#     )
-#     search_fields = (
-#         "last_name",
-#         "email",
-#     )
-#     list_filter = (
-#         "is_active",
-#         "groups",
-#         ("date_joined", DateRangeFilter),
-#     )
-
 admin.site.register(User, CustomUserAdmin)
 
 @admin.register(Group)
@@ -222,6 +155,7 @@ class DepartmentModelAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "name",
+        "count",
     )
     list_display_links = (
         "name",
@@ -249,42 +183,76 @@ class AcademicYearModelAdmin(admin.ModelAdmin):
         "date_end",
     )
 
+@admin.register(StudyYearIb)
+class StudyYearIbModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "program_ib",
+    )
+    list_display_links = (
+        "name",
+    )
+    fields = (
+        "name",
+        "program_ib",
+    )
+
 @admin.register(StudyYear)
 class StudyYearModelAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "number",
-        "number_ib",
         "level",
-        "program_ib",
     )
     list_display_links = (
         "number",
     )
     fields = (
         "number",
-        "number_ib",
         "level",
-        "program_ib",
+        "ib",
     )
 
 @admin.register(ClassGroup)
-class ClassGroupModelAdmin(admin.ModelAdmin):
+class ClassGroupModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
-        "name",
-        "mentor",
         "year_academic",
+        "name",
+        "year_study",
+        "year_study_ib",
+        "mentor",
+        "dnevnik_id",
+        "count",
     )
     list_display_links = (
         "name",
     )
+    filter_horizontal = ('extra',)
     fields = (
         "year_academic",
         "year_study",
+        "year_study_ib",
         "letter",
         "dnevnik_id",
         "mentor",
-        "psychologist",
-        "program_ib"
+        "students",
+    )
+    
+
+@admin.register(ClassGroupRole)
+class ClassGroupRoleModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "group",
+        "role"
+    )
+    list_display_links = (
+        "user",
+    )
+    fields = (
+        "user",
+        "group",
+        "role"
     )

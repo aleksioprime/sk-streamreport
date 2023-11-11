@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'drf_spectacular',
     'django_filters',
+    'import_export',
     # Приложения
     'general',
     'apps.syllabus',
@@ -234,3 +235,7 @@ if DEBUG:
     import socket  # only if you haven't already imported this
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1"]
+
+# Данные для API сервиса Дневник.ру
+SCHOOL_ID = os.environ.get("SCHOOL_ID")
+CLIENT_ID = os.environ.get("CLIENT_ID")
