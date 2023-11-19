@@ -29,6 +29,9 @@ urlpatterns = [
     path('api/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/', include('general.urls')),
+    path('api/', include('apps.curriculum.urls')),
+    # path('api/', include('apps.units.urls')),
+    path('api/', include('apps.report.urls')),
 ]
 
 if bool(settings.DEBUG):

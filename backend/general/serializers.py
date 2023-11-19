@@ -38,6 +38,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "password",
             "first_name",
             "last_name",
+            "middle_name",
+            "dnevnik_id",
         )
 
     def create(self, validated_data):
@@ -58,7 +60,10 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = (
             "id", 
             "first_name", 
-            "last_name"
+            "last_name",
+            "middle_name",
+            "email",
+            "dnevnik_id",
             )
 
 # Информация о пользователе
@@ -72,9 +77,16 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
             "id",
             "first_name",
             "last_name",
+            "middle_name",
             "email",
-            "myp_unitplans_count",
-            "departments"
+            "gender",
+            "position",
+            "departments",
+            "groups",
+            "classes",
+            "dnevnik_id",
+            "dnevnik_user_id",
+            "myp_unitplans_count"
         )
         
     def get_myp_unitplans_count(self, obj) -> int:
@@ -151,7 +163,25 @@ class ClassGroupListSerializer(serializers.ModelSerializer):
             )
 
 # Информация о группе
-class ClassGroupCRUDSerializer(serializers.ModelSerializer):
+class ClassCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClassGroup
+        fields = (
+            "id",
+            "year_academic",
+            "year_study",
+            "year_study_ib",
+            "letter",
+            "dnevnik_id",
+            "mentor",
+            "extra",
+        )
+
+# Информация о группе со студентами
+class ClassRetrieveSerializer(serializers.ModelSerializer):
+    students = UserListSerializer(many=True)
+    mentor = UserListSerializer()
+    extra = UserListSerializer(many=True)
     class Meta:
         model = ClassGroup
         fields = (

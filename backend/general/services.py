@@ -13,3 +13,6 @@ def get_group_queryset():
             "year_academic",
             "year_study",
         )
+
+def load_file_excel():
+    pass

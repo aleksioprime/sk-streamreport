@@ -49,11 +49,17 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'django_filters',
     'import_export',
-    # Приложения
+    # Приложения проекта
     'general',
+    'apps.curriculum',
     'apps.syllabus',
     'apps.assessment',
-    'apps.units',
+    'apps.ibo',
+    'apps.units.pyp',
+    'apps.units.myp',
+    'apps.units.dp',
+    'apps.report',
+    'apps.portfolio',
 ]
 
 MIDDLEWARE = [
@@ -220,7 +226,7 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_SETTINGS': {
         'displayOperationId': True,
         'defaultModelsExpandDepth': -1,
-    }
+    },
 }
 
 SIMPLE_JWT = {

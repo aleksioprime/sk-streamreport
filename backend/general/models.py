@@ -146,7 +146,7 @@ class ClassGroup(models.Model):
         return self.students.count
     @property
     def name(self):
-        return f"{self.year_study.number}{self.letter}"
+        return f"{self.year_study}{self.letter}"
     def __str__(self):
         return f"{self.year_study}{self.letter} класс"
     

@@ -20,7 +20,8 @@ from general.serializers import (
     UserImportSerializer,
     CustomTokenObtainPairSerializer,
     ClassGroupListSerializer,
-    ClassGroupCRUDSerializer,
+    ClassRetrieveSerializer,
+    ClassCreateSerializer,
 )
 
 from general.models import (
@@ -161,13 +162,13 @@ class UserViewSet(ModelViewSet):
                 for user_instance in users_instances:
                     user_instance.delete()
                 return Response({'detail': 'Users not imported'}, status=status.HTTP_400_BAD_REQUEST)
-            logger.info(f"User {request.user.email} (ID: {request.user.id}) выполнил импорт пользователей")
+            logger.info(f"User {request.user.email} (ID: {request.user.id}) perform import users")
             return Response({'detail': 'Users imported successfully'}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema_view(
-    list=extend_schema(summary='Список класса', tags=['Классы']),
+    list=extend_schema(summary='Список классов', tags=['Классы']),
     create=extend_schema(summary='Создание класса', tags=['Классы']),
     retrieve=extend_schema(summary='Просмотр класса', tags=['Классы']),
     update=extend_schema(summary='Обновление класса', tags=['Классы']),
@@ -178,9 +179,11 @@ class ClassGroupViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'put', 'delete']
 
     def get_serializer_class(self):
-        if self.action == "list":
-            return ClassGroupListSerializer
-        return ClassGroupCRUDSerializer
+        if self.action in ["create"]:
+            return ClassCreateSerializer
+        if self.action in ["retrieve", "update"]:
+            return ClassRetrieveSerializer
+        return ClassGroupListSerializer
     
     def get_queryset(self):
         return get_group_queryset()

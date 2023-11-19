@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib.admin import register, site, ModelAdmin
 from django.contrib.auth.models import Group
 from import_export.admin import ImportExportModelAdmin
 
@@ -27,10 +27,11 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('email',)  # Use 'email' as the username
 
 class CustomUserChangeForm(UserChangeForm):
+    
     class Meta(UserChangeForm.Meta):
         model = User
 
-admin.site.unregister(Group)
+site.unregister(Group)
 
 class CustomUserAdmin(BaseUserAdmin):
     add_form = CustomUserCreationForm
@@ -47,6 +48,8 @@ class CustomUserAdmin(BaseUserAdmin):
         "date_joined",
         "last_login",
         "last_activity",
+        "display_classes",
+        "display_departments",
     )
     list_display_links = (
         "first_name",
@@ -75,7 +78,6 @@ class CustomUserAdmin(BaseUserAdmin):
             }
         ),
     )
-    
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (
@@ -86,6 +88,8 @@ class CustomUserAdmin(BaseUserAdmin):
                     "middle_name",
                     "gender",
                     "photo",
+                    "display_classes",
+                    "display_departments",
                     "groups",
                 )
             }
@@ -128,16 +132,22 @@ class CustomUserAdmin(BaseUserAdmin):
     list_filter = (
         "is_active",
         "groups",
-        ("date_joined", DateRangeFilter),
+        ("last_activity", DateRangeFilter),
     )
     # Удалите ordering, если не используете сортировку
     ordering = ('email',)
     exclude = ('username',)
+    def display_classes(self, obj):
+        return ", ".join([f"{cl.name} ({cl.year_academic})" for cl in obj.classes.all()])
+    display_classes.short_description = 'Классы'
+    def display_departments(self, obj):
+        return ", ".join([f"{dp.name}" for dp in obj.departments.all()])
+    display_departments.short_description = 'Подразделение'
 
-admin.site.register(User, CustomUserAdmin)
+site.register(User, CustomUserAdmin)
 
-@admin.register(Group)
-class UserModelAdmin(admin.ModelAdmin):
+@register(Group)
+class UserModelAdmin(ModelAdmin):
     list_display = (
         "id",
         "name",
@@ -150,8 +160,8 @@ class UserModelAdmin(admin.ModelAdmin):
         "permissions",
     )
 
-@admin.register(Department)
-class DepartmentModelAdmin(admin.ModelAdmin):
+@register(Department)
+class DepartmentModelAdmin(ModelAdmin):
     list_display = (
         "id",
         "name",
@@ -160,14 +170,15 @@ class DepartmentModelAdmin(admin.ModelAdmin):
     list_display_links = (
         "name",
     )
+    filter_horizontal = ('employees',)
     fields = (
         "name",
         "logo",
         "employees",
     )
 
-@admin.register(AcademicYear)
-class AcademicYearModelAdmin(admin.ModelAdmin):
+@register(AcademicYear)
+class AcademicYearModelAdmin(ModelAdmin):
     list_display = (
         "id",
         "name",
@@ -183,8 +194,8 @@ class AcademicYearModelAdmin(admin.ModelAdmin):
         "date_end",
     )
 
-@admin.register(StudyYearIb)
-class StudyYearIbModelAdmin(admin.ModelAdmin):
+@register(StudyYearIb)
+class StudyYearIbModelAdmin(ModelAdmin):
     list_display = (
         "id",
         "name",
@@ -198,8 +209,8 @@ class StudyYearIbModelAdmin(admin.ModelAdmin):
         "program_ib",
     )
 
-@admin.register(StudyYear)
-class StudyYearModelAdmin(admin.ModelAdmin):
+@register(StudyYear)
+class StudyYearModelAdmin(ModelAdmin):
     list_display = (
         "id",
         "number",
@@ -214,7 +225,7 @@ class StudyYearModelAdmin(admin.ModelAdmin):
         "ib",
     )
 
-@admin.register(ClassGroup)
+@register(ClassGroup)
 class ClassGroupModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
@@ -229,7 +240,7 @@ class ClassGroupModelAdmin(ImportExportModelAdmin):
     list_display_links = (
         "name",
     )
-    filter_horizontal = ('extra',)
+    filter_horizontal = ('students',)
     fields = (
         "year_academic",
         "year_study",
@@ -241,8 +252,8 @@ class ClassGroupModelAdmin(ImportExportModelAdmin):
     )
     
 
-@admin.register(ClassGroupRole)
-class ClassGroupRoleModelAdmin(admin.ModelAdmin):
+@register(ClassGroupRole)
+class ClassGroupRoleModelAdmin(ModelAdmin):
     list_display = (
         "user",
         "group",
