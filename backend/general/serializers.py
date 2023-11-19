@@ -54,7 +54,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 # Список пользователей
-class UserListSerializer(serializers.ModelSerializer):
+class UserListGeneralSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -117,7 +117,7 @@ class UserImportSerializer(serializers.ModelSerializer):
         }
 
 # Учебные года
-class AcademicYearListSerializer(serializers.ModelSerializer):
+class AcademicYearListGeneralSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicYear
         fields = (
@@ -138,7 +138,7 @@ class StudyYearIbListSerializer(serializers.ModelSerializer):
             )
         
 # Параллели обучения
-class StudyYearListSerializer(serializers.ModelSerializer):
+class StudyYearListSerializerGeneral(serializers.ModelSerializer):
     ib = StudyYearIbListSerializer()
     class Meta:
         model = StudyYear
@@ -150,9 +150,9 @@ class StudyYearListSerializer(serializers.ModelSerializer):
             )
 
 # Список групп
-class ClassGroupListSerializer(serializers.ModelSerializer):
-    year_academic = AcademicYearListSerializer()
-    year_study = StudyYearListSerializer()
+class ClassGroupListGeneralSerializer(serializers.ModelSerializer):
+    year_academic = AcademicYearListGeneralSerializer()
+    year_study = StudyYearListSerializerGeneral()
     class Meta:
         model = ClassGroup
         fields = (
@@ -179,9 +179,9 @@ class ClassCreateSerializer(serializers.ModelSerializer):
 
 # Информация о группе со студентами
 class ClassRetrieveSerializer(serializers.ModelSerializer):
-    students = UserListSerializer(many=True)
-    mentor = UserListSerializer()
-    extra = UserListSerializer(many=True)
+    students = UserListGeneralSerializer(many=True)
+    mentor = UserListGeneralSerializer()
+    extra = UserListGeneralSerializer(many=True)
     class Meta:
         model = ClassGroup
         fields = (

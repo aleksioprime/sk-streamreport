@@ -68,7 +68,7 @@ class CurriculumListSerializer(serializers.ModelSerializer):
             "level"
             )
         
-class StudyYearListSerializer(serializers.ModelSerializer):
+class StudyYearListSerializerCurriculum(serializers.ModelSerializer):
     class Meta:
         model = StudyYear
         fields = (
@@ -81,7 +81,7 @@ class StudyYearListSerializer(serializers.ModelSerializer):
 class CurriculumLoadListSerializer(serializers.ModelSerializer):
     curriculum = CurriculumListSerializer()
     subject = SubjectListSerializer()
-    years = StudyYearListSerializer(many=True)
+    years = StudyYearListSerializerCurriculum(many=True)
     class Meta:
         model = CurriculumLoad
         fields = (
@@ -92,7 +92,7 @@ class CurriculumLoadListSerializer(serializers.ModelSerializer):
             "hours"
             )
 
-class AcademicYearListSerializer(serializers.ModelSerializer):
+class AcademicYearListCurriculumSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicYear
         fields = (
@@ -102,7 +102,7 @@ class AcademicYearListSerializer(serializers.ModelSerializer):
             "date_end"
             )
         
-class UserListSerializer(serializers.ModelSerializer):
+class UserListCurriculumSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -114,9 +114,9 @@ class UserListSerializer(serializers.ModelSerializer):
             "dnevnik_id",
             )
 
-class ClassGroupListSerializer(serializers.ModelSerializer):
-    year_academic = AcademicYearListSerializer()
-    year_study = StudyYearListSerializer()
+class ClassGroupListCurriculumSerializer(serializers.ModelSerializer):
+    year_academic = AcademicYearListCurriculumSerializer()
+    year_study = StudyYearListSerializerCurriculum()
     class Meta:
         model = ClassGroup
         fields = (
@@ -128,10 +128,10 @@ class ClassGroupListSerializer(serializers.ModelSerializer):
 
 # Преподавательская нагрузка
 class TeachingLoadListSerializer(serializers.ModelSerializer):
-    year = AcademicYearListSerializer()
-    teacher = UserListSerializer()
+    year = AcademicYearListCurriculumSerializer()
+    teacher = UserListCurriculumSerializer()
     subject = SubjectListSerializer()
-    groups = ClassGroupListSerializer(many=True)
+    groups = ClassGroupListCurriculumSerializer(many=True)
     class Meta:
         model = TeachingLoad
         fields = (

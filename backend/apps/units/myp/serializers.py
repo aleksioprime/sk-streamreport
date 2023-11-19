@@ -1,26 +1,10 @@
 from rest_framework import serializers
 
-from apps.units.models import (
-    PypUnitPlanner,
+from apps.units.myp.models import (
     MypUnitPlanner,
     MypUnitPlannerInterdisciplinary,
-    DpUnitPlanner,
     )
 
-# Список планнеров в PYP
-class PypUnitPlannerListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PypUnitPlanner
-        fields = (
-            "id",
-            "order",
-            "title",
-            "teachers",
-            "year",
-            "hours",
-            "transdisciplinary_theme",
-            )
-        
 # Список планнеров в MYP
 class MypUnitPlannerListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,19 +30,4 @@ class MypUnitPlannerInterdisciplinaryListSerializer(serializers.ModelSerializer)
             "year",
             "hours",
             "global_context"
-            )
-        
-# Список планеров в DP
-class DpUnitPlannerListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DpUnitPlanner
-        fields = (
-            "id",
-            "order",
-            "title",
-            "year",
-            "authors",
-            "teachers",
-            "hours",
-            "levels",
             )

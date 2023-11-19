@@ -15,11 +15,11 @@ logger = logging.getLogger('main')
 
 from general.serializers import (
     UserRegistrationSerializer, 
-    UserListSerializer, 
+    UserListGeneralSerializer, 
     UserRetrieveSerializer,
     UserImportSerializer,
     CustomTokenObtainPairSerializer,
-    ClassGroupListSerializer,
+    ClassGroupListGeneralSerializer,
     ClassRetrieveSerializer,
     ClassCreateSerializer,
 )
@@ -82,7 +82,7 @@ class UserViewSet(ModelViewSet):
             return UserRegistrationSerializer
         if self.action in ["retrieve", "me"]:
             return UserRetrieveSerializer
-        return UserListSerializer
+        return UserListGeneralSerializer
     
     @action(detail=False, methods=["get"], url_path="me")
     def me(self, request):
@@ -183,7 +183,7 @@ class ClassGroupViewSet(ModelViewSet):
             return ClassCreateSerializer
         if self.action in ["retrieve", "update"]:
             return ClassRetrieveSerializer
-        return ClassGroupListSerializer
+        return ClassGroupListGeneralSerializer
     
     def get_queryset(self):
         return get_group_queryset()
