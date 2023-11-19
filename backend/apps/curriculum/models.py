@@ -73,7 +73,7 @@ class Subject(models.Model):
 
 class Curriculum(models.Model):
     """ Учебные планы """
-    year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="curriculum")
+    year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="curricula")
     name = models.CharField(max_length=128, verbose_name=_("Название"), null=True, blank=True)
     name_short = models.CharField(max_length=32, verbose_name=_("Сокращённое название"), null=True, blank=True)
     level = models.CharField(verbose_name=_("Уровень образования"), choices=LevelNationChoices.choices, default=None, max_length=4)

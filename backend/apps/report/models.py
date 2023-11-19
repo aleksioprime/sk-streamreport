@@ -74,7 +74,7 @@ class ReportPrimaryIbProfile(models.Model):
 class ReportPrimaryAchievement(models.Model):
     """ Академические достижения в репорте начальной школы """
     report = models.ForeignKey('report.ReportTeacherPrimary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="achievements")
-    topic = models.CharField(verbose_name=_("Предметная тема"), max_length=255)
+    topic = models.ForeignKey('syllabus.CourseTopic', verbose_name=_("Тема"), on_delete=models.CASCADE, null=True, related_name="achievements")
     level = models.CharField(verbose_name=_("Уровень"), choices=LevelAchievementPrimaryChoices.choices, default=None, max_length=4)
     comment = models.TextField(verbose_name=_("Комментарий"), null=True, blank=True)
     class Meta:

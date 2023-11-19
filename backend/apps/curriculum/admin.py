@@ -1,5 +1,6 @@
 from django.contrib.admin import register, ModelAdmin
 from import_export.admin import ImportExportModelAdmin
+
 from apps.curriculum.models import (
     Subject,
     FgosSubjectGroup,

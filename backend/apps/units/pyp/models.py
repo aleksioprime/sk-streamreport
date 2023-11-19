@@ -49,7 +49,8 @@ class PypAtlSkill(models.Model):
     """ Навыки ATL в PYP """
     name = models.CharField(max_length=255, verbose_name=_("Название"))
     name_rus = models.CharField(max_length=255, verbose_name=_("Название на рус. языке"), null=True)
-    group = models.ForeignKey('pyp.PypAtlGroup', verbose_name=_("Группа ATL"), on_delete=models.CASCADE, null=False, related_name="pyp_skills")
+    group = models.ForeignKey('pyp.PypAtlGroup', verbose_name=_("Группа ATL"), on_delete=models.CASCADE, null=True, related_name="pyp_skills")
+    cluster = models.ForeignKey('ibo.AtlCluster', verbose_name=_("Кластер ATL"), on_delete=models.CASCADE, null=False, related_name="pyp_skills")
     class Meta:
         verbose_name = 'PYP: ATL навык'
         verbose_name_plural = 'PYP: ATL навыки'
