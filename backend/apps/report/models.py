@@ -55,9 +55,22 @@ class ReportTeacherBaseModel(ReportBaseModel):
 
 class ReportTeacherPrimary(ReportTeacherBaseModel):
     """ Репорты по предметам начальной школы """
+    units = models.ManyToManyField('pyp.PypUnitPlanner', verbose_name=_("Юниты "), through='report.ReportPrimaryUnit', blank=True, related_name="reports")
     class Meta:
         verbose_name = 'Репорт начальной школы'
         verbose_name_plural = 'Репорты начальной школы'
+
+class ReportPrimaryUnit(models.Model):
+    """ Развитие профиля IB-студента """
+    report = models.ForeignKey('report.ReportTeacherPrimary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="report_units")
+    unit = models.ForeignKey('pyp.PypUnitPlanner', verbose_name=_("Юнит"), on_delete=models.CASCADE, null=True, related_name="unit_reports")
+    comment = models.TextField(verbose_name=_("Комментарий"), null=True, blank=True)
+    class Meta:
+        verbose_name = 'Репорты начальной школы: юнит'
+        verbose_name_plural = 'Репорты начальной школы: юниты'
+        ordering = ['report', 'unit']
+    def __str__(self):
+        return f'{self.report}: {self.unit}'
 
 class ReportPrimaryIbProfile(models.Model):
     """ Развитие профиля IB-студента """
