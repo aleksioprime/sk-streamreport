@@ -147,7 +147,7 @@ class CustomUserAdmin(BaseUserAdmin):
 site.register(User, CustomUserAdmin)
 
 @register(Group)
-class UserModelAdmin(ModelAdmin):
+class UserModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
         "name",
@@ -161,7 +161,7 @@ class UserModelAdmin(ModelAdmin):
     )
 
 @register(Department)
-class DepartmentModelAdmin(ModelAdmin):
+class DepartmentModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
         "name",
@@ -178,7 +178,7 @@ class DepartmentModelAdmin(ModelAdmin):
     )
 
 @register(AcademicYear)
-class AcademicYearModelAdmin(ModelAdmin):
+class AcademicYearModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
         "name",
@@ -187,42 +187,30 @@ class AcademicYearModelAdmin(ModelAdmin):
     )
     list_display_links = (
         "name",
-    )
-    fields = (
-        "name",
-        "date_start",
-        "date_end",
     )
 
 @register(StudyYearIb)
-class StudyYearIbModelAdmin(ModelAdmin):
+class StudyYearIbModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
+        "number",
         "name",
         "program_ib",
     )
     list_display_links = (
         "name",
-    )
-    fields = (
-        "name",
-        "program_ib",
     )
 
 @register(StudyYear)
-class StudyYearModelAdmin(ModelAdmin):
+class StudyYearModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
         "number",
+        "ib",
         "level",
     )
     list_display_links = (
         "number",
-    )
-    fields = (
-        "number",
-        "level",
-        "ib",
     )
 
 @register(ClassGroup)

@@ -93,27 +93,30 @@ class Department(models.Model):
 
 class AcademicYear(models.Model):
     """ Учебные года """
-    name = models.CharField(max_length=32, verbose_name=_("Учебный год"))
+    number = models.PositiveIntegerField(verbose_name=_("Учебный год"), default=0)
     date_start = models.DateField(verbose_name=_("Дата начала"))
     date_end = models.DateField(verbose_name=_("Дата окончания"))
     class Meta:
         verbose_name = 'Учебный год'
         verbose_name_plural = 'Учебные года'
         ordering = ['date_start']
+    @property
+    def name(self):
+        return f"{self.number}-{self.number + 1} уч. год"
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.number}-{self.number + 1} уч. год"
 
 class StudyYearIb(models.Model):
     """ Параллель обучения в IB """
+    number = models.PositiveIntegerField(verbose_name=_("Номер параллели IB"), default=None, null=True)
     name = models.CharField(max_length=12, verbose_name=_("Название параллели IB"), null=True)
     program_ib = models.CharField(verbose_name=_("IB-программа"), choices=ProgramIbChoices.choices, default=None, null=True, max_length=4)
     class Meta:
         verbose_name = 'Параллель обучения IB'
         verbose_name_plural = 'Параллели обучения IB'
-        ordering = ['program_ib', 'name']
+        ordering = ['number', 'program_ib', 'name']
     def __str__(self):
         return f"{self.name} {self.program_ib.upper()}"
-
 
 class StudyYear(models.Model):
     """ Параллель обучения """
@@ -125,7 +128,7 @@ class StudyYear(models.Model):
         verbose_name_plural = 'Параллели обучения'
         ordering = ['number']
     def __str__(self):
-        return f"{self.number}"
+        return f"{self.number} классы"
 
 class ClassGroup(models.Model):
     """ Учебные классы """
@@ -146,9 +149,9 @@ class ClassGroup(models.Model):
         return self.students.count
     @property
     def name(self):
-        return f"{self.year_study}{self.letter}"
+        return f"{self.year_study.number}{self.letter}"
     def __str__(self):
-        return f"{self.year_study}{self.letter} класс"
+        return f"{self.year_study.number}{self.letter} класс"
     
 class ClassGroupRole(models.Model):
     """ Роли сотрудников класса """

@@ -55,15 +55,15 @@ class ReportTeacherBaseModel(ReportBaseModel):
 
 class ReportTeacherPrimary(ReportTeacherBaseModel):
     """ Репорты по предметам начальной школы """
-    units = models.ManyToManyField('pyp.PypUnitPlanner', verbose_name=_("Юниты "), through='report.ReportPrimaryUnit', blank=True, related_name="reports")
+    # units = models.ManyToManyField('pyp.PypUnitPlanner', verbose_name=_("Юниты "), through='report.ReportPrimaryUnit', blank=True, related_name="reports")
     class Meta:
         verbose_name = 'Репорт начальной школы'
         verbose_name_plural = 'Репорты начальной школы'
 
 class ReportPrimaryUnit(models.Model):
     """ Развитие профиля IB-студента """
-    report = models.ForeignKey('report.ReportTeacherPrimary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="report_units")
-    unit = models.ForeignKey('pyp.PypUnitPlanner', verbose_name=_("Юнит"), on_delete=models.CASCADE, null=True, related_name="unit_reports")
+    report = models.ForeignKey('report.ReportTeacherPrimary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="units")
+    unit = models.ForeignKey('pyp.PypUnitPlanner', verbose_name=_("Юнит"), on_delete=models.CASCADE, null=True, related_name="reports")
     comment = models.TextField(verbose_name=_("Комментарий"), null=True, blank=True)
     class Meta:
         verbose_name = 'Репорты начальной школы: юнит'

@@ -68,7 +68,7 @@ class CurriculumListSerializer(serializers.ModelSerializer):
             "level"
             )
         
-class StudyYearListSerializerCurriculum(serializers.ModelSerializer):
+class StudyYearListCurriculumSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudyYear
         fields = (
@@ -81,7 +81,7 @@ class StudyYearListSerializerCurriculum(serializers.ModelSerializer):
 class CurriculumLoadListSerializer(serializers.ModelSerializer):
     curriculum = CurriculumListSerializer()
     subject = SubjectListSerializer()
-    years = StudyYearListSerializerCurriculum(many=True)
+    years = StudyYearListCurriculumSerializer(many=True)
     class Meta:
         model = CurriculumLoad
         fields = (
@@ -116,7 +116,7 @@ class UserListCurriculumSerializer(serializers.ModelSerializer):
 
 class ClassGroupListCurriculumSerializer(serializers.ModelSerializer):
     year_academic = AcademicYearListCurriculumSerializer()
-    year_study = StudyYearListSerializerCurriculum()
+    year_study = StudyYearListCurriculumSerializer()
     class Meta:
         model = ClassGroup
         fields = (
