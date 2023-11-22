@@ -25,7 +25,6 @@ from drf_spectacular.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("__debug__/", include("debug_toolbar.urls")),
     path('api/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/', include('general.urls')),
@@ -35,6 +34,10 @@ urlpatterns = [
     path('api/', include('apps.units.dp.urls')),
     path('api/', include('apps.report.urls')),
 ]
+
+if bool(settings.DEBUG):
+    import debug_toolbar
+    urlpatterns += [ path('__debug__/', include(debug_toolbar.urls)) ]
 
 if bool(settings.DEBUG):
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

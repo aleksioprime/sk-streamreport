@@ -1,1 +1,1166 @@
-[{"model": "general.user", "pk": 1, "fields": {"password": "pbkdf2_sha256$600000$JLGm2Weigzfb8ViIIjBIZB$YA8CCNFvVKsGWgoHQBolXlQ3OlaS+qytH4UCHY/q3rw=", "last_login": "2023-11-19T10:06:30.079Z", "is_superuser": true, "is_staff": true, "is_active": true, "date_joined": "2023-11-19T10:05:26.901Z", "email": "admin@streamreport.ru", "last_name": "Администраторов", "first_name": "Администратор", "middle_name": "Администраторович", "gender": "М", "photo": "", "dnevnik_token": null, "dnevnik_id": null, "dnevnik_user_id": null, "position": null, "last_activity": "2023-11-20T17:34:00.098Z", "groups": [], "user_permissions": []}}, {"model": "general.department", "pk": 1, "fields": {"name": "Кафедра русского языка и литературы", "logo": "", "employees": []}}, {"model": "general.department", "pk": 2, "fields": {"name": "Кафедра иностранных языков", "logo": "", "employees": []}}, {"model": "general.department", "pk": 3, "fields": {"name": "Кафедра общественных наук", "logo": "", "employees": []}}, {"model": "general.department", "pk": 4, "fields": {"name": "Кафедра естественных наук", "logo": "", "employees": []}}, {"model": "general.department", "pk": 5, "fields": {"name": "Кафедра математики", "logo": "", "employees": []}}, {"model": "general.department", "pk": 6, "fields": {"name": "Кафедра визуальных искусств", "logo": "", "employees": []}}, {"model": "general.department", "pk": 7, "fields": {"name": "Кафедра сценических искусств", "logo": "", "employees": []}}, {"model": "general.department", "pk": 8, "fields": {"name": "Кафедра физической культуры", "logo": "", "employees": []}}, {"model": "general.department", "pk": 9, "fields": {"name": "Кафедра дизайна и технологии", "logo": "", "employees": []}}, {"model": "general.department", "pk": 10, "fields": {"name": "Начальная школа", "logo": "", "employees": []}}, {"model": "general.department", "pk": 11, "fields": {"name": "Дошкольное отделение", "logo": "", "employees": []}}, {"model": "general.department", "pk": 12, "fields": {"name": "Администрация", "logo": "", "employees": []}}, {"model": "general.department", "pk": 13, "fields": {"name": "Служба сопровождения", "logo": "", "employees": []}}, {"model": "general.academicyear", "pk": 1, "fields": {"number": 2022, "date_start": "2022-09-01", "date_end": "2023-05-04"}}, {"model": "general.academicyear", "pk": 2, "fields": {"number": 2023, "date_start": "2023-09-01", "date_end": "2024-05-02"}}, {"model": "general.studyyearib", "pk": 1, "fields": {"number": 1, "name": "Grade 1", "program_ib": "pyp"}}, {"model": "general.studyyearib", "pk": 2, "fields": {"number": 2, "name": "Grade 2", "program_ib": "pyp"}}, {"model": "general.studyyearib", "pk": 3, "fields": {"number": 3, "name": "Grade 3", "program_ib": "pyp"}}, {"model": "general.studyyearib", "pk": 4, "fields": {"number": 4, "name": "Grade 4", "program_ib": "pyp"}}, {"model": "general.studyyearib", "pk": 5, "fields": {"number": 5, "name": "Year 1", "program_ib": "myp"}}, {"model": "general.studyyearib", "pk": 6, "fields": {"number": 6, "name": "Year 2", "program_ib": "myp"}}, {"model": "general.studyyearib", "pk": 7, "fields": {"number": 7, "name": "Year 3", "program_ib": "myp"}}, {"model": "general.studyyearib", "pk": 8, "fields": {"number": 8, "name": "Year 4", "program_ib": "myp"}}, {"model": "general.studyyearib", "pk": 9, "fields": {"number": 9, "name": "Year 5", "program_ib": "myp"}}, {"model": "general.studyyearib", "pk": 10, "fields": {"number": 10, "name": "Grade 10", "program_ib": "dp"}}, {"model": "general.studyyearib", "pk": 11, "fields": {"number": 11, "name": "Grade 11", "program_ib": "dp"}}, {"model": "general.studyyear", "pk": 1, "fields": {"number": 1, "ib": 1, "level": "noo"}}, {"model": "general.studyyear", "pk": 2, "fields": {"number": 2, "ib": 2, "level": "noo"}}, {"model": "general.studyyear", "pk": 3, "fields": {"number": 3, "ib": 3, "level": "noo"}}, {"model": "general.studyyear", "pk": 4, "fields": {"number": 4, "ib": 4, "level": "noo"}}, {"model": "general.studyyear", "pk": 5, "fields": {"number": 5, "ib": 5, "level": "ooo"}}, {"model": "general.studyyear", "pk": 6, "fields": {"number": 6, "ib": 6, "level": "ooo"}}, {"model": "general.studyyear", "pk": 7, "fields": {"number": 7, "ib": 7, "level": "ooo"}}, {"model": "general.studyyear", "pk": 8, "fields": {"number": 8, "ib": 8, "level": "ooo"}}, {"model": "general.studyyear", "pk": 9, "fields": {"number": 9, "ib": 9, "level": "ooo"}}, {"model": "general.studyyear", "pk": 10, "fields": {"number": 10, "ib": 10, "level": "soo"}}, {"model": "general.studyyear", "pk": 11, "fields": {"number": 11, "ib": 11, "level": "soo"}}, {"model": "general.classgroup", "pk": 1, "fields": {"year_academic": 1, "year_study": 1, "year_study_ib": 1, "letter": "A", "dnevnik_id": "1984810053554586366", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 2, "fields": {"year_academic": 1, "year_study": 1, "year_study_ib": 1, "letter": "B", "dnevnik_id": "1984814623399789374", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 3, "fields": {"year_academic": 1, "year_study": 1, "year_study_ib": 1, "letter": "C", "dnevnik_id": "1984814924047500095", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 4, "fields": {"year_academic": 1, "year_study": 2, "year_study_ib": 2, "letter": "A", "dnevnik_id": "1984778846322213610", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 5, "fields": {"year_academic": 1, "year_study": 2, "year_study_ib": 2, "letter": "B", "dnevnik_id": "1984792212260438777", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 6, "fields": {"year_academic": 1, "year_study": 2, "year_study_ib": 2, "letter": "C", "dnevnik_id": "1984793024009257722", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 7, "fields": {"year_academic": 1, "year_study": 3, "year_study_ib": 3, "letter": "A", "dnevnik_id": "1984815774451024704", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 8, "fields": {"year_academic": 1, "year_study": 3, "year_study_ib": 3, "letter": "B", "dnevnik_id": "1984816040738997057", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 9, "fields": {"year_academic": 1, "year_study": 3, "year_study_ib": 3, "letter": "C", "dnevnik_id": "1984816281257165634", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 10, "fields": {"year_academic": 1, "year_study": 4, "year_study_ib": 4, "letter": "A", "dnevnik_id": "1984816517480366915", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 11, "fields": {"year_academic": 1, "year_study": 4, "year_study_ib": 4, "letter": "B", "dnevnik_id": "1984817750135980868", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 12, "fields": {"year_academic": 1, "year_study": 4, "year_study_ib": 4, "letter": "C", "dnevnik_id": "1984818149567939397", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 13, "fields": {"year_academic": 1, "year_study": 4, "year_study_ib": 4, "letter": "D", "dnevnik_id": "1984818385791140678", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 14, "fields": {"year_academic": 1, "year_study": 5, "year_study_ib": 5, "letter": "A", "dnevnik_id": "1985171238829344614", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 15, "fields": {"year_academic": 1, "year_study": 5, "year_study_ib": 5, "letter": "B", "dnevnik_id": "1985171475052545895", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 16, "fields": {"year_academic": 1, "year_study": 5, "year_study_ib": 5, "letter": "C", "dnevnik_id": "1985172368405743464", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 17, "fields": {"year_academic": 1, "year_study": 6, "year_study_ib": 6, "letter": "A", "dnevnik_id": "1985176109322258283", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 18, "fields": {"year_academic": 1, "year_study": 6, "year_study_ib": 6, "letter": "B", "dnevnik_id": "1985176263941080940", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 19, "fields": {"year_academic": 1, "year_study": 6, "year_study_ib": 6, "letter": "C", "dnevnik_id": "1985176409969969007", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 20, "fields": {"year_academic": 1, "year_study": 7, "year_study_ib": 7, "letter": "A", "dnevnik_id": "1985176903891208049", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 21, "fields": {"year_academic": 1, "year_study": 7, "year_study_ib": 7, "letter": "B", "dnevnik_id": "1985177552431269748", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 22, "fields": {"year_academic": 1, "year_study": 8, "year_study_ib": 8, "letter": "A", "dnevnik_id": "1985177900323620727", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 23, "fields": {"year_academic": 1, "year_study": 8, "year_study_ib": 8, "letter": "K", "dnevnik_id": "1985178411424728959", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 24, "fields": {"year_academic": 1, "year_study": 8, "year_study_ib": 8, "letter": "S", "dnevnik_id": "1985178231036102524", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 25, "fields": {"year_academic": 1, "year_study": 9, "year_study_ib": 9, "letter": "A", "dnevnik_id": "1985178639057995651", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 26, "fields": {"year_academic": 1, "year_study": 9, "year_study_ib": 9, "letter": "B", "dnevnik_id": "1985178793676818310", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 27, "fields": {"year_academic": 1, "year_study": 9, "year_study_ib": 9, "letter": "C", "dnevnik_id": "1985178969770477453", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 28, "fields": {"year_academic": 1, "year_study": 10, "year_study_ib": null, "letter": "A", "dnevnik_id": "1985179175928907669", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 29, "fields": {"year_academic": 1, "year_study": 10, "year_study_ib": 10, "letter": "B", "dnevnik_id": "1985179622605506477", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 30, "fields": {"year_academic": 1, "year_study": 11, "year_study_ib": null, "letter": "A", "dnevnik_id": "1985179785814263741", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 31, "fields": {"year_academic": 1, "year_study": 11, "year_study_ib": 11, "letter": "B", "dnevnik_id": "1985179936138119102", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 32, "fields": {"year_academic": 2, "year_study": 1, "year_study_ib": 1, "letter": "A", "dnevnik_id": "2101624423747326840", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 33, "fields": {"year_academic": 2, "year_study": 1, "year_study_ib": 1, "letter": "B", "dnevnik_id": "2101624591251051385", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 34, "fields": {"year_academic": 2, "year_study": 1, "year_study_ib": 1, "letter": "C", "dnevnik_id": "2101624793114514298", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 35, "fields": {"year_academic": 2, "year_study": 2, "year_study_ib": 2, "letter": "A", "dnevnik_id": "2101620919054013274", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 36, "fields": {"year_academic": 2, "year_study": 2, "year_study_ib": 2, "letter": "B", "dnevnik_id": "2101622250493875043", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 37, "fields": {"year_academic": 2, "year_study": 2, "year_study_ib": 2, "letter": "C", "dnevnik_id": "2101622830314460013", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 38, "fields": {"year_academic": 2, "year_study": 3, "year_study_ib": 3, "letter": "A", "dnevnik_id": "2101653238682915717", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 39, "fields": {"year_academic": 2, "year_study": 3, "year_study_ib": 3, "letter": "B", "dnevnik_id": "2101654870770488207", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 40, "fields": {"year_academic": 2, "year_study": 3, "year_study_ib": 3, "letter": "C", "dnevnik_id": "2101658491427918745", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 41, "fields": {"year_academic": 2, "year_study": 4, "year_study_ib": 4, "letter": "A", "dnevnik_id": "2101660544422286242", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 42, "fields": {"year_academic": 2, "year_study": 4, "year_study_ib": 4, "letter": "B", "dnevnik_id": "2101661553739600817", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 43, "fields": {"year_academic": 2, "year_study": 4, "year_study_ib": 4, "letter": "C", "dnevnik_id": "2101664177964618688", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 44, "fields": {"year_academic": 2, "year_study": 5, "year_study_ib": 5, "letter": "A", "dnevnik_id": "2114958467545348728", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 45, "fields": {"year_academic": 2, "year_study": 5, "year_study_ib": 5, "letter": "B", "dnevnik_id": "2114958875567241849", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 46, "fields": {"year_academic": 2, "year_study": 5, "year_study_ib": 5, "letter": "C", "dnevnik_id": "2114962869886827148", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 47, "fields": {"year_academic": 2, "year_study": 5, "year_study_ib": 5, "letter": "D", "dnevnik_id": "2114963054570420891", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 48, "fields": {"year_academic": 2, "year_study": 6, "year_study_ib": 6, "letter": "A", "dnevnik_id": "2101676706384221137", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 49, "fields": {"year_academic": 2, "year_study": 6, "year_study_ib": 6, "letter": "B", "dnevnik_id": "2101680322746684400", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 50, "fields": {"year_academic": 2, "year_study": 6, "year_study_ib": 6, "letter": "C", "dnevnik_id": "2101681151675372558", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 51, "fields": {"year_academic": 2, "year_study": 7, "year_study_ib": 7, "letter": "A", "dnevnik_id": "2106824933358084871", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 52, "fields": {"year_academic": 2, "year_study": 7, "year_study_ib": 7, "letter": "B", "dnevnik_id": "2106825513178669868", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 53, "fields": {"year_academic": 2, "year_study": 7, "year_study_ib": 7, "letter": "C", "dnevnik_id": "2106826329222456147", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 54, "fields": {"year_academic": 2, "year_study": 8, "year_study_ib": 8, "letter": "A", "dnevnik_id": "2106826780194022264", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 55, "fields": {"year_academic": 2, "year_study": 8, "year_study_ib": 8, "letter": "B", "dnevnik_id": "2106827682137154464", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 56, "fields": {"year_academic": 2, "year_study": 9, "year_study_ib": 9, "letter": "A", "dnevnik_id": "2106828648504796102", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 57, "fields": {"year_academic": 2, "year_study": 9, "year_study_ib": 9, "letter": "K", "dnevnik_id": "2106829078001525741", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 58, "fields": {"year_academic": 2, "year_study": 9, "year_study_ib": 9, "letter": "S", "dnevnik_id": "2106829700771783701", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 59, "fields": {"year_academic": 2, "year_study": 10, "year_study_ib": null, "letter": "A", "dnevnik_id": "2114967263638370987", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 60, "fields": {"year_academic": 2, "year_study": 10, "year_study_ib": 10, "letter": "B", "dnevnik_id": "2114967379602488017", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 61, "fields": {"year_academic": 2, "year_study": 11, "year_study_ib": null, "letter": "A", "dnevnik_id": "2101696806831166508", "mentor": null, "students": []}}, {"model": "general.classgroup", "pk": 62, "fields": {"year_academic": 2, "year_study": 11, "year_study_ib": 11, "letter": "B", "dnevnik_id": "2101696918500316242", "mentor": null, "students": []}}]
+[
+    {
+        "model": "general.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$JLGm2Weigzfb8ViIIjBIZB$YA8CCNFvVKsGWgoHQBolXlQ3OlaS+qytH4UCHY/q3rw=",
+            "last_login": "2023-11-19T10:06:30.079Z",
+            "is_superuser": true,
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-11-19T10:05:26.901Z",
+            "email": "admin@streamreport.ru",
+            "last_name": "Администраторов",
+            "first_name": "Администратор",
+            "middle_name": "Администраторович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": null,
+            "last_activity": "2023-11-20T17:34:00.098Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 1,
+        "fields": {
+            "name": "Кафедра русского языка и литературы",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 2,
+        "fields": {
+            "name": "Кафедра иностранных языков",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 3,
+        "fields": {
+            "name": "Кафедра общественных наук",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 4,
+        "fields": {
+            "name": "Кафедра естественных наук",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 5,
+        "fields": {
+            "name": "Кафедра математики",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 6,
+        "fields": {
+            "name": "Кафедра визуальных искусств",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 7,
+        "fields": {
+            "name": "Кафедра сценических искусств",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 8,
+        "fields": {
+            "name": "Кафедра физической культуры",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 9,
+        "fields": {
+            "name": "Кафедра дизайна и технологии",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 10,
+        "fields": {
+            "name": "Начальная школа",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 11,
+        "fields": {
+            "name": "Дошкольное отделение",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 12,
+        "fields": {
+            "name": "Администрация",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.department",
+        "pk": 13,
+        "fields": {
+            "name": "Служба сопровождения",
+            "logo": "",
+            "employees": []
+        }
+    },
+    {
+        "model": "general.academicyear",
+        "pk": 1,
+        "fields": {
+            "number": 2022,
+            "date_start": "2022-09-01",
+            "date_end": "2023-05-04"
+        }
+    },
+    {
+        "model": "general.academicyear",
+        "pk": 2,
+        "fields": {
+            "number": 2023,
+            "date_start": "2023-09-01",
+            "date_end": "2024-05-02"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 1,
+        "fields": {
+            "number": 1,
+            "name": "Grade 1",
+            "program_ib": "pyp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 2,
+        "fields": {
+            "number": 2,
+            "name": "Grade 2",
+            "program_ib": "pyp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 3,
+        "fields": {
+            "number": 3,
+            "name": "Grade 3",
+            "program_ib": "pyp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 4,
+        "fields": {
+            "number": 4,
+            "name": "Grade 4",
+            "program_ib": "pyp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 5,
+        "fields": {
+            "number": 5,
+            "name": "Year 1",
+            "program_ib": "myp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 6,
+        "fields": {
+            "number": 6,
+            "name": "Year 2",
+            "program_ib": "myp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 7,
+        "fields": {
+            "number": 7,
+            "name": "Year 3",
+            "program_ib": "myp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 8,
+        "fields": {
+            "number": 8,
+            "name": "Year 4",
+            "program_ib": "myp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 9,
+        "fields": {
+            "number": 9,
+            "name": "Year 5",
+            "program_ib": "myp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 10,
+        "fields": {
+            "number": 10,
+            "name": "Grade 10",
+            "program_ib": "dp"
+        }
+    },
+    {
+        "model": "general.studyyearib",
+        "pk": 11,
+        "fields": {
+            "number": 11,
+            "name": "Grade 11",
+            "program_ib": "dp"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 1,
+        "fields": {
+            "number": 1,
+            "ib": 1,
+            "level": "noo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 2,
+        "fields": {
+            "number": 2,
+            "ib": 2,
+            "level": "noo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 3,
+        "fields": {
+            "number": 3,
+            "ib": 3,
+            "level": "noo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 4,
+        "fields": {
+            "number": 4,
+            "ib": 4,
+            "level": "noo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 5,
+        "fields": {
+            "number": 5,
+            "ib": 5,
+            "level": "ooo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 6,
+        "fields": {
+            "number": 6,
+            "ib": 6,
+            "level": "ooo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 7,
+        "fields": {
+            "number": 7,
+            "ib": 7,
+            "level": "ooo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 8,
+        "fields": {
+            "number": 8,
+            "ib": 8,
+            "level": "ooo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 9,
+        "fields": {
+            "number": 9,
+            "ib": 9,
+            "level": "ooo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 10,
+        "fields": {
+            "number": 10,
+            "ib": 10,
+            "level": "soo"
+        }
+    },
+    {
+        "model": "general.studyyear",
+        "pk": 11,
+        "fields": {
+            "number": 11,
+            "ib": 11,
+            "level": "soo"
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 1,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 1,
+            "year_study_ib": 1,
+            "letter": "A",
+            "dnevnik_id": "1984810053554586366",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 2,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 1,
+            "year_study_ib": 1,
+            "letter": "B",
+            "dnevnik_id": "1984814623399789374",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 3,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 1,
+            "year_study_ib": 1,
+            "letter": "C",
+            "dnevnik_id": "1984814924047500095",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 4,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 2,
+            "year_study_ib": 2,
+            "letter": "A",
+            "dnevnik_id": "1984778846322213610",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 5,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 2,
+            "year_study_ib": 2,
+            "letter": "B",
+            "dnevnik_id": "1984792212260438777",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 6,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 2,
+            "year_study_ib": 2,
+            "letter": "C",
+            "dnevnik_id": "1984793024009257722",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 7,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 3,
+            "year_study_ib": 3,
+            "letter": "A",
+            "dnevnik_id": "1984815774451024704",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 8,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 3,
+            "year_study_ib": 3,
+            "letter": "B",
+            "dnevnik_id": "1984816040738997057",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 9,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 3,
+            "year_study_ib": 3,
+            "letter": "C",
+            "dnevnik_id": "1984816281257165634",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 10,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 4,
+            "year_study_ib": 4,
+            "letter": "A",
+            "dnevnik_id": "1984816517480366915",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 11,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 4,
+            "year_study_ib": 4,
+            "letter": "B",
+            "dnevnik_id": "1984817750135980868",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 12,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 4,
+            "year_study_ib": 4,
+            "letter": "C",
+            "dnevnik_id": "1984818149567939397",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 13,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 4,
+            "year_study_ib": 4,
+            "letter": "D",
+            "dnevnik_id": "1984818385791140678",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 14,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 5,
+            "year_study_ib": 5,
+            "letter": "A",
+            "dnevnik_id": "1985171238829344614",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 15,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 5,
+            "year_study_ib": 5,
+            "letter": "B",
+            "dnevnik_id": "1985171475052545895",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 16,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 5,
+            "year_study_ib": 5,
+            "letter": "C",
+            "dnevnik_id": "1985172368405743464",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 17,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 6,
+            "year_study_ib": 6,
+            "letter": "A",
+            "dnevnik_id": "1985176109322258283",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 18,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 6,
+            "year_study_ib": 6,
+            "letter": "B",
+            "dnevnik_id": "1985176263941080940",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 19,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 6,
+            "year_study_ib": 6,
+            "letter": "C",
+            "dnevnik_id": "1985176409969969007",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 20,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 7,
+            "year_study_ib": 7,
+            "letter": "A",
+            "dnevnik_id": "1985176903891208049",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 21,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 7,
+            "year_study_ib": 7,
+            "letter": "B",
+            "dnevnik_id": "1985177552431269748",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 22,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 8,
+            "year_study_ib": 8,
+            "letter": "A",
+            "dnevnik_id": "1985177900323620727",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 23,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 8,
+            "year_study_ib": 8,
+            "letter": "K",
+            "dnevnik_id": "1985178411424728959",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 24,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 8,
+            "year_study_ib": 8,
+            "letter": "S",
+            "dnevnik_id": "1985178231036102524",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 25,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 9,
+            "year_study_ib": 9,
+            "letter": "A",
+            "dnevnik_id": "1985178639057995651",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 26,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 9,
+            "year_study_ib": 9,
+            "letter": "B",
+            "dnevnik_id": "1985178793676818310",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 27,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 9,
+            "year_study_ib": 9,
+            "letter": "C",
+            "dnevnik_id": "1985178969770477453",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 28,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 10,
+            "year_study_ib": null,
+            "letter": "A",
+            "dnevnik_id": "1985179175928907669",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 29,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 10,
+            "year_study_ib": 10,
+            "letter": "B",
+            "dnevnik_id": "1985179622605506477",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 30,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 11,
+            "year_study_ib": null,
+            "letter": "A",
+            "dnevnik_id": "1985179785814263741",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 31,
+        "fields": {
+            "year_academic": 1,
+            "year_study": 11,
+            "year_study_ib": 11,
+            "letter": "B",
+            "dnevnik_id": "1985179936138119102",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 32,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 1,
+            "year_study_ib": 1,
+            "letter": "A",
+            "dnevnik_id": "2101624423747326840",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 33,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 1,
+            "year_study_ib": 1,
+            "letter": "B",
+            "dnevnik_id": "2101624591251051385",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 34,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 1,
+            "year_study_ib": 1,
+            "letter": "C",
+            "dnevnik_id": "2101624793114514298",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 35,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 2,
+            "year_study_ib": 2,
+            "letter": "A",
+            "dnevnik_id": "2101620919054013274",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 36,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 2,
+            "year_study_ib": 2,
+            "letter": "B",
+            "dnevnik_id": "2101622250493875043",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 37,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 2,
+            "year_study_ib": 2,
+            "letter": "C",
+            "dnevnik_id": "2101622830314460013",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 38,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 3,
+            "year_study_ib": 3,
+            "letter": "A",
+            "dnevnik_id": "2101653238682915717",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 39,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 3,
+            "year_study_ib": 3,
+            "letter": "B",
+            "dnevnik_id": "2101654870770488207",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 40,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 3,
+            "year_study_ib": 3,
+            "letter": "C",
+            "dnevnik_id": "2101658491427918745",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 41,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 4,
+            "year_study_ib": 4,
+            "letter": "A",
+            "dnevnik_id": "2101660544422286242",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 42,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 4,
+            "year_study_ib": 4,
+            "letter": "B",
+            "dnevnik_id": "2101661553739600817",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 43,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 4,
+            "year_study_ib": 4,
+            "letter": "C",
+            "dnevnik_id": "2101664177964618688",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 44,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 5,
+            "year_study_ib": 5,
+            "letter": "A",
+            "dnevnik_id": "2114958467545348728",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 45,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 5,
+            "year_study_ib": 5,
+            "letter": "B",
+            "dnevnik_id": "2114958875567241849",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 46,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 5,
+            "year_study_ib": 5,
+            "letter": "C",
+            "dnevnik_id": "2114962869886827148",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 47,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 5,
+            "year_study_ib": 5,
+            "letter": "D",
+            "dnevnik_id": "2114963054570420891",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 48,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 6,
+            "year_study_ib": 6,
+            "letter": "A",
+            "dnevnik_id": "2101676706384221137",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 49,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 6,
+            "year_study_ib": 6,
+            "letter": "B",
+            "dnevnik_id": "2101680322746684400",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 50,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 6,
+            "year_study_ib": 6,
+            "letter": "C",
+            "dnevnik_id": "2101681151675372558",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 51,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 7,
+            "year_study_ib": 7,
+            "letter": "A",
+            "dnevnik_id": "2106824933358084871",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 52,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 7,
+            "year_study_ib": 7,
+            "letter": "B",
+            "dnevnik_id": "2106825513178669868",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 53,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 7,
+            "year_study_ib": 7,
+            "letter": "C",
+            "dnevnik_id": "2106826329222456147",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 54,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 8,
+            "year_study_ib": 8,
+            "letter": "A",
+            "dnevnik_id": "2106826780194022264",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 55,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 8,
+            "year_study_ib": 8,
+            "letter": "B",
+            "dnevnik_id": "2106827682137154464",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 56,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 9,
+            "year_study_ib": 9,
+            "letter": "A",
+            "dnevnik_id": "2106828648504796102",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 57,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 9,
+            "year_study_ib": 9,
+            "letter": "K",
+            "dnevnik_id": "2106829078001525741",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 58,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 9,
+            "year_study_ib": 9,
+            "letter": "S",
+            "dnevnik_id": "2106829700771783701",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 59,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 10,
+            "year_study_ib": null,
+            "letter": "A",
+            "dnevnik_id": "2114967263638370987",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 60,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 10,
+            "year_study_ib": 10,
+            "letter": "B",
+            "dnevnik_id": "2114967379602488017",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 61,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 11,
+            "year_study_ib": null,
+            "letter": "A",
+            "dnevnik_id": "2101696806831166508",
+            "mentor": null,
+            "students": []
+        }
+    },
+    {
+        "model": "general.classgroup",
+        "pk": 62,
+        "fields": {
+            "year_academic": 2,
+            "year_study": 11,
+            "year_study_ib": 11,
+            "letter": "B",
+            "dnevnik_id": "2101696918500316242",
+            "mentor": null,
+            "students": []
+        }
+    }
+]

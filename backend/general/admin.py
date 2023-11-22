@@ -127,6 +127,7 @@ class CustomUserAdmin(BaseUserAdmin):
     )
     search_fields = (
         "last_name",
+        "first_name",
         "email",
     )
     list_filter = (
@@ -238,6 +239,7 @@ class ClassGroupModelAdmin(ImportExportModelAdmin):
         "mentor",
         "students",
     )
+    autocomplete_fields = ['mentor']
     
 
 @register(ClassGroupRole)
