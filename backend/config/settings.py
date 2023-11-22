@@ -170,6 +170,7 @@ CACHES = {
     }
 }
 
+# Настройки модуля Django Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -180,8 +181,7 @@ REST_FRAMEWORK = {
 
 }
 
-import logging
-
+# Настройки логирования
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -229,6 +229,7 @@ SPECTACULAR_SETTINGS = {
     },
 }
 
+# Настройка авторизации с помощью JWT
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Время жизни токена доступа (по умолчанию 5 минут)
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),  # Время жизни токена обновления
@@ -237,6 +238,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_SCOPE_CLAIM': 'scope',
 }
 
+# Настройка отображения панели Debug Toolbar
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda _request: DEBUG
 }

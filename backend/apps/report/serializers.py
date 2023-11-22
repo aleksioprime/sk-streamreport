@@ -5,10 +5,10 @@ from apps.report.models import (
     ReportPeriod,
     ReportTeacherPrimary,
     ReportPrimaryUnit,
-    ReportPrimaryIbProfile,
+    ReportIbProfile,
     ReportPrimaryAchievement,
     ReportTeacherSecondary,
-    ReportSecondaryCriteria,
+    ReportSecondaryCriterion,
     ReportTeacherHigh,
     ReportMentor,
     ReportExtra
@@ -104,9 +104,9 @@ class SubjectReportListSerializer(serializers.ModelSerializer):
 # =================  Сериализаторы для репортов учителя НАЧАЛЬНОЙ школы ================= # 
 
 # Список уровня развития профиля студента IB для репортов начальной школы
-class ReportPrimaryIbProfileSerializer(serializers.ModelSerializer):
+class ReportIbProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ReportPrimaryIbProfile
+        model = ReportIbProfile
         fields = (
             "id",
             "report",
@@ -180,7 +180,7 @@ class ReportTeacherPrimaryRetrieveSerializer(serializers.ModelSerializer):
     period = ReportPeriodListReportSerializer()
     subject = SubjectReportListSerializer()
     units = ReportPrimaryUnitSerializer(many=True)
-    profiles = ReportPrimaryIbProfileSerializer(many=True)
+    profiles = ReportIbProfileSerializer(many=True)
     achievements = ReportPrimaryAchievementSerializer(many=True)
     class Meta:
         model = ReportTeacherPrimary
@@ -205,7 +205,7 @@ class ReportTeacherPrimaryCreateUpdateSerializer(serializers.ModelSerializer):
         default=serializers.CurrentUserDefault(),
     )
     units = ReportPrimaryUnitSerializer(many=True, required=False)
-    profiles = ReportPrimaryIbProfileSerializer(many=True, required=False)
+    profiles = ReportIbProfileSerializer(many=True, required=False)
     achievements = ReportPrimaryAchievementSerializer(many=True, required=False)
     class Meta:
         model = ReportTeacherPrimary
@@ -239,9 +239,9 @@ class ReportTeacherPrimaryCreateUpdateSerializer(serializers.ModelSerializer):
             instance.save()
         profiles = validated_data.pop('profiles', None)
         if profiles is not None:
-            instance_profiles = ReportPrimaryIbProfileSerializer.objects.filter(report=instance)
+            instance_profiles = ReportIbProfileSerializer.objects.filter(report=instance)
             instance_profiles.filter(~Q(id__in=[item.get('id') for item in profiles if 'id' in item])).delete()
-            instance.achievements.set(self.create_or_update_related_field(profiles, ReportPrimaryIbProfileSerializer))
+            instance.achievements.set(self.create_or_update_related_field(profiles, ReportIbProfileSerializer))
             instance.save()
         achievements = validated_data.pop('achievements', None)
         if achievements is not None:
@@ -303,10 +303,10 @@ class ReportTeacherSecondaryListSerializer(serializers.ModelSerializer):
             "final_grade",
             )
         
-class ReportSecondaryCriteriaListSerializer(serializers.ModelSerializer):
+class ReportSecondaryCriterionListSerializer(serializers.ModelSerializer):
     criterion = MypObjectiveReportListSerializer()
     class Meta:
-        model = ReportSecondaryCriteria
+        model = ReportSecondaryCriterion
         fields = (
             "id",
             "report",

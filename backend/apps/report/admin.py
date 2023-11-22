@@ -3,13 +3,19 @@ from import_export.admin import ImportExportModelAdmin
 
 from apps.report.models import (
     ReportPeriod,
+    ReflectionChecklist,
+    ReflectionChecklistLevel,
+    ReportTeacher,
+    ReportChecklistAchievement,
     ReportTeacherPrimary,
-    ReportPrimaryIbProfile,
     ReportPrimaryAchievement,
     ReportTeacherSecondary,
-    ReportSecondaryCriteria,
+    ReportSecondaryCriterion,
     ReportTeacherHigh,
     ReportMentor,
+    ReportIbProfile,
+    ReportMentorPrimary,
+    ReportPrimaryUnit,
     ReportExtra,
 )
 
@@ -27,12 +33,25 @@ class ReportPeriodModelAdmin(ImportExportModelAdmin):
         "order",
         "name",
     )
-    fields = (
-        "year",
-        "order",
-        "name",
-        "date_start",
-        "date_end",
+
+@register(ReportTeacher)
+class ReportTeacherModelAdmin(ModelAdmin):
+    list_display = (
+        "id",
+        "period",
+        "group",
+        "student",
+        "subject",
+        "author",
+        "updated_at",
+    )
+    list_display_links = (
+        "student",
+        "author",
+    )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
     )
 
 @register(ReportTeacherPrimary)
@@ -54,18 +73,8 @@ class ReportTeacherPrimaryModelAdmin(ModelAdmin):
         "created_at",
         "updated_at",
     )
-    fields = (
-        "student",
-        "subject",
-        "author",
-        "period",
-        "group",
-        "comment",
-        "created_at",
-        "updated_at",
-    )
 
-@register(ReportPrimaryIbProfile)
+@register(ReportIbProfile)
 class ReportPrimaryIbProfileModelAdmin(ModelAdmin):
     list_display = (
         "id",
@@ -76,11 +85,6 @@ class ReportPrimaryIbProfileModelAdmin(ModelAdmin):
     list_display_links = (
         "report",
         "profile",
-    )
-    fields = (
-        "report",
-        "profile",
-        "level",
     )
 
 @register(ReportPrimaryAchievement)
@@ -94,12 +98,6 @@ class ReportPrimaryAchievementModelAdmin(ModelAdmin):
     list_display_links = (
         "report",
         "topic",
-    )
-    fields = (
-        "report",
-        "topic",
-        "level",
-        "comment",
     )
 
 @register(ReportTeacherSecondary)
@@ -121,22 +119,9 @@ class ReportTeacherSecondaryModelAdmin(ModelAdmin):
         "created_at",
         "updated_at",
     )
-    fields = (
-        "student",
-        "subject",
-        "author",
-        "period",
-        "group",
-        "comment",
-        "achievements",
-        "final_grade",
-        "created_at",
-        "updated_at",
-    )
-    filter_horizontal = ('achievements',)
 
-@register(ReportSecondaryCriteria)
-class ReportSecondaryCriteriaModelAdmin(ModelAdmin):
+@register(ReportSecondaryCriterion)
+class ReportSecondaryCriterionModelAdmin(ModelAdmin):
     list_display = (
         "id",
         "report",
@@ -146,11 +131,6 @@ class ReportSecondaryCriteriaModelAdmin(ModelAdmin):
     list_display_links = (
         "report",
         "criterion",
-    )
-    fields = (
-        "report",
-        "criterion",
-        "mark",
     )
 
 @register(ReportTeacherHigh)
@@ -174,18 +154,6 @@ class ReportTeacherHighModelAdmin(ModelAdmin):
         "created_at",
         "updated_at",
     )
-    fields = (
-        "student",
-        "subject",
-        "author",
-        "period",
-        "group",
-        "comment",
-        "final_grade",
-        "final_grade_ib",
-        "created_at",
-        "updated_at",
-    )
 
 @register(ReportMentor)
 class ReportMentorModelAdmin(ModelAdmin):
@@ -202,15 +170,6 @@ class ReportMentorModelAdmin(ModelAdmin):
         "author",
     )
     readonly_fields = (
-        "created_at",
-        "updated_at",
-    )
-    fields = (
-        "student",
-        "author",
-        "period",
-        "group",
-        "comment",
         "created_at",
         "updated_at",
     )
@@ -231,16 +190,6 @@ class ReportExtraModelAdmin(ModelAdmin):
         "author",
     )
     readonly_fields = (
-        "created_at",
-        "updated_at",
-    )
-    fields = (
-        "student",
-        "author",
-        "role",
-        "period",
-        "group",
-        "comment",
         "created_at",
         "updated_at",
     )
