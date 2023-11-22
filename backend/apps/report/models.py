@@ -31,12 +31,12 @@ class ReportPeriod(models.Model):
     def __str__(self):
         return f"{self.order} период ({self.year})"
 
-class ReflectionChecklist(models.Model):
+class ReportCriterion(models.Model):
     """ Чек-лист рефлексии """
-    name = models.CharField(max_length=128, verbose_name=_("Название периода"), default=None, null=True)
-    subjects = models.ManyToManyField('curriculum.Subject', verbose_name=_("Предметы"), related_name="reflection_checklists")
-    author = models.ForeignKey('general.User', verbose_name=_("Автор чеклиста"), on_delete=models.SET_NULL, null=True, related_name="reflection_checklists")
-    years = models.ManyToManyField('general.StudyYear', verbose_name=_("Параллели"), related_name="reflection_checklists")
+    name = models.CharField(max_length=128, verbose_name=_("Название критерия"), default=None, null=True)
+    subjects = models.ManyToManyField('curriculum.Subject', verbose_name=_("Предметы"), blank=True, related_name="report_criteria")
+    author = models.ForeignKey('general.User', verbose_name=_("Автор критерия"), on_delete=models.SET_NULL, null=True, related_name="report_criteria")
+    years = models.ManyToManyField('general.StudyYear', verbose_name=_("Параллели"), related_name="report_criteria")
     class Meta:
         verbose_name = 'Чек-лист рефлексии'
         verbose_name_plural = 'Чек-листы рефлексии'
@@ -44,14 +44,14 @@ class ReflectionChecklist(models.Model):
     def __str__(self):
         return f"{self.name}"
     
-class ReflectionChecklistLevel(models.Model):
+class ReportCriterionLevel(models.Model):
     """ Уровни чек-листа рефлексии """
     name = models.CharField(max_length=128, verbose_name=_("Название периода"), default=None, null=True)
     point = models.PositiveSmallIntegerField(verbose_name=_("Баллы"), default=1)
-    checklist = models.ForeignKey('report.ReflectionChecklist', verbose_name=_("Чеклист"), on_delete=models.CASCADE, related_name="levels")
+    criterion = models.ForeignKey('report.ReportCriterion', verbose_name=_("Чеклист"), on_delete=models.CASCADE, related_name="levels")
     class Meta:
-        verbose_name = 'Чек-лист рефлексии: уровень'
-        verbose_name_plural = 'Чек-лист рефлексии: уровни'
+        verbose_name = 'Чек-листы рефлексии: уровень'
+        verbose_name_plural = 'Чек-листы рефлексии: уровни'
         ordering = ['point', 'name']
     def __str__(self):
         return f"{self.name} ({self.point})"
@@ -79,13 +79,13 @@ class ReportTeacher(ReportBaseModel):
         verbose_name = 'Репорт учителя'
         verbose_name_plural = 'Репорты учителя'
 
-class ReportChecklistAchievement(models.Model):
-    checklist = models.ForeignKey('report.ReflectionChecklist', verbose_name=_("Чеклист"), on_delete=models.SET_NULL, null=True, related_name="reports")
-    achievement = models.ForeignKey('report.ReflectionChecklistLevel', verbose_name=_("Достижение по чеклисту"), on_delete=models.SET_NULL, null=True, blank=True, related_name="reports")
-    report = models.ForeignKey('report.ReportTeacher', verbose_name=_("Репорт учителя"), on_delete=models.CASCADE, null=True, related_name="checklist_achievements")
+class ReportCriterionAchievement(models.Model):
+    criterion = models.ForeignKey('report.ReportCriterion', verbose_name=_("Чеклист"), on_delete=models.SET_NULL, null=True, related_name="reports")
+    achievement = models.ForeignKey('report.ReportCriterionLevel', verbose_name=_("Достижение по чеклисту"), on_delete=models.SET_NULL, null=True, blank=True, related_name="reports")
+    report = models.ForeignKey('report.ReportTeacher', verbose_name=_("Репорт учителя"), on_delete=models.CASCADE, null=True, related_name="criterion_achievements")
     class Meta:
-        verbose_name = 'Достижение по чеклисту рефлексии для репорта'
-        verbose_name_plural = 'Достижения по чеклисту рефлексии для репорта'
+        verbose_name = 'Репорты учителя: достижение по чеклисту'
+        verbose_name_plural = 'Репорты учителя: достижения по чеклисту'
 
 class ReportTeacherPrimary(ReportTeacher):
     """ Репорты по предметам начальной школы """
@@ -93,10 +93,10 @@ class ReportTeacherPrimary(ReportTeacher):
         verbose_name = 'Репорт учителя НШ'
         verbose_name_plural = 'Репорты учителя НШ'
 
-class ReportPrimaryAchievement(models.Model):
+class ReportPrimaryTopic(models.Model):
     """ Академические достижения в репорте начальной школы """
-    report = models.ForeignKey('report.ReportTeacherPrimary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="achievements")
-    topic = models.ForeignKey('syllabus.CourseTopic', verbose_name=_("Тема"), on_delete=models.CASCADE, null=True, related_name="achievements")
+    report = models.ForeignKey('report.ReportTeacherPrimary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="topic_achievements")
+    topic = models.ForeignKey('syllabus.CourseTopic', verbose_name=_("Тема"), on_delete=models.CASCADE, null=True, related_name="topic_achievements")
     level = models.CharField(verbose_name=_("Уровень"), choices=LevelAchievementPrimaryChoices.choices, default=None, max_length=4)
     comment = models.TextField(verbose_name=_("Комментарий"), null=True, blank=True)
     class Meta:
@@ -113,17 +113,17 @@ class ReportTeacherSecondary(ReportTeacher):
         verbose_name = 'Репорт учителя СрШ'
         verbose_name_plural = 'Репорты учителя СрШ'
 
-class ReportSecondaryAchievement(models.Model):
+class ReportSecondaryLevel(models.Model):
     """ Выбор предметных целей и уровня из достижений в репорте средней школы"""
-    report = models.ForeignKey('report.ReportTeacherSecondary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="achievement_levels")
-    objective = models.ForeignKey('myp.MypObjective', verbose_name=_("Предметная цель"), on_delete=models.CASCADE, null=True, related_name="achievement_levels")
-    achievement = models.ForeignKey('myp.AchievementLevel', verbose_name=_("Уровень достижений"), on_delete=models.CASCADE, blank=True, null=True, related_name="achievement_levels")
+    report = models.ForeignKey('report.ReportTeacherSecondary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="objective_levels")
+    objective = models.ForeignKey('myp.MypObjective', verbose_name=_("Предметная цель"), on_delete=models.CASCADE, null=True, related_name="objective_levels")
+    level = models.ForeignKey('myp.AchievementLevel', verbose_name=_("Уровень достижений"), on_delete=models.CASCADE, blank=True, null=True, related_name="objective_levels")
     class Meta:
         verbose_name = 'Репорты учителя СрШ: уровнень достижений'
         verbose_name_plural = 'Репорты учителя СрШ: уровни достижений'
         ordering = ['objective']
     def __str__(self):
-        return '{}: {}'.format(self.objective, self.achievement)
+        return '{}: {}'.format(self.objective, self.level)
 
 class ReportSecondaryCriterion(models.Model):
     """ Баллы по критериям в репорте средней школы """

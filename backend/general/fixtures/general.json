@@ -1,30 +1,5 @@
 [
     {
-        "model": "general.user",
-        "pk": 1,
-        "fields": {
-            "password": "pbkdf2_sha256$600000$JLGm2Weigzfb8ViIIjBIZB$YA8CCNFvVKsGWgoHQBolXlQ3OlaS+qytH4UCHY/q3rw=",
-            "last_login": "2023-11-19T10:06:30.079Z",
-            "is_superuser": true,
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2023-11-19T10:05:26.901Z",
-            "email": "admin@streamreport.ru",
-            "last_name": "Администраторов",
-            "first_name": "Администратор",
-            "middle_name": "Администраторович",
-            "gender": "М",
-            "photo": "",
-            "dnevnik_token": null,
-            "dnevnik_id": null,
-            "dnevnik_user_id": null,
-            "position": null,
-            "last_activity": "2023-11-20T17:34:00.098Z",
-            "groups": [],
-            "user_permissions": []
-        }
-    },
-    {
         "model": "general.department",
         "pk": 1,
         "fields": {

@@ -3,13 +3,14 @@ from import_export.admin import ImportExportModelAdmin
 
 from apps.report.models import (
     ReportPeriod,
-    ReflectionChecklist,
-    ReflectionChecklistLevel,
+    ReportCriterion,
+    ReportCriterionLevel,
     ReportTeacher,
-    ReportChecklistAchievement,
+    ReportCriterionAchievement,
     ReportTeacherPrimary,
-    ReportPrimaryAchievement,
+    ReportPrimaryTopic,
     ReportTeacherSecondary,
+    ReportSecondaryLevel,
     ReportSecondaryCriterion,
     ReportTeacherHigh,
     ReportMentor,
@@ -34,6 +35,45 @@ class ReportPeriodModelAdmin(ImportExportModelAdmin):
         "name",
     )
 
+@register(ReportCriterion)
+class ReportCriterionModelAdmin(ImportExportModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "author",
+    )
+    list_display_links = (
+        "name",
+    )
+    readonly_fields = (
+        "display_levels",
+    )
+    filter_horizontal = (
+        'subjects',
+        'years',
+    )
+    autocomplete_fields = (
+        'author',
+    )
+
+    def display_levels(self, obj):
+        levels = "\n".join([f"{lvl.point} - {lvl.name}" for lvl in obj.levels.all()])
+        return f"{levels}"
+    
+    display_levels.short_description = "Уровни критерия"
+
+@register(ReportCriterionLevel)
+class ReportCriterionLevelModelAdmin(ImportExportModelAdmin):
+    list_display = (
+        "id",
+        "criterion",
+        "name",
+        "point",
+    )
+    list_display_links = (
+        "name",
+    )
+
 @register(ReportTeacher)
 class ReportTeacherModelAdmin(ModelAdmin):
     list_display = (
@@ -52,6 +92,18 @@ class ReportTeacherModelAdmin(ModelAdmin):
     readonly_fields = (
         "created_at",
         "updated_at",
+    )
+
+@register(ReportCriterionAchievement)
+class ReportCriterionAchievementModelAdmin(ModelAdmin):
+    list_display = (
+        "id",
+        "report",
+        "criterion",
+        "achievement",
+    )
+    list_display_links = (
+        "criterion",
     )
 
 @register(ReportTeacherPrimary)
@@ -74,21 +126,8 @@ class ReportTeacherPrimaryModelAdmin(ModelAdmin):
         "updated_at",
     )
 
-@register(ReportIbProfile)
-class ReportPrimaryIbProfileModelAdmin(ModelAdmin):
-    list_display = (
-        "id",
-        "report",
-        "profile",
-        "level",
-    )
-    list_display_links = (
-        "report",
-        "profile",
-    )
-
-@register(ReportPrimaryAchievement)
-class ReportPrimaryAchievementModelAdmin(ModelAdmin):
+@register(ReportPrimaryTopic)
+class ReportPrimaryTopicModelAdmin(ModelAdmin):
     list_display = (
         "id",
         "report",
@@ -118,6 +157,19 @@ class ReportTeacherSecondaryModelAdmin(ModelAdmin):
     readonly_fields = (
         "created_at",
         "updated_at",
+    )
+
+@register(ReportSecondaryLevel)
+class ReportSecondaryLevelModelAdmin(ModelAdmin):
+    list_display = (
+        "id",
+        "report",
+        "objective",
+        "level",
+    )
+    list_display_links = (
+        "report",
+        "objective",
     )
 
 @register(ReportSecondaryCriterion)
@@ -172,6 +224,51 @@ class ReportMentorModelAdmin(ModelAdmin):
     readonly_fields = (
         "created_at",
         "updated_at",
+    )
+
+@register(ReportIbProfile)
+class ReportIbProfileModelAdmin(ModelAdmin):
+    list_display = (
+        "id",
+        "report",
+        "profile",
+        "level",
+    )
+    list_display_links = (
+        "report",
+        "profile",
+    )
+
+@register(ReportMentorPrimary)
+class ReportMentorPrimaryModelAdmin(ModelAdmin):
+    list_display = (
+        "id",
+        "period",
+        "group",
+        "student",
+        "author",
+        "updated_at",
+    )
+    list_display_links = (
+        "student",
+        "author",
+    )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+@register(ReportPrimaryUnit)
+class ReportPrimaryUnitModelAdmin(ModelAdmin):
+    list_display = (
+        "id",
+        "report",
+        "unit",
+        "comment",
+    )
+    list_display_links = (
+        "report",
+        "unit",
     )
 
 @register(ReportExtra)

@@ -156,10 +156,6 @@ class UserModelAdmin(ImportExportModelAdmin):
     list_display_links = (
         "name",
     )
-    fields = (
-        "name",
-        "permissions",
-    )
 
 @register(Department)
 class DepartmentModelAdmin(ImportExportModelAdmin):

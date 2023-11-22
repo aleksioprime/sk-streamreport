@@ -1,0 +1,3932 @@
+[
+    {
+        "model": "general.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$JLGm2Weigzfb8ViIIjBIZB$YA8CCNFvVKsGWgoHQBolXlQ3OlaS+qytH4UCHY/q3rw=",
+            "last_login": "2023-11-22T12:18:08.938Z",
+            "is_superuser": true,
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-11-19T10:05:26.901Z",
+            "email": "admin@streamreport.ru",
+            "last_name": "Администраторов",
+            "first_name": "Администратор",
+            "middle_name": "Администраторович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": null,
+            "last_activity": "2023-11-20T17:34:00.098Z",
+            "groups": [
+                1
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$EYEMCIIJ1LATIOLAMww2P2$Ynh0G0KsjnmPWofhihqKi/YGCoX2AiaxYSYYFbBjK9M=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:33.782Z",
+            "email": "eabdrashitova@sk.ru",
+            "last_name": "Абдрашитова",
+            "first_name": "Эльмира",
+            "middle_name": "Наильевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000020208813",
+            "dnevnik_user_id": "1000011580797",
+            "position": "Учитель визуальных искусств",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$2W9IJKIsIxoF0LnlcaxpEO$7RklKreEDaiA/s+IUO/WrMPx3Xq+NKdG3v0rdiJ6shs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:33.962Z",
+            "email": "mabramushkina@sk.ru",
+            "last_name": "Абрамушкина",
+            "first_name": "Милана",
+            "middle_name": "Павловна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826388",
+            "dnevnik_user_id": "1000007186560",
+            "position": "Учитель физической культуры",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$VxgpRqyptZNJDkDGElYkbU$TvsfFOzpZYRUn671l8SCRkqs0Fye8wrIctBHTPF2Khg=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:34.151Z",
+            "email": "savetisyan@sk.ru",
+            "last_name": "Аветисян",
+            "first_name": "Сусанна",
+            "middle_name": "Нерсиковна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022276236",
+            "dnevnik_user_id": "1000012872792",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 5,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$pGFeTJL8WjFd88WX2MxMzF$VXAG+LkhwJxFdDJg5Nq/grheFDk6IXHBXumEk1DaZBs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:34.330Z",
+            "email": "gagayan@sk.ru",
+            "last_name": "Агаян",
+            "first_name": "Гаяне",
+            "middle_name": "Григорьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016599970",
+            "dnevnik_user_id": null,
+            "position": "Педагог-психолог дошкольного отделения",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 6,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$fdxJabVvWwFJ4jZxlEDWQd$kqN8GxKSa0XZ2PBFM+luAw3wZIm05UoT4Jn5aaxhMcY=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:34.510Z",
+            "email": "taitzhanova@sk.ru",
+            "last_name": "Айтжанова",
+            "first_name": "Татьяна",
+            "middle_name": "Николаевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000020403255",
+            "dnevnik_user_id": "1000011746169",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 7,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$XnakzLzaPIChNvAKzmpLLR$0Rzoj2H23XEJ8BzN+C4AvMKbWPC+0PYuTDI2H7Y3QOQ=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:34.690Z",
+            "email": "malussef@sk.ru",
+            "last_name": "Алюссеф",
+            "first_name": "Мохсен",
+            "middle_name": null,
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021343739",
+            "dnevnik_user_id": "1000012238663",
+            "position": "Учитель биологии",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 8,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$MPLsZEsp900Qxamhl1yywF$Ajj8Eyzn/7ZyEspp08c1suHPhFxH7+zfcyJRBVeukcE=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:34.869Z",
+            "email": "eandreeva@sk.ru",
+            "last_name": "Андреева",
+            "first_name": "Елена",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826466",
+            "dnevnik_user_id": "1000007051115",
+            "position": "Руководитель программы основного общего образования, координатор программы MYP",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 9,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$its2YwQoKpBifzzWT53skE$zbzaLqKnBKRqmJ1YV8lzfTXCVxStbMRNPkXw9Z8bfhk=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:35.048Z",
+            "email": "pbalakirev@sk.ru",
+            "last_name": "Балакирев",
+            "first_name": "Павел",
+            "middle_name": "Николаевич",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826503",
+            "dnevnik_user_id": "1000007187958",
+            "position": "Учитель физической культуры",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 10,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$a9bBHc74je9N1fHpYCIixw$QblNkF0fAorUvBBm1DuU+3h7pu08t9tUQLaofT7v7Lg=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:35.230Z",
+            "email": "rbaragyan@sk.ru",
+            "last_name": "Барагян",
+            "first_name": "Раиса",
+            "middle_name": "Николаевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826467",
+            "dnevnik_user_id": "1000006980952",
+            "position": "Руководитель программы среднего общего образования (координатор DP)",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 11,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$mEJfvkCd1UAJZlDdD9b97C$TQFORFrg5mX+GfcfNt64jIWCgfUjvz6mByYE9AVuNJ8=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:35.420Z",
+            "email": "obardysheva@sk.ru",
+            "last_name": "Бардышева",
+            "first_name": "Ольга",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826435",
+            "dnevnik_user_id": "1000011462875",
+            "position": "Учитель физической культуры, тренер по спортивным танцам",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 12,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$XKz5maIXx4t4lyADCaxWOo$M6jZlnYAN5pjiKTpyWfz//vyWzV+yQCb2W3YQHY1DKg=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:35.601Z",
+            "email": "abarmenkova@sk.ru",
+            "last_name": "Барменкова",
+            "first_name": "Анна",
+            "middle_name": "Сергеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022938015",
+            "dnevnik_user_id": "1000013332215",
+            "position": "Учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 13,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$UXf6nYJYl27uMNNC1jxlBl$PjtXgh2RGsaiV6JRF2fvfSNlxEmeZNis65AQwStrYK0=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:35.781Z",
+            "email": "sbasirova@sk.ru",
+            "last_name": "Басирова",
+            "first_name": "Сожида",
+            "middle_name": "Римовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826419",
+            "dnevnik_user_id": "1000009532841",
+            "position": "Руководитель программы дошкольного образования",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 14,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$I4cwBWjSUVF5Y4y8rqRu4z$iyqbqK05ziw5+Z1p5mJbr/Aj1IXu66TIxxZ0PKHnaSI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:35.960Z",
+            "email": "iberezhnaya@sk.ru",
+            "last_name": "Бережная",
+            "first_name": "Инесса",
+            "middle_name": "Игоревна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000020573827",
+            "dnevnik_user_id": "1000011874200",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 15,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$5TztJyYwSX0SaTkSqZPs0b$02/aK7lkZ5OJ6gwJjEpTOYrBL7xu8flmGoel6QCtGLU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:36.140Z",
+            "email": "abiriukova@sk.ru",
+            "last_name": "Бирюкова",
+            "first_name": "Анастасия",
+            "middle_name": "Алексеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000019955622",
+            "dnevnik_user_id": "1000011327704",
+            "position": "Заведующий кафедрой естественных наук, учитель химии",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 16,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$1FyaSAjTOpRRmpr7r4eLDo$AdICHD99Qn20SJOwwtjmoRKhpstnQBdMYr9LTTPXIcA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:36.322Z",
+            "email": "oborisova@sk.ru",
+            "last_name": "Борисова",
+            "first_name": "Ольга",
+            "middle_name": "Михайловна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000017659553",
+            "dnevnik_user_id": "1000009581794",
+            "position": "Педагог-психолог в программе PYP и MYP",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 17,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$a3TR2YcZYn1Cs55fKlZR2I$9+7UrUN7/gpcGe9R3w7lHmeZT0y6gUkHtxVfhXxD4PI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:36.503Z",
+            "email": "fvaganova@sk.ru",
+            "last_name": "Ваганова",
+            "first_name": "Флёра",
+            "middle_name": "Анатольевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826468",
+            "dnevnik_user_id": "1000007206380",
+            "position": "Заведующая кафедрой русского языка и литературы, учитель русского языка и литературы",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 18,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$jwtmxM2R6ZTJv5RlEobJZY$hb40OKRa+/XWBJiiXNtJGlx2fqzoyQ6pctax+IPGL0c=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:36.683Z",
+            "email": "pjwest@sk.ru",
+            "last_name": "Вест",
+            "first_name": "Петер",
+            "middle_name": "Джеймс",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 19,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$A7T5zhNequnHFQP1YmRlZY$Mou/G9Yn6Uf/XLOAS6QKrVBuqqWU8bXGPVHDD/bEtI8=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:36.863Z",
+            "email": "vvoronchikhina@sk.ru",
+            "last_name": "Ворончихина",
+            "first_name": "Вера",
+            "middle_name": "Вавиловна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Ассистент воспитателя",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 20,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$ej6DdaDEzTMMtOraQaKWqI$rSPSrXELAOPhPDxfThtdNpyl53lR+TjUqzv7EewDfd0=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:37.043Z",
+            "email": "mviushina@sk.ru",
+            "last_name": "Вьюшина",
+            "first_name": "Мария",
+            "middle_name": "Дмитриевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000023005087",
+            "dnevnik_user_id": "1000013407722",
+            "position": "Учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 21,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$DoTWcpk7gGRkZ1mPd7qpMk$wBN1zw2Sc8FQvFIDPtS74z3hY7T7iJqJWf+6wixZABc=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:37.224Z",
+            "email": "egarkusha@sk.ru",
+            "last_name": "Гаркуша",
+            "first_name": "Елена",
+            "middle_name": "Михайловна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826469",
+            "dnevnik_user_id": "1000007072071",
+            "position": "Учитель русского языка и литературы",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 22,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$JQk8tDoQ3KJtPLjvV6wlBC$5RpNOjytTHKkqJ+gWGkCnclwseMSuk9z1f+lLWwRRMU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:37.405Z",
+            "email": "agakhov@sk.ru",
+            "last_name": "Гахов",
+            "first_name": "Александр",
+            "middle_name": "Сергеевич",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826432",
+            "dnevnik_user_id": "1000007071397",
+            "position": "Учитель визуальных искусств",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 23,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$94L8lCctzsKzLQodaLHzpi$PimnoIXbqxpluh8Vg9lwo9rK/mmFjH1ROJnA8fK98ps=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:37.584Z",
+            "email": "egeorg@sk.ru",
+            "last_name": "Георг",
+            "first_name": "Екатерина",
+            "middle_name": "Дмитриевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000018997744",
+            "dnevnik_user_id": "1000010884165",
+            "position": "Учитель визуальных искусств, куратор направления Art & Design",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 24,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$G2vuEPEr3t6bxf2XAxc40W$ICWy17fvH/QKARawa/4ziqlkXPe4Rsz5mnoImiuoy7Y=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:37.764Z",
+            "email": "kglazneva@sk.ru",
+            "last_name": "Глазнева",
+            "first_name": "Ксения",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022406397",
+            "dnevnik_user_id": "1000013091964",
+            "position": "Учитель китайского языка",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 25,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$V8I59iOcXGUHjxQKbfawnU$ZwCKp2ies/ZpKeATftZgwDz3o//ab0RPBgLeMUD/i3Y=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:37.944Z",
+            "email": "agordienko@sk.ru",
+            "last_name": "Гордиенко",
+            "first_name": "Анжелика",
+            "middle_name": "Борисовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016601460",
+            "dnevnik_user_id": "1000008841999",
+            "position": "Учитель физической культуры, тренер по плаванию",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 26,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$QkfRqsyhFFctD5ElFxWgEM$EmgGK6pKK/P1y67AQhTYjFalU4DmLX7IMrJQDx+3RIs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:38.123Z",
+            "email": "mgorelik@sk.ru",
+            "last_name": "Горелик",
+            "first_name": "Михаил",
+            "middle_name": "Леонидович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014655832",
+            "dnevnik_user_id": "1000007732173",
+            "position": "Учитель физики",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 27,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$CubNWbMRbUlBsrYLtjyxy2$xIICgkZ6yyiD3LI58eo67g6MQhp5KZkHSG7TV556Oto=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:38.305Z",
+            "email": "kgrady@sk.ru",
+            "last_name": "Грейди",
+            "first_name": "Кевин",
+            "middle_name": "Джон",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Учитель математики",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 28,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$2kgWh6Ehy1cdZE9ldDozvL$4zYq4x3W5oYH8AeBX5K0x0knyeyGvFoQAXc4ict9OIs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:38.484Z",
+            "email": "mgrosheva@sk.ru",
+            "last_name": "Грошева",
+            "first_name": "Мария",
+            "middle_name": "Петровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022028286",
+            "dnevnik_user_id": null,
+            "position": "Учитель-логопед в программе PYP",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 29,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$u3lWnkgY32iV3VlfrzLIrG$ZDuRml6+4dEUaEnLxLn2239l6xnVvMrmWNG0IYcdM4M=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:38.664Z",
+            "email": "agrudnitskaya@sk.ru",
+            "last_name": "Грудницкая",
+            "first_name": "Алена",
+            "middle_name": "Анатольевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016602189",
+            "dnevnik_user_id": "1000008841712",
+            "position": "Координатор направления довузовской подготовки",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 30,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$vlpUVryOUJ3ErdShjhDyFd$q8DaUCBMfB9O4fLbrh0GxMTkSCZljxgL5C4pb7hVmMU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:38.844Z",
+            "email": "aguseva@sk.ru",
+            "last_name": "Гусева",
+            "first_name": "Анастасия",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000020403239",
+            "dnevnik_user_id": "1000011741151",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 31,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$IRNqzBkmiFr7ZRzOJOe1uC$QZounaCv2fZ6GxTcrR6RoEb38V2RwbqkWakekUB1Ixc=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:39.023Z",
+            "email": "ldavletshina@sk.ru",
+            "last_name": "Давлетшина",
+            "first_name": "Лейла",
+            "middle_name": "Рамилевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021374116",
+            "dnevnik_user_id": "1000012244296",
+            "position": "Учитель математики",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 32,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$r6oJ7REhCPIsMRjMdhW04E$v8MUcFj6lCd5tQ2PQJuPWrMgxHLJBicRItNTDsmWg0s=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:39.203Z",
+            "email": "odemianenko@sk.ru",
+            "last_name": "Демьяненко",
+            "first_name": "Оксана",
+            "middle_name": "Юрьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826375",
+            "dnevnik_user_id": "1000007056833",
+            "position": "Директор",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 33,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$quf7Z3jAJz7Q4o622ozv0j$cS4hL0yR4935XqI30LHgEfkjVxikG7A99C6Dy7Tei0g=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:39.383Z",
+            "email": "yderyabina@sk.ru",
+            "last_name": "Дерябина",
+            "first_name": "Юлия",
+            "middle_name": "Юрьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.573Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 34,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$Rh2oIQ0CnQgKmqUrGJA5AN$I29MLp2OsJ2blPt2OoHan2SNdraZsGyyxfgLi8p7lbs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:39.563Z",
+            "email": "odorofeeva@sk.ru",
+            "last_name": "Дорофеева",
+            "first_name": "Ольга",
+            "middle_name": "Валерьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022773455",
+            "dnevnik_user_id": "1000013410603",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 35,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$dY0ooNXgyEzZfkPKUSLnon$OY9HsKkrzAjB2TSRm7PSf1fOK8anPi7I1TMGqAavOlE=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:39.746Z",
+            "email": "tdubrova@sk.ru",
+            "last_name": "Дуброва",
+            "first_name": "Татьяна",
+            "middle_name": "Эдуардовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014655819",
+            "dnevnik_user_id": "1000007760434",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 36,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$sLh6uVEhMyKRXXswnxdLyt$QE/V9GBoJSjtgYuiauTL2oky8PN1FVmUAJJUwCBqp2s=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:39.927Z",
+            "email": "meliseeva@sk.ru",
+            "last_name": "Елисеева",
+            "first_name": "Мария",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Руководитель программы начального общего образования, координатор программы PYP",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 37,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$NnmdrUpYOz9WG6upl2nEy2$wOpcst4vi9ZRMcdEbZITixSBRd6k6pLzoqFU4w/0Lgg=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:40.107Z",
+            "email": "vzhevnyak@sk.ru",
+            "last_name": "Жевняк",
+            "first_name": "Вероника",
+            "middle_name": "Юрьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016600655",
+            "dnevnik_user_id": "1000008889648",
+            "position": "Тьютор",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 38,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$R2ZkCNnInWPwrkKvOGywjf$QWuT02C2zQ8tN7D8yD5s/WeVz0gWYGEihuK9LOY5BsA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:40.287Z",
+            "email": "lzaytseva@sk.ru",
+            "last_name": "Зайцева",
+            "first_name": "Людмила",
+            "middle_name": "Геннадьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016930779",
+            "dnevnik_user_id": "1000009048437",
+            "position": "Учитель технологии и архитектуры",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 39,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$nY3pU3bzJi60JCs1hhH1Zo$T/aHzsA7C/CqeXaZFRuzrEOePE8jOcGytjVJswtxi6c=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:40.467Z",
+            "email": "szinovieva@sk.ru",
+            "last_name": "Зиновьева",
+            "first_name": "София",
+            "middle_name": "Дмитриевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022773457",
+            "dnevnik_user_id": "1000013409228",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 40,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$Z0GiiHCXIstGjBPafbNbnc$SLyFm6Eu89TasumdqtKpnjbH5gBHX4tA9T+CEEuiStU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:40.647Z",
+            "email": "nkadysheva@sk.ru",
+            "last_name": "Кадышева",
+            "first_name": "Наталья",
+            "middle_name": "Григорьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014889020",
+            "dnevnik_user_id": "1000007731539",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 41,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$gO8Hc5FwZA5kUFXYeJeLc1$iyrQ4K32A8Qpl5IVZkULxuX10o2L+3mdqGuIAb1S8TM=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:40.828Z",
+            "email": "dkalinina@sk.ru",
+            "last_name": "Калинина",
+            "first_name": "Дарья",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Ассистент воспитателя",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 42,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$YWAx2oqbyusBr93fv2L6WN$zQZCqVMwZ8fAEkVsm/5lsGYpFB8xTTFLCSd7JsDVZLI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:41.008Z",
+            "email": "rkaryakin@sk.ru",
+            "last_name": "Карякин",
+            "first_name": "Роман",
+            "middle_name": "Евгеньевич",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000023840796",
+            "dnevnik_user_id": null,
+            "position": "Учитель физической культуры",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 43,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$A1QJxaYUKCEmDbXS0beVJt$7f9kpSO1FVM1AeGl6CaXp1efxmDJJRfZ6UANN3TCOqw=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:41.188Z",
+            "email": "eklatt@sk.ru",
+            "last_name": "Клатт",
+            "first_name": "Екатерина",
+            "middle_name": "Валентиновна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022442760",
+            "dnevnik_user_id": "1000013093096",
+            "position": "Учитель китайского языка",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 44,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$6RLQeSHRBA4NHjj0iSR1PK$Oketev2fnBj7YqE96DYpVeW0vn+gfENJO3kRAkmOvVY=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:41.369Z",
+            "email": "dklimenko@sk.ru",
+            "last_name": "Клименко",
+            "first_name": "Дарья",
+            "middle_name": "Львовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016545491",
+            "dnevnik_user_id": "1000008836611",
+            "position": "Учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 45,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$skaRZzriikLJ9vd0DzwnSs$RMU7zyUHSW331P741zFRPPuCCTCgdn3BnW5P+iFF5i8=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:41.552Z",
+            "email": "kkoltysheva@sk.ru",
+            "last_name": "Колтышева",
+            "first_name": "Ксения",
+            "middle_name": "Викторовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022848074",
+            "dnevnik_user_id": "1000013318272",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 46,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$xd6CYltWpQYRPhcaisgPGB$cMqtmuyh9+bkrL8LPFgd8nSXe9ASmuidQ0l5xP6HPEU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:41.732Z",
+            "email": "ykrasnoborodova@sk.ru",
+            "last_name": "Краснобородова",
+            "first_name": "Юлия",
+            "middle_name": "Витальевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014655836",
+            "dnevnik_user_id": "1000007680424",
+            "position": "Учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 47,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$uLw4q7YAAx2NLIcdlLzLYM$F3gdYmoVOJx3maGsao+fhT1MYexF9Tth1uItQF65xxQ=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:41.912Z",
+            "email": "akrivoshchapova@sk.ru",
+            "last_name": "Кривощапова",
+            "first_name": "Анна",
+            "middle_name": "Алексеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022463230",
+            "dnevnik_user_id": "1000013121893",
+            "position": "Учитель французского и английского языков",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 48,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$X3B8f6TKMQQNWuBrZCkbKr$Mkvmm2NBH8NSVwucL+iwMAIxdKk3V/iObmfaGpbMnlA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:42.094Z",
+            "email": "nkrukovich@sk.ru",
+            "last_name": "Крукович",
+            "first_name": "Наталия",
+            "middle_name": "Николаевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022848076",
+            "dnevnik_user_id": "1000013317073",
+            "position": "Учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 49,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$2FA79DY5W9OyGmxYnoj0DW$XdxlKFgzWW4ZgFBFqvNJ4UMuWhktz4WD2m8UShH+l5w=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:42.273Z",
+            "email": "okudryashova@sk.ru",
+            "last_name": "Кудряшова",
+            "first_name": "Оксана",
+            "middle_name": "Сергеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016568976",
+            "dnevnik_user_id": "1000008982091",
+            "position": "Учитель истории и обществознания",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 50,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$sFJwlGLBJI7g0riNd3pQr4$Tg5IfapTiBxwQAJSIoktnmHR9qhOnhsilkbyP2iwt4M=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:42.454Z",
+            "email": "nkuzevanova@sk.ru",
+            "last_name": "Кузеванова",
+            "first_name": "Наталья",
+            "middle_name": "Ивановна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016545505",
+            "dnevnik_user_id": "1000008835880",
+            "position": "Заведующая кафедрой иностранных языков, учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 51,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$Dp8wJcr2I6pxmDuvt35ng3$hlonEb2PxpDiy3OafPgdh5VlsfIxZ4Gx2A5QDlSv4fw=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:42.633Z",
+            "email": "akuzmina@sk.ru",
+            "last_name": "Кузьмина",
+            "first_name": "Анастасия",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826440",
+            "dnevnik_user_id": "1000007368354",
+            "position": "Учитель информатики",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 52,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$TeV0llJ96DZ5NGdE7gWR8T$bK/Y/YBOdGpY6Ejn5wGfFwqmb05jbrcOh3+NU/tS7SA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:42.813Z",
+            "email": "ekulikova@sk.ru",
+            "last_name": "Куликова",
+            "first_name": "Елизавета",
+            "middle_name": "Олеговна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022349093",
+            "dnevnik_user_id": "1000012944190",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 53,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$IicyxGvnYSP8g7GjCReXM1$oiYkofxbUFwZQOS0MRlJP8dqeWYIzzgh1dCsJg+OBII=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:42.992Z",
+            "email": "tkupriyanova@sk.ru",
+            "last_name": "Куприянова",
+            "first_name": "Татьяна",
+            "middle_name": "Сергеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000023019025",
+            "dnevnik_user_id": "1000013368235",
+            "position": "Учитель музыки",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 54,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$up72vUQZRAjpNWAo9Wl22t$LS5ezOVXj1ClxP3pfa+hqkbh43y52qTf1eGG4JNK6KU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:43.173Z",
+            "email": "vlapshina@sk.ru",
+            "last_name": "Лапшина",
+            "first_name": "Вера",
+            "middle_name": "Анатольевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021344571",
+            "dnevnik_user_id": "1000012241812",
+            "position": "Учитель химии",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 55,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$uGo9QQdTo77wipcQLaEXJC$8puFk6ZOtHHgTWC4pBbDsn4yP29hMmQ2IL9ijUNnkt8=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:43.354Z",
+            "email": "llevina@sk.ru",
+            "last_name": "Левина",
+            "first_name": "Людмила",
+            "middle_name": "Викторовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016575235",
+            "dnevnik_user_id": "1000008838582",
+            "position": "Учитель французского языка",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 56,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$CMaFLlI6xIzj7GJbgJrbSb$4ThWTpvAFb9CvlLvL6olXp8+yCig2uUqU3Avrt24jKs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:43.534Z",
+            "email": "eleonova@sk.ru",
+            "last_name": "Леонова",
+            "first_name": "Елена",
+            "middle_name": "Петровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826402",
+            "dnevnik_user_id": "1000007053574",
+            "position": "Педагог-психолог",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 57,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$j6XlrjduTmCyunj0ThXTqV$l9MTYET7G5z7al6AjwNl3u44Vo2EqVzuubO463vtPXI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:43.713Z",
+            "email": "elepik@sk.ru",
+            "last_name": "Лепик",
+            "first_name": "Елена",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826434",
+            "dnevnik_user_id": "1000007349142",
+            "position": "Заведующая кафедрой визуальных искусств, дизайнер",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 58,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$dAoJOJ2nw5hQJ0LYLFKDNB$S/B8Ud1ibE98/Czp7fC5kCYjUOF0opl2PZwsBP9yGd4=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:43.893Z",
+            "email": "glitvinenko@sk.ru",
+            "last_name": "Литвиненко",
+            "first_name": "Галина",
+            "middle_name": "Аркадьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826496",
+            "dnevnik_user_id": "1000007050998",
+            "position": "Учитель физики",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 59,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$8lSJSMxdFUXByk2iYE0rvx$hqcfK3Sb+np1O3BlKosg6Q26htF3BewtqzxH6V7bFBY=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:44.072Z",
+            "email": "alobzhanidze@sk.ru",
+            "last_name": "Лобжанидзе",
+            "first_name": "Александр",
+            "middle_name": "Александрович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826391",
+            "dnevnik_user_id": "1000007206160",
+            "position": "Заведующий кафедрой общественных наук, учитель географии",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 60,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$pIl66B85Lj60tMA4xNlBIl$2zUL2vwOab/t6NKD6wBcdo4R2T2aiR3zQG+Ug75YcTU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:44.251Z",
+            "email": "elopukhova@sk.ru",
+            "last_name": "Лопухова",
+            "first_name": "Елена",
+            "middle_name": "Олеговна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014138218",
+            "dnevnik_user_id": "1000007360844",
+            "position": "Учитель физической культуры, тренер по плаванию",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 61,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$aUPi5RTz6FmSSsSgR5ykE6$0HytvzzLemxVJ6W3VqB+Diuz1PZ/d9PRaHoec/eoKZI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:44.432Z",
+            "email": "slyadova@sk.ru",
+            "last_name": "Лядова",
+            "first_name": "Светлана",
+            "middle_name": "Валентиновна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021481797",
+            "dnevnik_user_id": "1000012697367",
+            "position": "Учитель визуальных искусств",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 62,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$3ITW0Xx6s0gORtgoxWZMmF$Kkx3xjOhKKABPVXVfxEI6RhHcKnymt8LrqH4Zs2bfDA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:44.612Z",
+            "email": "amelnikova@sk.ru",
+            "last_name": "Мельникова",
+            "first_name": "Александр",
+            "middle_name": null,
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Педагог-психолог в программе PYP",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 63,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$lj7ZfCXhXUa4OSz2a9TkIq$vki1ejhXlSvqIolLiPva5wXwdVGajfj6pSY8GifxxKA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:44.791Z",
+            "email": "mminova@sk.ru",
+            "last_name": "Минова",
+            "first_name": "Марина",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021340736",
+            "dnevnik_user_id": "1000012237794",
+            "position": "Учитель русского языка и литературы",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 64,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$eNBPBmIaXVoJ5RMCaZ2oqW$qKoukyEDR1fs0isMvazwx8a+2K9h/rKswHXnVTUW0ww=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:44.971Z",
+            "email": "iminchenko@sk.ru",
+            "last_name": "Минченко",
+            "first_name": "Ирина",
+            "middle_name": "Сергеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Учитель-логопед в дошкольном отделении и начальной школе",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 65,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$vEkt9bptsWmoxhpaGfISUH$OzyZf1GaxG9N63V0QJD6aWAN1B3dkfBJ1ErTspelyPs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:45.150Z",
+            "email": "mmironenko@sk.ru",
+            "last_name": "Мироненко",
+            "first_name": "Маргарита",
+            "middle_name": "Сергеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 66,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$tvr0SeP0ykqJ3heYXnACjA$RYHRQqbwnjImNZgSpTcwskQjj2z3vN0h6YJ9wh12pTc=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:45.334Z",
+            "email": "amikheeva@sk.ru",
+            "last_name": "Михеева",
+            "first_name": "Анастасия",
+            "middle_name": "Анатольевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014242524",
+            "dnevnik_user_id": "1000007372842",
+            "position": "Заместитель директора по сопровождению образовательного процесса",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 67,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$lbMsG6qjydFZvCoXM47u2M$7zSIYq8PCtcYLL1jsM/4oGClhxV2DwBv2yDy2S04W38=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:45.515Z",
+            "email": "amoiseeva@sk.ru",
+            "last_name": "Моисеева",
+            "first_name": "Анна",
+            "middle_name": "Михайловна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 68,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$6oOY88FVSVJb64LBgbA7z6$+MZunfcpfhgY9/CqedOvA/N1n4lLmvUCzF1xYJNRNlA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:45.694Z",
+            "email": "imoskvina@sk.ru",
+            "last_name": "Москвина",
+            "first_name": "Ирина",
+            "middle_name": "Алексеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826471",
+            "dnevnik_user_id": "1000007215395",
+            "position": "Учитель русского языка и литературы",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 69,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$CNrgqqKkH8lZQGudIeTBAo$gxGtVSnRiJ6R3wEDSL8qR1Dxl/knWR5rH9M2zl6k1cE=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:45.874Z",
+            "email": "pmoshenskaya@sk.ru",
+            "last_name": "Мошенская",
+            "first_name": "Полина",
+            "middle_name": "Юрьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Ассистент воспитателя",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 70,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$kGdsRE4FMsu1oHFDp9Yf6R$XZE6u0ZbRlPp7XmcpXT5hS9wupO5s8zk0tF1Yhvv6kc=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:46.054Z",
+            "email": "nmulyaeva@sk.ru",
+            "last_name": "Муляева",
+            "first_name": "Нина",
+            "middle_name": "Раисовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016599916",
+            "dnevnik_user_id": "1000008841612",
+            "position": "Педагог-психолог в программе MYP",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 71,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$CmPrk2Ikuta6dG2LNdQNvC$8SmJ7HYFp43yYFWdVPI4fz0DUQQW+yZPnlBLpaNXKjQ=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:46.233Z",
+            "email": "inigmetzyanov@sk.ru",
+            "last_name": "Нигметзянов",
+            "first_name": "Ильдар",
+            "middle_name": "Ильясович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021737548",
+            "dnevnik_user_id": "1000012375007",
+            "position": "Учитель информатики",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 72,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$U0x5jCYHipsV9VaLCLDBCT$RaRKrrSWPq8hEZPduj5ePQuwDgfH/JjStXvEbR5cozI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:46.415Z",
+            "email": "inikiforov@sk.ru",
+            "last_name": "Никифоров",
+            "first_name": "Иван",
+            "middle_name": "Валерьевич",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022890406",
+            "dnevnik_user_id": "1000013344710",
+            "position": "Учитель химии",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 73,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$eXNua2mewvxShTawY8G00H$GTwe9AimSBXsr7fQDr526seUgheoUM5vhDY4NGQvegA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:46.594Z",
+            "email": "nnoskina@sk.ru",
+            "last_name": "Носкина",
+            "first_name": "Наталья",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 74,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$D7JZjRbp5qJFHb4xuwgyuu$vI5IhtDhnLukR+Jg+0cyxlzxpcqKR0LGgfDFl1do6T8=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:46.773Z",
+            "email": "eovechkina@sk.ru",
+            "last_name": "Овечкина",
+            "first_name": "Екатерина",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826403",
+            "dnevnik_user_id": "1000007344050",
+            "position": "Руководитель психолого-педагогического направления, Нейропсихолог в программе PYP и MYP",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 75,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$skTfULZN1eAJDdWfxgshHr$/SsfLNygqcsrd/E2KxvkRklZhi/yQjVNJevQdACvkCo=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:46.953Z",
+            "email": "vovchinnikova@sk.ru",
+            "last_name": "Овчинникова",
+            "first_name": "Виктория",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 76,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$kRYzoA4vGyPMrtP6dwV0KL$nYdySClncQ3gdpXz3Zv9WTUYIW3NTFB2LZtyldSZIns=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:47.133Z",
+            "email": "aokunkova@sk.ru",
+            "last_name": "Окунькова",
+            "first_name": "Анастасия",
+            "middle_name": "Андреевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826475",
+            "dnevnik_user_id": "1000007198038",
+            "position": "Учитель и методист на кафедре иностранных языков по программам MYP и DP",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 77,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$UwkrlhasjCXVSHQWf3xM2N$haC0xfsbFfB5+Yu0xNXhUz7vv3sVXqhmVmuHFX9n4iI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:47.313Z",
+            "email": "sokshina@sk.ru",
+            "last_name": "Окшина",
+            "first_name": "Светлана",
+            "middle_name": "Михайловна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.574Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 78,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$4ao64aHcuO5whmHeRjCh2i$IWIYHk4eIjB5PoE49aD11hUnZ/eiBaw8f+JiKM6y6bo=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:47.494Z",
+            "email": "iosyutina@sk.ru",
+            "last_name": "Осютина",
+            "first_name": "Ирина",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014888999",
+            "dnevnik_user_id": "1000007731422",
+            "position": "Педагог-психолог",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 79,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$wWfEiHXYAP3UmEZQXoy7dz$bpBOyIx4dnsAcDIqQUp0svuXddGRERvwPe3oHAuz9W4=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:47.673Z",
+            "email": "rpaleykina@sk.ru",
+            "last_name": "Палейкина",
+            "first_name": "Раиса",
+            "middle_name": "Николаевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016930588",
+            "dnevnik_user_id": "1000008963207",
+            "position": "Учитель математики",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 80,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$jML7Ew7ffMispQa1QjnVHQ$zXyQXlRqOU37V3xkzf/Exo82ZSfrr5nevyvHlNiRDEY=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:47.853Z",
+            "email": "tpanchenko@sk.ru",
+            "last_name": "Панченко",
+            "first_name": "Татьяна",
+            "middle_name": "Сергеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000019368115",
+            "dnevnik_user_id": "1000011140168",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 81,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$NX0duxPh9vG46WGJzufwn7$hKVRyMV+iW9s3SheaStqyWfwTuINuBV9lsCpTlArwac=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:48.033Z",
+            "email": "lpedanova@sk.ru",
+            "last_name": "Педанова",
+            "first_name": "Людмила",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Ассистент воспитателя",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 82,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$ZSnjrmlh00Sy3PbaTdlf3t$R43sfmREsyF/euJAT3SbNM3e/IzlJnAl0xtcgU4VnYg=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:48.212Z",
+            "email": "yperevezentseva@sk.ru",
+            "last_name": "Перевезенцева",
+            "first_name": "Юлия",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000020404451",
+            "dnevnik_user_id": "1000011776618",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 83,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$EudhfNHH3y5ksx9LOxH0mW$kPpJFZ242Yvy/rOlGOZcyPNpBnTPniNVtMN5H18Ahuk=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:48.391Z",
+            "email": "tperkova@sk.ru",
+            "last_name": "Перкова",
+            "first_name": "Татьяна",
+            "middle_name": "Юрьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000019228312",
+            "dnevnik_user_id": "1000011037525",
+            "position": "Учитель математики",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 84,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$rqVwsXhWYnfkUo8Nt06df1$Kkeam7ojlCecHpwg4Op/NZYX4W/1fQi3xJVi1Mfwlwo=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:48.572Z",
+            "email": "apermyakova@sk.ru",
+            "last_name": "Пермякова",
+            "first_name": "Анна",
+            "middle_name": "Андреевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014603798",
+            "dnevnik_user_id": "1000007662781",
+            "position": "Учитель информатики",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 85,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$4s7zyDOoSQ2S9VwPDO2OAI$U9KYlrg0i5rDF6ELQxZprb7p05KjTNpev/BzLcjAQek=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:48.751Z",
+            "email": "eppetrova@sk.ru",
+            "last_name": "Петрова",
+            "first_name": "Екатерина",
+            "middle_name": "Петровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021345346",
+            "dnevnik_user_id": "1000012254069",
+            "position": "Учитель математики",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 86,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$Akvuvzyp5aBt3UmFBjoq4R$fsbF/IOaGBrboYSwE1zH6TZkPY4qgQkknyXoKg1/OeE=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:48.931Z",
+            "email": "rpetushkov@sk.ru",
+            "last_name": "Петушков",
+            "first_name": "Роман",
+            "middle_name": "Викторович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000018335299",
+            "dnevnik_user_id": "1000010419574",
+            "position": "Учитель технологии",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 87,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$7jlaI1KS4vpBNhEMvoj4S8$OVp+RjwY1D1b+8IuiGhC3pjCOPDGUgNY4C6s3Sx03Ek=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:49.110Z",
+            "email": "eplaksunova@sk.ru",
+            "last_name": "Плаксунова",
+            "first_name": "Эльвира",
+            "middle_name": "Викторовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014888115",
+            "dnevnik_user_id": "1000007952451",
+            "position": "Учитель физической культуры",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 88,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$Xl61RA10h6h634JVex2O05$akjWaRozutSEK/ysrKnPwAaaxoE1A1jCL+BSoKA+jdM=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:49.289Z",
+            "email": "vpodobueva@sk.ru",
+            "last_name": "Подобуева",
+            "first_name": "Вера",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826447",
+            "dnevnik_user_id": "1000007189691",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 89,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$Ag3ml9IzG026r1rVE3GWfY$1DklbI5DhuidHcFwIvPj8vFbUWHjNZGI0N9WcVnXVF8=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:49.470Z",
+            "email": "ipolyak@sk.ru",
+            "last_name": "Поляк",
+            "first_name": "Ирина",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022848302",
+            "dnevnik_user_id": "1000013317199",
+            "position": "Учитель математики",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 90,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$0HQgq2x1T8dGz17SyNJjg7$fhFv+QwFRYXDoNEru44Vmt8WwbqHATmHwPOeDIxhs8k=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:49.651Z",
+            "email": "npotapova@sk.ru",
+            "last_name": "Потапова",
+            "first_name": "Наталья",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826441",
+            "dnevnik_user_id": "1000007338711",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 91,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$p6cJXiRyABbopyaYjbzCG9$uLTjRwQsjpIzp+EIDMNz5OwGoFyUujcdaKtx6DldXXI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:49.830Z",
+            "email": "mrogacheva@sk.ru",
+            "last_name": "Рогачева",
+            "first_name": "Мария",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016575796",
+            "dnevnik_user_id": "1000008838663",
+            "position": "Тьютор",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 92,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$hne8NftJbwOfS9V6r0cD90$P2ZlWCL7A6+N9xfYS4DZwiUmTShzXIp1gorBCk/WZ7A=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:50.010Z",
+            "email": "eromanova@sk.ru",
+            "last_name": "Романова",
+            "first_name": "Елена",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826405",
+            "dnevnik_user_id": "1000007544798",
+            "position": "Координатор психолого-педагогического сопровождения",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 93,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$SPk3WZCO4qkGPsaqvcug4z$IydnmLOFWX1M5V1zGpcvyIYsS4uguHqvrVWzVPQsNZU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:50.189Z",
+            "email": "arubanova@sk.ru",
+            "last_name": "Рубанова",
+            "first_name": "Анастасия",
+            "middle_name": "Максимовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022848331",
+            "dnevnik_user_id": "1000013317375",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 94,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$3EkgSjXuMo9ZDaCqMlk7jV$9rf/LrbuTMOQupFnZTKp7oo+5NMygaUTs8OuaskO7IA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:50.371Z",
+            "email": "asavina@sk.ru",
+            "last_name": "Савина",
+            "first_name": "Анастасия",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022176710",
+            "dnevnik_user_id": "1000012810018",
+            "position": "Учитель физической культуры",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 95,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$tOHRJ47ZRTaI63vn2AYTmr$G144iuxeyVkx83Ov1+Z2EZd5u3/M43CabBYeM1LMjac=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:50.552Z",
+            "email": "asadchikova@sk.ru",
+            "last_name": "Садчикова",
+            "first_name": "Анна",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000019556048",
+            "dnevnik_user_id": "1000011181597",
+            "position": "Учитель драмы",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 96,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$bauMp0BrSGFSSUyMe0YE6C$LcyVX+kHWZggOI1suYHksPn+Jq6T8cgBXvC86PGpbag=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:50.731Z",
+            "email": "zsamarbaeva@sk.ru",
+            "last_name": "Самарбаева",
+            "first_name": "Жанеля",
+            "middle_name": "Батрбековна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021344450",
+            "dnevnik_user_id": "1000012260921",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 97,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$q0vzYOxYbMcNzawT0yU0eM$2L7r2bBXIVFOwVQeYSzFb5J2BU8uQwSVcyvpiwN3ENk=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:50.911Z",
+            "email": "asamosadov@sk.ru",
+            "last_name": "Самосадов",
+            "first_name": "Андрей",
+            "middle_name": "Андреевич",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000018444045",
+            "dnevnik_user_id": "1000010455791",
+            "position": "Учитель информатики",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 98,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$UyTyp9k4Ar279MsIaxpsJU$MnRggBGiFyBAKeOsUTkquYuLmP6gDIAcwE/Q+/0D+wI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:51.090Z",
+            "email": "ssamchenko@sk.ru",
+            "last_name": "Самченко",
+            "first_name": "Семен",
+            "middle_name": "Александрович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826433",
+            "dnevnik_user_id": "1000009135684",
+            "position": "Учитель музыки и ритмики",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 99,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$h1ycpSoVPAp7tAkC33dJEv$EWJ8alMxVng05NlTdRrGDGTIG+n6W0KNu4SfLUQe5Zc=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:51.270Z",
+            "email": "osaratovtseva@sk.ru",
+            "last_name": "Саратовцева",
+            "first_name": "Олеся",
+            "middle_name": "Олеговна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022554282",
+            "dnevnik_user_id": "1000013227031",
+            "position": "Учитель истории и обществознания",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 100,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$1XL2ESfchVM09DPiRYg0sQ$0BIneaHJ0ka2GJyUBP6SEPj5vF3+j+5m/230H9Kem+Q=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:51.449Z",
+            "email": "ssvetlov@sk.ru",
+            "last_name": "Светлов",
+            "first_name": "Станислав",
+            "middle_name": "Эдуардович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000018949142",
+            "dnevnik_user_id": "1000010822120",
+            "position": "Учитель драмы, режиссер",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 101,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$jnBrjYl7zeqS9z6dIL1Vyq$2vYgA9Wiv+5gBxzijTuIEOPbDGdzG4bFlqq1ZMUPQEM=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:51.630Z",
+            "email": "ksvetlova@sk.ru",
+            "last_name": "Светлова",
+            "first_name": "Ксения",
+            "middle_name": "Вячеславовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000017599179",
+            "dnevnik_user_id": "1000009547541",
+            "position": "Учитель драмы",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 102,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$zuaoYYJGIZAnJDJnoPkCH0$mLMdhnN7nI2fm4LRZMRNXOt79DXpQxPcXIo2vQP6ZZ0=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:51.809Z",
+            "email": "esedova@sk.ru",
+            "last_name": "Седова",
+            "first_name": "Екатерина",
+            "middle_name": "Вячеславовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022182834",
+            "dnevnik_user_id": "1000012749349",
+            "position": "Учитель визуальных искусств",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 103,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$tYfMRW8zx74c6v1WdNAX13$5eZGOP7YAZw085nlKOJ/zce5ImDlmvdaHQIWU5oMoks=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:51.989Z",
+            "email": "asemochkin@sk.ru",
+            "last_name": "Семочкин",
+            "first_name": "Алексей",
+            "middle_name": "Викторович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826395",
+            "dnevnik_user_id": "1000007184348",
+            "position": "Заведующий кафедрой дизайна и технологии, учитель информатики и программирования",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 104,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$FKm33Flt4ZhquAUqZ9x1XJ$w0JZkzXIOAKxfsci3cnTcTjoAV5xnhxG5k0nRSQL5B0=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:52.169Z",
+            "email": "lsergeeva@sk.ru",
+            "last_name": "Сергеева",
+            "first_name": "Людмила",
+            "middle_name": "Олеговна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 105,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$yOHmzl5yGdiw5Hlndry3nj$QaIX1Ghcgh6flkXi8SLS5xdJuC3Qypm11NarJbJM9qA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:52.354Z",
+            "email": "lserikov@sk.ru",
+            "last_name": "Сериков",
+            "first_name": "Лаврентий",
+            "middle_name": "Игоревич",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000019697418",
+            "dnevnik_user_id": "1000011231967",
+            "position": "Учитель физической культуры",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 106,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$Oa55rnlxJvxSb06WyDQK4P$LfHfFqjinQL9jRNPyc97T3XW2d+Z21/qYSDL5msxVJU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:52.534Z",
+            "email": "esidorkova@sk.ru",
+            "last_name": "Сидоркова",
+            "first_name": "Елена",
+            "middle_name": "Аркадьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016211051",
+            "dnevnik_user_id": "1000008735813",
+            "position": "Методист, учитель математики",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 107,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$zUM6PfonkAImhhkmT1OEVs$8WbethcoCVE6o0MY/ZRB6cdAGGemJeQkdCW6pcBg+gc=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:52.714Z",
+            "email": "ysimaeva@sk.ru",
+            "last_name": "Симаева",
+            "first_name": "Юлия",
+            "middle_name": "Михайловна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826394",
+            "dnevnik_user_id": "1000007730568",
+            "position": "Заведующий кафедрой сценических искусств, учитель хореографии",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 108,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$XugagLG03DEs0cwbGmcyky$5SZR5KpMuuqT/xxT8Pi4WhDFNe7k0VMUFLv67mIcJLI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:52.897Z",
+            "email": "lsireneva@sk.ru",
+            "last_name": "Сиренева",
+            "first_name": "Лилия",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000020264916",
+            "dnevnik_user_id": "1000011623722",
+            "position": "Учитель физики",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 109,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$RS7Ak4BNRWckA3VkwwP8tM$7FvqSwLIrN37KBwUSHPsQY3E6Erxa0iuQvCpjVzdQPs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:53.076Z",
+            "email": "vskorobogatova@sk.ru",
+            "last_name": "Скоробогатова",
+            "first_name": "Вера",
+            "middle_name": "Вячеславовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000020527010",
+            "dnevnik_user_id": "1000011864625",
+            "position": "Учитель испанского языка",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 110,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$uIAjvfiO07vUQif6TLECc5$xdlDKe8Fp+deDYBimy5z6bXz0AUWr1HZJ5gPN5Sh2OM=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:53.259Z",
+            "email": "aslubskaya@sk.ru",
+            "last_name": "Слубская",
+            "first_name": "Анастасия",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021287968",
+            "dnevnik_user_id": "1000012227374",
+            "position": "Учитель истории и обществознания",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 111,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$JHZaxyDI8NyuQMwTgkFWBy$Xn9GrAiZVMf3OuUpAjCCg9NTMJpKEvs2YgAGsM4OBcg=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:53.439Z",
+            "email": "asmirnova@sk.ru",
+            "last_name": "Смирнова",
+            "first_name": "Алена",
+            "middle_name": "Игоревна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826450",
+            "dnevnik_user_id": "1000007187604",
+            "position": "Учитель русского языка и литературы",
+            "last_activity": "2023-11-22T12:47:59.575Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 112,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$dCx6w19MdShUjwmQXYxjcs$OM2BpR4iEQ8dREDpcPsRsKVqOaQoKTPaoX5X9Kihc/E=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:53.620Z",
+            "email": "esmolina@sk.ru",
+            "last_name": "Смолина",
+            "first_name": "Екатерина",
+            "middle_name": "Олеговна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000020403262",
+            "dnevnik_user_id": "1000011741104",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 113,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$rp9ddOxisSqymrwzKRcltJ$QHsGZkt1UMLWC5FAivdApojLaVP7slH+08otqOvVpAU=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:53.799Z",
+            "email": "esolosyatova@sk.ru",
+            "last_name": "Солосятова",
+            "first_name": "Екатерина",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 114,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$wR4vNH6FFfVTYePXYYbswq$QJohwNt3QcVNdqbdCvIhILfvJdUQaN86DsW7c0Uy+ZA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:53.981Z",
+            "email": "ssorokin@sk.ru",
+            "last_name": "Сорокин",
+            "first_name": "Сергей",
+            "middle_name": "Сергеевич",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016181257",
+            "dnevnik_user_id": "1000008736956",
+            "position": "Заведующий кафедрой математики, учитель математики",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 115,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$rlou50R90ONVvpJ9Uv26Zn$d8k/HOJQqCTVAKdVRDiUk29lpy9V9Rw754Mjv2gMd4I=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:54.160Z",
+            "email": "aspanderashvili@sk.ru",
+            "last_name": "Спандерашвили",
+            "first_name": "Анна",
+            "middle_name": "Сергеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016545475",
+            "dnevnik_user_id": "1000008835889",
+            "position": "Учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 116,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$2h5UI1Yk1nMU6s6NZMwjOP$DgQ/jQIiv507hXzxzVEj8fJttISoFz9PBdRfd2N573Y=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:54.339Z",
+            "email": "gstenyukov@sk.ru",
+            "last_name": "Стенюков",
+            "first_name": "Георгий",
+            "middle_name": "Евгеньевич",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021275173",
+            "dnevnik_user_id": "1000012226597",
+            "position": "Инструктор по физической культуре",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 117,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$O4khfeZrRmBYOAL3Wtv0a6$HHEWj4bty/glMjHKW9S9D3gXpnSEWew+bEhLf+YJAlQ=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:54.519Z",
+            "email": "msupryatkina@sk.ru",
+            "last_name": "Супряткина",
+            "first_name": "Мария",
+            "middle_name": "Михайловна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826439",
+            "dnevnik_user_id": "1000007345104",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 118,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$sYWoCLRQ3vWd7z3Iompevs$u96vpDS3OqJik7IVpwABiTmyseBxyv6Es5kQzEkbUPc=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:54.700Z",
+            "email": "vsyrykh@sk.ru",
+            "last_name": "Сырых",
+            "first_name": "Варвара",
+            "middle_name": "Михайловна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000023022512",
+            "dnevnik_user_id": "1000013335809",
+            "position": "Учитель географии",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 119,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$NxRclZsjxOhwhyYHLawXUk$CZpgOM0J6UysY2ClpT3nqcEB5+6w2QkxNYYmewFT0AE=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:54.884Z",
+            "email": "itarasova@sk.ru",
+            "last_name": "Тарасова",
+            "first_name": "Ирина",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 120,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$8aRBvsiRkBcQhGxDLWRR8t$QwpeiXB0Ctz9nQziebq3XT/nPaEGMaUKjJd+7qvRlYI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:55.064Z",
+            "email": "mtatsenko@sk.ru",
+            "last_name": "Таценко",
+            "first_name": "Маргарита",
+            "middle_name": "Сергеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021343779",
+            "dnevnik_user_id": "1000012239938",
+            "position": "Учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 121,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$v3ABOQ3PpWaABdoUDcRinX$e47I1YhtpERnnM6jj3IqPcMMC1a+0Hwv8o4hHY5X0eI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:55.244Z",
+            "email": "aterentyeva@sk.ru",
+            "last_name": "Терентьева",
+            "first_name": "Анна",
+            "middle_name": "Андреевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000017350051",
+            "dnevnik_user_id": "1000009357370",
+            "position": "Учитель-дефектолог в программе PYP",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 122,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$J9xk1dVCnqXRai1uilkGIn$+hpE5Ig6zsgw9CNmZ/No69iApsSjWiGyK3nnPBpJErI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:55.430Z",
+            "email": "ytrebnik@sk.ru",
+            "last_name": "Требник",
+            "first_name": "Яна",
+            "middle_name": "Анатольевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016601489",
+            "dnevnik_user_id": "1000008976900",
+            "position": "Заведующая кафедрой физической культуры, учитель физкультуры",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 123,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$66NaZfdrFXEc6SnNbx0D1x$PMVRH33YyygwgP9PIP/lS8IDS/7Past7cspNH5OJnqE=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:55.612Z",
+            "email": "atregubova@sk.ru",
+            "last_name": "Трегубова",
+            "first_name": "Анна",
+            "middle_name": "Евгеньевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014655830",
+            "dnevnik_user_id": "1000007682074",
+            "position": "Учитель географии",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 124,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$fZBdEJwP3Op5Fi9IUsLPNd$uK9Tp20YXo7aE4vlKxqSnlRZY7IX5FpMYW8bT1f9pjc=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:55.791Z",
+            "email": "mtrusova@sk.ru",
+            "last_name": "Трусова",
+            "first_name": "Марина",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826501",
+            "dnevnik_user_id": "1000007313349",
+            "position": "Учитель музыки",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 125,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$jt4K31lC5qvqEXKBAVtpKP$sZI4B0XrLOa9MvqJAf52jcoeXagdeTLvnXxN9NwKjMA=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:55.971Z",
+            "email": "yulina@sk.ru",
+            "last_name": "Улина",
+            "first_name": "Юлия",
+            "middle_name": "Геннадьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826465",
+            "dnevnik_user_id": "1000007184783",
+            "position": "Учитель информатики",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 126,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$MOLFXA7BmghpYweMlj8vCv$zvbJLK4pxXscuJN8qwPF/4J9WE9Yj7LfaoWGHZN+BKs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:56.150Z",
+            "email": "nusik@sk.ru",
+            "last_name": "Усик",
+            "first_name": "Наталья",
+            "middle_name": "Андреевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000016600817",
+            "dnevnik_user_id": "1000008842032",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 127,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$tKBNvPAcWEdds4h3sEtwUj$Hs115+DvSXKntdiStBzJ/YJa2V6r69fNUzXg76KkBbw=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:56.331Z",
+            "email": "vustinova@sk.ru",
+            "last_name": "Устинова",
+            "first_name": "Вера",
+            "middle_name": "Леонидовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000021343842",
+            "dnevnik_user_id": "1000012239944",
+            "position": "Учитель английского языка",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 128,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$ZxW1mmUtKemuZ79su7E01r$kPXjdxqyPeV18tWzZV4VnpW0NGD3Swl6TiQTA1PVois=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:56.513Z",
+            "email": "outkina@sk.ru",
+            "last_name": "Уткина",
+            "first_name": "Олеся",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826488",
+            "dnevnik_user_id": "1000007185425",
+            "position": "Руководитель Методической службы, учитель истории и обществознания",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 129,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$ynPKlJopGrcredvPXHko11$VhBrYj2LwVZY1R6+sKvFjm//i5pse53R74sAAl0XnDk=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:56.693Z",
+            "email": "efedyukovich@sk.ru",
+            "last_name": "Федюкович",
+            "first_name": "Екатерина",
+            "middle_name": "Владимировна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000020493636",
+            "dnevnik_user_id": "1000011847874",
+            "position": "Учитель экономики",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 130,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$bCUbH3WHmwtR2JMqtdS8ZB$+kfNZySJjrQMB1O7DcGuyE2ZQe7Oe78a0ihnAOaQZnM=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:56.873Z",
+            "email": "afrykin@sk.ru",
+            "last_name": "Фрыкин",
+            "first_name": "Антон",
+            "middle_name": "Дмитриевич",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826495",
+            "dnevnik_user_id": "1000007219612",
+            "position": "Заместитель директора по развитию образования, учитель биологии",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 131,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$tbUlwUwHpNKU8zVs0RUP4O$ixf9TgNq8VcbyqUxSWkX9xHqqqY0ez2+ZGCpF40wnwg=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:57.052Z",
+            "email": "akhramova@sk.ru",
+            "last_name": "Храмова",
+            "first_name": "Анна",
+            "middle_name": "Николаевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826445",
+            "dnevnik_user_id": "1000007208881",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 132,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$YLk3qUlTbZ88mSyaUZpLjv$YnUWVk6ij3hOW4T9wrXJdix6LC46xsKK/895/dn+PZI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:57.232Z",
+            "email": "ktsalon@sk.ru",
+            "last_name": "Цалон",
+            "first_name": "Ксения",
+            "middle_name": "Александровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014655822",
+            "dnevnik_user_id": "1000007730375",
+            "position": "Учитель русского языка и литературы",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 133,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$Y3wJm0VOeO2aQAoVV9GIgB$Td3dQ9GL093RZNowyyr15T+zxVRlqBivZSWrE7K6lQ4=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:57.412Z",
+            "email": "ptsitser@sk.ru",
+            "last_name": "Цицер",
+            "first_name": "Полина",
+            "middle_name": "Андреевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826477",
+            "dnevnik_user_id": "1000007186824",
+            "position": "Учитель немецкого языка",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 134,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$5qPnD3Aqxul5h8t6gUkDf6$cvi9LTAJ9a+g7WuwdMRyAkwbpckH1BqIIL1Gn5zWe8I=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:57.592Z",
+            "email": "dtsyganov@sk.ru",
+            "last_name": "Цыганов",
+            "first_name": "Дмитрий",
+            "middle_name": "Михайлович",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022554349",
+            "dnevnik_user_id": "1000013229476",
+            "position": "Учитель русского языка и литературы",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 135,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$cZXSnvA2sD5324fRWzF9kl$kxuPxbkQF/ecsM5n7XDeE2ttL6p/87a9UAzcHzrqtqw=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:57.772Z",
+            "email": "schazova@sk.ru",
+            "last_name": "Чазова",
+            "first_name": "Светлана",
+            "middle_name": "Анатольевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000014354415",
+            "dnevnik_user_id": "1000007500463",
+            "position": "Руководитель информационно-библиотечного центра",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                1,
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 136,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$9gfdA2d145gFdvXszbisV8$OJf+asJ4vOsQS9XCUrxuNoik1XlH+1hE5hhRo+kX0AE=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:57.952Z",
+            "email": "dchikhacheva@sk.ru",
+            "last_name": "Чихачева",
+            "first_name": "Дарья",
+            "middle_name": "Валерьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000023118785",
+            "dnevnik_user_id": "1000013969254",
+            "position": "Воспитатель",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 137,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$CtIeKM33qNc8pnHOuFRhSC$luWObLti4uakRixf13iq1h873xgWQK3Ai8ap7+tWR6I=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:58.131Z",
+            "email": "ashapovalova@sk.ru",
+            "last_name": "Шаповалова",
+            "first_name": "Анастасия",
+            "middle_name": "Андреевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826451",
+            "dnevnik_user_id": "1000007207418",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 138,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$tbzpKdmlkwmPhzQwhYmLgM$D8jk79OPRUr7QBzDnliEz9FbThXKjgS5KVzd0HZ5Hf4=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:58.311Z",
+            "email": "gshestakova@sk.ru",
+            "last_name": "Шестакова",
+            "first_name": "Галина",
+            "middle_name": "Сергеевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826443",
+            "dnevnik_user_id": "1000008207683",
+            "position": "Тьютор в программе MYP",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 139,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$xoLGdLHHPsMUJVT01urcza$SfjJbC2DakDelIKRO8GKe03VlNAvljeVWo8XWGNXuoI=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:58.490Z",
+            "email": "eshmeleva@sk.ru",
+            "last_name": "Шмелева",
+            "first_name": "Елена",
+            "middle_name": "Вячеславовна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826442",
+            "dnevnik_user_id": "1000007344230",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 140,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$bPYefCO8QVkMUWHvJxn0cE$qgsDCoPt5Rwt+ps3poYxDzTUkj/Oc/VLVQknkycNQ14=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:58.674Z",
+            "email": "ashcherbakova@sk.ru",
+            "last_name": "Щербакова",
+            "first_name": "Анастасия",
+            "middle_name": "Ивановна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000019475151",
+            "dnevnik_user_id": "1000011226108",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 141,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$mtF4VHZHGr5HpieMnjDQAq$0kFTNZLZ7oEIQ6IkKZAycMzdLOpHf6ER0ubgHJ36fNM=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:58.853Z",
+            "email": "eshcherbakova@sk.ru",
+            "last_name": "Щербакова",
+            "first_name": "Елена",
+            "middle_name": "Геннадьевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022892265",
+            "dnevnik_user_id": "1000013342611",
+            "position": "Учитель начальных классов",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 142,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$6rYbCRWlVr2IcyjbyocJyH$rlLlCanHo6pa9r+2mLRgBrXbB4CdrgZx5srEbQ/aSTY=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:59.033Z",
+            "email": "yyuzvak@sk.ru",
+            "last_name": "Юзвак",
+            "first_name": "Юлия",
+            "middle_name": "Анатольевна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000022028333",
+            "dnevnik_user_id": "1000012580523",
+            "position": "Учитель-логопед",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 143,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$QXxGpoILVbBoJLNNO52b9D$vgoSrpMGAa2Z7Hnxa/JyFnjpdD5c378U40HA04zWzbs=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:59.212Z",
+            "email": "niakushev@sk.ru",
+            "last_name": "Якушев",
+            "first_name": "Никита",
+            "middle_name": "Сергеевич",
+            "gender": "М",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000023571673",
+            "dnevnik_user_id": "1000013726065",
+            "position": "Учитель биологии",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 144,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$WoHNhKZZFavMeGcxV7ZMUK$adLeIoCOBQMTyRIgZjHEzP8CdxOMXxVlU4t2tspW6es=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:59.392Z",
+            "email": "lyalynskaya@sk.ru",
+            "last_name": "Ялынская",
+            "first_name": "Лариса",
+            "middle_name": "Петровна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": "1000013826462",
+            "dnevnik_user_id": "1000007237075",
+            "position": "Учитель музыки",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "general.user",
+        "pk": 145,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$6qIlWGvB6Riif1z5Gh7VSC$LSH/GlbBoTdMXsKmn0FYMAj5edU7S3h7Nc+BJ+Pvz4k=",
+            "last_login": null,
+            "is_superuser": false,
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-11-22T12:47:59.572Z",
+            "email": "syandaraeva@sk.ru",
+            "last_name": "Яндараева",
+            "first_name": "Светлана",
+            "middle_name": "Олеговна",
+            "gender": "Ж",
+            "photo": "",
+            "dnevnik_token": null,
+            "dnevnik_id": null,
+            "dnevnik_user_id": null,
+            "position": "Ассистент воспитателя",
+            "last_activity": "2023-11-22T12:47:59.576Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    }
+]

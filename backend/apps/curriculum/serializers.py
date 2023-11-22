@@ -50,7 +50,6 @@ class SubjectListSerializer(serializers.ModelSerializer):
             "name_eng",
             "group_ib",
             "group_fgos",
-            "type",
             "dnevnik_id",
             "department",
             "level",
