@@ -21,7 +21,6 @@ from general.serializers import (
     CustomTokenObtainPairSerializer,
     ClassGroupListGeneralSerializer,
     ClassRetrieveSerializer,
-    ClassCreateSerializer,
 )
 
 from general.models import (
@@ -60,18 +59,17 @@ class CustomTokenRefreshView(TokenRefreshView):
     create=extend_schema(summary='Создание нового пользователя', tags=['Пользователи']),
     retrieve=extend_schema(summary='Вывод информации о пользователе', tags=['Пользователи']),
     update=extend_schema(summary='Обновление информации о пользователе', tags=['Пользователи']),
-    destroy=extend_schema(summary='Удаление пользователя', tags=['Пользователи']),
+    partial_update=extend_schema(summary='Частичное обновление информации о пользователе', tags=['Пользователи']),
     me=extend_schema(summary='Вывод информации об авторизованном пользователе', tags=['Пользователи']),
     users_import=extend_schema(summary='Импорт пользователей', tags=['Пользователи']),
     )
-class UserViewSet(ModelViewSet):
+class UserViewSet(CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get', 'post', 'put', 'delete']
 
-    def get_permissions(self):
-        if self.action == "create":
-            self.permission_classes = [AllowAny]
-        return super().get_permissions()
+    # def get_permissions(self):
+    #     if self.action == "create":
+    #         self.permission_classes = [AllowAny]
+    #     return super().get_permissions()
 
     def get_queryset(self):
         return get_user_queryset()
@@ -169,19 +167,13 @@ class UserViewSet(ModelViewSet):
 
 @extend_schema_view(
     list=extend_schema(summary='Список классов', tags=['Классы']),
-    create=extend_schema(summary='Создание класса', tags=['Классы']),
     retrieve=extend_schema(summary='Просмотр класса', tags=['Классы']),
-    update=extend_schema(summary='Обновление класса', tags=['Классы']),
-    destroy=extend_schema(summary='Удаление класса', tags=['Классы']),
     )
-class ClassGroupViewSet(ModelViewSet):
+class ClassGroupViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get', 'post', 'put', 'delete']
 
     def get_serializer_class(self):
-        if self.action in ["create"]:
-            return ClassCreateSerializer
-        if self.action in ["retrieve", "update"]:
+        if self.action in ["retrieve"]:
             return ClassRetrieveSerializer
         return ClassGroupListGeneralSerializer
     

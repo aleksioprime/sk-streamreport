@@ -18,7 +18,7 @@ from apps.curriculum.models import (
     Subject
     )
 
-# Список пользователей для репортов
+# Список пользователей
 class UserListReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -29,7 +29,7 @@ class UserListReportSerializer(serializers.ModelSerializer):
             "middle_name",
             )
 
-# Список учебных лет для репортов
+# Список учебных лет
 class AcademicYearListReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicYear
@@ -40,7 +40,7 @@ class AcademicYearListReportSerializer(serializers.ModelSerializer):
             "date_end"
             )
 
-# Список учебных параллелей для репортов
+# Список учебных параллелей
 class StudyYearListReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudyYear
@@ -50,7 +50,7 @@ class StudyYearListReportSerializer(serializers.ModelSerializer):
             "level",
             )
 
-# Список учебных классов для репортов
+# Список учебных классов
 class ClassGroupListReportSerializer(serializers.ModelSerializer):
     year_academic = AcademicYearListReportSerializer()
     year_study = StudyYearListReportSerializer()
@@ -63,7 +63,7 @@ class ClassGroupListReportSerializer(serializers.ModelSerializer):
             "letter",
             )
 
-# Список предметов для репортов
+# Список предметов
 class SubjectReportListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
@@ -75,7 +75,7 @@ class SubjectReportListSerializer(serializers.ModelSerializer):
             "need_report"
             )
         
-# Список отчётных периодов для репортов
+# Вывод списка отчётных периодов для репортов
 class ReportPeriodListSerializer(serializers.ModelSerializer):
     year = AcademicYearListReportSerializer()
     class Meta:
@@ -95,13 +95,13 @@ class ReportPeriodUpdateSerializer(serializers.ModelSerializer):
         model = ReportPeriod
         fields = '__all__'
 
-# Просмотр, создание и редактирование уровней достижений по чек-листу
+# Вывод списка, создание и редактирование уровней достижений по критерию
 class ReportCriterionLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportCriterionLevel
         fields = '__all__'
 
-# Просмотр чек-листа рефлексии для репортов
+# Вывод списка критериев для репортов
 class ReportCriterionListSerializer(serializers.ModelSerializer):
     author = UserListReportSerializer()
     subjects = SubjectReportListSerializer(many=True)
@@ -111,7 +111,7 @@ class ReportCriterionListSerializer(serializers.ModelSerializer):
         model = ReportCriterion
         fields = '__all__'
 
-# Создание и редактирование чек-листа рефлексии для репортов
+# Создание и редактирование критериев для репортов
 class ReportCriterionUpdateSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),
@@ -120,7 +120,7 @@ class ReportCriterionUpdateSerializer(serializers.ModelSerializer):
         model = ReportCriterion
         fields = '__all__'
 
-# 
+# Вывод списка достижений по критериям для репортов учителя
 class ReportCriterionAchievementListSerializer(serializers.ModelSerializer):
     criterion = ReportCriterionListSerializer()
     achievement = ReportCriterionLevelSerializer()
@@ -128,7 +128,7 @@ class ReportCriterionAchievementListSerializer(serializers.ModelSerializer):
         model = ReportCriterionAchievement
         fields = '__all__'
 
-# 
+# Создание и редактирование достижения по критериям для репортов учителя
 class ReportCriterionAchievementUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportCriterionAchievement

@@ -9,9 +9,14 @@ from apps.report.models import (
     ReportSecondaryLevel,
     ReportTeacherSecondary,
     ReportTeacherHigh,
+    ReportIbProfile,
+    ReportMentor,
+    ReportPrimaryUnit,
+    ReportMentorPrimary,
+    ReportExtra,
 )
 
-def get_report_report_queryset():
+def get_report_period_queryset():
     return ReportPeriod.objects.all().select_related(
         'year',
         )
@@ -84,3 +89,42 @@ def get_report_teacher_high_queryset():
         ).prefetch_related(
             'criterion_achievements',
             )
+
+def get_report_ibprofile_queryset():
+    return ReportIbProfile.objects.all().select_related(
+        'profile',
+        )
+
+def get_report_mentor_queryset():
+    return ReportMentor.objects.all().select_related(
+        'student',
+        'author',
+        'period',
+        'group',
+        ).prefetch_related(
+            'profiles',
+            )
+
+def get_report_primary_unit_queryset():
+    return ReportPrimaryUnit.objects.all().select_related(
+        'unit',
+        )
+
+def get_report_mentor_primary_queryset():
+    return ReportMentorPrimary.objects.all().select_related(
+        'student',
+        'author',
+        'period',
+        'group',
+        ).prefetch_related(
+            'profiles',
+            'pyp_units',
+            )
+
+def get_report_extra_queryset():
+    return ReportExtra.objects.all().select_related(
+        'student',
+        'author',
+        'period',
+        'group',
+        )

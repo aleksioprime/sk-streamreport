@@ -11,6 +11,11 @@ from apps.report.views import (
     ReportSecondaryCriterionViewSet,
     ReportSecondaryLevelViewSet,
     ReportTeacherHighViewSet,
+    ReportIbProfileViewSet,
+    ReportMentorViewSet,
+    ReportPrimaryUnitViewSet,
+    ReportMentorPrimaryViewSet,
+    ReportExtraViewSet,
     )
 
 urlpatterns = [
@@ -33,4 +38,14 @@ urlpatterns = [
     path('reports/teacher/secondary/level/<int:pk>', ReportSecondaryLevelViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('reports/teacher/high', ReportTeacherHighViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('reports/teacher/high/<int:pk>', ReportTeacherHighViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('reports/mentor', ReportMentorViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('reports/mentor/<int:pk>', ReportMentorViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('reports/mentor/ibprofile', ReportIbProfileViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('reports/mentor/ibprofile/<int:pk>', ReportIbProfileViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('reports/mentor/primary', ReportMentorPrimaryViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('reports/mentor/primary/<int:pk>', ReportMentorPrimaryViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('reports/mentor/primary/unit', ReportPrimaryUnitViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('reports/mentor/primary/unit/<int:pk>', ReportPrimaryUnitViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('reports/extra', ReportExtraViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('reports/extra/<int:pk>', ReportExtraViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
 ]

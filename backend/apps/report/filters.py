@@ -11,6 +11,11 @@ from apps.report.models import (
     ReportSecondaryLevel,
     ReportTeacherSecondary,
     ReportTeacherHigh,
+    ReportIbProfile,
+    ReportMentor,
+    ReportPrimaryUnit,
+    ReportMentorPrimary,
+    ReportExtra
 )
 
 class ReportPeriodFilter(django_filters.FilterSet):
@@ -62,3 +67,28 @@ class ReportTeacherHighFilter(django_filters.FilterSet):
     class Meta:
         model = ReportTeacherHigh
         fields = {'student', 'author', 'subject', 'period', 'group'}
+
+class ReportIbProfileFilter(django_filters.FilterSet):
+    class Meta:
+        model =  ReportIbProfile
+        fields = {'report'}
+
+class ReportMentorFilter(django_filters.FilterSet):
+    class Meta:
+        model = ReportMentor
+        fields = {'student', 'author', 'period', 'group'}
+
+class ReportPrimaryUnitFilter(django_filters.FilterSet):
+    class Meta:
+        model =  ReportPrimaryUnit
+        fields = {'report'}
+
+class ReportMentorPrimaryFilter(django_filters.FilterSet):
+    class Meta:
+        model = ReportMentorPrimary
+        fields = {'student', 'author', 'period', 'group'}
+
+class ReportExtraFilter(django_filters.FilterSet):
+    class Meta:
+        model = ReportExtra
+        fields = {'student', 'author', 'period', 'group'}

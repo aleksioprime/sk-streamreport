@@ -7,14 +7,33 @@ from apps.report.models import (
     ReportPrimaryUnit,
     )
 
+from apps.ibo.models import (
+    LearnerProfile,
+)
+
+from apps.units.pyp.models import (
+    PypUnitPlanner
+)
+
 from .common import (
     UserListReportSerializer,
     ClassGroupListReportSerializer,
     ReportPeriodListSerializer,
 )
 
-# Список уровня развития профиля студента IB для репортов классного руководителя
-class ReportIbProfileSerializer(serializers.ModelSerializer):
+# Список профилей студента IB
+class LearnerProfileReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LearnerProfile
+        fields = (
+            "id",
+            "name",
+            "name_rus",
+            )
+
+# Вывод списка уровней развития профиля студента IB для репортов классного руководителя
+class ReportIbProfileListSerializer(serializers.ModelSerializer):
+    profile = LearnerProfileReportSerializer()
     class Meta:
         model = ReportIbProfile
         fields = (
@@ -24,7 +43,13 @@ class ReportIbProfileSerializer(serializers.ModelSerializer):
             "level"
             )
 
-# Список репортов классного руководителя
+# Создание и редактирование уровня развития профиля студента IB для репортов классного руководителя
+class ReportIbProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReportIbProfile
+        fields = '__all__'
+
+# Вывод списка репортов классного руководителя
 class ReportMentorListSerializer(serializers.ModelSerializer):
     student = UserListReportSerializer()
     author = UserListReportSerializer()
@@ -42,9 +67,49 @@ class ReportMentorListSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             )
+        
+# Подробный просмотр репорта классного руководителя
+class ReportMentorRetrieveSerializer(serializers.ModelSerializer):
+    student = UserListReportSerializer()
+    author = UserListReportSerializer()
+    group = ClassGroupListReportSerializer()
+    period = ReportPeriodListSerializer()
+    profiles = ReportIbProfileListSerializer(many=True)
+    class Meta:
+        model = ReportMentor
+        fields = (
+            "id",
+            "student",
+            "author",
+            "period",
+            "group",
+            "comment",
+            "profiles",
+            "created_at",
+            "updated_at",
+            )
 
-# Список юнитов для репорта классного руководителя начальной школы
-class ReportPrimaryUnitSerializer(serializers.ModelSerializer):
+# Создание и редактирование репорта классного руководителя
+class ReportMentorUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReportMentor
+        fields = '__all__'
+
+# TODO: Добавить необходимые поля для отображения
+# Список UnitPlanner начальной школы (PYP)
+class PypUnitPlannerReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PypUnitPlanner
+        fields = (
+            "id",
+            "title",
+            "transdisciplinary_theme",
+            "central_idea"
+            )
+
+# Список результатов юнитов для репорта классного руководителя начальной школы
+class ReportPrimaryUnitListSerializer(serializers.ModelSerializer):
+    unit = PypUnitPlannerReportSerializer()
     class Meta:
         model = ReportPrimaryUnit
         fields = (
@@ -53,6 +118,12 @@ class ReportPrimaryUnitSerializer(serializers.ModelSerializer):
             "unit",
             "comment"
             )
+
+# Создание и редактирование результатов юнитов для репорта классного руководителя начальной школы
+class ReportPrimaryUnitUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReportPrimaryUnit
+        fields = '__all__'
         
 # Список репортов классного руководителя начальной школы
 class ReportMentorPrimaryListSerializer(serializers.ModelSerializer):
@@ -72,4 +143,32 @@ class ReportMentorPrimaryListSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             )
-            
+
+# Подробный просмотр репорта классного руководителя начальной школы
+class ReportMentorPrimaryRetrieveSerializer(serializers.ModelSerializer):
+    student = UserListReportSerializer()
+    author = UserListReportSerializer()
+    group = ClassGroupListReportSerializer()
+    period = ReportPeriodListSerializer()
+    profiles = ReportIbProfileListSerializer(many=True)
+    pyp_units = ReportPrimaryUnitListSerializer(many=True)
+    class Meta:
+        model = ReportMentorPrimary
+        fields = (
+            "id",
+            "student",
+            "author",
+            "period",
+            "group",
+            "comment",
+            "profiles",
+            "pyp_units",
+            "created_at",
+            "updated_at",
+            )
+
+# Создание и редактирование репорта классного руководителя начальной школы
+class ReportMentorPrimaryUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReportMentorPrimary
+        fields = '__all__'

@@ -163,21 +163,6 @@ class ClassGroupListGeneralSerializer(serializers.ModelSerializer):
             )
 
 # Информация о группе
-class ClassCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ClassGroup
-        fields = (
-            "id",
-            "year_academic",
-            "year_study",
-            "year_study_ib",
-            "letter",
-            "dnevnik_id",
-            "mentor",
-            "extra",
-        )
-
-# Информация о группе со студентами
 class ClassRetrieveSerializer(serializers.ModelSerializer):
     students = UserListGeneralSerializer(many=True)
     mentor = UserListGeneralSerializer()

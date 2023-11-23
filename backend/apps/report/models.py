@@ -172,7 +172,7 @@ class ReportMentorPrimary(ReportBaseModel):
 class ReportPrimaryUnit(models.Model):
     """ Результаты исследования в PYP-юнитах """
     report = models.ForeignKey('report.ReportMentorPrimary', verbose_name=_("Репорт наставника НШ"), on_delete=models.CASCADE, null=True, related_name="pyp_units")
-    unit = models.ForeignKey('pyp.PypUnitPlanner', verbose_name=_("Юнит"), on_delete=models.CASCADE, null=True, related_name="reports")
+    unit = models.ForeignKey('pyp.PypUnitPlanner', verbose_name=_("Юнит"), on_delete=models.CASCADE, null=True, related_name="pyp_reports")
     comment = models.TextField(verbose_name=_("Комментарий"), null=True, blank=True)
     class Meta:
         verbose_name = 'Репорты наставника НШ: юнит PYP'
