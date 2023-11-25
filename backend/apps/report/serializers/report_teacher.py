@@ -34,7 +34,7 @@ class CourseTopicReportSerializer(serializers.ModelSerializer):
         model = CourseTopic
         fields = (
             "id",
-            "section",
+            "chapter",
             "number",
             "name",
             "description",

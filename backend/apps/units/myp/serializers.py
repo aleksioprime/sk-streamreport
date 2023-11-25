@@ -612,6 +612,7 @@ class MypUnitPlannerInterdisciplinaryRetrieveSerializer(serializers.ModelSeriali
             "atl_develops",
             "ibprofiles",
             "reflection_posts",
+            "teacher_roles",
             )
         
 # Создание междисциплинарного планнера в MYP

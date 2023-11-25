@@ -257,7 +257,6 @@ class UnitReflectionPostMypSerializer(serializers.ModelSerializer):
             "unit",
             )
 
-
 # Список предметов
 class SubjectDpSerializer(serializers.ModelSerializer):
     group_ib = IbSubjectGroupDpSerializer()
@@ -365,6 +364,7 @@ class DpUnitPlannerRetrieveSerializer(serializers.ModelSerializer):
             "atl_develops",
             "ibprofiles",
             "reflection_posts",
+            "teacher_roles",
         )
 
 # Создание планера в DP

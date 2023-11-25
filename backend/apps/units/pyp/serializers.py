@@ -280,6 +280,7 @@ class PypUnitPlannerRetrieveSerializer(serializers.ModelSerializer):
             "atl_develops",
             "ibprofiles",
             "reflection_posts",
+            "teacher_roles",
             )
         
 # Создание планнера в PYP

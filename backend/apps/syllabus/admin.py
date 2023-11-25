@@ -2,37 +2,51 @@ from django.contrib.admin import register, ModelAdmin
 from import_export.admin import ImportExportModelAdmin
 
 from apps.syllabus.models import (
+    Syllabus,
     Course,
-    CourseSection,
+    CourseChapter,
     CourseTopic,
 )
+
+@register(Syllabus)
+class SyllabusModelAdmin(ImportExportModelAdmin):
+    list_display = (
+        "id",
+        "subject",
+    )
+    list_display_links = (
+        "subject",
+    )
 
 @register(Course)
 class CourseModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
-        "subject",
+        "syllabus",
+        "year"
     )
     list_display_links = (
-        "subject",
+        "syllabus",
     )
 
-@register(CourseSection)
-class CourseSectionModelAdmin(ImportExportModelAdmin):
+@register(CourseChapter)
+class CourseChapterModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
         "course",
-        "year",
+        "number",
+        "name",
+        "unit"
     )
     list_display_links = (
-        "course",
+        "name",
     )
 
 @register(CourseTopic)
 class CourseTopicModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
-        "section",
+        "chapter",
         "number",
         "name",
         "hours",
