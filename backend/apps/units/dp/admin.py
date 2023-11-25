@@ -13,8 +13,6 @@ from apps.units.dp.models import (
     DpUnitPlanner,
     DpInquiryQuestion,
     DpAtlDevelop,
-    DpProfileDevelop,
-    DpReflectionPost,
     LevelDpChoices,
     LanguageLearningChoices,
     TokConnectionsChoices,
@@ -185,26 +183,4 @@ class DpAtlSkillModelAdmin(ModelAdmin):
     )
     list_display_links = (
         "name",
-    )
-
-@register(DpProfileDevelop)
-class DpProfileDevelopModelAdmin(ModelAdmin):
-    list_display = (
-        "profile",
-        "unit",
-    )
-    list_display_links = (
-        "profile",
-    )
-
-@register(DpReflectionPost)
-class DpReflectionPostModelAdmin(ModelAdmin):
-    list_display = (
-        "type",
-        "author",
-        "post",
-        "unit",
-    )
-    list_display_links = (
-        "author",
     )

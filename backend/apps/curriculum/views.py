@@ -2,6 +2,7 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, DestroyModelMixin, UpdateModelMixin
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 
 from apps.curriculum.serializers import (
     SubjectListSerializer, 
@@ -15,11 +16,16 @@ from apps.curriculum.services import (
     get_teaching_load_queryset
 )
 
+from apps.curriculum.filters import (
+    SubjectViewFilter
+)
+
 @extend_schema_view(
     list=extend_schema(summary='Список предметов', tags=['Предметы']),
     )
 class SubjectViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
+    filterset_class = SubjectViewFilter
 
     def get_serializer_class(self):
         return SubjectListSerializer

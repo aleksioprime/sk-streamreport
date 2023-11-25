@@ -2,10 +2,9 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import gettext_lazy as _
 
-class PostTypeDpChoices(models.TextChoices):
-        prior = "prior", "Перед началом юнита"
-        during = "during", "Во время юнита"
-        after = "after", "После окончания юнита"
+from apps.ibo.models import (
+    UnitPlanerBaseModel
+)
 
 class QuestionTypeDpChoices(models.TextChoices):
         factual = "factual", "Фактический"
@@ -141,19 +140,12 @@ class DpAtlSkill(models.Model):
     def __str__(self):
         return f"{self.name} ({self.cluster})"
 
-class DpUnitPlanner(models.Model):
+class DpUnitPlanner(UnitPlanerBaseModel):
     """ ЮнитПланеры DP """
-    title = models.CharField(max_length=255, verbose_name=_("Title unit"))
-    order = models.PositiveSmallIntegerField(verbose_name=_("Number"), default=0)
-    year = models.ForeignKey('general.StudyYear', verbose_name=_("Study year"), on_delete=models.SET_NULL, null=True, related_name="dp_unitplans")
     subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Subject"), on_delete=models.SET_NULL, null=True, related_name="dp_unitplans")
-    authors = models.ManyToManyField('general.User', verbose_name=_("Authors"), related_name="dp_authors")
-    teachers = models.ManyToManyField('general.User', verbose_name=_("Teachers"), related_name="dp_teachers")
     levels = ArrayField(
         models.CharField(max_length=5, choices=LevelDpChoices.choices),
         verbose_name=_("Levels"), default=list, blank=True)
-    hours = models.PositiveSmallIntegerField(verbose_name=_("Hours"), default=0)
-    description = models.TextField(verbose_name=_("Description"), null=True, blank=True)
     transfer_goals = models.TextField(verbose_name=_("Transfer goals"), null=True, blank=True)
     essential_understandings = models.TextField(verbose_name=_("Essential Understandings"), null=True, blank=True)
     misunderstandings = models.TextField(verbose_name=_("Missed concepts/misunderstandings"), null=True, blank=True)
@@ -204,8 +196,6 @@ class DpUnitPlanner(models.Model):
     work_well = models.TextField(verbose_name=_("What worked well?"), null=True, blank=True)
     work_well_not = models.TextField(verbose_name=_("What didn’t work well?"), null=True, blank=True)
     notes = models.TextField(verbose_name=_("Notes/changes/suggestions"), null=True, blank=True)
-    created_at = models.DateTimeField(verbose_name=_("Creation date"), auto_now_add=True)
-    updated_at = models.DateTimeField(verbose_name=_("Update date"), auto_now=True)
     class Meta:
         verbose_name = 'DP: UnitPlan'
         verbose_name_plural = 'DP: UnitPlans'
@@ -228,7 +218,7 @@ class DpInquiryQuestion(models.Model):
 class DpAtlDevelop(models.Model):
     """ Развитие ATL-навыков в юните DP """
     atl = models.ForeignKey('dp.DpAtlSkill', verbose_name=_("ATL Skill"), on_delete=models.SET_NULL, null=True, related_name="atl_develops")
-    description = models.TextField(verbose_name=_("Description"), null=True, blank=True)
+    action = models.TextField(verbose_name=_("Action"), null=True, blank=True)
     unit = models.ForeignKey('dp.DpUnitPlanner', verbose_name=_("Unit DP"), on_delete=models.CASCADE, related_name="atl_develops")
     class Meta:
         verbose_name = 'DP: UnitPlan - Approaches to Learning'
@@ -236,28 +226,3 @@ class DpAtlDevelop(models.Model):
         ordering = ['unit', 'atl']
     def __str__(self):
         return f"{self.atl} ({self.description})"
-    
-class DpProfileDevelop(models.Model):
-    """ Развитие профиля студента в юните DP """
-    profile = models.ForeignKey('ibo.LearnerProfile', verbose_name=_("IB Learner Profile"), on_delete=models.CASCADE, related_name="dp_profiles")
-    description = models.TextField(verbose_name=_("Description"), null=True, blank=True)
-    unit = models.ForeignKey('dp.DpUnitPlanner', verbose_name=_("Unit DP"), on_delete=models.CASCADE, related_name="profile_develops")
-    class Meta:
-        verbose_name = 'DP: UnitPlan - Learner Profile'
-        verbose_name_plural = 'DP: UnitPlans - Learner Profile'
-        ordering = ['unit', 'profile']
-    def __str__(self):
-        return f"{self.profile}"
-    
-class DpReflectionPost(models.Model):
-    """ Посты рефлексии по планеру DP """
-    post = models.TextField(verbose_name=_("Post"), null=True, blank=True)
-    type = models.CharField(choices=PostTypeDpChoices.choices, verbose_name=_("Type"), max_length=6)
-    author = models.ForeignKey('general.User', verbose_name=_("Author"), on_delete=models.SET_NULL, null=True, related_name="dp_reflections")
-    unit = models.ForeignKey('dp.DpUnitPlanner', verbose_name=_("Unit DP"), on_delete=models.CASCADE, related_name="reflection_posts")
-    class Meta:
-        verbose_name = 'DP: UnitPlan - Reflection Post'
-        verbose_name_plural = 'DP: UnitPlans - Reflection Posts'
-        ordering = ['unit', 'type', 'post']
-    def __str__(self):
-        return f"{self.type}: {self.post[:15]}"

@@ -85,7 +85,7 @@ class ReportPeriodViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_period_queryset()
     serializer_class = ReportPeriodListSerializer
-    filter_class = ReportPeriodFilter
+    filterset_class = ReportPeriodFilter
 
 # Критерии для репортов: список, создание, редактирование и удаление
 @extend_schema_view(
@@ -97,7 +97,7 @@ class ReportPeriodViewSet(ListModelMixin, GenericViewSet):
 class ReportCriterionViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_criterion_queryset()
-    filter_class = ReportCriterionFilter
+    filterset_class = ReportCriterionFilter
     def get_serializer_class(self):
         if self.action == "list":
             return ReportCriterionListSerializer
@@ -113,7 +113,7 @@ class ReportCriterionViewSet(ModelViewSet):
 class ReportCriterionLevelViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_criterion_level_queryset()
-    filter_class = ReportCriterionLevelFilter
+    filterset_class = ReportCriterionLevelFilter
     serializer_class = ReportCriterionLevelSerializer
 
 # Достижения по критериям в репорте: список, создание, редактирование и удаление
@@ -126,7 +126,7 @@ class ReportCriterionLevelViewSet(ModelViewSet):
 class ReportCriterionAchievementViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_criterion_achievement_queryset()
-    filter_class = ReportCriterionAchievementFilter
+    filterset_class = ReportCriterionAchievementFilter
     def get_serializer_class(self):
         if self.action == "list":
             return ReportCriterionAchievementListSerializer
@@ -143,7 +143,7 @@ class ReportCriterionAchievementViewSet(ModelViewSet):
     )
 class ReportTeacherPrimaryViewSet(ModelViewSet):
     queryset = get_report_teacher_primary_queryset()
-    filter_class = ReportTeacherPrimaryFilter
+    filterset_class = ReportTeacherPrimaryFilter
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
@@ -163,7 +163,7 @@ class ReportTeacherPrimaryViewSet(ModelViewSet):
 class ReportPrimaryTopicViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_primary_achievement_queryset()
-    filter_class = ReportPrimaryTopicFilter
+    filterset_class = ReportPrimaryTopicFilter
     def get_serializer_class(self):
         if self.action == "list":
             return ReportPrimaryTopicListSerializer
@@ -179,7 +179,7 @@ class ReportPrimaryTopicViewSet(ModelViewSet):
 class ReportSecondaryCriterionViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_secondary_criterion_queryset()
-    filter_class = ReportSecondaryCriterionFilter
+    filterset_class = ReportSecondaryCriterionFilter
     def get_serializer_class(self):
         if self.action == "list":
             return ReportSecondaryCriterionListSerializer
@@ -195,7 +195,7 @@ class ReportSecondaryCriterionViewSet(ModelViewSet):
 class ReportSecondaryLevelViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_secondary_level_queryset()
-    filter_class = ReportSecondaryLevelFilter
+    filterset_class = ReportSecondaryLevelFilter
     def get_serializer_class(self):
         if self.action == "list":
             return ReportSecondaryLevelListSerializer
@@ -213,7 +213,7 @@ class ReportSecondaryLevelViewSet(ModelViewSet):
 class ReportTeacherSecondaryViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_teacher_secondary_queryset()
-    filter_class = ReportTeacherSecondaryFilter
+    filterset_class = ReportTeacherSecondaryFilter
     
     def get_serializer_class(self):
         if self.action == "list":
@@ -235,7 +235,7 @@ class ReportTeacherSecondaryViewSet(ModelViewSet):
 class ReportTeacherHighViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_teacher_high_queryset()
-    filter_class = ReportTeacherHighFilter
+    filterset_class = ReportTeacherHighFilter
     
     def get_serializer_class(self):
         if self.action == "list":
@@ -254,7 +254,7 @@ class ReportTeacherHighViewSet(ModelViewSet):
 class ReportIbProfileViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_ibprofile_queryset()
-    filter_class = ReportIbProfileFilter
+    filterset_class = ReportIbProfileFilter
     def get_serializer_class(self):
         if self.action == "list":
             return ReportIbProfileListSerializer
@@ -272,7 +272,7 @@ class ReportIbProfileViewSet(ModelViewSet):
 class ReportMentorViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_mentor_queryset()
-    filter_class = ReportMentorFilter
+    filterset_class = ReportMentorFilter
     
     def get_serializer_class(self):
         if self.action == "list":
@@ -292,7 +292,7 @@ class ReportMentorViewSet(ModelViewSet):
 class ReportPrimaryUnitViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_primary_unit_queryset()
-    filter_class = ReportPrimaryUnitFilter
+    filterset_class = ReportPrimaryUnitFilter
     def get_serializer_class(self):
         if self.action == "list":
             return ReportPrimaryUnitListSerializer
@@ -310,7 +310,7 @@ class ReportPrimaryUnitViewSet(ModelViewSet):
 class ReportMentorPrimaryViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_mentor_primary_queryset()
-    filter_class = ReportMentorPrimaryFilter
+    filterset_class = ReportMentorPrimaryFilter
     
     def get_serializer_class(self):
         if self.action == "list":
@@ -331,7 +331,7 @@ class ReportMentorPrimaryViewSet(ModelViewSet):
 class ReportExtraViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_extra_queryset()
-    filter_class = ReportExtraFilter
+    filterset_class = ReportExtraFilter
     
     def get_serializer_class(self):
         if self.action == "list":

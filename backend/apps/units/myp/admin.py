@@ -4,9 +4,8 @@ from import_export.admin import ImportExportModelAdmin
 from apps.units.myp.models import (
     MypObjective, 
     Strand, 
-    EducationalLevel, 
     StrandLevel, 
-    AchievementLevel,
+    StrandLevelAchievement,
     MypAim, 
     MypKeyConcept,
     MypKeyConceptOfSubjects,
@@ -17,11 +16,9 @@ from apps.units.myp.models import (
     MypUnitPlanner,
     MypInquiryQuestion,
     MypAtlDevelop,
-    MypReflectionPost,
     MypUnitPlannerInterdisciplinary,
     MypInquiryQuestionIdu,
     MypAtlDevelopIdu,
-    MypReflectionPostIdu
 )
 
 @register(MypObjective)
@@ -47,16 +44,6 @@ class StrandModelAdmin(ImportExportModelAdmin):
         "name",
     )
 
-@register(EducationalLevel)
-class EducationalLevelModelAdmin(ImportExportModelAdmin):
-    list_display = (
-        "number",
-        "name",
-    )
-    list_display_links = (
-        "name",
-    )
-
 @register(StrandLevel)
 class StrandLevelModelAdmin(ImportExportModelAdmin):
     list_display = (
@@ -68,11 +55,11 @@ class StrandLevelModelAdmin(ImportExportModelAdmin):
         "name",
     )
 
-@register(AchievementLevel)
-class AchievementLevelModelAdmin(ImportExportModelAdmin):
+@register(StrandLevelAchievement)
+class StrandLevelAchievementModelAdmin(ImportExportModelAdmin):
     list_display = (
         "name",
-        "strand_level",
+        "level",
         "point",
     )
     list_display_links = (
@@ -183,18 +170,6 @@ class MypAtlDevelopModelAdmin(ModelAdmin):
         "atl",
     )
 
-@register(MypReflectionPost)
-class MypReflectionPostModelAdmin(ModelAdmin):
-    list_display = (
-        "post",
-        "type",
-        "author",
-        "unit",
-    )
-    list_display_links = (
-        "post",
-    )
-
 @register(MypUnitPlannerInterdisciplinary)
 class MypUnitPlannerInterdisciplinaryModelAdmin(ModelAdmin):
     list_display = (
@@ -225,16 +200,4 @@ class MypAtlDevelopIduModelAdmin(ModelAdmin):
     )
     list_display_links = (
         "atl",
-    )
-
-@register(MypReflectionPostIdu)
-class MypReflectionPostIduModelAdmin(ModelAdmin):
-    list_display = (
-        "post",
-        "type",
-        "author",
-        "unit",
-    )
-    list_display_links = (
-        "post",
     )

@@ -1,11 +1,9 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-
-class PypReflectionChoices(models.TextChoices):
-        teacher = "teacher", "Рефлексия учителя"
-        students = "students", "Рефлексия студентов"
-        assessment = "assessment", "Рефлексия оценивания"
+from apps.ibo.models import (
+    UnitPlanerBaseModel
+)
 
 class TransdisciplinaryTheme(models.Model):
     """ Трансдисциплинарные темы """
@@ -58,15 +56,8 @@ class PypAtlSkill(models.Model):
     def __str__(self):
         return f"{self.name} ({self.group})"
 
-# TODO: Подумать над добавлением фотоальбома в юнит (загрузка и хранение нескольких фотографий в одном поле через связанную таблицу)
-# TODO: Подумать над добавлением набора файлов в юнит (загрузка и хранение нескольких файлов в одном поле через связанную таблицу)
-class PypUnitPlanner(models.Model):
+class PypUnitPlanner(UnitPlanerBaseModel):
     """ ЮнитПланеры PYP """
-    title = models.CharField(max_length=255, verbose_name=_("Название юнита"))
-    order = models.PositiveSmallIntegerField(verbose_name=_("Номер"), default=0)
-    teachers = models.ManyToManyField('general.User', verbose_name=_("Учителя"), through='pyp.PypUnitTeacherRoles', related_name="pyp_unitplans")
-    year = models.ForeignKey('general.StudyYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="pyp_unitplans")
-    hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
     transdisciplinary_theme = models.ForeignKey('pyp.TransdisciplinaryTheme', verbose_name=_("Трансдисциплинарная тема"), on_delete=models.SET_NULL, null=True, related_name="pyp_unitplans")
     central_idea = models.TextField(verbose_name=_("Центральная идея"), null=True, blank=True)
     key_concepts = models.ManyToManyField('pyp.PypKeyConcept', verbose_name=_("Ключевые концепты"), blank=True, related_name="pyp_unitplans")
@@ -93,18 +84,6 @@ class PypUnitPlanner(models.Model):
     def __str__(self):
         return f"{self.title} ({self.year})"
 
-class PypUnitTeacherRoles(models.Model):
-    """ Роли авторов юнита PYP """
-    unit = models.ForeignKey('pyp.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="teacher_roles")
-    user = models.ForeignKey('general.User', verbose_name=_("Пользователь"), on_delete=models.CASCADE, related_name="pyp_unitroles")
-    role = models.CharField(max_length=32, verbose_name=_("Роль"), null=True)
-    class Meta:
-        verbose_name = 'PYP: Роль автора юнита'
-        verbose_name_plural = 'PYP: Роли автора юнита'
-        ordering = ['unit', 'user', 'role']
-    def __str__(self):
-        return f"{self.user} ({self.role})"
-
 class PypLinesOfInquiry(models.Model):
     """ Линии исследования в юните PYP """
     name = models.CharField(max_length=255, verbose_name=_("Линия исследования"))
@@ -127,19 +106,7 @@ class PypRelatedConcept(models.Model):
         ordering = ['unit', 'name']
     def __str__(self):
         return f"{self.name} ({self.unit})"
-    
-class PypProfileAttribute(models.Model):
-    """ Качества портрета студента в юните PYP """
-    profile = models.ForeignKey('ibo.LearnerProfile', verbose_name=_("Профиль студента"), on_delete=models.CASCADE, related_name="pyp_profiles")
-    description = models.TextField(verbose_name=_("Описание"), null=True, blank=True)
-    unit = models.ForeignKey('pyp.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="profile_attributes")
-    class Meta:
-        verbose_name = 'PYP: UnitPlan - Развитие профиля студента'
-        verbose_name_plural = 'PYP: UnitPlans - Развитие профиля студента'
-        ordering = ['unit', 'profile']
-    def __str__(self):
-        return f"{self.profile}"
-    
+      
 class PypAtlDevelop(models.Model):
     """ Развитие ATL-навыков в юните PYP """
     atl = models.ForeignKey('pyp.PypAtlSkill', verbose_name=_("Навык ATL"), on_delete=models.CASCADE, related_name="atl_develops")
@@ -151,16 +118,3 @@ class PypAtlDevelop(models.Model):
         ordering = ['unit', 'atl']
     def __str__(self):
         return f"{self.atl} ({self.action})"
-    
-class PypReflectionPost(models.Model):
-    """ Посты рефлексии по планеру PYP """
-    type = models.CharField(choices=PypReflectionChoices.choices, verbose_name=_("Тип рефлексии"), max_length=10)
-    post = models.TextField(verbose_name=_("Содержание рефлексии"), null=True, blank=True)
-    author = models.ForeignKey('general.User', verbose_name=_("Автор поста"), on_delete=models.SET_NULL, null=True, related_name="pyp_reflections")
-    unit = models.ForeignKey('pyp.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="pyp_reflections")
-    class Meta:
-        verbose_name = 'PYP: UnitPlan - Пост рефлексии'
-        verbose_name_plural = 'PYP: UnitPlans - Посты рефлексии'
-        ordering = ['type', 'post']
-    def __str__(self):
-        return f"{self.type}: {self.post[:15]}"

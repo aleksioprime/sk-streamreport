@@ -1,6 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.ibo.models import (
+    UnitPlanerBaseModel
+)
+
 class ObjectiveLetterChoices(models.TextChoices):
         A = "a", "Критерий A"
         B = "b", "Критерий B"
@@ -19,10 +23,11 @@ class QuestionTypeMypChoices(models.TextChoices):
         conceptual = "conceptual", "Концептуальный"
         debatable = "debatable", "Дискуссионный"
 
-class PostTypeMypChoices(models.TextChoices):
-        prior = "prior", "Перед началом юнита"
-        during = "during", "Во время юнита"
-        after = "after", "После окончания юнита"
+class EducationalLevelChoices(models.TextChoices):
+        level_1 = "first", "Year 1 / Emergent"
+        level_2 = "second", "Year 3 / Capable"
+        level_3 = "third", "Year 5 / Proficient"
+        level_all = None, "Year All"
 
 class MypObjective(models.Model):
     """ Предметные цели/критерии оценивания """
@@ -52,25 +57,12 @@ class Strand(models.Model):
         ordering = ['objective', 'number', 'letter']
     def __str__(self):
         return f"{self.number} ({self.get_letter_display()}). {self.name[:15]}..."
-    
-class EducationalLevel(models.Model):
-    """ Образовательный уровень """
-    number = models.PositiveIntegerField(verbose_name=_("Номер"), default=1)
-    name = models.CharField(max_length=255, verbose_name=_("Название"), null=True)
-    name_rus = models.CharField(max_length=255, verbose_name=_("Название на рус. языке"), null=True)
-    years = models.ManyToManyField('general.StudyYear', verbose_name=_("Года обучения"), related_name="edu_levels")
-    class Meta:
-        verbose_name = 'MYP: Образовательный уровень'
-        verbose_name_plural = 'MYP: Образовательные уровни'
-        ordering = ['name']
-    def __str__(self):
-        return f"{self.name}"
-    
+ 
 class StrandLevel(models.Model):
     """ Предметные цели по уровням и годам обучения """
     name = models.CharField(max_length=255, verbose_name=_("Описание"), null=True)
     name_rus = models.CharField(max_length=255, verbose_name=_("Описание на рус. языке"), null=True)
-    level = models.ForeignKey('myp.EducationalLevel', verbose_name=_("Уровень в IB"), on_delete=models.SET_NULL, null=True, related_name="strand_levels")
+    level = models.CharField(verbose_name=_("Образовательный уровень"), null=True, choices=ObjectiveLetterChoices.choices, max_length=12)
     strand = models.ForeignKey('myp.Strand', verbose_name=_("Стрэнд"), on_delete=models.SET_NULL, null=True, related_name="strand_levels")
     class Meta:
         verbose_name = 'MYP: Предметная цель на уровне'
@@ -79,16 +71,16 @@ class StrandLevel(models.Model):
     def __str__(self):
         return f"{self.level} | {self.strand.letter}. {self.name[:10]}..."
     
-class AchievementLevel(models.Model):
+class StrandLevelAchievement(models.Model):
     """ Уровни достижений образовательных целей """
     name = models.TextField(verbose_name=_("Описание"), null=True, blank=False)
     name_rus = models.TextField(verbose_name=_("Описание на рус. языке"), null=True, blank=True)
-    strand_level = models.ForeignKey('myp.StrandLevel', verbose_name=_("Предметная цель"), on_delete=models.CASCADE, null=True, related_name="achieve_levels")
+    level = models.ForeignKey('myp.StrandLevel', verbose_name=_("Предметная цель"), on_delete=models.CASCADE, null=True, related_name="achieve_levels")
     point = models.PositiveIntegerField(verbose_name=_("Баллы"), default=0)
     class Meta:
         verbose_name = 'MYP: Уровень достижений'
         verbose_name_plural = 'MYP: Уровни достижений'
-        ordering = ['strand_level', 'point']
+        ordering = ['level', 'point']
     def __str__(self):
         return  f"{self.name[:30]}...:{self.point}"
     
@@ -185,15 +177,10 @@ class MypAtlSkill(models.Model):
     def __str__(self):
         return f"{self.name} ({self.cluster})"
     
-class MypUnitPlanner(models.Model):
+class MypUnitPlanner(UnitPlanerBaseModel):
     """ ЮнитПланеры MYP """
-    title = models.CharField(max_length=255, verbose_name=_("Название юнита"))
-    order = models.PositiveSmallIntegerField(verbose_name=_("Номер"), default=0)
     subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"), on_delete=models.SET_NULL, null=True, related_name="myp_unitplans")
-    level = models.ForeignKey('myp.EducationalLevel', verbose_name=_("Образовательный уровень"), on_delete=models.SET_NULL, null=True, related_name="myp_unitplans")
-    teachers = models.ManyToManyField('general.User', verbose_name=_("Учителя"), related_name="myp_unitplans")
-    year = models.ForeignKey('general.StudyYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="myp_unitplans")
-    hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
+    level = models.CharField(verbose_name=_("Образовательный уровень"), choices=ObjectiveLetterChoices.choices, max_length=12, null=True)
     key_concept = models.ForeignKey('myp.MypKeyConcept', verbose_name=_("Ключевой концепт"), null=True, blank=True, on_delete=models.SET_NULL, related_name="myp_unitplans")
     related_concepts = models.ManyToManyField('myp.MypRelatedConcept', verbose_name=_("Сопутствующие концепты"), blank=True, related_name="myp_unitplans")
     conceptual_understanding = models.TextField(verbose_name=_("Концептуальное понимание"), null=True, blank=True)
@@ -255,37 +242,9 @@ class MypAtlDevelop(models.Model):
         ordering = ['strand']
     def __str__(self):
         return f"{self.atl} ({self.action})"
-
-class MypProfileDevelop(models.Model):
-    """ Развитие профиля студента в юните MYP """
-    profile = models.ForeignKey('ibo.LearnerProfile', verbose_name=_("Профиль студента"), on_delete=models.CASCADE, related_name="myp_profiles")
-    description = models.TextField(verbose_name=_("Описание"), null=True, blank=True)
-    unit = models.ForeignKey('myp.MypUnitPlanner', verbose_name=_("Юнит MYP"), on_delete=models.CASCADE, related_name="profile_develops")
-    class Meta:
-        verbose_name = 'MYP: UnitPlan - Развитие профиля студента'
-        verbose_name_plural = 'MYP: UnitPlans - Развитие профиля студента'
-        ordering = ['profile']
-    def __str__(self):
-        return f"{self.profile}"
     
-class MypReflectionPost(models.Model):
-    """ Посты рефлексии по планеру MYP """
-    type = models.CharField(choices=PostTypeMypChoices.choices, verbose_name=_("Тип рефлексии"), max_length=6)
-    post = models.TextField(verbose_name=_("Содержание рефлексии"), null=True, blank=True)
-    author = models.ForeignKey('general.User', verbose_name=_("Автор поста"), on_delete=models.SET_NULL, null=True, related_name="myp_reflections")
-    unit = models.ForeignKey('myp.MypUnitPlanner', verbose_name=_("Юнит MYP"), on_delete=models.CASCADE, related_name="reflection_posts")
-    class Meta:
-        verbose_name = 'MYP: UnitPlan - Пост рефлексии'
-        verbose_name_plural = 'MYP: UnitPlans - Посты рефлексии'
-        ordering = ['type', 'post']
-    def __str__(self):
-        return f"{self.type}: {self.post[:15]}"
-    
-class MypUnitPlannerInterdisciplinary(models.Model):
+class MypUnitPlannerInterdisciplinary(UnitPlanerBaseModel):
     """ Дополнение для междисциплинарных планеров MYP """
-    title = models.CharField(max_length=255, verbose_name=_("Название междисциплинарного юнита"))
-    year = models.ForeignKey('general.StudyYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, blank=False, related_name="myp_iduplans")
-    hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
     real_world_issue = models.TextField(verbose_name=_("Проблема реального мира"), null=True, blank=True)
     integrated_purpose = models.TextField(verbose_name=_("Цель интеграции"), null=True, blank=True)
     synthesis = models.TextField(verbose_name=_("Синтез"), null=True, blank=True)
@@ -334,16 +293,3 @@ class MypAtlDevelopIdu(models.Model):
         ordering = ['strand']
     def __str__(self):
         return f"{self.atl} ({self.action})"
-    
-class MypReflectionPostIdu(models.Model):
-    """ Посты рефлексии по междисциплинарному планеру MYP """
-    type = models.CharField(choices=PostTypeMypChoices.choices, verbose_name=_("Тип рефлексии"), max_length=6)
-    post = models.TextField(verbose_name=_("Содержание рефлексии"), null=True, blank=True)
-    author = models.ForeignKey('general.User', verbose_name=_("Автор поста"), on_delete=models.SET_NULL, null=True, related_name="myp_idu_reflections")
-    unit = models.ForeignKey('myp.MypUnitPlannerInterdisciplinary', verbose_name=_("Междисциплинарный юнит MYP"), on_delete=models.CASCADE, related_name="reflection_posts")
-    class Meta:
-        verbose_name = 'MYP IDU: UnitPlan - Пост рефлексии'
-        verbose_name_plural = 'MYP IDU: UnitPlans - Посты рефлексии'
-        ordering = ['type', 'post']
-    def __str__(self):
-        return f"{self.type}: {self.post[:15]}"

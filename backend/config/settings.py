@@ -178,6 +178,9 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', 
     'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ]
 
 }
 
@@ -226,7 +229,10 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_SETTINGS': {
         'displayOperationId': True,
         'defaultModelsExpandDepth': -1,
+        'docExpansion': 'none',
+        'tagsSorter': 'alpha',
     },
+    'SORT_OPERATION_PARAMETERS': False,
 }
 
 # Настройка авторизации с помощью JWT

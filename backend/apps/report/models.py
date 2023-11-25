@@ -117,7 +117,7 @@ class ReportSecondaryLevel(models.Model):
     """ Выбор предметных целей и уровня из достижений в репорте средней школы"""
     report = models.ForeignKey('report.ReportTeacherSecondary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="objective_levels")
     objective = models.ForeignKey('myp.MypObjective', verbose_name=_("Предметная цель"), on_delete=models.CASCADE, null=True, related_name="objective_levels")
-    level = models.ForeignKey('myp.AchievementLevel', verbose_name=_("Уровень достижений"), on_delete=models.CASCADE, blank=True, null=True, related_name="objective_levels")
+    level = models.ForeignKey('myp.StrandLevelAchievement', verbose_name=_("Уровень достижений"), on_delete=models.CASCADE, blank=True, null=True, related_name="objective_levels")
     class Meta:
         verbose_name = 'Репорты учителя СрШ: уровнень достижений'
         verbose_name_plural = 'Репорты учителя СрШ: уровни достижений'

@@ -15,7 +15,7 @@ from apps.syllabus.models import (
 
 from apps.units.myp.models import (
     MypObjective,
-    AchievementLevel
+    StrandLevelAchievement
     )
 
 from .common import (
@@ -130,14 +130,14 @@ class MypObjectiveReportListSerializer(serializers.ModelSerializer):
             )
 
 # Список уровней достижений MYP
-class AchievementLevelReportListSerializer(serializers.ModelSerializer):
+class StrandLevelAchievementReportListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AchievementLevel
+        model = StrandLevelAchievement
         fields = (
             "id",
             "name",
             "name_rus",
-            "strand_level",
+            "level",
             "point",
             )
 
@@ -162,7 +162,7 @@ class ReportSecondaryCriterionUpdateSerializer(serializers.ModelSerializer):
 # Вывод списка достижений по предметным целям MYP для репорта учителя по предметам средней школы
 class ReportSecondaryLevelListSerializer(serializers.ModelSerializer):
     objective = MypObjectiveReportListSerializer()
-    level = AchievementLevelReportListSerializer()
+    level = StrandLevelAchievementReportListSerializer()
     class Meta:
         model = ReportSecondaryLevel
         fields = (

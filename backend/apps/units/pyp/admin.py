@@ -9,10 +9,7 @@ from apps.units.pyp.models import (
     PypUnitPlanner,
     PypLinesOfInquiry,
     PypRelatedConcept,
-    PypProfileAttribute,
     PypAtlDevelop,
-    PypUnitTeacherRoles,
-    PypReflectionPost
 )
 
 @register(TransdisciplinaryTheme)
@@ -88,17 +85,6 @@ class PypRelatedConceptModelAdmin(ModelAdmin):
         "name",
     )
 
-@register(PypProfileAttribute)
-class PypProfileAttributeModelAdmin(ModelAdmin):
-    list_display = (
-        "profile",
-        "description",
-        "unit"
-    )
-    list_display_links = (
-        "profile",
-    )
-
 @register(PypAtlDevelop)
 class PypAtlDevelopModelAdmin(ModelAdmin):
     list_display = (
@@ -108,27 +94,4 @@ class PypAtlDevelopModelAdmin(ModelAdmin):
     )
     list_display_links = (
         "atl",
-    )
-
-@register(PypUnitTeacherRoles)
-class PypUnitTeacherRolesModelAdmin(ModelAdmin):
-    list_display = (
-        "unit",
-        "user",
-        "role",
-    )
-    list_display_links = (
-        "user",
-    )
-
-@register(PypReflectionPost)
-class PypReflectionPostModelAdmin(ModelAdmin):
-    list_display = (
-        "post",
-        "type",
-        "author",
-        "unit",
-    )
-    list_display_links = (
-        "post",
     )
