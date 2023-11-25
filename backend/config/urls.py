@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/', include('apps.units.myp.urls')),
     path('api/', include('apps.units.dp.urls')),
     path('api/', include('apps.report.urls')),
+    path('api/', include('apps.ibo.urls')),
 ]
 
 if bool(settings.DEBUG):

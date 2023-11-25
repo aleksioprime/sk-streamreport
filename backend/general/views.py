@@ -36,18 +36,14 @@ from general.services import (
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     def post(self, request, *args, **kwargs):
-
         response = super().post(request, *args, **kwargs)
-
         if response.status_code == 200:
             user = response.data['user']
             user_info = {
                 'user_id': user['id'],
                 'email': user['email'],
             }
-
             logger.info(f"User {user_info['email']} (ID: {user_info['user_id']}) has been authenticated.")
-
         return response
 
 @extend_schema_view(post=extend_schema(summary='Обновление токена',tags=['Аутентификация']))
@@ -172,10 +168,12 @@ class UserViewSet(CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateMo
 class ClassGroupViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return get_group_queryset()
+    
     def get_serializer_class(self):
         if self.action in ["retrieve"]:
             return ClassRetrieveSerializer
         return ClassGroupListGeneralSerializer
     
-    def get_queryset(self):
-        return get_group_queryset()
+    
