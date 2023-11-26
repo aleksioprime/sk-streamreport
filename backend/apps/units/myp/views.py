@@ -4,10 +4,10 @@ from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.permissions import IsAuthenticated
 
 from apps.units.myp.serializers import (
-    MypUnitPlannerInterdisciplinaryListSerializer,
-    MypUnitPlannerInterdisciplinaryRetrieveSerializer,
-    MypUnitPlannerInterdisciplinaryCreateSerializer,
-    MypUnitPlannerInterdisciplinaryUpdateSerializer,
+    MypUnitPlannerIdListSerializer,
+    MypUnitPlannerIdRetrieveSerializer,
+    MypUnitPlannerIdCreateSerializer,
+    MypUnitPlannerIdUpdateSerializer,
     MypObjectiveListSerializer,
     StrandListSerializer,
     StrandLevelListSerializer,
@@ -34,7 +34,7 @@ from apps.units.myp.serializers import (
 
 from apps.units.myp.services import (
     get_myp_unit_planner_queryset,
-    get_myp_unit_planner_interdisciplinary_queryset,
+    get_myp_unit_planner_id_queryset,
     get_myp_objective_queryset,
     get_strand_queryset,
     get_strand_level_queryset,
@@ -65,7 +65,7 @@ from apps.units.myp.filters import (
     MypInquiryQuestionIduFilter,
     MypAtlDevelopFilter,
     MypAtlDevelopIduFilter,
-    MypUnitPlannerInterdisciplinaryFilter,
+    MypUnitPlannerIdFilter,
 )
 
 # Предметные цели в MYP: список
@@ -268,20 +268,20 @@ class MypAtlDevelopIduViewSet(ModelViewSet):
     partial_update=extend_schema(summary='Частичное обновление междисцплинарного юнита MYP', tags=['MYP: Юниты МД']),
     destroy=extend_schema(summary='Удаление междисцплинарного юнита MYP', tags=['MYP: Юниты МД']),
     )
-class MypUnitPlannerInterdisciplinaryViewSet(ModelViewSet):
+class MypUnitPlannerIdViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    filterset_class = MypUnitPlannerInterdisciplinaryFilter
+    filterset_class = MypUnitPlannerIdFilter
 
     def get_queryset(self):
-        return get_myp_unit_planner_interdisciplinary_queryset()
+        return get_myp_unit_planner_id_queryset()
 
     def get_serializer_class(self):
         if self.action == "list":
-            return MypUnitPlannerInterdisciplinaryListSerializer
+            return MypUnitPlannerIdListSerializer
         elif self.action == "retrieve":
-            return MypUnitPlannerInterdisciplinaryRetrieveSerializer
+            return MypUnitPlannerIdRetrieveSerializer
         elif self.action == "create":
-            return MypUnitPlannerInterdisciplinaryCreateSerializer
-        return MypUnitPlannerInterdisciplinaryUpdateSerializer
+            return MypUnitPlannerIdCreateSerializer
+        return MypUnitPlannerIdUpdateSerializer
     
     

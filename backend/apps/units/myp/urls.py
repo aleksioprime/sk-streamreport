@@ -2,7 +2,7 @@ from django.urls import path
 
 from apps.units.myp.views import (
     MypUnitPlannerViewSet,
-    MypUnitPlannerInterdisciplinaryViewSet,
+    MypUnitPlannerIdViewSet,
     MypObjectiveViewSet,
     StrandViewSet,
     StrandLevelViewSet,
@@ -37,8 +37,8 @@ urlpatterns = [
     path('myp/unit/inquiry/<int:pk>', MypInquiryQuestionViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('myp/unit/atl', MypAtlDevelopViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('myp/unit/atl/<int:pk>', MypAtlDevelopViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
-    path('myp/unit/idu', MypUnitPlannerInterdisciplinaryViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('myp/unit/idu/<int:pk>', MypUnitPlannerInterdisciplinaryViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('myp/unit/idu', MypUnitPlannerIdViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('myp/unit/idu/<int:pk>', MypUnitPlannerIdViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('myp/unit/idu/inquiry', MypInquiryQuestionIduViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('myp/unit/idu/inquiry/<int:pk>', MypInquiryQuestionIduViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('myp/unit/idu/atl', MypAtlDevelopIduViewSet.as_view({'get': 'list', 'post': 'create'})),

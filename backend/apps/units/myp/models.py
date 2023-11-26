@@ -209,7 +209,7 @@ class MypUnitPlanner(UnitPlanerBaseModel):
     feedback = models.TextField(verbose_name=_("Обратная связь"), null=True, blank=True)
     differentiation = models.TextField(verbose_name=_("Дифференцированный подход"), null=True, blank=True)
     resources = models.TextField(verbose_name=_("Ресурсы"), null=True, blank=True)
-    interdisciplinary = models.ForeignKey('myp.MypUnitPlannerInterdisciplinary', verbose_name=_("Междисциплинарный юнит"), on_delete=models.SET_NULL, null=True, blank=True, related_name="myp_unitplans")
+    interdisciplinary = models.ForeignKey('myp.MypUnitPlannerId', verbose_name=_("Междисциплинарный юнит"), on_delete=models.SET_NULL, null=True, blank=True, related_name="myp_unitplans")
     class Meta:
         verbose_name = 'MYP: UnitPlan'
         verbose_name_plural = 'MYP: UnitPlans'
@@ -243,7 +243,7 @@ class MypAtlDevelop(models.Model):
     def __str__(self):
         return f"{self.atl} ({self.action})"
     
-class MypUnitPlannerInterdisciplinary(UnitPlanerBaseModel):
+class MypUnitPlannerId(UnitPlanerBaseModel):
     """ Дополнение для междисциплинарных планеров MYP """
     real_world_issue = models.TextField(verbose_name=_("Проблема реального мира"), null=True, blank=True)
     integrated_purpose = models.TextField(verbose_name=_("Цель интеграции"), null=True, blank=True)
@@ -273,7 +273,7 @@ class MypInquiryQuestionIdu(models.Model):
     question = models.CharField(max_length=255, verbose_name=_("Исследовательский вопрос"))
     type = models.CharField(choices=QuestionTypeMypChoices.choices, verbose_name=_("Тип вопроса"), default='Factual', max_length=12)
     line = models.CharField(max_length=255, verbose_name=_("Линия исследования"), null=True)
-    unit = models.ForeignKey('myp.MypUnitPlannerInterdisciplinary', verbose_name=_("Междисциплинарный юнит MYP"), on_delete=models.CASCADE, related_name="inquiry_questions")
+    unit = models.ForeignKey('myp.MypUnitPlannerId', verbose_name=_("Междисциплинарный юнит MYP"), on_delete=models.CASCADE, related_name="inquiry_questions")
     class Meta:
         verbose_name = 'MYP IDU: UnitPlan - Исследовательский вопрос'
         verbose_name_plural = 'MYP IDU: UnitPlans - Исследовательские вопросы'
@@ -286,7 +286,7 @@ class MypAtlDevelopIdu(models.Model):
     atl = models.ForeignKey('myp.MypAtlSkill', verbose_name=_("Навык ATL"), on_delete=models.CASCADE, related_name="idu_atl_develops")
     strand = models.ForeignKey('myp.Strand', verbose_name=_("Предметный стрэнд"), on_delete=models.CASCADE, related_name="idu_atl_develops")
     action = models.TextField(verbose_name=_("Описание учебных действий"), null=True, blank=True)
-    unit = models.ForeignKey('myp.MypUnitPlannerInterdisciplinary', verbose_name=_("Междисциплинарный юнит MYP"), on_delete=models.CASCADE, related_name="atl_develops")
+    unit = models.ForeignKey('myp.MypUnitPlannerId', verbose_name=_("Междисциплинарный юнит MYP"), on_delete=models.CASCADE, related_name="atl_develops")
     class Meta:
         verbose_name = 'MYP IDU: UnitPlan - Развитие ATL'
         verbose_name_plural = 'MYP IDU: UnitPlans - Развитие ATL'

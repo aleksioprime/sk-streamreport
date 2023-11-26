@@ -1,6 +1,6 @@
 from apps.units.myp.models import (
     MypUnitPlanner,
-    MypUnitPlannerInterdisciplinary,
+    MypUnitPlannerId,
     MypObjective,
     Strand,
     StrandLevel,
@@ -96,8 +96,8 @@ def get_myp_atl_develop_idu_queryset():
         'strand'
     )
 
-def get_myp_unit_planner_interdisciplinary_queryset():
-    return MypUnitPlannerInterdisciplinary.objects.all().select_related(
+def get_myp_unit_planner_id_queryset():
+    return MypUnitPlannerId.objects.all().select_related(
         'year'
         ).prefetch_related(
             'teachers',

@@ -16,7 +16,7 @@ from apps.units.myp.models import (
     MypUnitPlanner,
     MypInquiryQuestion,
     MypAtlDevelop,
-    MypUnitPlannerInterdisciplinary,
+    MypUnitPlannerId,
     MypInquiryQuestionIdu,
     MypAtlDevelopIdu,
 )
@@ -170,8 +170,8 @@ class MypAtlDevelopModelAdmin(ModelAdmin):
         "atl",
     )
 
-@register(MypUnitPlannerInterdisciplinary)
-class MypUnitPlannerInterdisciplinaryModelAdmin(ModelAdmin):
+@register(MypUnitPlannerId)
+class MypUnitPlannerIdModelAdmin(ModelAdmin):
     list_display = (
         "title",
         "year",

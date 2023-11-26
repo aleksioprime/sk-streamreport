@@ -14,7 +14,7 @@ from apps.units.myp.models import (
     MypAtlDevelop,
     MypInquiryQuestionIdu,
     MypAtlDevelopIdu,
-    MypUnitPlannerInterdisciplinary
+    MypUnitPlannerId
 )
 
 class MypObjectiveFilter(django_filters.FilterSet):
@@ -82,7 +82,7 @@ class MypAtlDevelopIduFilter(django_filters.FilterSet):
         model = MypAtlDevelopIdu
         fields = {'unit'}
 
-class MypUnitPlannerInterdisciplinaryFilter(django_filters.FilterSet):
+class MypUnitPlannerIdFilter(django_filters.FilterSet):
     class Meta:
-        model = MypUnitPlannerInterdisciplinary
+        model = MypUnitPlannerId
         fields = {'authors', 'teachers', 'year'}

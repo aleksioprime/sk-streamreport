@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from apps.units.myp.models import (
     MypUnitPlanner,
-    MypUnitPlannerInterdisciplinary,
+    MypUnitPlannerId,
     MypObjective,
     Strand,
     StrandLevel,
@@ -544,13 +544,13 @@ class MypAtlDevelopIduUpdateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 # Список междисциплинарных планеров в MYP
-class MypUnitPlannerInterdisciplinaryListSerializer(serializers.ModelSerializer):
+class MypUnitPlannerIdListSerializer(serializers.ModelSerializer):
     teachers = UserMypSerializer(many=True)
     authors = UserMypSerializer(many=True)
     year = StudyYearMypSerializer()
     global_context = GlobalContextListSerializer()
     class Meta:
-        model = MypUnitPlannerInterdisciplinary
+        model = MypUnitPlannerId
         fields = (
             "id",
             "order",
@@ -566,7 +566,7 @@ class MypUnitPlannerInterdisciplinaryListSerializer(serializers.ModelSerializer)
             )
         
 # Подробный просмотр междисциплинарных планеров в MYP
-class MypUnitPlannerInterdisciplinaryRetrieveSerializer(serializers.ModelSerializer):
+class MypUnitPlannerIdRetrieveSerializer(serializers.ModelSerializer):
     teachers = UserMypSerializer(many=True)
     authors = UserMypSerializer(many=True)
     year = StudyYearMypSerializer()
@@ -580,7 +580,7 @@ class MypUnitPlannerInterdisciplinaryRetrieveSerializer(serializers.ModelSeriali
     ibprofiles = IbProfileDevelopMypSerializer(many=True)
     reflection_posts = UnitReflectionPostMypSerializer(many=True)
     class Meta:
-        model = MypUnitPlannerInterdisciplinary
+        model = MypUnitPlannerId
         fields = (
             "id",
             "order",
@@ -616,9 +616,9 @@ class MypUnitPlannerInterdisciplinaryRetrieveSerializer(serializers.ModelSeriali
             )
         
 # Создание междисциплинарного планнера в MYP
-class MypUnitPlannerInterdisciplinaryCreateSerializer(serializers.ModelSerializer):
+class MypUnitPlannerIdCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MypUnitPlannerInterdisciplinary
+        model = MypUnitPlannerId
         fields = (
             "id",
             "order",
@@ -634,7 +634,7 @@ class MypUnitPlannerInterdisciplinaryCreateSerializer(serializers.ModelSerialize
             )
         
 # Редактирование междисциплинарного планнера в MYP
-class MypUnitPlannerInterdisciplinaryUpdateSerializer(serializers.ModelSerializer):
+class MypUnitPlannerIdUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MypUnitPlannerInterdisciplinary
+        model = MypUnitPlannerId
         fields = '__all__'
