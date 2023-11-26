@@ -16,8 +16,8 @@ from apps.units.pyp.models import (
 )
 
 from .common import (
-    UserListReportSerializer,
-    ClassGroupListReportSerializer,
+    UserReportSerializer,
+    ClassGroupReportSerializer,
     ReportPeriodListSerializer,
 )
 
@@ -51,9 +51,9 @@ class ReportIbProfileUpdateSerializer(serializers.ModelSerializer):
 
 # Вывод списка репортов классного руководителя
 class ReportMentorListSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     class Meta:
         model = ReportMentor
@@ -70,9 +70,9 @@ class ReportMentorListSerializer(serializers.ModelSerializer):
         
 # Подробный просмотр репорта классного руководителя
 class ReportMentorRetrieveSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     profiles = ReportIbProfileListSerializer(many=True)
     class Meta:
@@ -127,9 +127,9 @@ class ReportPrimaryUnitUpdateSerializer(serializers.ModelSerializer):
         
 # Список репортов классного руководителя начальной школы
 class ReportMentorPrimaryListSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     class Meta:
         model = ReportMentorPrimary
@@ -146,9 +146,9 @@ class ReportMentorPrimaryListSerializer(serializers.ModelSerializer):
 
 # Подробный просмотр репорта классного руководителя начальной школы
 class ReportMentorPrimaryRetrieveSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     profiles = ReportIbProfileListSerializer(many=True)
     pyp_units = ReportPrimaryUnitListSerializer(many=True)

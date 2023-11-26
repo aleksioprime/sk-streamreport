@@ -15,10 +15,11 @@ from general.models import (
     StudyYear,
     AcademicYear,
     ClassGroup,
+    Department,
     )
 
-
-class FgosSubjectGroupListSerializer(serializers.ModelSerializer):
+# Cписок предметных групп по ФГОС
+class FgosSubjectGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = FgosSubjectGroup
         fields = (
@@ -26,8 +27,9 @@ class FgosSubjectGroupListSerializer(serializers.ModelSerializer):
             "name",
             "type",
             )
-        
-class IbSubjectGroupListSerializer(serializers.ModelSerializer):
+
+# Cписок предметных групп по IB
+class IbSubjectGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = IbSubjectGroup
         fields = (
@@ -37,11 +39,22 @@ class IbSubjectGroupListSerializer(serializers.ModelSerializer):
             "logo",
             "program"
             )
+        
+# Cписок подразделений
+class DepartmentCurriculumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = (
+            "id",
+            "name",
+            "logo",
+            )
 
-# Список предметов
+# Вывод списка предметов
 class SubjectListSerializer(serializers.ModelSerializer):
-    group_ib = IbSubjectGroupListSerializer()
-    group_fgos = FgosSubjectGroupListSerializer()
+    group_ib = IbSubjectGroupSerializer()
+    group_fgos = FgosSubjectGroupSerializer()
+    department = DepartmentCurriculumSerializer()
     class Meta:
         model = Subject
         fields = (
@@ -55,7 +68,8 @@ class SubjectListSerializer(serializers.ModelSerializer):
             "level",
             "need_report"
             )
-        
+
+# Вывод списка учебных планов
 class CurriculumListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Curriculum
@@ -66,8 +80,9 @@ class CurriculumListSerializer(serializers.ModelSerializer):
             "name_short",
             "level"
             )
-        
-class StudyYearListCurriculumSerializer(serializers.ModelSerializer):
+
+# Список параллелей обучения
+class StudyYearCurriculumSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudyYear
         fields = (
@@ -76,11 +91,11 @@ class StudyYearListCurriculumSerializer(serializers.ModelSerializer):
             "level",
             )
         
-# Нагрузка учебных планов
+# Вывод списка нагрузки учебных планов
 class CurriculumLoadListSerializer(serializers.ModelSerializer):
     curriculum = CurriculumListSerializer()
     subject = SubjectListSerializer()
-    years = StudyYearListCurriculumSerializer(many=True)
+    years = StudyYearCurriculumSerializer(many=True)
     class Meta:
         model = CurriculumLoad
         fields = (
@@ -91,7 +106,8 @@ class CurriculumLoadListSerializer(serializers.ModelSerializer):
             "hours"
             )
 
-class AcademicYearListCurriculumSerializer(serializers.ModelSerializer):
+# Список учебных лет
+class AcademicYearCurriculumSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicYear
         fields = (
@@ -100,8 +116,9 @@ class AcademicYearListCurriculumSerializer(serializers.ModelSerializer):
             "date_start",
             "date_end"
             )
-        
-class UserListCurriculumSerializer(serializers.ModelSerializer):
+
+# Список пользователей
+class UserCurriculumSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -113,9 +130,10 @@ class UserListCurriculumSerializer(serializers.ModelSerializer):
             "dnevnik_id",
             )
 
+# Список учебных классов
 class ClassGroupListCurriculumSerializer(serializers.ModelSerializer):
-    year_academic = AcademicYearListCurriculumSerializer()
-    year_study = StudyYearListCurriculumSerializer()
+    year_academic = AcademicYearCurriculumSerializer()
+    year_study = StudyYearCurriculumSerializer()
     class Meta:
         model = ClassGroup
         fields = (
@@ -125,10 +143,10 @@ class ClassGroupListCurriculumSerializer(serializers.ModelSerializer):
             "letter",
             )
 
-# Преподавательская нагрузка
+# Вывод списка преподавательской нагрузки
 class TeachingLoadListSerializer(serializers.ModelSerializer):
-    year = AcademicYearListCurriculumSerializer()
-    teacher = UserListCurriculumSerializer()
+    year = AcademicYearCurriculumSerializer()
+    teacher = UserCurriculumSerializer()
     subject = SubjectListSerializer()
     groups = ClassGroupListCurriculumSerializer(many=True)
     class Meta:

@@ -19,10 +19,10 @@ from apps.units.myp.models import (
     )
 
 from .common import (
-    UserListReportSerializer,
-    ClassGroupListReportSerializer,
+    UserReportSerializer,
+    ClassGroupReportSerializer,
     ReportPeriodListSerializer,
-    SubjectReportListSerializer,
+    SubjectReportSerializer,
     ReportCriterionAchievementListSerializer,
 )
 
@@ -62,11 +62,11 @@ class ReportPrimaryTopicUpdateSerializer(serializers.ModelSerializer):
 
 # Вывод списка репортов учителя по предметам начальной школы
 class ReportTeacherPrimaryListSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
-    subject = SubjectReportListSerializer()
+    subject = SubjectReportSerializer()
     class Meta:
         model = ReportTeacherPrimary
         fields = (
@@ -83,11 +83,11 @@ class ReportTeacherPrimaryListSerializer(serializers.ModelSerializer):
 
 # Подробный просмотр репорта учителя по предметам начальной школы
 class ReportTeacherPrimaryRetrieveSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
-    subject = SubjectReportListSerializer()
+    subject = SubjectReportSerializer()
     topic_achievements = ReportPrimaryTopicListSerializer(many=True)
     criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
@@ -180,11 +180,11 @@ class ReportSecondaryLevelUpdateSerializer(serializers.ModelSerializer):
 
 # Вывод списка репортов учителя по предметам средней школы
 class ReportTeacherSecondaryListSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
-    subject = SubjectReportListSerializer()
+    subject = SubjectReportSerializer()
     class Meta:
         model = ReportTeacherSecondary
         fields = (
@@ -201,11 +201,11 @@ class ReportTeacherSecondaryListSerializer(serializers.ModelSerializer):
 
 # Подробный просмотр репорта учителя по предметам средней школы    
 class ReportTeacherSecondaryRetrieveSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
-    subject = SubjectReportListSerializer()
+    subject = SubjectReportSerializer()
     criterion_marks = ReportSecondaryCriterionListSerializer(many=True)
     objective_levels = ReportSecondaryLevelListSerializer(many=True)
     criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
@@ -240,11 +240,11 @@ class ReportTeacherSecondaryUpdateSerializer(serializers.ModelSerializer):
 
 # Вывод списка репортов учителя по предметам старшей школы
 class ReportTeacherHighListSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
-    subject = SubjectReportListSerializer()
+    subject = SubjectReportSerializer()
     class Meta:
         model = ReportTeacherHigh
         fields = (
@@ -261,11 +261,11 @@ class ReportTeacherHighListSerializer(serializers.ModelSerializer):
 
 # Подробный просмотр репорта учителя по предметам старшей школы  
 class ReportTeacherHighRetrieveSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
-    subject = SubjectReportListSerializer()
+    subject = SubjectReportSerializer()
     criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
         model = ReportTeacherHigh

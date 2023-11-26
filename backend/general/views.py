@@ -32,7 +32,7 @@ from general.services import (
     get_group_queryset
 )
 
-@extend_schema_view(post=extend_schema(summary='Получение токена', tags=['Аутентификация']))
+@extend_schema_view(post=extend_schema(summary='Получение токена', tags=['База: Аутентификация']))
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     def post(self, request, *args, **kwargs):
@@ -46,26 +46,21 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             logger.info(f"User {user_info['email']} (ID: {user_info['user_id']}) has been authenticated.")
         return response
 
-@extend_schema_view(post=extend_schema(summary='Обновление токена',tags=['Аутентификация']))
+@extend_schema_view(post=extend_schema(summary='Обновление токена',tags=['База: Аутентификация']))
 class CustomTokenRefreshView(TokenRefreshView):
     pass
 
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка пользователей', tags=['Пользователи']),
-    create=extend_schema(summary='Создание нового пользователя', tags=['Пользователи']),
-    retrieve=extend_schema(summary='Вывод информации о пользователе', tags=['Пользователи']),
-    update=extend_schema(summary='Обновление информации о пользователе', tags=['Пользователи']),
-    partial_update=extend_schema(summary='Частичное обновление информации о пользователе', tags=['Пользователи']),
-    me=extend_schema(summary='Вывод информации об авторизованном пользователе', tags=['Пользователи']),
-    users_import=extend_schema(summary='Импорт пользователей', tags=['Пользователи']),
+    list=extend_schema(summary='Вывод списка пользователей', tags=['База: Пользователи']),
+    create=extend_schema(summary='Создание нового пользователя', tags=['База: Пользователи']),
+    retrieve=extend_schema(summary='Вывод информации о пользователе', tags=['База: Пользователи']),
+    update=extend_schema(summary='Обновление информации о пользователе', tags=['База: Пользователи']),
+    partial_update=extend_schema(summary='Частичное обновление информации о пользователе', tags=['База: Пользователи']),
+    me=extend_schema(summary='Вывод информации об авторизованном пользователе', tags=['База: Пользователи']),
+    user_import=extend_schema(summary='Импорт пользователей', tags=['База: Пользователи']),
     )
-class UserViewSet(CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
-
-    # def get_permissions(self):
-    #     if self.action == "create":
-    #         self.permission_classes = [AllowAny]
-    #     return super().get_permissions()
 
     def get_queryset(self):
         return get_user_queryset()
@@ -85,7 +80,7 @@ class UserViewSet(CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateMo
         return Response(serializer.data)
     
     @action(detail=False, methods=["post"], url_path="import")
-    def users_import(self, request):
+    def user_import(self, request):
 
         # Проверяем, есть ли файл формата .xlsx в POST-запросе
         file = request.FILES.get('file')
@@ -162,8 +157,8 @@ class UserViewSet(CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateMo
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema_view(
-    list=extend_schema(summary='Список классов', tags=['Классы']),
-    retrieve=extend_schema(summary='Просмотр класса', tags=['Классы']),
+    list=extend_schema(summary='Список классов', tags=['База: Классы']),
+    retrieve=extend_schema(summary='Просмотр класса со студентами', tags=['База: Классы']),
     )
 class ClassGroupViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]

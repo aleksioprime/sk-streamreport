@@ -5,23 +5,27 @@ from rest_framework.permissions import IsAuthenticated
 
 from apps.syllabus.services import (
     get_syllabus_list_queryset,
-    get_course_topic_queryset
+    get_course_topic_queryset,
+    get_course_chapter_queryset,
 )
 
 from apps.syllabus.serializers import (
     SyllabusListSerializer,
     CourseTopicListSerializer,
-    CourseTopicUpdateSerializer
+    CourseTopicUpdateSerializer,
+    CourseChapterListSerializer,
+    CourseChapterUpdateSerializer,
 )
 
 from apps.syllabus.filters import (
     SyllabusFilter,
-    CourseTopicFilter
+    CourseTopicFilter,
+    CourseChapterFilter,
 )
 
 #TODO: Добавить просмотр и редактирование раздела учебного курса
 
-# Учебные курсы по предмету: список
+# Учебные курсы по предмету: список и просмотр
 @extend_schema_view(
     list=extend_schema(summary='Вывод списка учебных курсов по предмету', tags=['Курсы: Общий курс']),
     retrieve=extend_schema(summary='Просмотр учебного курса по предмету', tags=['Курсы: Общий курс']),
@@ -31,6 +35,23 @@ class SyllabusViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = get_syllabus_list_queryset()
     serializer_class = SyllabusListSerializer
     filterset_class = SyllabusFilter
+
+# Разделы курсов по предмету: список, создание, редактирование и удаление
+@extend_schema_view(
+    list=extend_schema(summary='Вывод списка разделов курсов по предмету', tags=['Курсы: Разделы']),
+    create=extend_schema(summary='Создание раздела курса по предмету', tags=['Курсы: Разделы']),
+    update=extend_schema(summary='Обновление раздела курса по предмету', tags=['Курсы: Разделы']),
+    destroy=extend_schema(summary='Удаление раздела курса по предмету', tags=['Курсы: Разделы']),
+    )
+class CourseChapterViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = get_course_chapter_queryset()
+    filterset_class = CourseChapterFilter
+    
+    def get_serializer_class(self):
+        if self.action == "list":
+            return CourseChapterListSerializer
+        return CourseChapterUpdateSerializer
 
 # Темы курсов по предмету: список, создание, редактирование и удаление
 @extend_schema_view(

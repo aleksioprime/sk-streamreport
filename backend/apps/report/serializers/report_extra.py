@@ -5,16 +5,16 @@ from apps.report.models import (
     )
 
 from .common import (
-    UserListReportSerializer,
-    ClassGroupListReportSerializer,
+    UserReportSerializer,
+    ClassGroupReportSerializer,
     ReportPeriodListSerializer,
 )
 
 # Вывод списка репортов дополнительных сотрудников класса
 class ReportExtraListSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     class Meta:
         model = ReportExtra
@@ -32,9 +32,9 @@ class ReportExtraListSerializer(serializers.ModelSerializer):
 
 # Подробный просмотр репорта дополнительных сотрудников класса
 class ReportExtraRetrieveSerializer(serializers.ModelSerializer):
-    student = UserListReportSerializer()
-    author = UserListReportSerializer()
-    group = ClassGroupListReportSerializer()
+    student = UserReportSerializer()
+    author = UserReportSerializer()
+    group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     class Meta:
         model = ReportExtra

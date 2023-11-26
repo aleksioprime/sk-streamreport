@@ -20,19 +20,7 @@ from apps.curriculum.models import (
     Subject
 )
 
-# Список тем курса учебного предмета
-class CourseTopicSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CourseTopic
-        fields = (
-            "id", 
-            "number",
-            "name",
-            "description",
-            "hours",
-            )
-
-# Список тем курса учебного предмета
+# Список юнитов
 class UnitPlanerBaseModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = UnitPlanerBaseModel
@@ -46,7 +34,6 @@ class UnitPlanerBaseModelSerializer(serializers.ModelSerializer):
 
 # Список разделов курса учебного предмета
 class CourseChapterSerializer(serializers.ModelSerializer):
-    topics = CourseTopicSerializer(many=True)
     unit = UnitPlanerBaseModelSerializer()
     class Meta:
         model = CourseChapter
@@ -148,8 +135,28 @@ class CourseTopicListSerializer(serializers.ModelSerializer):
             "hours",
             )
 
-# Создание и редактирование списка тем курса учебного предмета
+# Создание и редактирование темы курса учебного предмета
 class CourseTopicUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseTopic
+        fields = '__all__'
+
+# Вывод списка разделов курса учебного предмета
+class CourseChapterListSerializer(serializers.ModelSerializer):
+    unit = UnitPlanerBaseModelSerializer()
+    class Meta:
+        model = CourseChapter
+        fields = (
+            "id", 
+            "number",
+            "name",
+            "description",
+            "hours",
+            "unit",
+            )
+
+# Создание и редактирование раздела курса учебного предмета
+class CourseChapterUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseChapter
         fields = '__all__'

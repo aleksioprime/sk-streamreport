@@ -1,7 +1,7 @@
 from django.contrib.admin import register, ModelAdmin
 from import_export.admin import ImportExportModelAdmin
 
-from apps.curriculum.filters import SubjectFilter
+from apps.curriculum.filters import SubjectAdminFilter
 from django_admin_listfilter_dropdown.filters import ChoiceDropdownFilter
 
 from apps.curriculum.models import (
@@ -126,7 +126,7 @@ class CurriculumLoadModelAdmin(ImportExportModelAdmin):
         "subject",
     )
     list_filter = (
-        SubjectFilter,
+        SubjectAdminFilter,
         "curriculum__year",
         "curriculum",
         "years",

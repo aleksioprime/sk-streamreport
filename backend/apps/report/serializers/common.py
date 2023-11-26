@@ -19,7 +19,7 @@ from apps.curriculum.models import (
     )
 
 # Список пользователей
-class UserListReportSerializer(serializers.ModelSerializer):
+class UserReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -30,7 +30,7 @@ class UserListReportSerializer(serializers.ModelSerializer):
             )
 
 # Список учебных лет
-class AcademicYearListReportSerializer(serializers.ModelSerializer):
+class AcademicYearReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicYear
         fields = (
@@ -41,7 +41,7 @@ class AcademicYearListReportSerializer(serializers.ModelSerializer):
             )
 
 # Список учебных параллелей
-class StudyYearListReportSerializer(serializers.ModelSerializer):
+class StudyYearReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudyYear
         fields = (
@@ -51,9 +51,9 @@ class StudyYearListReportSerializer(serializers.ModelSerializer):
             )
 
 # Список учебных классов
-class ClassGroupListReportSerializer(serializers.ModelSerializer):
-    year_academic = AcademicYearListReportSerializer()
-    year_study = StudyYearListReportSerializer()
+class ClassGroupReportSerializer(serializers.ModelSerializer):
+    year_academic = AcademicYearReportSerializer()
+    year_study = StudyYearReportSerializer()
     class Meta:
         model = ClassGroup
         fields = (
@@ -64,7 +64,7 @@ class ClassGroupListReportSerializer(serializers.ModelSerializer):
             )
 
 # Список предметов
-class SubjectReportListSerializer(serializers.ModelSerializer):
+class SubjectReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = (
@@ -77,7 +77,7 @@ class SubjectReportListSerializer(serializers.ModelSerializer):
         
 # Вывод списка отчётных периодов для репортов
 class ReportPeriodListSerializer(serializers.ModelSerializer):
-    year = AcademicYearListReportSerializer()
+    year = AcademicYearReportSerializer()
     class Meta:
         model = ReportPeriod
         fields = (
@@ -103,9 +103,9 @@ class ReportCriterionLevelSerializer(serializers.ModelSerializer):
 
 # Вывод списка критериев для репортов
 class ReportCriterionListSerializer(serializers.ModelSerializer):
-    author = UserListReportSerializer()
-    subjects = SubjectReportListSerializer(many=True)
-    years = StudyYearListReportSerializer(many=True)
+    author = UserReportSerializer()
+    subjects = SubjectReportSerializer(many=True)
+    years = StudyYearReportSerializer(many=True)
     levels = ReportCriterionLevelSerializer(many=True)
     class Meta:
         model = ReportCriterion

@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/', include('apps.report.urls')),
     path('api/', include('apps.ibo.urls')),
     path('api/', include('apps.syllabus.urls')),
+    path('api/', include('apps.portfolio.urls')),
 ]
 
 if bool(settings.DEBUG):

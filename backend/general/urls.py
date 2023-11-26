@@ -1,19 +1,19 @@
-from rest_framework.routers import SimpleRouter
+from django.urls import path
+
 from general.views import (
     UserViewSet,
     ClassGroupViewSet,
     CustomTokenObtainPairView,
     CustomTokenRefreshView
     )
-from django.urls import path, include
 
-router = SimpleRouter()
-router.register(r'users', UserViewSet, basename="users")
-router.register(r'groups', ClassGroupViewSet, basename="groups")
-
-extra_paths = [
+urlpatterns = [
+    path('user', UserViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('user/<int:pk>', UserViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('user/me', UserViewSet.as_view({'get': 'me'})),
+    path('user/<int:pk>/import', UserViewSet.as_view({'post': 'user_import'})),
+    path('group/', ClassGroupViewSet.as_view({'get': 'list'})),
+    path('group/<int:pk>', ClassGroupViewSet.as_view({'get': 'retrieve'})),
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
 ]
-
-urlpatterns = router.urls + extra_paths

@@ -1,14 +1,15 @@
-from rest_framework.routers import SimpleRouter
+from django.urls import path
 
 from apps.curriculum.views import (
     SubjectViewSet,
+    CurriculumViewSet,
     CurriculumLoadViewSet,
     TeachingLoadViewSet
     )
 
-router = SimpleRouter()
-router.register(r'subjects', SubjectViewSet, basename="subjects")
-router.register(r'curriculum/loads', CurriculumLoadViewSet, basename="curriculum_load")
-router.register(r'teaching/loads', TeachingLoadViewSet, basename="teaching_load")
-
-urlpatterns = router.urls
+urlpatterns = [
+    path('curriculum', CurriculumViewSet.as_view({'get': 'list'})),
+    path('curriculum/subject', SubjectViewSet.as_view({'get': 'list'})),
+    path('curriculum/load', CurriculumLoadViewSet.as_view({'get': 'list'})),
+    path('curriculum/teaching', TeachingLoadViewSet.as_view({'get': 'list'})),
+]

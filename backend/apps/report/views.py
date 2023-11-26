@@ -118,10 +118,10 @@ class ReportCriterionLevelViewSet(ModelViewSet):
 
 # Достижения по критериям в репорте: список, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка достижений по критериям в репорте', tags=['Репорты учителя: Достижения по своим критериям']),
-    create=extend_schema(summary='Создание достижения по критериям в репорте', tags=['Репорты учителя: Достижения по своим критериям']),
-    update=extend_schema(summary='Обновление достижения по критериям в репорте', tags=['Репорты учителя: Достижения по своим критериям']),
-    destroy=extend_schema(summary='Удаление достижения по критериям в репорте', tags=['Репорты учителя: Достижения по своим критериям']),
+    list=extend_schema(summary='Вывод списка достижений по критериям в репорте', tags=['Репорты: Учителя. Достижения по своим критериям']),
+    create=extend_schema(summary='Создание достижения по критериям в репорте', tags=['Репорты: Учителя. Достижения по своим критериям']),
+    update=extend_schema(summary='Обновление достижения по критериям в репорте', tags=['Репорты: Учителя. Достижения по своим критериям']),
+    destroy=extend_schema(summary='Удаление достижения по критериям в репорте', tags=['Репорты: Учителя. Достижения по своим критериям']),
     )
 class ReportCriterionAchievementViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -134,12 +134,12 @@ class ReportCriterionAchievementViewSet(ModelViewSet):
     
 # Репорты учителя в начальной школе: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка репортов учителя в начальной школе', tags=['Репорты учителя НШ']),
-    create=extend_schema(summary='Создание репорта учителя в начальной школе', tags=['Репорты учителя НШ']),
-    retrieve=extend_schema(summary='Просмотр репорта учителя в начальной школе', tags=['Репорты учителя НШ']),
-    update=extend_schema(summary='Обновление репорта учителя в начальной школе', tags=['Репорты учителя НШ']),
-    partial_update=extend_schema(summary='Частичное обновление репорта учителя в начальной школе', tags=['Репорты учителя НШ']),
-    destroy=extend_schema(summary='Удаление репорта учителя в начальной школе', tags=['Репорты учителя НШ']),
+    list=extend_schema(summary='Вывод списка репортов учителя в начальной школе', tags=['Репорты: Учителя НШ']),
+    create=extend_schema(summary='Создание репорта учителя в начальной школе', tags=['Репорты: Учителя НШ']),
+    retrieve=extend_schema(summary='Просмотр репорта учителя в начальной школе', tags=['Репорты: Учителя НШ']),
+    update=extend_schema(summary='Обновление репорта учителя в начальной школе', tags=['Репорты: Учителя НШ']),
+    partial_update=extend_schema(summary='Частичное обновление репорта учителя в начальной школе', tags=['Репорты: Учителя НШ']),
+    destroy=extend_schema(summary='Удаление репорта учителя в начальной школе', tags=['Репорты: Учителя НШ']),
     )
 class ReportTeacherPrimaryViewSet(ModelViewSet):
     queryset = get_report_teacher_primary_queryset()
@@ -155,10 +155,10 @@ class ReportTeacherPrimaryViewSet(ModelViewSet):
 
 # Достижения по темам в репорте НШ: список, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка достижений по темам в репорте НШ', tags=['Репорты учителя НШ: Достижения по темам']),
-    create=extend_schema(summary='Создание достижения по темам в репорте НШ', tags=['Репорты учителя НШ: Достижения по темам']),
-    update=extend_schema(summary='Обновление достижения по темам в репорте НШ', tags=['Репорты учителя НШ: Достижения по темам']),
-    destroy=extend_schema(summary='Удаление достижения по темам в репорте НШ', tags=['Репорты учителя НШ: Достижения по темам']),
+    list=extend_schema(summary='Вывод списка достижений по темам в репорте НШ', tags=['Репорты: Учителя НШ. Достижения по темам']),
+    create=extend_schema(summary='Создание достижения по темам в репорте НШ', tags=['Репорты: Учителя НШ. Достижения по темам']),
+    update=extend_schema(summary='Обновление достижения по темам в репорте НШ', tags=['Репорты: Учителя НШ. Достижения по темам']),
+    destroy=extend_schema(summary='Удаление достижения по темам в репорте НШ', tags=['Репорты: Учителя НШ. Достижения по темам']),
     )
 class ReportPrimaryTopicViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -171,10 +171,10 @@ class ReportPrimaryTopicViewSet(ModelViewSet):
     
 # Баллы по критериям в репорте СрШ: список, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка баллов по критериям в репорте СрШ', tags=['Репорты учителя СрШ: Баллы по критериям']),
-    create=extend_schema(summary='Создание балла по критериям в репорте СрШ', tags=['Репорты учителя СрШ: Баллы по критериям']),
-    update=extend_schema(summary='Обновление балла по критериям в репорте СрШ', tags=['Репорты учителя СрШ: Баллы по критериям']),
-    destroy=extend_schema(summary='Удаление балла по критериям в репорте СрШ', tags=['Репорты учителя СрШ: Баллы по критериям']),
+    list=extend_schema(summary='Вывод списка баллов по критериям в репорте СрШ', tags=['Репорты: Учителя СрШ. Баллы по критериям']),
+    create=extend_schema(summary='Создание балла по критериям в репорте СрШ', tags=['Репорты: Учителя СрШ. Баллы по критериям']),
+    update=extend_schema(summary='Обновление балла по критериям в репорте СрШ', tags=['Репорты: Учителя СрШ. Баллы по критериям']),
+    destroy=extend_schema(summary='Удаление балла по критериям в репорте СрШ', tags=['Репорты: Учителя СрШ. Баллы по критериям']),
     )
 class ReportSecondaryCriterionViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -187,10 +187,10 @@ class ReportSecondaryCriterionViewSet(ModelViewSet):
     
 # Предметные достижения в репорте СрШ: список, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка предметных достижений в репорте СрШ', tags=['Репорты учителя СрШ: Предметные достижения']),
-    create=extend_schema(summary='Создание предметного достижения в репорте СрШ', tags=['Репорты учителя СрШ: Предметные достижения']),
-    update=extend_schema(summary='Обновление предметного достижения в репорте СрШ', tags=['Репорты учителя СрШ: Предметные достижения']),
-    destroy=extend_schema(summary='Удаление предметного достижения в репорте СрШ', tags=['Репорты учителя СрШ: Предметные достижения']),
+    list=extend_schema(summary='Вывод списка предметных достижений в репорте СрШ', tags=['Репорты: Учителя СрШ. Предметные достижения']),
+    create=extend_schema(summary='Создание предметного достижения в репорте СрШ', tags=['Репорты: Учителя СрШ. Предметные достижения']),
+    update=extend_schema(summary='Обновление предметного достижения в репорте СрШ', tags=['Репорты: Учителя СрШ. Предметные достижения']),
+    destroy=extend_schema(summary='Удаление предметного достижения в репорте СрШ', tags=['Репорты: Учителя СрШ. Предметные достижения']),
     )
 class ReportSecondaryLevelViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -203,12 +203,12 @@ class ReportSecondaryLevelViewSet(ModelViewSet):
     
 # Репорты учителя в средней школе: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка репортов учителя в средней школе', tags=['Репорты учителя СрШ']),
-    create=extend_schema(summary='Создание репорта учителя в средней школе', tags=['Репорты учителя СрШ']),
-    retrieve=extend_schema(summary='Просмотр репорта учителя в средней школе', tags=['Репорты учителя СрШ']),
-    update=extend_schema(summary='Обновление репорта учителя в средней школе', tags=['Репорты учителя СрШ']),
-    partial_update=extend_schema(summary='Частичное обновление репорта учителя в средней школе', tags=['Репорты учителя СрШ']),
-    destroy=extend_schema(summary='Удаление репорта учителя в средней школе', tags=['Репорты учителя СрШ']),
+    list=extend_schema(summary='Вывод списка репортов учителя в средней школе', tags=['Репорты: Учителя СрШ']),
+    create=extend_schema(summary='Создание репорта учителя в средней школе', tags=['Репорты: Учителя СрШ']),
+    retrieve=extend_schema(summary='Просмотр репорта учителя в средней школе', tags=['Репорты: Учителя СрШ']),
+    update=extend_schema(summary='Обновление репорта учителя в средней школе', tags=['Репорты: Учителя СрШ']),
+    partial_update=extend_schema(summary='Частичное обновление репорта учителя в средней школе', tags=['Репорты: Учителя СрШ']),
+    destroy=extend_schema(summary='Удаление репорта учителя в средней школе', tags=['Репорты: Учителя СрШ']),
     )
 class ReportTeacherSecondaryViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -225,12 +225,12 @@ class ReportTeacherSecondaryViewSet(ModelViewSet):
 
 # Репорты учителя в старшей школе: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка репортов учителя в старшей школе', tags=['Репорты учителя СтШ']),
-    create=extend_schema(summary='Создание репорта учителя в старшей школе', tags=['Репорты учителя СтШ']),
-    retrieve=extend_schema(summary='Просмотр репорта учителя в старшей школе', tags=['Репорты учителя СтШ']),
-    update=extend_schema(summary='Обновление репорта учителя в старшей школе', tags=['Репорты учителя СтШ']),
-    partial_update=extend_schema(summary='Частичное обновление репорта учителя в старшей школе', tags=['Репорты учителя СтШ']),
-    destroy=extend_schema(summary='Удаление репорта учителя в старшей школе', tags=['Репорты учителя СтШ']),
+    list=extend_schema(summary='Вывод списка репортов учителя в старшей школе', tags=['Репорты: Учителя СтШ']),
+    create=extend_schema(summary='Создание репорта учителя в старшей школе', tags=['Репорты: Учителя СтШ']),
+    retrieve=extend_schema(summary='Просмотр репорта учителя в старшей школе', tags=['Репорты: Учителя СтШ']),
+    update=extend_schema(summary='Обновление репорта учителя в старшей школе', tags=['Репорты: Учителя СтШ']),
+    partial_update=extend_schema(summary='Частичное обновление репорта учителя в старшей школе', tags=['Репорты: Учителя СтШ']),
+    destroy=extend_schema(summary='Удаление репорта учителя в старшей школе', tags=['Репорты: Учителя СтШ']),
     )
 class ReportTeacherHighViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -246,10 +246,10 @@ class ReportTeacherHighViewSet(ModelViewSet):
     
 # Оценки профиля студента в репорте классного руководителя: список, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка оценок профилей студента в репортах классного руководителя', tags=['Репорты классного руководителя: Развитие профиля студента']),
-    create=extend_schema(summary='Создание оценки профиля студента в репортах классного руководителя', tags=['Репорты классного руководителя: Развитие профиля студента']),
-    update=extend_schema(summary='Обновление оценки профиля студента в репортах классного руководителя', tags=['Репорты классного руководителя: Развитие профиля студента']),
-    destroy=extend_schema(summary='Удаление оценки профиля студента в репортах классного руководителя', tags=['Репорты классного руководителя: Развитие профиля студента']),
+    list=extend_schema(summary='Вывод списка оценок профилей студента в репортах классного руководителя', tags=['Репорты: Классный руководитель. Развитие профиля студента']),
+    create=extend_schema(summary='Создание оценки профиля студента в репортах классного руководителя', tags=['Репорты: Классный руководитель. Развитие профиля студента']),
+    update=extend_schema(summary='Обновление оценки профиля студента в репортах классного руководителя', tags=['Репорты: Классный руководитель. Развитие профиля студента']),
+    destroy=extend_schema(summary='Удаление оценки профиля студента в репортах классного руководителя', tags=['Репорты: Классный руководитель. Развитие профиля студента']),
     )
 class ReportIbProfileViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -262,12 +262,12 @@ class ReportIbProfileViewSet(ModelViewSet):
     
 # Репорты классного руководителя: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка репортов классного руководителя', tags=['Репорты классного руководителя']),
-    create=extend_schema(summary='Создание репорта классного руководителя', tags=['Репорты классного руководителя']),
-    retrieve=extend_schema(summary='Просмотр репорта классного руководителя', tags=['Репорты классного руководителя']),
-    update=extend_schema(summary='Обновление репорта классного руководителя', tags=['Репорты классного руководителя']),
-    partial_update=extend_schema(summary='Частичное обновление репорта классного руководителя', tags=['Репорты классного руководителя']),
-    destroy=extend_schema(summary='Удаление репорта классного руководителя', tags=['Репорты классного руководителя']),
+    list=extend_schema(summary='Вывод списка репортов классного руководителя', tags=['Репорты: Классный руководитель']),
+    create=extend_schema(summary='Создание репорта классного руководителя', tags=['Репорты: Классный руководитель']),
+    retrieve=extend_schema(summary='Просмотр репорта классного руководителя', tags=['Репорты: Классный руководитель']),
+    update=extend_schema(summary='Обновление репорта классного руководителя', tags=['Репорты: Классный руководитель']),
+    partial_update=extend_schema(summary='Частичное обновление репорта классного руководителя', tags=['Репорты: Классный руководитель']),
+    destroy=extend_schema(summary='Удаление репорта классного руководителя', tags=['Репорты: Классный руководитель']),
     )
 class ReportMentorViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -284,10 +284,10 @@ class ReportMentorViewSet(ModelViewSet):
 
 # Результаты юнита в репорте классного руководителя НШ: список, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка результатов юнита в репорте классного руководителя НШ', tags=['Репорты классного руководителя НШ: Результаты юнита']),
-    create=extend_schema(summary='Создание результата юнита в репорте классного руководителя НШ', tags=['Репорты классного руководителя НШ: Результаты юнита']),
-    update=extend_schema(summary='Обновление результата юнита в репорте классного руководителя НШ', tags=['Репорты классного руководителя НШ: Результаты юнита']),
-    destroy=extend_schema(summary='Удаление результата юнита в репорте классного руководителя НШ', tags=['Репорты классного руководителя НШ: Результаты юнита']),
+    list=extend_schema(summary='Вывод списка результатов юнита в репорте классного руководителя НШ', tags=['Репорты: Классный руководитель НШ. Результаты юнита']),
+    create=extend_schema(summary='Создание результата юнита в репорте классного руководителя НШ', tags=['Репорты: Классный руководитель НШ. Результаты юнита']),
+    update=extend_schema(summary='Обновление результата юнита в репорте классного руководителя НШ', tags=['Репорты: Классный руководитель НШ. Результаты юнита']),
+    destroy=extend_schema(summary='Удаление результата юнита в репорте классного руководителя НШ', tags=['Репорты: Классный руководитель НШ. Результаты юнита']),
     )
 class ReportPrimaryUnitViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -300,12 +300,12 @@ class ReportPrimaryUnitViewSet(ModelViewSet):
     
 # Репорты классного руководителя начальной школы: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка репортов классного руководителя НШ', tags=['Репорты классного руководителя НШ']),
-    create=extend_schema(summary='Создание репорта классного руководителя НШ', tags=['Репорты классного руководителя НШ']),
-    retrieve=extend_schema(summary='Просмотр репорта классного руководителя НШ', tags=['Репорты классного руководителя НШ']),
-    update=extend_schema(summary='Обновление репорта классного руководителя НШ', tags=['Репорты классного руководителя НШ']),
-    partial_update=extend_schema(summary='Частичное обновление репорта классного руководителя НШ', tags=['Репорты классного руководителя НШ']),
-    destroy=extend_schema(summary='Удаление репорта классного руководителя НШ', tags=['Репорты классного руководителя НШ']),
+    list=extend_schema(summary='Вывод списка репортов классного руководителя НШ', tags=['Репорты: Классный руководитель НШ']),
+    create=extend_schema(summary='Создание репорта классного руководителя НШ', tags=['Репорты: Классный руководитель НШ']),
+    retrieve=extend_schema(summary='Просмотр репорта классного руководителя НШ', tags=['Репорты: Классный руководитель НШ']),
+    update=extend_schema(summary='Обновление репорта классного руководителя НШ', tags=['Репорты: Классный руководитель НШ']),
+    partial_update=extend_schema(summary='Частичное обновление репорта классного руководителя НШ', tags=['Репорты: Классный руководитель НШ']),
+    destroy=extend_schema(summary='Удаление репорта классного руководителя НШ', tags=['Репорты: Классный руководитель НШ']),
     )
 class ReportMentorPrimaryViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -321,12 +321,12 @@ class ReportMentorPrimaryViewSet(ModelViewSet):
     
 # Репорты дополнительных сотрудников класса: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
-    list=extend_schema(summary='Вывод списка репортов классного сотрудника класса', tags=['Репорты сотрудников класса']),
-    create=extend_schema(summary='Создание репорта классного сотрудника класса', tags=['Репорты сотрудников класса']),
-    retrieve=extend_schema(summary='Просмотр репорта классного сотрудника класса', tags=['Репорты сотрудников класса']),
-    update=extend_schema(summary='Обновление репорта классного сотрудника класса', tags=['Репорты сотрудников класса']),
-    partial_update=extend_schema(summary='Частичное обновление репорта сотрудника класса', tags=['Репорты сотрудников класса']),
-    destroy=extend_schema(summary='Удаление репорта классного сотрудника класса', tags=['Репорты сотрудников класса']),
+    list=extend_schema(summary='Вывод списка репортов классного сотрудника класса', tags=['Репорты: Сотрудники класса']),
+    create=extend_schema(summary='Создание репорта классного сотрудника класса', tags=['Репорты: Сотрудники класса']),
+    retrieve=extend_schema(summary='Просмотр репорта классного сотрудника класса', tags=['Репорты: Сотрудники класса']),
+    update=extend_schema(summary='Обновление репорта классного сотрудника класса', tags=['Репорты: Сотрудники класса']),
+    partial_update=extend_schema(summary='Частичное обновление репорта сотрудника класса', tags=['Репорты: Сотрудники класса']),
+    destroy=extend_schema(summary='Удаление репорта классного сотрудника класса', tags=['Репорты: Сотрудники класса']),
     )
 class ReportExtraViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
