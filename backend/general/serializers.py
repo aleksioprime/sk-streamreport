@@ -9,19 +9,19 @@ from general.models import (
     StudyYearIb
     )
 
-# Кастомный сериализатор для ответа при JWT-аутентификации
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        # Добавление дополнительных данных к токенам
-        data['user'] = {
-            'id': self.user.pk,
-            'email': self.user.email,
-            'first_name': self.user.first_name,
-            'middle_name': self.user.middle_name,
-            'last_name': self.user.last_name,
-        }
-        return data
+# Кастомный сериализатор для ответа при JWT-аутентификации (неактивен)
+# class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+#     def validate(self, attrs):
+#         data = super().validate(attrs)
+#         # Добавление дополнительных данных к токенам
+#         data['user'] = {
+#             'id': self.user.pk,
+#             'email': self.user.email,
+#             'first_name': self.user.first_name,
+#             'middle_name': self.user.middle_name,
+#             'last_name': self.user.last_name,
+#         }
+#         return data
 
 # Подразделения
 class DepartmentListSerializer(serializers.ModelSerializer):
@@ -68,7 +68,6 @@ class UserListGeneralSerializer(serializers.ModelSerializer):
 
 # Информация о пользователе
 class UserRetrieveSerializer(serializers.ModelSerializer):
-    myp_unitplans_count = serializers.SerializerMethodField()
     departments = DepartmentListSerializer(many=True)
 
     class Meta:
@@ -86,11 +85,7 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
             "classes",
             "dnevnik_id",
             "dnevnik_user_id",
-            "myp_unitplans_count"
         )
-        
-    def get_myp_unitplans_count(self, obj) -> int:
-        return obj.myp_unitplans.count()
 
 # Импорт пользователей
 class UserImportSerializer(serializers.ModelSerializer):

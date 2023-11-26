@@ -15,8 +15,11 @@ export default defineConfig({
     port: 8080,
     proxy: {
       "/api": {
-        target: "http://backend:8000/",
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        target: "http://backend:8000",
+        // rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+      "|/media|/static|/admin": {
+        target: "http://backend:8000",
       },
     },
   },

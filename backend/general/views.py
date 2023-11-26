@@ -2,6 +2,9 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, DestroyModelMixin, UpdateModelMixin
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.tokens import UntypedToken
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -11,6 +14,8 @@ from django.contrib.auth.hashers import make_password
 import logging
 from openpyxl import load_workbook
 
+import time
+
 logger = logging.getLogger('main')
 
 from general.serializers import (
@@ -18,7 +23,7 @@ from general.serializers import (
     UserListGeneralSerializer, 
     UserRetrieveSerializer,
     UserImportSerializer,
-    CustomTokenObtainPairSerializer,
+    # CustomTokenObtainPairSerializer,
     ClassGroupListGeneralSerializer,
     ClassRetrieveSerializer,
 )
@@ -34,21 +39,53 @@ from general.services import (
 
 @extend_schema_view(post=extend_schema(summary='Получение токена', tags=['База: Аутентификация']))
 class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
+    # serializer_class = CustomTokenObtainPairSerializer
     def post(self, request, *args, **kwargs):
+        # Вызов родительского метода для генерации токенов
         response = super().post(request, *args, **kwargs)
-        if response.status_code == 200:
-            user = response.data['user']
-            user_info = {
-                'user_id': user['id'],
-                'email': user['email'],
-            }
-            logger.info(f"User {user_info['email']} (ID: {user_info['user_id']}) has been authenticated.")
+
+        # Получение токена доступа из ответа
+        access_token = response.data.get("access", None)
+        if access_token:
+            try:
+                # Расшифровка токена
+                untyped_token = UntypedToken(access_token)
+
+                # Получение ID пользователя из токена
+                user_id = untyped_token['user_id']
+
+                # Получение объекта пользователя
+                user = User.objects.get(id=user_id)
+                
+                # Теперь у вас есть объект пользователя, можно добавить дополнительные данные в ответ, если нужно
+                # Например:
+                # response.data['username'] = user.username
+                logger.info(f"User {user.email} (ID: {user.pk}) has been authenticated")
+
+            except (InvalidToken, TokenError, User.DoesNotExist) as e:
+                # Обработка ошибок, если токен невалиден или пользователя не существует
+                logger.info(f"Authentication failed")
+            
         return response
 
 @extend_schema_view(post=extend_schema(summary='Обновление токена',tags=['База: Аутентификация']))
 class CustomTokenRefreshView(TokenRefreshView):
-    pass
+    def post(self, request, *args, **kwargs):
+        # Вызов родительского метода для обновления токенов
+        response = super().post(request, *args, **kwargs)
+        refresh_token = request.data.get("refresh")
+        if refresh_token:
+            try:
+                decoded_token = RefreshToken(refresh_token)
+                # Получите время истечения токена
+                exp_timestamp = decoded_token['exp']
+                current_timestamp = int(time.time())
+                remaining_lifetime = exp_timestamp - current_timestamp
+                logger.info(f"Refresh token lifetime is {remaining_lifetime} seconds")
+            except TokenError:
+                # Обработка ошибки расшифровки токена
+                pass
+        return response
 
 @extend_schema_view(
     list=extend_schema(summary='Вывод списка пользователей', tags=['База: Пользователи']),
@@ -77,6 +114,29 @@ class UserViewSet(ModelViewSet):
     def me(self, request):
         instance = self.request.user
         serializer = self.get_serializer(instance)
+        # Получаем заголовок Authorization
+        auth_header = request.META.get('HTTP_AUTHORIZATION')
+        if auth_header:
+            # Разделяем 'Bearer' и токен
+            parts = auth_header.split()
+            if len(parts) == 2 and parts[0].lower() == "bearer":
+                token = parts[1]
+                try:
+                    untyped_token = UntypedToken(token)
+                    exp_timestamp = untyped_token['exp']
+                    current_timestamp = int(time.time())
+                    remaining_time = exp_timestamp - current_timestamp
+                    logger.info(f"Token lifetime for {instance.email} (ID: {instance.pk}) is {remaining_time} seconds")
+                except InvalidToken:
+                    # Обработка невалидного токена
+                    pass
+            else:
+                # Обработка ошибки: неверный формат заголовка
+                pass
+        else:
+            # Обработка ошибки: заголовок отсутствует
+            pass
+
         return Response(serializer.data)
     
     @action(detail=False, methods=["post"], url_path="import")
