@@ -9,7 +9,7 @@ from general.views import (
 
 urlpatterns = [
     path('user', UserViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('user/<int:pk>', UserViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('user/<int:pk>', UserViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update'})),
     path('user/me', UserViewSet.as_view({'get': 'me'})),
     path('user/<int:pk>/import', UserViewSet.as_view({'post': 'user_import'})),
     path('group/', ClassGroupViewSet.as_view({'get': 'list'})),
