@@ -6,6 +6,7 @@ export const routes = [
       name: "home",
       component: () => import("@/views/HomeView.vue"),
       meta: { 
+        layout: "DefaultLayout",
         middlewares: [isLoggedIn],
       },
     },
@@ -13,5 +14,17 @@ export const routes = [
       path: "/login",
       name: "login",
       component: () => import("@/views/LoginView.vue"),
+      meta: { 
+        layout: "LoginLayout",
+      },
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: () => import("@/views/UserProfileView.vue"),
+      meta: { 
+        layout: "DefaultLayout",
+        middlewares: [isLoggedIn],
+      },
     },
 ]

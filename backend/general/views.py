@@ -95,6 +95,7 @@ class CustomTokenRefreshView(TokenRefreshView):
     partial_update=extend_schema(summary='Частичное обновление информации о пользователе', tags=['База: Пользователи']),
     me=extend_schema(summary='Вывод информации об авторизованном пользователе', tags=['База: Пользователи']),
     user_import=extend_schema(summary='Импорт пользователей', tags=['База: Пользователи']),
+    upload_photo=extend_schema(summary='Загрузка фотографии', tags=['База: Пользователи']),
     )
 class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -139,6 +140,29 @@ class UserViewSet(ModelViewSet):
 
         return Response(serializer.data)
     
+    @action(detail=True, methods=["post"], url_path="upload")
+    def upload_photo(self, request, pk=None):
+        photo_file = request.FILES.get('photo')
+
+        if photo_file is None:
+            return Response({'detail': 'Invalid file'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(id=pk)
+        except Exception as e:
+            logger.error(f"An error occurred: {str(e)}")
+            return Response({'detail': f'Error get user: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.photo = photo_file
+        user.save()
+
+        try:
+            response_user_photo = User.objects.get(id=pk)
+        except Exception as e:
+            logger.error(f"An error occurred: {str(e)}")
+        logger.info(f"User {user.email} (ID: {user.pk}) uploaded photo")
+        return Response({'detail': 'Users photo success uploaded', 'user': self.get_serializer(user).data}, status=status.HTTP_200_OK)
+
     @action(detail=False, methods=["post"], url_path="import")
     def user_import(self, request):
 

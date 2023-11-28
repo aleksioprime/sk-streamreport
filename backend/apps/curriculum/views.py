@@ -7,6 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from apps.curriculum.serializers import (
     SubjectListSerializer, 
     CurriculumListSerializer,
+    CurriculumRetrieveSerializer,
     CurriculumLoadListSerializer,
     TeachingLoadListSerializer,
 )
@@ -29,7 +30,7 @@ from apps.curriculum.filters import (
 @extend_schema_view(
     list=extend_schema(summary='Список учебных планов', tags=['Учебные планы']),
     )
-class CurriculumViewSet(ListModelMixin, GenericViewSet):
+class CurriculumViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     filterset_class = CurriculumFilter
 
@@ -37,6 +38,8 @@ class CurriculumViewSet(ListModelMixin, GenericViewSet):
         return get_curriculum_queryset()
     
     def get_serializer_class(self):
+        if self.action == "retrieve":
+            return CurriculumRetrieveSerializer
         return CurriculumListSerializer
 
 @extend_schema_view(

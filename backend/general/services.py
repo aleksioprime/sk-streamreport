@@ -5,7 +5,8 @@ from general.models import (
 
 def get_user_queryset():
     return User.objects.all().prefetch_related(
-            "myp_unitplans",
+            "groups",
+            "departments",
         ).order_by("-id")
 
 def get_group_queryset():

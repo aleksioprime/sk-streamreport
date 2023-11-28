@@ -106,6 +106,33 @@ class CurriculumLoadListSerializer(serializers.ModelSerializer):
             "hours"
             )
 
+# Нагрузка учебных планов (дополнительный сериализатор)
+class CurriculumLoadSerializer(serializers.ModelSerializer):
+    subject = SubjectListSerializer()
+    years = StudyYearCurriculumSerializer(many=True)
+    class Meta:
+        model = CurriculumLoad
+        fields = (
+            "id",
+            "subject",
+            "years",
+            "hours"
+            )
+
+# Подробный просмотр учебного плана
+class CurriculumRetrieveSerializer(serializers.ModelSerializer):
+    curriculum_loads = CurriculumLoadSerializer(many=True)
+    class Meta:
+        model = Curriculum
+        fields = (
+            "id",
+            "year",
+            "name",
+            "name_short",
+            "level",
+            "curriculum_loads"
+            )
+
 # Список учебных лет
 class AcademicYearCurriculumSerializer(serializers.ModelSerializer):
     class Meta:

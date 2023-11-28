@@ -31,7 +31,7 @@ export class ApiService {
     }, error => {
       const originalRequest = error.config;
       // Обработка ошибок ответа (ошибка авторизации, повторный запрос, запрос обновления токена)
-      if (error.response.status === 401 && !originalRequest._retry && originalRequest.url.includes("/refresh")) {
+      if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url.includes("/refresh")) {
         originalRequest._retry = true;
         // Обрабатываем истечение срока действия токена
         return refreshTokenProcedure().then(newAccessToken => {
@@ -111,8 +111,8 @@ export class ApiService {
     return this._wrapper2(axios.put, url, payload)();
   }
 
-  $update(url, payload) {
-    return this._wrapper2(axios.update, url, payload)();
+  $patch(url, payload) {
+    return this._wrapper2(axios.patch, url, payload)();
   }
 
   $delete(url) {

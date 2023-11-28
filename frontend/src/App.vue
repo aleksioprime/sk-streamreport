@@ -1,8 +1,11 @@
 <template>
-  <router-view v-if="isLoaded" />
+  <app-layout>
+    <router-view v-if="isLoaded" />
+  </app-layout>
 </template>
 
 <script setup>
+import AppLayout from "@/layouts/AppLayout.vue";
 import { onMounted, ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import JwtService from "@/services/jwt/jwt.service";

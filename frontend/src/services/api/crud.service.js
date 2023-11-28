@@ -10,6 +10,10 @@ export class CrudService extends ApiService {
     return this.$get(this.resource);
   }
 
+  retrieve(id) {
+    return this.$get(`${this.resource}/${id}`);
+  }
+
   post(entity) {
     return this.$post(this.resource, entity);
   }
@@ -18,8 +22,8 @@ export class CrudService extends ApiService {
     return this.$put(`${this.resource}/${entity.id}`, entity);
   }
 
-  update(entity) {
-    return this.$update(`${this.resource}/${entity.id}`, entity);
+  patch(entity) {
+    return this.$patch(`${this.resource}/${entity.id}`, entity);
   }
 
   delete(id) {

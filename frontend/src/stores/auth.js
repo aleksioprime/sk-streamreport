@@ -17,6 +17,10 @@ export const useAuthStore = defineStore("auth", {
       this.user = user;
     },
 
+    setPhoto(photo) {
+      this.user.photo = photo;
+    },
+
     async login(credentials) {
       const res = await resources.auth.login(credentials);
       if (res.__state === "success") {

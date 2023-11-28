@@ -8,8 +8,9 @@ from apps.curriculum.views import (
     )
 
 urlpatterns = [
+    path('subject', SubjectViewSet.as_view({'get': 'list'})),
     path('curriculum', CurriculumViewSet.as_view({'get': 'list'})),
-    path('curriculum/subject', SubjectViewSet.as_view({'get': 'list'})),
+    path('curriculum/<int:pk>', CurriculumViewSet.as_view({'get': 'retrieve'})),
     path('curriculum/load', CurriculumLoadViewSet.as_view({'get': 'list'})),
     path('curriculum/teaching', TeachingLoadViewSet.as_view({'get': 'list'})),
 ]

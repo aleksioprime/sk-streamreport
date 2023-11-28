@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth.models import Group
 from general.models import (
     User,
     Department,
@@ -62,14 +63,25 @@ class UserListGeneralSerializer(serializers.ModelSerializer):
             "first_name", 
             "last_name",
             "middle_name",
+            "photo",
             "email",
             "dnevnik_id",
             )
 
+# Список пользователей
+class GroupGeneralSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = (
+            "id", 
+            "name",
+            )
+
 # Информация о пользователе
 class UserRetrieveSerializer(serializers.ModelSerializer):
+    groups = GroupGeneralSerializer(many=True)
     departments = DepartmentListSerializer(many=True)
-
+    full_name = serializers.CharField(source='get_full_name', read_only=True)
     class Meta:
         model = User
         fields = (
@@ -77,9 +89,11 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "middle_name",
+            "full_name",
             "email",
             "gender",
             "position",
+            "photo",
             "departments",
             "groups",
             "classes",
