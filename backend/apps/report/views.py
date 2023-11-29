@@ -39,6 +39,7 @@ from apps.report.serializers import (
     ReportExtraListSerializer,
     ReportExtraRetrieveSerializer,
     ReportExtraUpdateSerializer,
+    UserListReportExtraSerializer,
 )
 
 from apps.report.services import (
@@ -56,7 +57,8 @@ from apps.report.services import (
     get_report_mentor_queryset,
     get_report_primary_unit_queryset,
     get_report_mentor_primary_queryset,
-    get_report_extra_queryset
+    get_report_extra_queryset,
+    get_user_report_extra_queryset
 )
 
 from apps.report.filters import (
@@ -74,7 +76,8 @@ from apps.report.filters import (
     ReportMentorFilter,
     ReportPrimaryUnitFilter,
     ReportMentorPrimaryFilter,
-    ReportExtraFilter
+    ReportExtraFilter,
+    UserFilter
 )
 
 # Отчётные периоды для репортов: список
@@ -86,6 +89,7 @@ class ReportPeriodViewSet(ListModelMixin, GenericViewSet):
     queryset = get_report_period_queryset()
     serializer_class = ReportPeriodListSerializer
     filterset_class = ReportPeriodFilter
+    pagination_class = None
 
 # Критерии для репортов: список, создание, редактирование и удаление
 @extend_schema_view(
@@ -98,6 +102,7 @@ class ReportCriterionViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_criterion_queryset()
     filterset_class = ReportCriterionFilter
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReportCriterionListSerializer
@@ -127,6 +132,7 @@ class ReportCriterionAchievementViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_criterion_achievement_queryset()
     filterset_class = ReportCriterionAchievementFilter
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReportCriterionAchievementListSerializer
@@ -164,6 +170,7 @@ class ReportPrimaryTopicViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_primary_achievement_queryset()
     filterset_class = ReportPrimaryTopicFilter
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReportPrimaryTopicListSerializer
@@ -180,6 +187,7 @@ class ReportSecondaryCriterionViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_secondary_criterion_queryset()
     filterset_class = ReportSecondaryCriterionFilter
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReportSecondaryCriterionListSerializer
@@ -196,6 +204,7 @@ class ReportSecondaryLevelViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_secondary_level_queryset()
     filterset_class = ReportSecondaryLevelFilter
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReportSecondaryLevelListSerializer
@@ -255,6 +264,7 @@ class ReportIbProfileViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_ibprofile_queryset()
     filterset_class = ReportIbProfileFilter
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReportIbProfileListSerializer
@@ -293,6 +303,7 @@ class ReportPrimaryUnitViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_primary_unit_queryset()
     filterset_class = ReportPrimaryUnitFilter
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReportPrimaryUnitListSerializer
@@ -339,3 +350,17 @@ class ReportExtraViewSet(ModelViewSet):
         elif self.action == "retrieve":
             return ReportExtraRetrieveSerializer
         return ReportExtraUpdateSerializer
+    
+
+# Список студентов с репортами сотрудников: список, 
+@extend_schema_view(
+    list=extend_schema(summary='Вывод списка студентов с репортами сотрудников класса', tags=['Репорты: Студенты с репортами сотрудников класса']),
+    )
+class UserReportExtraViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = get_user_report_extra_queryset()
+    filterset_class = UserFilter
+    pagination_class = None
+    
+    def get_serializer_class(self):
+        return UserListReportExtraSerializer

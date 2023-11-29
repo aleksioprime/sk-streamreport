@@ -29,6 +29,7 @@ from apps.curriculum.filters import (
 
 @extend_schema_view(
     list=extend_schema(summary='Список учебных планов', tags=['Учебные планы']),
+    retrieve=extend_schema(summary='Просмотр учебного плана', tags=['Учебные планы']),
     )
 class CurriculumViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
@@ -48,6 +49,7 @@ class CurriculumViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
 class SubjectViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     filterset_class = SubjectFilter
+    pagination_class = None
     
     def get_queryset(self):
         return get_subject_queryset()

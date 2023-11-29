@@ -4,7 +4,9 @@ from general.views import (
     UserViewSet,
     ClassGroupViewSet,
     CustomTokenObtainPairView,
-    CustomTokenRefreshView
+    CustomTokenRefreshView,
+    AcademicYearViewSet,
+    StudyYearViewSet,
     )
 
 urlpatterns = [
@@ -17,4 +19,6 @@ urlpatterns = [
     path('group/<int:pk>', ClassGroupViewSet.as_view({'get': 'retrieve'})),
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
+    path('year/academic', AcademicYearViewSet.as_view({'get': 'list'})),
+    path('year/study', StudyYearViewSet.as_view({'get': 'list'})),
 ]

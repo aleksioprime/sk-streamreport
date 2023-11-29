@@ -5,7 +5,7 @@ export class GroupResource extends CrudService {
     super("/api/group");
   }
 
-  getGroups() {
-    return this.get();
+  getGroups(config) {
+    return this.get(config);
   }
 }

@@ -16,6 +16,10 @@ from apps.report.models import (
     ReportExtra,
 )
 
+from general.models import (
+    User
+)
+
 def get_report_period_queryset():
     return ReportPeriod.objects.all().select_related(
         'year',
@@ -127,4 +131,10 @@ def get_report_extra_queryset():
         'author',
         'period',
         'group',
+        )
+
+def get_user_report_extra_queryset():
+    return User.objects.all().prefetch_related(
+        'reportextra_student_reports',
+        'classes',
         )

@@ -18,6 +18,10 @@ from apps.report.models import (
     ReportExtra
 )
 
+from general.models import (
+    User
+)
+
 class ReportPeriodFilter(django_filters.FilterSet):
     class Meta:
         model = ReportPeriod
@@ -92,3 +96,8 @@ class ReportExtraFilter(django_filters.FilterSet):
     class Meta:
         model = ReportExtra
         fields = {'student', 'author', 'period', 'group'}
+
+class UserFilter(django_filters.FilterSet):
+    class Meta:
+        model = User
+        fields = {'groups', 'classes'}

@@ -64,10 +64,10 @@ export class ApiService {
   }
 
   /* Функция для запросов без тела: GET, DELETE */
-  _wrapper1(method, url) {
+  _wrapper1(method, url, config) {
     return async () => {
       try {
-        const response = await method(url);
+        const response = await method(url, config);
         return {
           __state: "success",
           ...response,
@@ -99,8 +99,8 @@ export class ApiService {
     };
   }
 
-  $get(url) {
-    return this._wrapper1(axios.get, url)();
+  $get(url, config) {
+    return this._wrapper1(axios.get, url, config)();
   }
 
   $post(url, payload) {

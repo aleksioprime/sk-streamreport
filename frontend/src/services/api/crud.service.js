@@ -6,8 +6,8 @@ export class CrudService extends ApiService {
     this.resource = resource;
   }
 
-  get() {
-    return this.$get(this.resource);
+  get(config) {
+    return this.$get(this.resource, config);
   }
 
   retrieve(id) {

@@ -27,4 +27,13 @@ export const routes = [
         middlewares: [isLoggedIn],
       },
     },
+    {
+      path: "/report/extra",
+      name: "reportExtra",
+      component: () => import("@/views/ReportExtraView.vue"),
+      meta: { 
+        layout: "DefaultLayout",
+        middlewares: [isLoggedIn],
+      },
+    },
 ]

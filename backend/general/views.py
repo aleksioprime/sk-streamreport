@@ -26,6 +26,8 @@ from general.serializers import (
     # CustomTokenObtainPairSerializer,
     ClassGroupListGeneralSerializer,
     ClassRetrieveSerializer,
+    AcademicYearListGeneralSerializer,
+    StudyYearListGeneralSerializer,
 )
 
 from general.models import (
@@ -34,7 +36,13 @@ from general.models import (
 
 from general.services import (
     get_user_queryset,
-    get_group_queryset
+    get_group_queryset,
+    get_academic_year_queryset,
+    get_study_year_queryset
+)
+
+from general.filters import (
+    ClassGroupFilter
 )
 
 @extend_schema_view(post=extend_schema(summary='Получение токена', tags=['База: Аутентификация']))
@@ -246,6 +254,8 @@ class UserViewSet(ModelViewSet):
     )
 class ClassGroupViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
+    pagination_class = None
+    filterset_class = ClassGroupFilter
 
     def get_queryset(self):
         return get_group_queryset()
@@ -254,5 +264,31 @@ class ClassGroupViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
         if self.action in ["retrieve"]:
             return ClassRetrieveSerializer
         return ClassGroupListGeneralSerializer
+    
+@extend_schema_view(
+    list=extend_schema(summary='Список учебных домов', tags=['База: Учебные года']),
+    )
+class AcademicYearViewSet(ListModelMixin, GenericViewSet):
+    permission_classes = [IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        return get_academic_year_queryset()
+    
+    def get_serializer_class(self):
+        return AcademicYearListGeneralSerializer
+
+@extend_schema_view(
+    list=extend_schema(summary='Список учебных параллелей', tags=['База: Учебные параллели']),
+    )
+class StudyYearViewSet(ListModelMixin, GenericViewSet):
+    permission_classes = [IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        return get_study_year_queryset()
+    
+    def get_serializer_class(self):
+        return StudyYearListGeneralSerializer
     
     

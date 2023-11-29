@@ -43,4 +43,5 @@ from .report_extra import (
     ReportExtraListSerializer,
     ReportExtraRetrieveSerializer,
     ReportExtraUpdateSerializer,
+    UserListReportExtraSerializer
 )

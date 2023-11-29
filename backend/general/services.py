@@ -1,6 +1,8 @@
 from general.models import (
     User,
     ClassGroup,
+    AcademicYear,
+    StudyYear
 )
 
 def get_user_queryset():
@@ -17,3 +19,9 @@ def get_group_queryset():
 
 def load_file_excel():
     pass
+
+def get_academic_year_queryset():
+    return AcademicYear.objects.all()
+
+def get_study_year_queryset():
+    return StudyYear.objects.all()

@@ -66,6 +66,7 @@ class UserListGeneralSerializer(serializers.ModelSerializer):
             "photo",
             "email",
             "dnevnik_id",
+            "position",
             )
 
 # Список пользователей
@@ -147,7 +148,7 @@ class StudyYearIbListSerializer(serializers.ModelSerializer):
             )
         
 # Параллели обучения
-class StudyYearListSerializerGeneral(serializers.ModelSerializer):
+class StudyYearListGeneralSerializer(serializers.ModelSerializer):
     ib = StudyYearIbListSerializer()
     class Meta:
         model = StudyYear
@@ -161,7 +162,7 @@ class StudyYearListSerializerGeneral(serializers.ModelSerializer):
 # Список групп
 class ClassGroupListGeneralSerializer(serializers.ModelSerializer):
     year_academic = AcademicYearListGeneralSerializer()
-    year_study = StudyYearListSerializerGeneral()
+    year_study = StudyYearListGeneralSerializer()
     class Meta:
         model = ClassGroup
         fields = (
@@ -169,6 +170,7 @@ class ClassGroupListGeneralSerializer(serializers.ModelSerializer):
             "year_academic",
             "year_study",
             "letter",
+            "name",
             )
 
 # Информация о группе
