@@ -358,9 +358,13 @@ class ReportExtraViewSet(ModelViewSet):
     )
 class UserReportExtraViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = get_user_report_extra_queryset()
     filterset_class = UserFilter
     pagination_class = None
+
+    def get_queryset(self):
+        period = self.request.query_params.get('report_period', None)
+        group = self.request.query_params.get('report_group', None)
+        return get_user_report_extra_queryset(group, period)
     
     def get_serializer_class(self):
         return UserListReportExtraSerializer

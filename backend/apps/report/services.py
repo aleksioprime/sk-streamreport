@@ -1,3 +1,5 @@
+from django.db.models import Prefetch
+
 from apps.report.models import (
     ReportPeriod,
     ReportCriterion,
@@ -133,8 +135,14 @@ def get_report_extra_queryset():
         'group',
         )
 
-def get_user_report_extra_queryset():
+def get_user_report_extra_queryset(group=None, period=None):
+    print(group, period)
     return User.objects.all().prefetch_related(
         'reportextra_student_reports',
+        Prefetch(
+                'reportextra_student_reports', 
+                queryset=ReportExtra.objects.filter(group=group, period=period), 
+                to_attr='filtered_reports'
+            ),
         'classes',
         )

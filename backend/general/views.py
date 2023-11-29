@@ -266,7 +266,7 @@ class ClassGroupViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
         return ClassGroupListGeneralSerializer
     
 @extend_schema_view(
-    list=extend_schema(summary='Список учебных домов', tags=['База: Учебные года']),
+    list=extend_schema(summary='Список учебных годов', tags=['База: Учебные года']),
     )
 class AcademicYearViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]

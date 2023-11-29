@@ -20,6 +20,7 @@ from apps.curriculum.models import (
 
 # Список пользователей
 class UserReportSerializer(serializers.ModelSerializer):
+    short_name = serializers.CharField(source='get_short_name', read_only=True)
     class Meta:
         model = User
         fields = (
@@ -27,6 +28,7 @@ class UserReportSerializer(serializers.ModelSerializer):
             "first_name", 
             "last_name",
             "middle_name",
+            "short_name",
             )
 
 # Список учебных лет

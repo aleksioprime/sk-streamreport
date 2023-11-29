@@ -28,8 +28,8 @@ export const useReportStore = defineStore("report", {
       if (res.__state === "success") {
         this.reportPeriods = res.data.map(item => {
           return {
-            ...item, // Копирование всех существующих свойств
-            full_name: capitalizeFirstLetter(item.name) // Добавление нового свойства name
+            ...item, 
+            full_name: capitalizeFirstLetter(item.name) 
           };
         });
       }
@@ -37,8 +37,22 @@ export const useReportStore = defineStore("report", {
     async loadStudentExtraReports(config) {
       const res = await resources.studentExtraReport.getStudentExtraReports(config);
       if (res.__state === "success") {
-        this.studentExtraReports = res.data
+        this.studentExtraReports = res.data.map(item => {
+          return {
+            ...item,
+            report: item.reports[0]
+          };
+        });
       }
+    },
+    async createReportExtra(report) {
+      return await resources.reportExtra.createReportExtra(report);
+    },
+    async updateReportExtra(report) {
+      return await resources.reportExtra.updateReportExtra(report);
+    },
+    async removeReportExtra(report) {
+      return await resources.reportExtra.removeReportExtra(report);
     },
   }
 });

@@ -15,6 +15,7 @@ def get_group_queryset():
     return ClassGroup.objects.all().select_related(
             "year_academic",
             "year_study",
+            "year_study__ib",
         )
 
 def load_file_excel():
@@ -24,4 +25,6 @@ def get_academic_year_queryset():
     return AcademicYear.objects.all()
 
 def get_study_year_queryset():
-    return StudyYear.objects.all()
+    return StudyYear.objects.all().select_related(
+            "ib",
+        )

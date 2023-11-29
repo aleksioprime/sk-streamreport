@@ -72,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'general.middleware.LastActivityMiddleware',
+    'general.middleware.DBCountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

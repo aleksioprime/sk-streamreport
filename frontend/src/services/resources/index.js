@@ -4,6 +4,7 @@ import { GroupResource } from "@/services/resources/general/group.resource";
 import { AcademicYearResource } from "@/services/resources/general/academicYear.resource";
 import { ReportPeriodResource } from "@/services/resources/report/reportPeriod.resource";
 import { StudentExtraReportResource } from "@/services/resources/report/studentExtraReport.resource";
+import { ReportExtraResource } from "@/services/resources/report/reportExtra.resource";
 import { StudyYearResource } from "@/services/resources/general/studyYear.resource";
 import { SubjectResource } from "@/services/resources/subject.resource";
 
@@ -14,6 +15,7 @@ export default {
     academicYear: new AcademicYearResource(),
     reportPeriod: new ReportPeriodResource(),
     studentExtraReport: new StudentExtraReportResource(),
+    reportExtra: new ReportExtraResource(),
     studyYear: new StudyYearResource(),
     subject: new SubjectResource(),
   };
