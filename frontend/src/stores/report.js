@@ -121,5 +121,15 @@ export const useReportStore = defineStore("report", {
     async removeReportTeacherHigh(report) {
       return await resources.reportTeacherHigh.removeReportTeacherHigh(report);
     },
+    // CRUD для академических результатов студентов начальной школы
+    async createReportPrimaryTopic(report) {
+      return await resources.reportPrimaryTopic.createReportPrimaryTopic(report);
+    },
+    async updateReportPrimaryTopic(report) {
+      return await resources.reportPrimaryTopic.updateReportPrimaryTopic(report);
+    },
+    async removeReportPrimaryTopic(id) {
+      return await resources.reportPrimaryTopic.removeReportPrimaryTopic(id);
+    },
   }
 });

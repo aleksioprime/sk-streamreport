@@ -7,6 +7,7 @@ from apps.syllabus.services import (
     get_syllabus_list_queryset,
     get_course_topic_queryset,
     get_course_chapter_queryset,
+    get_course_queryset,
 )
 
 from apps.syllabus.serializers import (
@@ -15,12 +16,14 @@ from apps.syllabus.serializers import (
     CourseTopicUpdateSerializer,
     CourseChapterListSerializer,
     CourseChapterUpdateSerializer,
+    CourseListSerializer,
 )
 
 from apps.syllabus.filters import (
     SyllabusFilter,
     CourseTopicFilter,
     CourseChapterFilter,
+    CourseFilter,
 )
 
 #TODO: Добавить просмотр и редактирование раздела учебного курса
@@ -35,6 +38,16 @@ class SyllabusViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = get_syllabus_list_queryset()
     serializer_class = SyllabusListSerializer
     filterset_class = SyllabusFilter
+
+# Курсы по предмету: список
+@extend_schema_view(
+    list=extend_schema(summary='Вывод списка курсов по предмету', tags=['Курсы: Курс учебного года']),
+    )
+class CourseViewSet(ListModelMixin, GenericViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = get_course_queryset()
+    serializer_class = CourseListSerializer
+    filterset_class = CourseFilter
 
 # Разделы курсов по предмету: список, создание, редактирование и удаление
 @extend_schema_view(

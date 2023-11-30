@@ -122,7 +122,7 @@ class SyllabusRetrieveSerializer(serializers.ModelSerializer):
             "file",
             "courses"
             )
-        
+
 # Вывод списка тем курса учебного предмета
 class CourseTopicListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -154,9 +154,40 @@ class CourseChapterListSerializer(serializers.ModelSerializer):
             "hours",
             "unit",
             )
+        
+# Подробная информация по разделу курса учебного предмета
+class CourseChapterRetrieveSerializer(serializers.ModelSerializer):
+    unit = UnitPlanerBaseModelSerializer()
+    topics = CourseTopicListSerializer(many=True)
+    class Meta:
+        model = CourseChapter
+        fields = (
+            "id", 
+            "number",
+            "name",
+            "description",
+            "hours",
+            "unit",
+            "topics",
+            )
 
 # Создание и редактирование раздела курса учебного предмета
 class CourseChapterUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseChapter
         fields = '__all__'
+
+
+# Вывод списка курсов по предмету
+class CourseListSerializer(serializers.ModelSerializer):
+    year = StudyYearSyllabusSerializer()
+    syllabus = SyllabusListSerializer()
+    chapters = CourseChapterRetrieveSerializer(many=True)
+    class Meta:
+        model = Course
+        fields = (
+            "id", 
+            "syllabus",
+            "year",
+            "chapters",
+            )

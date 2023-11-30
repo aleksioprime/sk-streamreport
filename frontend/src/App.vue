@@ -1,5 +1,8 @@
 <template>
   <app-layout-default>
+    <div v-if="authStore.alertSuccess" :class="authStore.animationClass" class="alert alert-success">
+      Данные успешно сохранены!
+    </div>
     <router-view v-if="isLoaded" />
   </app-layout-default>
 </template>
@@ -15,9 +18,9 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 const isLoaded = ref(false);
+const authStore = useAuthStore();
 
 const checkLoggedIn = async () => {
-  const authStore = useAuthStore();
   const token = JwtService.getAccessToken();
   
   if (!token) {
@@ -43,5 +46,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
+.alert {
+  position: fixed;
+  top: 20px;
+  width: calc(90vw);
+  z-index: 1;
+  /* Дополнительные стили для всплывающего сообщения */
+}
 </style>

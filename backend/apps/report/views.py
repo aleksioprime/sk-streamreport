@@ -2,6 +2,8 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, DestroyModelMixin, UpdateModelMixin
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
 
 from apps.report.serializers import (
@@ -165,6 +167,7 @@ class ReportTeacherPrimaryViewSet(ModelViewSet):
     list=extend_schema(summary='Вывод списка достижений по темам в репорте НШ', tags=['Репорты: Учителя НШ. Достижения по темам']),
     create=extend_schema(summary='Создание достижения по темам в репорте НШ', tags=['Репорты: Учителя НШ. Достижения по темам']),
     update=extend_schema(summary='Обновление достижения по темам в репорте НШ', tags=['Репорты: Учителя НШ. Достижения по темам']),
+    partial_update=extend_schema(summary='Частичное обновление достижения по темам в репорте НШ', tags=['Репорты: Учителя НШ. Достижения по темам']),
     destroy=extend_schema(summary='Удаление достижения по темам в репорте НШ', tags=['Репорты: Учителя НШ. Достижения по темам']),
     )
 class ReportPrimaryTopicViewSet(ModelViewSet):
@@ -176,6 +179,23 @@ class ReportPrimaryTopicViewSet(ModelViewSet):
         if self.action == "list":
             return ReportPrimaryTopicListSerializer
         return ReportPrimaryTopicUpdateSerializer
+    
+    # Переопределение метода create для массового создания объектов
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data,list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        detail_serializer = ReportPrimaryTopicListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = ReportPrimaryTopicListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
     
 # Баллы по критериям в репорте СрШ: список, создание, редактирование и удаление
 @extend_schema_view(

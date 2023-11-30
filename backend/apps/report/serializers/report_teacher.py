@@ -60,6 +60,14 @@ class ReportPrimaryTopicUpdateSerializer(serializers.ModelSerializer):
         model = ReportPrimaryTopic
         fields = '__all__'
 
+    def create(self, validated_data):
+        # Проверка, является ли validated_data списком
+        print("Создание объектов в сериализаторе")
+        if isinstance(validated_data, list):
+            objects_to_create = [ReportPrimaryTopic(**item) for item in validated_data]
+            return ReportPrimaryTopic.objects.bulk_create(objects_to_create)
+        return ReportPrimaryTopic.objects.create(**validated_data)
+
 # Вывод списка репортов учителя по предметам начальной школы
 class ReportTeacherPrimaryListSerializer(serializers.ModelSerializer):
     student = UserReportSerializer()
@@ -67,6 +75,8 @@ class ReportTeacherPrimaryListSerializer(serializers.ModelSerializer):
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     subject = SubjectReportSerializer()
+    topic_achievements = ReportPrimaryTopicListSerializer(many=True)
+    criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
         model = ReportTeacherPrimary
         fields = (
@@ -79,6 +89,8 @@ class ReportTeacherPrimaryListSerializer(serializers.ModelSerializer):
             "comment",
             "created_at",
             "updated_at",
+            "topic_achievements",
+            "criterion_achievements",
             )
 
 # Подробный просмотр репорта учителя по предметам начальной школы
@@ -185,6 +197,9 @@ class ReportTeacherSecondaryListSerializer(serializers.ModelSerializer):
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     subject = SubjectReportSerializer()
+    criterion_marks = ReportSecondaryCriterionListSerializer(many=True)
+    objective_levels = ReportSecondaryLevelListSerializer(many=True)
+    criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
         model = ReportTeacherSecondary
         fields = (
@@ -197,6 +212,10 @@ class ReportTeacherSecondaryListSerializer(serializers.ModelSerializer):
             "comment",
             "created_at",
             "updated_at",
+            "criterion_marks",
+            "objective_levels",
+            "criterion_achievements",
+            "final_grade",
             )
 
 # Подробный просмотр репорта учителя по предметам средней школы    
@@ -257,6 +276,9 @@ class ReportTeacherHighListSerializer(serializers.ModelSerializer):
             "comment",
             "created_at",
             "updated_at",
+            "criterion_achievements",
+            "final_grade",
+            "final_grade_ib",
             )
 
 # Подробный просмотр репорта учителя по предметам старшей школы  

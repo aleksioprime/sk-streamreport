@@ -8,9 +8,11 @@ import { ReportExtraResource } from "@/services/resources/report/reportExtra.res
 import { ReportTeacherPrimaryResource } from "@/services/resources/report/reportTeacherPrimary.resource";
 import { ReportTeacherSecondaryResource } from "@/services/resources/report/reportTeacherSecondary.resource";
 import { ReportTeacherHighResource } from "@/services/resources/report/reportTeacherHigh.resource";
+import { ReportPrimaryTopicResource } from "@/services/resources/report/reportPrimaryTopic.resource";
 import { StudyYearResource } from "@/services/resources/general/studyYear.resource";
 import { SubjectResource } from "@/services/resources/curriculum/subject.resource";
 import { CurriculumResource } from "@/services/resources/curriculum/curriculum.resource";
+import { CourseResource } from "@/services/resources/syllabus/course.resource";
 
 export default {
     auth: new AuthResource(),
@@ -23,7 +25,9 @@ export default {
     reportTeacherPrimary: new ReportTeacherPrimaryResource(),
     reportTeacherSecondary: new ReportTeacherSecondaryResource(),
     reportTeacherHigh: new ReportTeacherHighResource(),
+    reportPrimaryTopic: new ReportPrimaryTopicResource(),
     studyYear: new StudyYearResource(),
     subject: new SubjectResource(),
     curriculum: new CurriculumResource(),
+    course: new CourseResource(),
   };

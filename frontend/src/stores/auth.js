@@ -6,6 +6,8 @@ import JwtService from "@/services/jwt/jwt.service";
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null,
+    alertSuccess: false,
+    animationClass: null,
   }),
   getters: {
     isAuthenticated() {
@@ -49,5 +51,15 @@ export const useAuthStore = defineStore("auth", {
       resources.auth.setAuthHeader("");
       this.user = null;
     },
+
+    showMessageSuccess() {
+      this.alertSuccess = true;
+      this.animationClass = 'animate__animated animate__fadeIn';
+      // Скрыть сообщение через 3 секунды
+      setTimeout(() => {
+        this.animationClass = 'animate__animated animate__fadeOut';
+        this.alertSuccess = false;
+      }, 3000);
+    }
   },
 });
