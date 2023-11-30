@@ -7,6 +7,7 @@ export const useGeneralStore = defineStore("general", {
     studyYears: [],
     academicYears: [],
     groups: [],
+    users: [],
   }),
   getters: {
     isStudyYearsLoaded() {
@@ -75,6 +76,13 @@ export const useGeneralStore = defineStore("general", {
             full_name: item.name + ' класс' // Добавление нового свойства name
           };
         });
+      }
+    },
+    async loadUsers(config) {
+      const res = await resources.user.getUsers(config);
+      if (res.__state === "success") {
+        this.users = res.data
+        console.log(res.data)
       }
     },
   }

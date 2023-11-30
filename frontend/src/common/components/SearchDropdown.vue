@@ -5,11 +5,9 @@
         aria-expanded="false">
         {{ selectedItem[showName] || title }}
       </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenuModule">
-        <li class="mx-2">
+      <ul class="dropdown-menu pt-0" aria-labelledby="dropdownMenuModule">
+        <li class="px-2 pt-2 sticky-top bg-light">
           <input type="text" class="form-control" placeholder="Поиск..." v-model="searchQuery">
-        </li>
-        <li>
           <hr class="dropdown-divider">
         </li>
         <li v-for="(item, index) in filteredList" :key="index" @click="selectItem(item)">
@@ -24,7 +22,7 @@
 </template>
   
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 const BASE_NUMBER = 10
 
@@ -47,7 +45,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update:modelValue', 'save']);
+const emit = defineEmits(['update:modelValue', 'select']);
 
 const searchQuery = ref('');
 const selectedItem = ref({});
@@ -69,7 +67,13 @@ const selectItem = (item) => {
   selectedItem.value = item;
   showNumber.value = BASE_NUMBER;
   emit('update:modelValue', selectedItem.value);
+  emit('select');
 };
+
+// Следим за изменениями modelValue, чтобы обновлять локальное состояние
+watch(() => props.modelValue, (newVal) => {
+  selectedItem.value = newVal;
+});
 </script>
   
 <style scoped>

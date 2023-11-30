@@ -151,6 +151,7 @@ class ReportTeacherPrimaryViewSet(ModelViewSet):
     queryset = get_report_teacher_primary_queryset()
     filterset_class = ReportTeacherPrimaryFilter
     permission_classes = [IsAuthenticated]
+    pagination_class = None
 
     def get_serializer_class(self):
         if self.action == "list":

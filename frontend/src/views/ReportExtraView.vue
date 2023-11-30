@@ -40,7 +40,7 @@
           <div class="accordion" :id="`accordionStudent-${student.id}`" v-if="student.reports.length">
             <div class="accordion-item">
               <h2 class="accordion-header" :id="`heading-${student.id}`">
-                <button class="accordion-button collapsed" :class="{ 'report-success': student.report.comment }"
+                <button class="accordion-button collapsed p-2" :class="{ 'report-success': student.report.comment }"
                   type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${student.id}`" aria-expanded="true"
                   :aria-controls="`collapse-${student.id}`">
                   Репорт студента
@@ -221,7 +221,7 @@ const createStudentExtraReports = (id) => {
       period: currentReportPeriod.value.id,
       group: currentGroup.value.id,
     }).then((result) => {
-      console.log('Репорт успешно добавлен: ', result)
+      // console.log('Репорт успешно добавлен: ', result)
       getStudentExtraReports();
     })
   }
@@ -243,9 +243,9 @@ const cancelRemoveStudentExtraReport = () => {
 // Удаление выбранного репорта студента и закрытие модального окна
 // После успешного ответа происходит повторный запрос на обновление списка студентов
 const removeStudentExtraReport = () => {
-  console.log('Запрос на удаление репорта студенту: ', currentStudent.value);
+  // console.log('Запрос на удаление репорта студенту: ', currentStudent.value);
   reportStore.removeReportExtra(currentStudent.value.report.id).then((result) => {
-    console.log('Репорт успешно удалён: ', result);
+    // console.log('Репорт успешно удалён: ', result);
     getStudentExtraReports();
   })
   confirmationModal.hide();
@@ -266,7 +266,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   reportStore.updateReportExtra(updatedObject).then((result) => {
-    console.log('Репорт успешно обновлён: ', result)
+    // console.log('Репорт успешно обновлён: ', result)
     getStudentExtraReports();
   })
 };

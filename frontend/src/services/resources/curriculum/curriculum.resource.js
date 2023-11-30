@@ -5,11 +5,11 @@ export class CurriculumResource extends CrudService {
     super("/api/curriculum");
   }
 
-  getCurriculums() {
-    return this.get();
+  getCurriculums(config) {
+    return this.get(config);
   }
 
-  retrieveCurriculum() {
+  retrieveCurriculum(id) {
     return this.retrieve(id);
   }
 }

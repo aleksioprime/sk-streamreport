@@ -17,8 +17,6 @@
 <script setup>
 import { ref, watch } from 'vue';
 
-const BASE_NUMBER = 10
-
 const props = defineProps({
   modelValue: {
     type: Object,

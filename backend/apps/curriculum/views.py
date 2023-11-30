@@ -34,6 +34,7 @@ from apps.curriculum.filters import (
 class CurriculumViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     filterset_class = CurriculumFilter
+    pagination_class = None
 
     def get_queryset(self):
         return get_curriculum_queryset()

@@ -71,6 +71,7 @@ class SubjectListSerializer(serializers.ModelSerializer):
 
 # Вывод списка учебных планов
 class CurriculumListSerializer(serializers.ModelSerializer):
+    level_name = serializers.CharField(source='get_level_display', read_only=True)
     class Meta:
         model = Curriculum
         fields = (
@@ -78,7 +79,9 @@ class CurriculumListSerializer(serializers.ModelSerializer):
             "year",
             "name",
             "name_short",
-            "level"
+            "level",
+            "level_name",
+            "ib",
             )
 
 # Список параллелей обучения

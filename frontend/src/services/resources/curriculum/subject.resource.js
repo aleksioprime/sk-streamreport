@@ -5,7 +5,7 @@ export class SubjectResource extends CrudService {
     super("/api/subject");
   }
 
-  getSubjects() {
-    return this.get();
+  getSubjects(config) {
+    return this.get(config);
   }
 }

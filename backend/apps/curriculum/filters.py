@@ -13,10 +13,14 @@ class SubjectAdminFilter(AutocompleteFilter):
     field_name = 'subject'
 
 class SubjectFilter(django_filters.FilterSet):
+    curriculum_loads__curriculum = django_filters.AllValuesFilter(field_name='curriculum_loads__curriculum', distinct=True)
+    curriculum_loads__years__classes = django_filters.AllValuesFilter(field_name='curriculum_loads__years__classes', distinct=True)
     class Meta:
         model = Subject
         fields = {
             'department',
+            'curriculum_loads__curriculum',
+            'curriculum_loads__years__classes',
         }
 
 class CurriculumFilter(django_filters.FilterSet):

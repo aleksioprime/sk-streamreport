@@ -9,6 +9,10 @@ export const useReportStore = defineStore("report", {
   state: () => ({
     reportPeriods: [],
     studentExtraReports: [],
+    reportTeachers: [],
+    reportTeachersPrimary: [],
+    reportTeachersSecondary: [],
+    reportTeachersHigh: []
   }),
   getters: {
     isReportPeriodsLoaded() {
@@ -19,6 +23,21 @@ export const useReportStore = defineStore("report", {
     isStudentExtraReportsLoaded() {
       return (
         this.studentExtraReports.length > 0
+      );
+    },
+    isReportTeachersPrimaryLoaded() {
+      return (
+        this.reportTeachersPrimary.length > 0
+      );
+    },
+    isReportTeachersSecondaryLoaded() {
+      return (
+        this.reportTeachersSecondary.length > 0
+      );
+    },
+    isReportTeachersHighLoaded() {
+      return (
+        this.reportTeachersHigh.length > 0
       );
     },
   },
@@ -53,6 +72,54 @@ export const useReportStore = defineStore("report", {
     },
     async removeReportExtra(report) {
       return await resources.reportExtra.removeReportExtra(report);
+    },
+    async loadReportTeachersPrimary(config) {
+      const res = await resources.reportTeacherPrimary.getReportTeachersPrimary(config);
+      if (res.__state === "success") {
+        this.reportTeachersPrimary = res.data
+        this.reportTeachers = res.data
+      }
+    },
+    async createReportTeacherPrimary(report) {
+      return await resources.reportTeacherPrimary.createReportTeacherPrimary(report);
+    },
+    async updateReportTeacherPrimary(report) {
+      return await resources.reportTeacherPrimary.updateReportTeacherPrimary(report);
+    },
+    async removeReportTeacherPrimary(report) {
+      return await resources.reportTeacherPrimary.removeReportTeacherPrimary(report);
+    },
+    async loadReportTeachersSecondary(config) {
+      const res = await resources.reportTeacherSecondary.getReportTeachersSecondary(config);
+      if (res.__state === "success") {
+        this.reportTeachersSecondary = res.data
+        this.reportTeachers = res.data
+      }
+    },
+    async createReportTeacherSecondary(report) {
+      return await resources.reportTeacherSecondary.createReportTeacherSecondary(report);
+    },
+    async updateReportTeacherSecondary(report) {
+      return await resources.reportTeacherSecondary.updateReportTeacherSecondary(report);
+    },
+    async removeReportTeacherSecondary(report) {
+      return await resources.reportTeacherSecondary.removeReportTeacherSecondary(report);
+    },
+    async loadReportTeachersHigh(config) {
+      const res = await resources.reportTeacherHigh.getReportTeachersHigh(config);
+      if (res.__state === "success") {
+        this.reportTeachersHigh = res.data
+        this.reportTeachers = res.data
+      }
+    },
+    async createReportTeacherHigh(report) {
+      return await resources.reportTeacherHigh.createReportTeacherHigh(report);
+    },
+    async updateReportTeacherHigh(report) {
+      return await resources.reportTeacherHigh.updateReportTeacherHigh(report);
+    },
+    async removeReportTeacherHigh(report) {
+      return await resources.reportTeacherHigh.removeReportTeacherHigh(report);
     },
   }
 });

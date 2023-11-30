@@ -5,8 +5,12 @@ import { AcademicYearResource } from "@/services/resources/general/academicYear.
 import { ReportPeriodResource } from "@/services/resources/report/reportPeriod.resource";
 import { StudentExtraReportResource } from "@/services/resources/report/studentExtraReport.resource";
 import { ReportExtraResource } from "@/services/resources/report/reportExtra.resource";
+import { ReportTeacherPrimaryResource } from "@/services/resources/report/reportTeacherPrimary.resource";
+import { ReportTeacherSecondaryResource } from "@/services/resources/report/reportTeacherSecondary.resource";
+import { ReportTeacherHighResource } from "@/services/resources/report/reportTeacherHigh.resource";
 import { StudyYearResource } from "@/services/resources/general/studyYear.resource";
-import { SubjectResource } from "@/services/resources/subject.resource";
+import { SubjectResource } from "@/services/resources/curriculum/subject.resource";
+import { CurriculumResource } from "@/services/resources/curriculum/curriculum.resource";
 
 export default {
     auth: new AuthResource(),
@@ -16,6 +20,10 @@ export default {
     reportPeriod: new ReportPeriodResource(),
     studentExtraReport: new StudentExtraReportResource(),
     reportExtra: new ReportExtraResource(),
+    reportTeacherPrimary: new ReportTeacherPrimaryResource(),
+    reportTeacherSecondary: new ReportTeacherSecondaryResource(),
+    reportTeacherHigh: new ReportTeacherHighResource(),
     studyYear: new StudyYearResource(),
     subject: new SubjectResource(),
+    curriculum: new CurriculumResource(),
   };

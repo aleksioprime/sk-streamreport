@@ -9,7 +9,7 @@ def get_user_queryset():
     return User.objects.all().prefetch_related(
             "groups",
             "departments",
-        ).order_by("-id")
+        )
 
 def get_group_queryset():
     return ClassGroup.objects.all().select_related(

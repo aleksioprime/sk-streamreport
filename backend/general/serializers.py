@@ -56,6 +56,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 # Список пользователей
 class UserListGeneralSerializer(serializers.ModelSerializer):
+    short_name = serializers.CharField(source='get_short_name', read_only=True)
     class Meta:
         model = User
         fields = (
@@ -67,6 +68,7 @@ class UserListGeneralSerializer(serializers.ModelSerializer):
             "email",
             "dnevnik_id",
             "position",
+            "short_name"
             )
 
 # Список пользователей
@@ -150,6 +152,7 @@ class StudyYearIbListSerializer(serializers.ModelSerializer):
 # Параллели обучения
 class StudyYearListGeneralSerializer(serializers.ModelSerializer):
     ib = StudyYearIbListSerializer()
+    level_name = serializers.CharField(source='get_level_display', read_only=True)
     class Meta:
         model = StudyYear
         fields = (
@@ -157,7 +160,9 @@ class StudyYearListGeneralSerializer(serializers.ModelSerializer):
             "number",
             "level",
             "ib",
+            "level_name",
             )
+    
 
 # Список групп
 class ClassGroupListGeneralSerializer(serializers.ModelSerializer):
@@ -171,6 +176,7 @@ class ClassGroupListGeneralSerializer(serializers.ModelSerializer):
             "year_study",
             "letter",
             "name",
+            "curriculum",
             )
 
 # Информация о группе
@@ -190,4 +196,5 @@ class ClassRetrieveSerializer(serializers.ModelSerializer):
             "students",
             "mentor",
             "extra",
+            "curriculum",
         )

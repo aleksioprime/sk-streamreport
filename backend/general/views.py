@@ -42,7 +42,8 @@ from general.services import (
 )
 
 from general.filters import (
-    ClassGroupFilter
+    ClassGroupFilter,
+    UserFilter
 )
 
 @extend_schema_view(post=extend_schema(summary='Получение токена', tags=['База: Аутентификация']))
@@ -107,6 +108,8 @@ class CustomTokenRefreshView(TokenRefreshView):
     )
 class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
+    pagination_class = None
+    filterset_class = UserFilter
 
     def get_queryset(self):
         return get_user_queryset()

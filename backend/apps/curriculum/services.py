@@ -10,7 +10,7 @@ def get_subject_queryset():
         'group_ib',
         'group_fgos',
         'discipline_ib',
-        'department'
+        'department',
     )
 
 def get_curriculum_queryset():

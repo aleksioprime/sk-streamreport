@@ -134,7 +134,8 @@ class ClassGroup(models.Model):
     """ Учебные классы """
     year_academic = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="classes")
     year_study = models.ForeignKey('general.StudyYear', verbose_name=_("Параллель"), on_delete=models.SET_NULL, null=True, related_name="classes")
-    year_study_ib = models.ForeignKey('general.StudyYearIb', verbose_name=_("Год обучения по IB"), on_delete=models.SET_NULL, null=True, related_name="classes")
+    year_study_ib = models.ForeignKey('general.StudyYearIb', verbose_name=_("Год обучения по IB"), on_delete=models.SET_NULL, null=True, blank=True, related_name="classes")
+    curriculum = models.ForeignKey('curriculum.Curriculum', verbose_name=_("Учебный план"), on_delete=models.SET_NULL, null=True, related_name="classes")
     letter = models.CharField(max_length=1, verbose_name=_("Литера класса"), null=True)
     dnevnik_id = models.CharField(max_length=255, verbose_name=_('ID системы Дневник.РУ'), blank=True, null=True)
     students = models.ManyToManyField('general.user', verbose_name=_("Студенты"), related_name="classes")

@@ -220,6 +220,7 @@ class ClassGroupModelAdmin(ImportExportModelAdmin):
         "year_study_ib",
         "mentor",
         "dnevnik_id",
+        "curriculum",
         "count",
     )
     list_display_links = (
@@ -234,6 +235,7 @@ class ClassGroupModelAdmin(ImportExportModelAdmin):
         "dnevnik_id",
         "mentor",
         "students",
+        "curriculum",
     )
     autocomplete_fields = ['mentor']
     

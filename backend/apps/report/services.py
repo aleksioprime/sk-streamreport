@@ -54,11 +54,14 @@ def get_report_teacher_primary_queryset():
         'student',
         'author',
         'period',
+        'period__year',
         'group',
-        'subject'
+        'group__year_academic',
+        'group__year_study',
+        'subject',
         ).prefetch_related(
             'criterion_achievements',
-            'topic_achievements'
+            'topic_achievements',
             )
 
 def get_report_secondary_criterion_queryset():
@@ -77,8 +80,11 @@ def get_report_teacher_secondary_queryset():
         'student',
         'author',
         'period',
+        'period__year',
         'group',
-        'subject'
+        'group__year_academic',
+        'group__year_study',
+        'subject',
         ).prefetch_related(
             'criterion_achievements',
             'criterion_marks',
@@ -90,8 +96,11 @@ def get_report_teacher_high_queryset():
         'student',
         'author',
         'period',
+        'period__year',
         'group',
-        'subject'
+        'group__year_academic',
+        'group__year_study',
+        'subject',
         ).prefetch_related(
             'criterion_achievements',
             )

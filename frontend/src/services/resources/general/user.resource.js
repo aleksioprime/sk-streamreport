@@ -5,8 +5,8 @@ export class UserResource extends CrudService {
     super("/api/user");
   }
 
-  getUsers() {
-    return this.get();
+  getUsers(config) {
+    return this.get(config);
   }
 
   createUser(user) {

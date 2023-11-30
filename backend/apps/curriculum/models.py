@@ -78,6 +78,7 @@ class Curriculum(models.Model):
     name = models.CharField(max_length=128, verbose_name=_("Название"), null=True, blank=True)
     name_short = models.CharField(max_length=32, verbose_name=_("Сокращённое название"), null=True, blank=True)
     level = models.CharField(verbose_name=_("Уровень образования"), choices=LevelNationChoices.choices, default=None, max_length=4)
+    ib = models.BooleanField(verbose_name=_('Наличие компонента IB'), default=False)
     class Meta:
         verbose_name = 'Учебный план'
         verbose_name_plural = 'Учебные планы'

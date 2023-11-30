@@ -6,7 +6,6 @@ export const useCurriculumStore = defineStore("curriculum", {
   state: () => ({
     subjects: [],
     curriculums: [],
-    groups: [],
   }),
   getters: {
     isSubjectsLoaded() {
@@ -16,23 +15,17 @@ export const useCurriculumStore = defineStore("curriculum", {
     },
   },
   actions: {
-    async loadSubjects() {
-      const res = await resources.subject.getSubjects();
+    async loadSubjects(config) {
+      const res = await resources.subject.getSubjects(config);
       if (res.__state === "success") {
         this.subjects = res.data
       }
     },
-    async loadCurriculums() {
-      const res = await resources.subject.getCurriculums();
+    async loadCurriculums(config) {
+      const res = await resources.curriculum.getCurriculums(config);
       if (res.__state === "success") {
         this.curriculums = res.data
       }
     },
-    async loadGroups() {
-      const res = await resources.subject.getGroups();
-      if (res.__state === "success") {
-        this.groups = res.data
-      }
-    }
   }
 });

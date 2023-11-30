@@ -83,6 +83,7 @@ class CurriculumModelAdmin(ImportExportModelAdmin):
         "name_short",
         "level",
         "year",
+        "ib",
     )
     readonly_fields = (
         "display_loads",
