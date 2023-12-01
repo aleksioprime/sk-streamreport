@@ -8,9 +8,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, nextTick } from 'vue';
 
-// Определяем пропс и эмит
+// Определяем в props текущее значение поля и название этого поля
 const props = defineProps({
   propData: {
     type: String,
@@ -22,6 +22,7 @@ const props = defineProps({
   }
 });
 
+// Определяем в emit событие сохранение поля
 const emit = defineEmits(['save']);
 
 // Реактивные данные и методы
@@ -30,26 +31,7 @@ const text = ref(props.propData);
 const originalText = ref(props.propData);
 const inputRef = ref(null);
 
-const toggleEditMode = (event) => {
-  if (event.type === 'blur' || (event.type === 'keyup' && event.key === 'Escape')) {
-    editMode.value = false;
-    text.value = originalText.value; // Возвращаем к исходному значению
-  }
-};
-
-const handleKeyup = (event) => {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault(); // Предотвратить перенос текста на новую строку
-    originalText.value = text.value; // Сохраняем новое значение
-    editMode.value = false;
-    emit('save', { value: text.value, propName: props.propName });
-  } else if (event.key === 'Escape') {
-    text.value = originalText.value; // Возвращаем к исходному значению
-    editMode.value = false;
-  }
-};
-
-// Изменение режима редактирования при клике на span
+// Переход в режим редактирования, перевод курсора в поле ввода и привязка функции автоматического увеличения textarea
 const enableEditMode = () => {
   editMode.value = true;
   nextTick(() => {
@@ -61,6 +43,26 @@ const enableEditMode = () => {
   });
 };
 
+// Отмена редактирования и возврат к предыдущему значению при потере фокуса или нажатия Escape 
+const toggleEditMode = (event) => {
+  if (event.type === 'blur' || (event.type === 'keyup' && event.key === 'Escape')) {
+    editMode.value = false;
+    text.value = originalText.value; // Возвращаем к исходному значению
+  }
+};
+
+// Сохранение результата при нажатии на enter и отмена сохранения при нажатии на Escape
+const handleKeyup = (event) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault(); // Предотвратить перенос текста на новую строку
+    originalText.value = text.value; // Сохраняем новое значение
+    editMode.value = false;
+    emit('save', { value: text.value, propName: props.propName });
+  } else if (event.key === 'Escape') {
+    text.value = originalText.value; // Возвращаем к исходному значению
+    editMode.value = false;
+  }
+};
 </script>
 
 <style scoped>

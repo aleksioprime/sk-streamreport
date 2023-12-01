@@ -82,7 +82,7 @@ export const useGeneralStore = defineStore("general", {
       const res = await resources.user.getUsers(config);
       if (res.__state === "success") {
         this.users = res.data
-        console.log(res.data)
+        // console.log(res.data)
       }
     },
   }

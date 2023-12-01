@@ -42,6 +42,8 @@ from apps.report.serializers import (
     ReportExtraRetrieveSerializer,
     ReportExtraUpdateSerializer,
     UserListReportExtraSerializer,
+    UserListReportMentorPrimarySerializer,
+    UserListReportMentorSerializer
 )
 
 from apps.report.services import (
@@ -60,7 +62,9 @@ from apps.report.services import (
     get_report_primary_unit_queryset,
     get_report_mentor_primary_queryset,
     get_report_extra_queryset,
-    get_user_report_extra_queryset
+    get_user_report_extra_queryset,
+    get_user_report_mentor_primary_queryset,
+    get_user_report_mentor_queryset
 )
 
 from apps.report.filters import (
@@ -110,6 +114,7 @@ class ReportCriterionViewSet(ModelViewSet):
             return ReportCriterionListSerializer
         return ReportCriterionUpdateSerializer
     
+    
 # Уровни достижений по критериям для репортов: список, создание, редактирование и удаление
 @extend_schema_view(
     list=extend_schema(summary='Вывод списка уровней достижений по критериям для репортов', tags=['Репорты: Уровни достижений по критерию']),
@@ -139,6 +144,27 @@ class ReportCriterionAchievementViewSet(ModelViewSet):
         if self.action == "list":
             return ReportCriterionAchievementListSerializer
         return ReportCriterionAchievementUpdateSerializer
+    
+    # Переопределение метода create для массового создания объектов
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data,list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        if isinstance(serializer.instance, list):
+            data = [ReportCriterionAchievementListSerializer(instance).data for instance in serializer.instance]
+        else:
+            data = ReportCriterionAchievementListSerializer(serializer.instance).data
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    # Переопределение метода partial_update для ответа с другим сериализатором
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = ReportCriterionAchievementListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
     
 # Репорты учителя в начальной школе: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
@@ -186,9 +212,13 @@ class ReportPrimaryTopicViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        detail_serializer = ReportPrimaryTopicListSerializer(serializer.instance)
-        return Response(detail_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        if isinstance(serializer.instance, list):
+            data = [ReportPrimaryTopicListSerializer(instance).data for instance in serializer.instance]
+        else:
+            data = ReportPrimaryTopicListSerializer(serializer.instance).data
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
     
+    # Переопределение метода partial_update для ответа с другим сериализатором
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
@@ -389,3 +419,38 @@ class UserReportExtraViewSet(ModelViewSet):
     
     def get_serializer_class(self):
         return UserListReportExtraSerializer
+    
+# Список студентов с репортами классных руководитедей начальной школы: список, 
+@extend_schema_view(
+    list=extend_schema(summary='Вывод списка студентов с репортами классных руководителей начальной школы', tags=['Репорты: Студенты с репортами классных руководителей']),
+    )
+class UserReportMentorPrimaryViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    filterset_class = UserFilter
+    pagination_class = None
+
+    def get_queryset(self):
+        period = self.request.query_params.get('report_period', None)
+        group = self.request.query_params.get('report_group', None)
+        return get_user_report_mentor_primary_queryset(group, period)
+    
+    def get_serializer_class(self):
+        return UserListReportMentorPrimarySerializer
+    
+
+# Список студентов с репортами классных руководитедей: список, 
+@extend_schema_view(
+    list=extend_schema(summary='Вывод списка студентов с репортами классных руководителей', tags=['Репорты: Студенты с репортами классных руководителей']),
+    )
+class UserReportMentorViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    filterset_class = UserFilter
+    pagination_class = None
+
+    def get_queryset(self):
+        period = self.request.query_params.get('report_period', None)
+        group = self.request.query_params.get('report_group', None)
+        return get_user_report_mentor_queryset(group, period)
+    
+    def get_serializer_class(self):
+        return UserListReportMentorSerializer

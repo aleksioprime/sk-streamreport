@@ -28,8 +28,8 @@
             </a>
             <div class="dropdown-menu">
               <router-link :to="{ name: 'reportTeacher' }" class="dropdown-item">Репорты учителя</router-link>
-              <router-link :to="{ name: 'home' }" class="dropdown-item">Репорты наставника</router-link>
               <router-link :to="{ name: 'reportExtra' }" class="dropdown-item">Репорты службы сопровождения</router-link>
+              <router-link :to="{ name: 'reportMentor' }" class="dropdown-item">Репорты наставника</router-link>
             </div>
           </li>
           <li class="nav-item dropdown">

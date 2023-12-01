@@ -60,9 +60,9 @@ class ReportPrimaryTopicUpdateSerializer(serializers.ModelSerializer):
         model = ReportPrimaryTopic
         fields = '__all__'
 
+    # Переопределение метода для создания нескольких объектов
     def create(self, validated_data):
         # Проверка, является ли validated_data списком
-        print("Создание объектов в сериализаторе")
         if isinstance(validated_data, list):
             objects_to_create = [ReportPrimaryTopic(**item) for item in validated_data]
             return ReportPrimaryTopic.objects.bulk_create(objects_to_create)

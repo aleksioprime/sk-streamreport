@@ -1,10 +1,10 @@
 <template>
-  <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" data-bs-backdrop="static" 
+  <div class="modal fade" :id="nameModal" tabindex="-1" role="dialog" :aria-labelledby="`${nameModal}Label`" data-bs-backdrop="static" 
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalLabel">Подтвердите действие</h5>
+          <h5 class="modal-title" :id="`${nameModal}Label`">Подтвердите действие</h5>
           <button type="button" class="btn-close" data-dismiss="modal" aria-label="Закрыть" @click="cancelModal"></button>
         </div>
         <div class="modal-body">
@@ -20,6 +20,13 @@
 </template>
 
 <script setup>
+
+const props = defineProps({
+  nameModal: {
+    type: String,
+    default: 'confirmationModal',
+  },
+});
 
 const emit = defineEmits(['confirm', 'cancel']);
 

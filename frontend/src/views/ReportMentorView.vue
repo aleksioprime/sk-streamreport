@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Репорты службы сопровождения</h1>
+    <h1>Репорты наставника</h1>
     <div class="py-2">
       <div class="d-flex flex-wrap">
         <div class="m-2">
@@ -54,15 +54,23 @@
       <button
         type="button"
         class="btn btn-primary m-2"
-        @click="getStudentExtraReports"
+        @click="getStudentMentorReports"
         :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)"
       >
         Показать студентов
       </button>
       <hr class="hr" />
-      <div v-if="reportStore.studentExtraReports.length">
+      <h5 v-if="!isEmpty(currentStudyYear)" class="mb-2">
+        Тип репорта: {{ currentStudyYear.level_name }}
+      </h5>
+      <h5>
+        <span v-if="!isEmpty(currentGroup)"
+          >Класс: {{ currentGroup.name }}</span
+        >
+      </h5>
+      <div v-if="reportStore.studentMentorReports.length">
         <div
-          v-for="student in reportStore.studentExtraReports"
+          v-for="student in reportStore.studentMentorReports"
           :key="student.id"
           class="my-3"
         >
@@ -88,7 +96,7 @@
                     <a
                       class="dropdown-item"
                       href="##"
-                      @click="createStudentExtraReport(student.id)"
+                      @click="createStudentMentorReport(student.id)"
                       >Добавит репорт</a
                     >
                   </li>
@@ -165,8 +173,8 @@
     </div>
     <!-- Подключение модального окна -->
     <confirmation-modal
-      @confirm="removeStudentExtraReport"
-      @cancel="cancelRemoveStudentExtraReport"
+      @confirm="removeStudentMentorReport"
+      @cancel="cancelRemoveStudentMentorReport"
     >
       Вы действитель хотите удалить репорт студента:
       <strong
@@ -224,7 +232,7 @@ const filteredGroup = computed(() => {
 // запись в localstorage, сброс всех выбранных опций с очисткой списка студентов
 const selectAcademicYear = () => {
   localStorage.setItem(
-    "selectedAcademicYearReportExtra",
+    "selectedAcademicYearReportMentor",
     JSON.stringify(currentAcademicYear.value)
   );
   resetSelectedOptions();
@@ -234,7 +242,7 @@ const selectAcademicYear = () => {
 // запись в localstorage, получение классов, очистка списка студентов, сброс выбранного класса
 const selectStudyYear = () => {
   localStorage.setItem(
-    "selectedStudyYearReportExtra",
+    "selectedStudyYearReportMentor",
     JSON.stringify(currentStudyYear.value)
   );
   resetSelectedGroup();
@@ -245,7 +253,7 @@ const selectStudyYear = () => {
 // запись в localstorage, очистка списка студентов
 const selectReportPeriod = () => {
   localStorage.setItem(
-    "selectedReportPeriodReportExtra",
+    "selectedReportPeriodReportMentor",
     JSON.stringify(currentReportPeriod.value)
   );
   resetStudents();
@@ -255,7 +263,7 @@ const selectReportPeriod = () => {
 // запись в localstorage, очистка списка студентов
 const selectGroup = () => {
   localStorage.setItem(
-    "selectedGroupReportExtra",
+    "selectedGroupReportMentor",
     JSON.stringify(currentGroup.value)
   );
   resetStudents();
@@ -272,24 +280,24 @@ const resetSelectedOptions = () => {
 // Сброс выбранной учебной параллели
 const resetSelectedStudyYear = () => {
   currentStudyYear.value = {};
-  localStorage.removeItem("selectedStudyYearReportExtra");
+  localStorage.removeItem("selectedStudyYearReportMentor");
 };
 
 // Сброс выбранного периода репрорта
 const resetSelectedReportPeriod = () => {
   currentReportPeriod.value = {};
-  localStorage.removeItem("selectedReportPeriodReportExtra");
+  localStorage.removeItem("selectedReportPeriodReportMentor");
 };
 
 // Сброс выбранного класса
 const resetSelectedGroup = () => {
   currentGroup.value = {};
-  localStorage.removeItem("selectedGroupReportExtra");
+  localStorage.removeItem("selectedGroupReportMentor");
 };
 
 // Очистка списка студентов
 const resetStudents = () => {
-  reportStore.studentExtraReports = [];
+  reportStore.studentMentorReports = [];
 };
 
 // Запрос на получение списка групп (срабатывает, если выбран текущий учебный год и параллель)
@@ -307,17 +315,18 @@ const getGroups = () => {
 
 // Запрос на получение списка студентов
 // Нужно выбрать текущий учебный год, параллель и класс
-const getStudentExtraReports = () => {
+const getStudentMentorReports = () => {
   // console.log('Запрос студентов с репортами')
   if (
-    !(
-      isEmpty(currentStudyYear.value) &&
-      isEmpty(currentAcademicYear.value) &&
-      isEmpty(currentGroup.value)
-    )
+    isEmpty(currentStudyYear.value) ||
+    isEmpty(currentAcademicYear.value) ||
+    isEmpty(currentGroup.value)
   ) {
+    return null;
+  }
+  if (currentStudyYear.value.level == "noo") {
     reportStore
-      .loadStudentExtraReports({
+      .loadStudentMentorPrimaryReports({
         params: {
           groups: 3,
           classes: currentGroup.value.id,
@@ -326,7 +335,20 @@ const getStudentExtraReports = () => {
         },
       })
       .then(() => {
-        // console.log(reportStore.studentExtraReports)
+        console.log(reportStore.studentMentorReports);
+      });
+  } else {
+    reportStore
+      .loadStudentMentorReports({
+        params: {
+          groups: 3,
+          classes: currentGroup.value.id,
+          report_period: currentReportPeriod.value.id,
+          report_group: currentGroup.value.id,
+        },
+      })
+      .then(() => {
+        console.log(reportStore.studentMentorReports);
       });
   }
 };
@@ -334,11 +356,14 @@ const getStudentExtraReports = () => {
 // Запрос на создание репорта для студента:
 // Нужно выбрать период и класс
 // После успешного ответа происходит повторный запрос на обновление списка студентов
-const createStudentExtraReport = (id) => {
+const createStudentMentorReport = (id) => {
   // console.log('Запрос на создание репорта для студента')
-  if (!(isEmpty(currentReportPeriod.value) && isEmpty(currentGroup.value))) {
+  if (isEmpty(currentReportPeriod.value) || isEmpty(currentGroup.value)) {
+    return null;
+  }
+  if (currentStudyYear.value.level == "noo") {
     reportStore
-      .createReportExtra({
+      .createReportMentorPrimary({
         student: id,
         author: authStore.user.id,
         period: currentReportPeriod.value.id,
@@ -346,7 +371,19 @@ const createStudentExtraReport = (id) => {
       })
       .then((result) => {
         // console.log('Репорт успешно добавлен: ', result)
-        getStudentExtraReports();
+        getStudentMentorReports();
+      });
+  } else {
+    reportStore
+      .createReportMentor({
+        student: id,
+        author: authStore.user.id,
+        period: currentReportPeriod.value.id,
+        group: currentGroup.value.id,
+      })
+      .then((result) => {
+        // console.log('Репорт успешно добавлен: ', result)
+        getStudentMentorReports();
       });
   }
 };
@@ -358,28 +395,31 @@ const showConfirmationModal = (student) => {
 };
 
 // Закрытие модального окна для подтверждения удаления (отмена)
-const cancelRemoveStudentExtraReport = () => {
+const cancelRemoveStudentMentorReport = () => {
   confirmationModal.hide();
   currentStudent.value = [];
 };
 
 // Удаление выбранного репорта студента и закрытие модального окна
 // После успешного ответа происходит повторный запрос на обновление списка студентов
-const removeStudentExtraReport = () => {
+const removeStudentMentorReport = () => {
   // console.log('Запрос на удаление репорта студенту: ', currentStudent.value);
-  reportStore
-    .removeReportExtra(currentStudent.value.report.id)
-    .then((result) => {
-      // console.log('Репорт успешно удалён: ', result);
-      getStudentExtraReports();
-    });
+  if (currentStudyYear.value.level == "noo") {
+    reportStore
+      .removeReportMentorPrimary(currentStudent.value.report.id)
+      .then((result) => {
+        // console.log('Репорт успешно удалён: ', result);
+        getStudentMentorReports();
+      });
+  } else {
+    reportStore
+      .removeReportMentor(currentStudent.value.report.id)
+      .then((result) => {
+        // console.log('Репорт успешно удалён: ', result);
+        getStudentMentorReports();
+      });
+  }
   confirmationModal.hide();
-};
-
-// Получение состояния режима редактирования в компоненте
-// Необходимо для блокирования редактирования других компонентов
-const toggleEdit = (state) => {
-  isEditing.value = state;
 };
 
 // Запрос на сохранение данных из компонента редактирования
@@ -390,44 +430,52 @@ const handleSave = async (editData, id) => {
     id: id,
     [editData.propName]: editData.value,
   };
-  reportStore.updateReportExtra(updatedObject).then((result) => {
-    // console.log('Репорт успешно обновлён: ', result)
-    getStudentExtraReports();
-  });
+  if (currentStudyYear.value.level == "noo") {
+    reportStore.updateReportMentorPrimary(updatedObject).then((result) => {
+      // console.log('Репорт успешно обновлён: ', result)
+      getStudentMentorReports();
+    });
+  } else {
+    reportStore.updateReportMentor(updatedObject).then((result) => {
+      // console.log('Репорт успешно обновлён: ', result)
+      getStudentMentorReports();
+    });
+  }
+};
+
+// Получение состояния режима редактирования в компоненте
+// Необходимо для блокирования редактирования других компонентов
+const toggleEdit = (state) => {
+  isEditing.value = state;
 };
 
 // Функция восстановления текущих значений периода, параллели и класса из LocalStorage
 const recoveryOptions = () => {
   const savedSelectionStudyYear = JSON.parse(
-    localStorage.getItem("selectedStudyYearReportExtra")
+    localStorage.getItem("selectedStudyYearReportMentor")
   );
   if (savedSelectionStudyYear) {
     currentStudyYear.value = savedSelectionStudyYear;
   }
   const savedSelectionReportPeriod = JSON.parse(
-    localStorage.getItem("selectedReportPeriodReportExtra")
+    localStorage.getItem("selectedReportPeriodReportMentor")
   );
   if (savedSelectionReportPeriod) {
     currentReportPeriod.value = savedSelectionReportPeriod;
   }
   const savedSelectionGroup = JSON.parse(
-    localStorage.getItem("selectedGroupReportExtra")
+    localStorage.getItem("selectedGroupReportMentor")
   );
   if (savedSelectionGroup) {
     currentGroup.value = savedSelectionGroup;
   }
 };
 
-// Запросы и установки при монтировании компонента:
-// Восстановление опций из LocalStorage, загрузка данных в соответствии с опциями (если они не загружены)
-// Создание объекта модального окна из компонента
 onMounted(() => {
   recoveryOptions();
   if (!generalStore.isAcademicYearsLoaded) {
     generalStore.loadAcademicYears().then(() => {
       currentAcademicYear.value = generalStore.relevantYear;
-      getGroups();
-      getStudentExtraReports();
     });
   } else {
     currentAcademicYear.value = generalStore.relevantYear;
@@ -439,14 +487,8 @@ onMounted(() => {
     reportStore.loadReportPeriods();
   }
   if (!generalStore.isGroupsLoaded) {
-    generalStore.groups = [];
+    getGroups();
   }
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });
 </script>
-
-<style scoped>
-.report-success {
-  background-color: rgb(174, 232, 232);
-}
-</style>

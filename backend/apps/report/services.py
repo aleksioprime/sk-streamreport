@@ -32,7 +32,8 @@ def get_report_criterion_queryset():
         'author',
         ).prefetch_related(
             'subjects',
-            'years'
+            'years',
+            'levels'
             )
 
 def get_report_criterion_level_queryset():
@@ -41,7 +42,7 @@ def get_report_criterion_level_queryset():
 def get_report_criterion_achievement_queryset():
     return ReportCriterionAchievement.objects.all().select_related(
         'criterion',
-        'achievement'
+        'achievement',
         )
 
 def get_report_primary_achievement_queryset():
@@ -61,7 +62,13 @@ def get_report_teacher_primary_queryset():
         'subject',
         ).prefetch_related(
             'criterion_achievements',
+            'criterion_achievements__criterion',
+            'criterion_achievements__criterion__author',
+            'criterion_achievements__criterion__subjects',
+            'criterion_achievements__criterion__years',
+            'criterion_achievements__criterion__levels',
             'topic_achievements',
+            'topic_achievements__topic',
             )
 
 def get_report_secondary_criterion_queryset():
@@ -145,12 +152,33 @@ def get_report_extra_queryset():
         )
 
 def get_user_report_extra_queryset(group=None, period=None):
-    print(group, period)
     return User.objects.all().prefetch_related(
         'reportextra_student_reports',
         Prefetch(
                 'reportextra_student_reports', 
                 queryset=ReportExtra.objects.filter(group=group, period=period), 
+                to_attr='filtered_reports'
+            ),
+        'classes',
+        )
+
+def get_user_report_mentor_primary_queryset(group=None, period=None):
+    return User.objects.all().prefetch_related(
+        'reportmentorprimary_student_reports',
+        Prefetch(
+                'reportmentorprimary_student_reports', 
+                queryset=ReportMentorPrimary.objects.filter(group=group, period=period), 
+                to_attr='filtered_reports'
+            ),
+        'classes',
+        )
+
+def get_user_report_mentor_queryset(group=None, period=None):
+    return User.objects.all().prefetch_related(
+        'reportmentor_student_reports',
+        Prefetch(
+                'reportmentor_student_reports', 
+                queryset=ReportMentor.objects.filter(group=group, period=period), 
                 to_attr='filtered_reports'
             ),
         'classes',

@@ -65,6 +65,7 @@ const filteredList = computed(() => {
 
 const selectItem = (item) => {
   selectedItem.value = item;
+  searchQuery.value = ''
   showNumber.value = BASE_NUMBER;
   emit('update:modelValue', selectedItem.value);
   emit('select');

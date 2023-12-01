@@ -8,6 +8,7 @@ export const useAuthStore = defineStore("auth", {
     user: null,
     alertSuccess: false,
     animationClass: null,
+    alertSuccessMessage: null,
   }),
   getters: {
     isAuthenticated() {
@@ -52,14 +53,20 @@ export const useAuthStore = defineStore("auth", {
       this.user = null;
     },
 
-    showMessageSuccess() {
+    showMessageSuccess(message) {
+      this.animationClass = 'animate__fadeInDown';
+      this.alertSuccessMessage = message
       this.alertSuccess = true;
-      this.animationClass = 'animate__animated animate__fadeIn';
       // Скрыть сообщение через 3 секунды
       setTimeout(() => {
-        this.animationClass = 'animate__animated animate__fadeOut';
-        this.alertSuccess = false;
+        this.animationClass = 'animate__fadeOutUp';
+        setTimeout(() => {
+          this.alertSuccess = false;
+          this.alertSuccessMessage = null
+        }, 1000)
+        
       }, 3000);
+      
     }
   },
 });

@@ -45,4 +45,13 @@ export const routes = [
         middlewares: [isLoggedIn],
       },
     },
+    {
+      path: "/report/mentor",
+      name: "reportMentor",
+      component: () => import("@/views/ReportMentorView.vue"),
+      meta: { 
+        layout: "DefaultLayout",
+        middlewares: [isLoggedIn],
+      },
+    },
 ]

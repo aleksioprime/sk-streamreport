@@ -8,45 +8,97 @@ class ApiError extends Error {
   }
 }
 
-function refreshTokenProcedure() {
-  return new Promise((resolve, reject) => {
-    axios.post('/api/token/refresh/', {
-      refresh: jwtService.getRefreshToken()
-    }).then(response => {
-      // Сохраняем новый access токен
-      jwtService.saveAccessToken(response.data.access);
-      resolve(response.data.access);
-    }).catch(error => {
-      reject(error);
-    });
-  });
+let isRefreshing = false;
+let subscribers = [];
+
+function subscribeTokenRefresh(cb) {
+  subscribers.push(cb);
 }
+
+function onTokenRefreshed(accessToken) {
+  subscribers.forEach(cb => cb(accessToken));
+  subscribers = [];
+}
+
+async function refreshToken() {
+  if (!isRefreshing) {
+    isRefreshing = true;
+    try {
+      const response = await axios.post('/api/token/refresh/', {
+        refresh: jwtService.getRefreshToken()
+      })
+      jwtService.saveAccessToken(response.data.access);
+      const newToken = response.data.access;
+      isRefreshing = false;
+      onTokenRefreshed(newToken);
+      return newToken;
+    } catch (error) {
+      isRefreshing = false;
+      throw error;
+    }
+  }
+}
+
+// function refreshTokenProcedure() {
+//   return new Promise((resolve, reject) => {
+//     axios.post('/api/token/refresh/', {
+//       refresh: jwtService.getRefreshToken()
+//     }).then(response => {
+//       // Сохраняем новый access токен
+//       jwtService.saveAccessToken(response.data.access);
+//       resolve(response.data.access);
+//     }).catch(error => {
+//       reject(error);
+//     });
+//   });
+// }
 
 export class ApiService {
   constructor() {
     // Добавление перехватчика ответов
-    axios.interceptors.response.use(response => {
-      // Обработка успешных ответов
-      return response;
-    }, error => {
-      const originalRequest = error.config;
-      // Обработка ошибок ответа (ошибка авторизации, повторный запрос, запрос обновления токена)
-      if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url.includes("/refresh")) {
-        originalRequest._retry = true;
-        // Обрабатываем истечение срока действия токена
-        return refreshTokenProcedure().then(newAccessToken => {
-          // Повторно устанавливаем заголовки и повторяем запрос
-          originalRequest.headers['Authorization'] = 'Bearer ' + newAccessToken;
-          return axios(originalRequest);
-        }).catch(refreshError => {
-          // Обработка ошибки обновления токена
-          console.error(refreshError);
-          // Перенаправление на страницу входа или очистка токенов
-          return Promise.reject(refreshError);
-        });
-      }
-      return Promise.reject(this._getError(error));
-    });
+    // axios.interceptors.response.use(response => {
+    //   // Обработка успешных ответов
+    //   return response;
+    // }, error => {
+    //   const originalRequest = error.config;
+    //   // Обработка ошибок ответа (ошибка авторизации, повторный запрос, запрос обновления токена)
+    //   if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url.includes("/refresh")) {
+    //     originalRequest._retry = true;
+    //     // Обрабатываем истечение срока действия токена
+    //     return refreshTokenProcedure().then(newAccessToken => {
+    //       // Повторно устанавливаем заголовки и повторяем запрос
+    //       originalRequest.headers['Authorization'] = 'Bearer ' + newAccessToken;
+    //       return axios(originalRequest);
+    //     }).catch(refreshError => {
+    //       // Обработка ошибки обновления токена
+    //       console.error(refreshError);
+    //       // Перенаправление на страницу входа или очистка токенов
+    //       return Promise.reject(refreshError);
+    //     });
+    //   }
+    //   return Promise.reject(this._getError(error));
+    // });
+
+    axios.interceptors.response.use(response => response,
+      error => {
+        const { config, response } = error;
+        const originalRequest = config;
+        if (response && response.status === 401 && !originalRequest._retry && !originalRequest.url.includes("/refresh")) {
+          originalRequest._retry = true;
+          return new Promise((resolve, reject) => {
+            subscribeTokenRefresh(newToken => {
+              originalRequest.headers['Authorization'] = 'Bearer ' + newToken;
+              resolve(axios(originalRequest));
+            });
+            if (!isRefreshing) {
+              refreshToken().catch(refreshError => {
+                reject(refreshError);
+              });
+            }
+          });
+        }
+        return Promise.reject(error);
+      });
   }
 
   _getError(e) {

@@ -7,7 +7,7 @@
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuModule">
         <li v-for="(item, index) in propItems" :key="index" @click="selectItem(item)">
-          <a class="dropdown-item" :class="{active: item == selectedItem}" href="#">{{ item[showName] }}</a>
+          <a class="dropdown-item" :class="{active: item == selectedItem}" href="##">{{ item[showName] }}</a>
         </li>
       </ul>
     </div>
@@ -42,7 +42,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'select']);
 
-const selectedItem = ref({});
+const selectedItem = ref(props.modelValue);
 
 const selectItem = (item) => {
   selectedItem.value = item;

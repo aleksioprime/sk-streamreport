@@ -36,6 +36,8 @@ from .report_mentor import (
     ReportMentorPrimaryListSerializer,
     ReportMentorPrimaryRetrieveSerializer,
     ReportMentorPrimaryUpdateSerializer,
+    UserListReportMentorPrimarySerializer,
+    UserListReportMentorSerializer
 )
 
 

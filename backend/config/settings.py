@@ -238,7 +238,7 @@ SPECTACULAR_SETTINGS = {
 
 # Настройка авторизации с помощью JWT
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Время жизни токена доступа (по умолчанию 5 минут)
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),  # Время жизни токена доступа (по умолчанию 5 минут)
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),  # Время жизни токена обновления
     'SLIDING_TOKEN_LIFETIME': timedelta(days=1),  # Время жизни скользящего токена
     'SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD': timedelta(minutes=5),  # Период гибкости для обновления токена

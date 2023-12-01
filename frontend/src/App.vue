@@ -1,10 +1,12 @@
 <template>
-  <app-layout-default>
-    <div v-if="authStore.alertSuccess" :class="authStore.animationClass" class="alert alert-success">
-      Данные успешно сохранены!
+  <div>
+    <div v-show="authStore.alertSuccess" class="alert alert-success animate__animated block" :class="authStore.animationClass">
+      {{ authStore.alertSuccessMessage }}
     </div>
-    <router-view v-if="isLoaded" />
-  </app-layout-default>
+    <app-layout-default>
+      <router-view v-if="isLoaded" />
+    </app-layout-default>
+  </div>
 </template>
 
 <script setup>
@@ -22,7 +24,7 @@ const authStore = useAuthStore();
 
 const checkLoggedIn = async () => {
   const token = JwtService.getAccessToken();
-  
+
   if (!token) {
     isLoaded.value = true;
     return;
@@ -46,11 +48,13 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.alert {
+.block {
   position: fixed;
-  top: 20px;
-  width: calc(90vw);
+  top: 10px;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
   z-index: 1;
+  text-align: center;
   /* Дополнительные стили для всплывающего сообщения */
 }
 </style>

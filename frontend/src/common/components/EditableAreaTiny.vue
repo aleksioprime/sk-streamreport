@@ -81,7 +81,7 @@ const submitUpdate = (event) => {
 </script>
 
 <style scoped>
-.custom-style > p {
-  margin-bottom: 0.5rem!important;
+.custom-style p {
+  margin-bottom: 0px !important;
 }
 </style>

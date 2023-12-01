@@ -2,9 +2,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class LevelAchievementPrimaryChoices(models.TextChoices):
-        level_a = "A", "Уровень A"
-        level_b = "B", "Уровень B"
-        level_c = "C", "Уровень C"
+        level_a = "a", "Уровень A"
+        level_b = "b", "Уровень B"
+        level_c = "c", "Уровень C"
         NONE = None, "Не указан"
 
 class LevelProfilePrimaryChoices(models.TextChoices):

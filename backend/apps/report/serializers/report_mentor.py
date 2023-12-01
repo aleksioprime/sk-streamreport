@@ -21,6 +21,10 @@ from .common import (
     ReportPeriodListSerializer,
 )
 
+from general.models import (
+    User
+)
+
 # Список профилей студента IB
 class LearnerProfileReportSerializer(serializers.ModelSerializer):
     class Meta:
@@ -172,3 +176,84 @@ class ReportMentorPrimaryUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportMentorPrimary
         fields = '__all__'
+
+
+
+class ReportMentorPrimarySerializer(serializers.ModelSerializer):
+    author = UserReportSerializer()
+    profiles = ReportIbProfileListSerializer(many=True)
+    pyp_units = ReportPrimaryUnitListSerializer(many=True)
+    class Meta:
+        model = ReportMentorPrimary
+        fields = (
+            "id",
+            "student",
+            "author",
+            "period",
+            "group",
+            "comment",
+            "profiles",
+            "pyp_units",
+            "created_at",
+            "updated_at",
+            )
+
+# Вывод списка пользователей с фильтрацией репортов классных руководителей
+class UserListReportMentorPrimarySerializer(serializers.ModelSerializer):
+    reports = serializers.SerializerMethodField()
+    class Meta:
+        model = User
+        fields = (
+            "id", 
+            "first_name", 
+            "last_name",
+            "middle_name",
+            "reports",
+            "photo",
+            )
+    def get_reports(self, obj):
+        period = self.context['request'].query_params.get('report_period', None)
+        group = self.context['request'].query_params.get('report_group', None)
+        if period is not None and  group is not None:
+            return ReportMentorPrimarySerializer(obj.filtered_reports, many=True).data
+        else:
+            return None
+        
+
+class ReportMentorSerializer(serializers.ModelSerializer):
+    author = UserReportSerializer()
+    profiles = ReportIbProfileListSerializer(many=True)
+    class Meta:
+        model = ReportMentor
+        fields = (
+            "id",
+            "student",
+            "author",
+            "period",
+            "group",
+            "comment",
+            "profiles",
+            "created_at",
+            "updated_at",
+            )
+
+# Вывод списка пользователей с фильтрацией репортов классных руководителей
+class UserListReportMentorSerializer(serializers.ModelSerializer):
+    reports = serializers.SerializerMethodField()
+    class Meta:
+        model = User
+        fields = (
+            "id", 
+            "first_name", 
+            "last_name",
+            "middle_name",
+            "reports",
+            "photo",
+            )
+    def get_reports(self, obj):
+        period = self.context['request'].query_params.get('report_period', None)
+        group = self.context['request'].query_params.get('report_group', None)
+        if period is not None and  group is not None:
+            return ReportMentorSerializer(obj.filtered_reports, many=True).data
+        else:
+            return None

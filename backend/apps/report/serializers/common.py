@@ -135,3 +135,11 @@ class ReportCriterionAchievementUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportCriterionAchievement
         fields = '__all__'
+    
+    # Переопределение метода для создания нескольких объектов
+    def create(self, validated_data):
+        # Проверка, является ли validated_data списком
+        if isinstance(validated_data, list):
+            objects_to_create = [ReportCriterionAchievement(**item) for item in validated_data]
+            return ReportCriterionAchievement.objects.bulk_create(objects_to_create)
+        return ReportCriterionAchievement.objects.create(**validated_data)

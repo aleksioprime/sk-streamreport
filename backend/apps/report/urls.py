@@ -16,7 +16,9 @@ from apps.report.views import (
     ReportPrimaryUnitViewSet,
     ReportMentorPrimaryViewSet,
     ReportExtraViewSet,
-    UserReportExtraViewSet
+    UserReportExtraViewSet,
+    UserReportMentorPrimaryViewSet,
+    UserReportMentorViewSet
     )
 
 urlpatterns = [
@@ -26,7 +28,7 @@ urlpatterns = [
     path('report/criterion/level', ReportCriterionLevelViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('report/criterion/levels/<int:pk>', ReportCriterionLevelViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('report/teacher/achievement', ReportCriterionAchievementViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('report/teacher/achievement/<int:pk>', ReportCriterionAchievementViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('report/teacher/achievement/<int:pk>', ReportCriterionAchievementViewSet.as_view({'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/teacher/primary', ReportTeacherPrimaryViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('report/teacher/primary/<int:pk>', ReportTeacherPrimaryViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/teacher/primary/topic', ReportPrimaryTopicViewSet.as_view({'get': 'list', 'post': 'create'})),
@@ -49,5 +51,7 @@ urlpatterns = [
     path('report/mentor/primary/unit/<int:pk>', ReportPrimaryUnitViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('report/extra', ReportExtraViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('report/extra/<int:pk>', ReportExtraViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
-    path('report/student', UserReportExtraViewSet.as_view({'get': 'list'})),
+    path('report/extra/student', UserReportExtraViewSet.as_view({'get': 'list'})),
+    path('report/mentor/student', UserReportMentorViewSet.as_view({'get': 'list'})),
+    path('report/mentor/primary/student', UserReportMentorPrimaryViewSet.as_view({'get': 'list'})),
 ]
