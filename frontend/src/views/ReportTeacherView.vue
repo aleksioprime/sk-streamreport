@@ -4,154 +4,85 @@
     <div class="py-2">
       <div class="d-flex flex-wrap">
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите учебный год"
-            v-model="currentAcademicYear"
-            :propItems="generalStore.academicYears"
-            showName="name"
-            @select="selectAcademicYear"
-          />
+          <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+            :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
         </div>
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите период"
-            v-model="currentReportPeriod"
-            :propItems="filteredReportPeriod"
-            showName="full_name"
-            :disabled="!Boolean(filteredReportPeriod.length)"
-            @select="selectReportPeriod"
-          />
+          <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+            showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
         </div>
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите учебный план"
-            v-model="currentCurriculum"
-            :propItems="curriculumStore.curriculums"
-            showName="name"
-            @select="selectCurriculum"
-          />
+          <simple-dropdown title="Выберите учебный план" v-model="currentCurriculum"
+            :propItems="curriculumStore.curriculums" showName="name" @select="selectCurriculum" />
         </div>
       </div>
       <div class="d-flex flex-wrap">
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите класс"
-            v-model="currentGroup"
-            :propItems="filteredGroup"
-            showName="full_name"
-            :disabled="
-              isEmpty(currentAcademicYear) || isEmpty(currentCurriculum)
-            "
-            @select="selectGroup"
-          />
+          <simple-dropdown title="Выберите класс" v-model="currentGroup" :propItems="filteredGroup" showName="full_name"
+            :disabled="isEmpty(currentAcademicYear) || isEmpty(currentCurriculum)
+              " @select="selectGroup" />
         </div>
         <div class="m-2">
-          <search-dropdown
-            title="Выберите предмет"
-            v-model="currentSubject"
-            :propItems="curriculumStore.subjects"
-            showName="name"
-            @select="selectSubject"
-            :disabled="isEmpty(currentGroup) || isEmpty(currentCurriculum)"
-          />
+          <search-dropdown title="Выберите предмет" v-model="currentSubject" :propItems="curriculumStore.subjects"
+            showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup) || isEmpty(currentCurriculum)" />
         </div>
       </div>
-      <button
-        type="button"
-        class="btn btn-primary m-2"
-        @click="getTeacherReports"
-        :disabled="
-          isEmpty(currentGroup) ||
-          isEmpty(currentReportPeriod) ||
-          isEmpty(currentSubject)
-        "
-      >
+      <button type="button" class="btn btn-primary m-2" @click="getTeacherReports" :disabled="isEmpty(currentGroup) ||
+        isEmpty(currentReportPeriod) ||
+        isEmpty(currentSubject)
+        ">
         Показать студентов
       </button>
-      <button
-        type="button"
-        class="btn btn-secondary m-2"
-        @click="resetSelectedOptions"
-      >
+      <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
         Сброс
       </button>
       <hr class="hr" />
       <h5 v-if="!isEmpty(currentCurriculum)" class="mb-2">
-        Тип репорта: {{ currentCurriculum.level_name }}
+        Тип репорта: {{ currentReportType.name }}
       </h5>
       <h5 v-if="!isEmpty(currentSubject)" class="mb-2">
         {{ currentSubject.name }}
         <span v-if="currentSubject.group_ib">
           ({{ currentSubject.group_ib.name }}
-          {{ currentSubject.group_ib.program.toUpperCase() }}) </span
-        >:
+          {{ currentSubject.group_ib.program.toUpperCase() }})</span>:
         <span v-if="!isEmpty(currentGroup)">{{ currentGroup.name }} класс</span>
       </h5>
       <!-- Список студентов -->
       <div class="row" v-if="generalStore.users.length">
         <div class="col-md-3">
-          <div
-            class="d-flex flex-column align-items-start justify-content-start mt-2"
-          >
+          <div class="d-flex flex-column align-items-start justify-content-start mt-2">
             <div v-for="user in generalStore.users" :key="user.id">
               <div class="d-flex align-items-center my-1">
-                <img
-                  :src="user.photo ? user.photo : imageStudent"
-                  alt=""
-                  width="20"
-                  class="me-2 rounded-circle"
-                />
+                <img :src="user.photo ? user.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
                 <div v-if="!checkStudentWithReport(user.id)" class="me-2">
                   {{ user.short_name }}
                 </div>
                 <a v-else class="select" :href="`#st-${user.id}`">
                   {{ user.short_name }}
                 </a>
-                <i
-                  class="bi bi-plus-square dot-menu"
-                  @click="createTeacherReport(user.id)"
-                  v-if="!checkStudentWithReport(user.id)"
-                ></i>
+                <i class="bi bi-plus-square dot-menu" @click="createTeacherReport(user.id)"
+                  v-if="!checkStudentWithReport(user.id)"></i>
               </div>
             </div>
           </div>
         </div>
         <div class="col">
           <div v-if="reportStore.reportTeachers.length">
-            <div
-              v-for="report in reportStore.reportTeachers"
-              :key="report.id"
-              class="my-3"
-              :id="`st-${report.student.id}`"
-            >
+            <div v-for="report in reportStore.reportTeachers" :key="report.id" class="my-3"
+              :id="`st-${report.student.id}`">
               <div class="card my-1">
                 <div class="card-body d-flex align-items-center">
-                  <img
-                    :src="
-                      report.student.photo ? report.student.photo : imageStudent
-                    "
-                    alt=""
-                    width="50"
-                    class="me-2 rounded-circle"
-                  />
+                  <img :src="report.student.photo ? report.student.photo : imageStudent
+                    " alt="" width="50" class="me-2 rounded-circle" />
                   <h4 class="m-0">
                     {{ report.student.last_name }}
                     {{ report.student.first_name }}
                   </h4>
                   <div class="ms-auto">
-                    <i
-                      class="bi bi-three-dots dot-menu"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    ></i>
+                    <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
                     <ul class="dropdown-menu">
                       <li>
-                        <a
-                          class="dropdown-item"
-                          href="##"
-                          @click="showConfirmationModal(report)"
-                          >Удалить репорт</a
-                        >
+                        <a class="dropdown-item" href="##" @click="showConfirmationModal(report)">Удалить репорт</a>
                       </li>
                     </ul>
                   </div>
@@ -160,43 +91,48 @@
               <div class="accordion" :id="`accordionStudent-${report.id}`">
                 <div class="accordion-item">
                   <h2 class="accordion-header" :id="`heading-${report.id}`">
-                    <button
-                      class="accordion-button collapsed p-2"
-                      :class="{ 'report-success': report.comment }"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      :data-bs-target="`#collapse-${report.id}`"
-                      aria-expanded="true"
-                      :aria-controls="`collapse-${report.id}`"
-                    >
+                    <button class="accordion-button collapsed p-2" :class="{ 'report-success': report.comment }"
+                      type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${report.id}`"
+                      aria-expanded="true" :aria-controls="`collapse-${report.id}`">
                       Репорт студента
                     </button>
                   </h2>
-                  <div
-                    :id="`collapse-${report.id}`"
-                    class="accordion-collapse collapse"
-                    :aria-labelledby="`heading-${report.id}`"
-                  >
+                  <div :id="`collapse-${report.id}`" class="accordion-collapse collapse"
+                    :aria-labelledby="`heading-${report.id}`">
                     <div class="accordion-body">
-                      <div class="mt-1">
+                      <div class="my-3">
+                        <report-teacher-myp-criteria :report="report" v-if="currentReportType.value == 'ooo'"/>
+                      </div>
+                      <div class="my-3" v-if="['ooo', 'soo', 'ib'].includes(currentReportType.value)">
+                        <div class="d-flex align-items-center">
+                          <h5>Итоговая оценка</h5>
+                          <div class="ms-auto">
+                            <scale-radio :elementId="String(report.id)" :data="MARK5"
+                              :propValue="report.final_grade" propName="final_grade"
+                              @save="handleSave($event, report.id)" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="my-3" v-if="currentReportType.value == 'dp'">
+                        <div class="d-flex align-items-center">
+                          <h5>Итоговая оценка IB</h5>
+                          <div class="ms-auto">
+                            <scale-radio :elementId="String(report.id)" :data="MARK7"
+                              :propValue="report.final_grade" propName="final_grade"
+                              @save="handleSave($event, report.id)" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="my-3">
                         <report-teacher-criteria :report="report" />
                       </div>
-                      <div class="mt-3">
-                        <report-teacher-topic
-                          :report="report"
-                          v-if="currentCurriculum.level == 'noo'"
-                        />
+                      <div class="my-2">
+                        <report-teacher-topic :report="report" v-if="currentReportType.value == 'noo'" />
                       </div>
                       <hr />
-                      <div class="mt-3">
-                        <editable-area-tiny
-                          class="text-muted"
-                          :propData="report.comment"
-                          propName="comment"
-                          @save="handleSave($event, report.id)"
-                          :isEditing="isEditing"
-                          @toggleEdit="toggleEdit"
-                        />
+                      <div class="my-2">
+                        <editable-area-tiny class="text-muted" :propData="report.comment" propName="comment"
+                          @save="handleSave($event, report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
                       </div>
                       <hr />
                       <div class="d-flex align-items-center">
@@ -230,10 +166,7 @@
       </div>
     </div>
     <!-- Подключение модального окна -->
-    <confirmation-modal
-      @confirm="removeTeacherReport"
-      @cancel="cancelRemoveTeacherReport"
-    >
+    <confirmation-modal @confirm="removeTeacherReport" @cancel="cancelRemoveTeacherReport">
       Вы действитель хотите удалить репорт студента?
     </confirmation-modal>
   </div>
@@ -243,19 +176,23 @@
 import { ref, computed, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import imageStudent from "@/assets/img/student.svg";
+import { MARK5, MARK7, REPORT_TYPE } from "@/common/constants";
 
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
 import SearchDropdown from "@/common/components/SearchDropdown.vue";
 import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
+import ScaleRadio from "@/common/components/ScaleRadio.vue";
 
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
 import ReportTeacherTopic from "@/modules/ReportTeacherTopic.vue";
 import ReportTeacherCriteria from "@/modules/ReportTeacherCriteria.vue";
+import ReportTeacherMypCriteria from "@/modules/ReportTeacherMypCriteria.vue";
 
 import { useGeneralStore } from "@/stores/general";
 import { useCurriculumStore } from "@/stores/curriculum";
 import { useReportStore } from "@/stores/report";
 import { useAuthStore } from "@/stores/auth";
+import { useUnitMypStore } from "@/stores/unitMyp";
 
 import { formatDate } from "@/common/helpers/date";
 
@@ -270,13 +207,27 @@ const generalStore = useGeneralStore();
 const reportStore = useReportStore();
 const authStore = useAuthStore();
 const curriculumStore = useCurriculumStore();
-const isEditing = ref(false);
+const unitMypStore = useUnitMypStore();
 
+const isEditing = ref(false);
 let confirmationModal = null;
 
-// Функции для интерфеса
+const currentReportType = computed(() => {
+  const emptyType = { value: null, name: '-' }
+  if (currentCurriculum.value.level == 'noo') {
+    return REPORT_TYPE.find(i => i.value == 'noo') || emptyType
+  } else if (currentCurriculum.value.level == 'ooo') {
+    return REPORT_TYPE.find(i => i.value == 'ooo') || emptyType
+  } else if (currentCurriculum.value.level == 'soo' && currentCurriculum.value.ib == true) {
+    return REPORT_TYPE.find(i => i.value == 'dp') || emptyType
+  } else if (currentCurriculum.value.level == 'soo' && currentCurriculum.value.ib == false) {
+    return REPORT_TYPE.find(i => i.value == 'soo') || emptyType
+  } else {
+    return emptyType
+  }
+})
 
-// Проверка
+// Проверка на наличие репорта у студента с текущим ID
 const checkStudentWithReport = (id) => {
   return reportStore.reportTeachers.some((item) => item.student.id == id);
 };
@@ -460,15 +411,15 @@ const getTeacherReports = () => {
     };
     if (currentCurriculum.value.level == "noo") {
       reportStore.loadReportTeachersPrimary(config).then(() => {
-        // console.log(reportStore.reportTeachers);
+        console.log(reportStore.reportTeachers);
       });
     } else if (currentCurriculum.value.level == "ooo") {
       reportStore.loadReportTeachersSecondary(config).then(() => {
-        // console.log(reportStore.reportTeachers);
+        console.log(reportStore.reportTeachers);
       });
     } else if (currentCurriculum.value.level == "soo") {
       reportStore.loadReportTeachersHigh(config).then(() => {
-        // console.log(reportStore.reportTeachers);
+        console.log(reportStore.reportTeachers);
       });
     } else {
       // console.log('Не выбран уровень')
@@ -561,6 +512,17 @@ const toggleEdit = (state) => {
   isEditing.value = state;
 };
 
+// Замена обновлённого репорта учителя
+const replaceReportTeacher = (data) => {
+  console.log("Репорт успешно обновлён: ", data);
+  const index = reportStore.reportTeachers.findIndex(
+    (item) => item.id === data.id
+  );
+  if (index != -1) {
+    reportStore.reportTeachers[index] = data;
+  }
+};
+
 // Запрос на сохранение данных из компонента редактирования
 // После успешного ответа происходит повторный запрос на обновление списка студентов
 const handleSave = async (editData, id) => {
@@ -572,20 +534,17 @@ const handleSave = async (editData, id) => {
   if (currentCurriculum.value.level == "noo") {
     // console.log('Запрос на удаление репорта для студента начальной школы')
     reportStore.updateReportTeacherPrimary(updatingData).then((result) => {
-      // console.log('Репорт успешно обновлён: ', result)
-      getTeacherReports();
+      replaceReportTeacher(result.data);
     });
   } else if (currentCurriculum.value.level == "ooo") {
     // console.log('Запрос на удаление репорта для студента средней школы')
     reportStore.updateReportTeacherSecondary(updatingData).then((result) => {
-      // console.log('Репорт успешно обновлён: ', result)
-      getTeacherReports();
+      replaceReportTeacher(result.data);
     });
   } else if (currentCurriculum.value.level == "soo") {
     // console.log('Запрос на удаление репорта для студента старшей школы')
     reportStore.updateReportTeacherHigh(updatingData).then((result) => {
-      // console.log('Репорт успешно обновлён: ', result)
-      getTeacherReports();
+      replaceReportTeacher(result.data);
     });
   } else {
     // console.log('Не выбран уровень')
@@ -628,17 +587,23 @@ onMounted(() => {
   if (!generalStore.isAcademicYearsLoaded) {
     generalStore.loadAcademicYears().then(() => {
       currentAcademicYear.value = generalStore.relevantYear;
+      getGroups();
+      getCurriculums();
     });
   } else {
     currentAcademicYear.value = generalStore.relevantYear;
+    getGroups();
+    getCurriculums();
   }
   if (!reportStore.isReportPeriodsLoaded) {
     reportStore.loadReportPeriods();
   }
   if (!generalStore.isGroupsLoaded) {
-    getGroups();
   }
-  getCurriculums();
+  if (!unitMypStore.isObjectivesLoaded) {
+    unitMypStore.loadObjectives();
+  }
+  
   getSubjects();
   getTeacherReports();
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });

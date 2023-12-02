@@ -14,11 +14,13 @@ import { ReportTeacherPrimaryResource } from "@/services/resources/report/report
 import { ReportTeacherSecondaryResource } from "@/services/resources/report/reportTeacherSecondary.resource";
 import { ReportTeacherHighResource } from "@/services/resources/report/reportTeacherHigh.resource";
 import { ReportPrimaryTopicResource } from "@/services/resources/report/reportPrimaryTopic.resource";
+import { ReportSecondaryCriterionResource } from "@/services/resources/report/reportSecondaryCriterion.resource";
 import { ReportTeacherAchievementResource } from "@/services/resources/report/reportTeacherAchievement.resource";
 import { StudyYearResource } from "@/services/resources/general/studyYear.resource";
 import { SubjectResource } from "@/services/resources/curriculum/subject.resource";
 import { CurriculumResource } from "@/services/resources/curriculum/curriculum.resource";
 import { CourseResource } from "@/services/resources/syllabus/course.resource";
+import { ObjectiveResource } from "@/services/resources/myp/objective.resource";
 
 export default {
     auth: new AuthResource(),
@@ -37,9 +39,11 @@ export default {
     reportTeacherSecondary: new ReportTeacherSecondaryResource(),
     reportTeacherHigh: new ReportTeacherHighResource(),
     reportPrimaryTopic: new ReportPrimaryTopicResource(),
+    reportSecondaryCriterion: new ReportSecondaryCriterionResource(),
     reportTeacherAchievement: new ReportTeacherAchievementResource(),
     studyYear: new StudyYearResource(),
     subject: new SubjectResource(),
     curriculum: new CurriculumResource(),
     course: new CourseResource(),
+    objective: new ObjectiveResource(),
   };

@@ -1,4 +1,4 @@
-from django.contrib.admin import register, ModelAdmin
+from django.contrib.admin import register, ModelAdmin, TabularInline, StackedInline
 from import_export.admin import ImportExportModelAdmin
 
 from apps.report.models import (
@@ -35,8 +35,13 @@ class ReportPeriodModelAdmin(ImportExportModelAdmin):
         "name",
     )
 
+class ReportLevelInline(StackedInline):  # StackedInline, TabularInline
+    model = ReportCriterionLevel
+    extra = 1
+
 @register(ReportCriterion)
 class ReportCriterionModelAdmin(ImportExportModelAdmin):
+    inlines = [ReportLevelInline]
     list_display = (
         "id",
         "name",

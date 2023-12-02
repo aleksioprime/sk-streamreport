@@ -303,7 +303,7 @@ const resetStudents = () => {
 // Запрос на получение списка групп (срабатывает, если выбран текущий учебный год и параллель)
 const getGroups = () => {
   if (
-    !(isEmpty(currentStudyYear.value) && isEmpty(currentAcademicYear.value))
+    !isEmpty(currentAcademicYear.value)
   ) {
     generalStore.loadGroups({
       params: {
@@ -476,18 +476,17 @@ onMounted(() => {
   if (!generalStore.isAcademicYearsLoaded) {
     generalStore.loadAcademicYears().then(() => {
       currentAcademicYear.value = generalStore.relevantYear;
+      getGroups();
     });
   } else {
     currentAcademicYear.value = generalStore.relevantYear;
+    getGroups();
   }
   if (!generalStore.isStudyYearsLoaded) {
     generalStore.loadStudyYears();
   }
   if (!reportStore.isReportPeriodsLoaded) {
     reportStore.loadReportPeriods();
-  }
-  if (!generalStore.isGroupsLoaded) {
-    getGroups();
   }
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });

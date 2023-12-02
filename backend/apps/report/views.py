@@ -187,6 +187,15 @@ class ReportTeacherPrimaryViewSet(ModelViewSet):
         elif self.action == "retrieve":
             return ReportTeacherPrimaryRetrieveSerializer
         return ReportTeacherPrimaryUpdateSerializer
+    
+    # Переопределение метода partial_update для ответа с другим сериализатором
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = ReportTeacherPrimaryListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
 
 # Достижения по темам в репорте НШ: список, создание, редактирование и удаление
 @extend_schema_view(
@@ -244,6 +253,15 @@ class ReportSecondaryCriterionViewSet(ModelViewSet):
             return ReportSecondaryCriterionListSerializer
         return ReportSecondaryCriterionUpdateSerializer
     
+    # Переопределение метода partial_update для ответа с другим сериализатором
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = ReportSecondaryCriterionListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
+    
 # Предметные достижения в репорте СрШ: список, создание, редактирование и удаление
 @extend_schema_view(
     list=extend_schema(summary='Вывод списка предметных достижений в репорте СрШ', tags=['Репорты: Учителя СрШ. Предметные достижения']),
@@ -282,6 +300,15 @@ class ReportTeacherSecondaryViewSet(ModelViewSet):
             return ReportTeacherSecondaryRetrieveSerializer
         return ReportTeacherSecondaryUpdateSerializer
     
+    # Переопределение метода partial_update для ответа с другим сериализатором
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = ReportTeacherSecondaryRetrieveSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
+    
 
 # Репорты учителя в старшей школе: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
@@ -303,6 +330,15 @@ class ReportTeacherHighViewSet(ModelViewSet):
         elif self.action == "retrieve":
             return ReportTeacherHighRetrieveSerializer
         return ReportTeacherHighUpdateSerializer
+    
+    # Переопределение метода partial_update для ответа с другим сериализатором
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = ReportTeacherHighListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
     
 # Оценки профиля студента в репорте классного руководителя: список, создание, редактирование и удаление
 @extend_schema_view(

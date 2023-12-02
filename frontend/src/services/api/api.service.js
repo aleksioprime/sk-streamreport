@@ -27,6 +27,7 @@ async function refreshToken() {
       const response = await axios.post('/api/token/refresh/', {
         refresh: jwtService.getRefreshToken()
       })
+      // jwtService.setAuthHeader(response.data.access);
       jwtService.saveAccessToken(response.data.access);
       const newToken = response.data.access;
       isRefreshing = false;

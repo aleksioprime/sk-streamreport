@@ -74,7 +74,9 @@ class SubjectReportSerializer(serializers.ModelSerializer):
             "name", 
             "name_eng",
             "level",
-            "need_report"
+            "need_report",
+            "group_ib",
+            "discipline_ib"
             )
         
 # Вывод списка отчётных периодов для репортов

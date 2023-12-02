@@ -62,6 +62,7 @@ def get_report_teacher_primary_queryset():
         'subject',
         ).prefetch_related(
             'criterion_achievements',
+            'criterion_achievements__achievement',
             'criterion_achievements__criterion',
             'criterion_achievements__criterion__author',
             'criterion_achievements__criterion__subjects',
@@ -94,9 +95,18 @@ def get_report_teacher_secondary_queryset():
         'subject',
         ).prefetch_related(
             'criterion_achievements',
+            'criterion_achievements__achievement',
+            'criterion_achievements__criterion',
+            'criterion_achievements__criterion__author',
+            'criterion_achievements__criterion__subjects',
+            'criterion_achievements__criterion__years',
+            'criterion_achievements__criterion__levels',
             'criterion_marks',
-            'objective_levels'
-            )
+            'criterion_marks__criterion',
+            'objective_levels',
+            'objective_levels__objective',
+            'objective_levels__level',
+            ).all()
 
 def get_report_teacher_high_queryset():
     return ReportTeacherHigh.objects.all().select_related(
@@ -110,6 +120,7 @@ def get_report_teacher_high_queryset():
         'subject',
         ).prefetch_related(
             'criterion_achievements',
+            'criterion_achievements__criterion',
             )
 
 def get_report_ibprofile_queryset():

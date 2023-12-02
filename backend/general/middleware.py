@@ -32,8 +32,8 @@ class DBCountMiddleware:
         response = self.get_response(request)
 
         # Логирование подробностей каждого запроса
-        # for query in connection.queries:
-        #     logger.info(f"Query: {query['sql']} Time: {query['time']}")
+        for query in connection.queries:
+            logger.info(f"Query: {query['sql']} Time: {query['time']}")
 
         # Подсчет количества запросов к базе данных
         total_queries = len(connection.queries)

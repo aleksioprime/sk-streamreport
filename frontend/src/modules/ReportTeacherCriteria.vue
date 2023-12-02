@@ -8,7 +8,6 @@
           <li><a class="dropdown-item" href="##" @click="showCriterionImportModal(report)">Добавить критерии</a></li>
         </ul>
       </div>
-
     </div>
     <div v-if="report.criterion_achievements.length">
       <table class="table table-sm table-bordered">
@@ -22,7 +21,7 @@
         <tr v-for="achievement in report.criterion_achievements" :key="achievement.id">
           <td>
             <span class="me-2">{{ achievement.criterion.name }}</span>
-            <i class="bi bi-dash-square inline-buttonu" @click="showConfirmationModal(achievement)"></i>
+            <i class="bi bi-dash-square inline-button" @click="showConfirmationModal(achievement)"></i>
             <confirmation-modal v-if="achievement.id == currentTeacherCriterion.id" :nameModal="`confirmationDeleteCriterion${achievement.id}`" @confirm="removeTeacherCriterion"
               @cancel="cancelRemoveTeacherCriterion">
               Вы действитель хотите удалить этот критерий?
@@ -47,13 +46,28 @@
       titleConfirm="Добавить критерии" titleModal="Добавление критериев в репорт студента"
       @confirm="confirmCriterionImportModal" @cancel="cancelCriterionImportModal">
       <div>
-        <div class="form-check" v-for="criterion in reportStore.reportCriteria" :key="criterion.id">
-          <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
-            v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
-          <label class="form-check-label" :for="`check-${criterion.id}`">
-            {{ criterion.name }} (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>)
-          </label>
-        </div>
+        <div>
+          <div class="my-2">
+            <h5>Общие критерии</h5>
+            <div class="form-check" v-for="criterion in groupedCriteria.withoutSubjects" :key="criterion.id">
+              <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
+                v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
+              <label class="form-check-label" :for="`check-${criterion.id}`">
+                {{ criterion.name }} (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>)
+              </label>
+            </div>
+          </div>
+          <div class="my-2">
+            <h5>Предметные критерии</h5>
+            <div class="form-check" v-for="criterion in groupedCriteria.withSubjects" :key="criterion.id">
+              <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
+                v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
+              <label class="form-check-label" :for="`check-${criterion.id}`">
+                {{ criterion.name }} (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>)
+              </label>
+            </div>
+          </div>
+      </div>
       </div>
     </simple-modal>
   </div>
@@ -91,7 +105,41 @@ const checkDisableCriterion = (id) => {
   return props.report.criterion_achievements.some(item => item.criterion.id == id)
 }
 
+// Группировка критериев по наличию предметов
+const groupBySubjects = (arr) => {
+  return arr.reduce((accumulator, obj) => {
+    // Проверяем, существует ли свойство 'subjects' и является ли оно непустым массивом
+    let key = Array.isArray(obj.subjects) && obj.subjects.length > 0 ? 'withSubjects' : 'withoutSubjects';
+
+    // Инициализируем ключ в аккумуляторе, если это необходимо
+    if (!accumulator[key]) {
+      accumulator[key] = [];
+    }
+
+    // Добавляем объект в соответствующую группу
+    accumulator[key].push(obj);
+
+    return accumulator;
+  }, {});
+}
+
+// Фильтр списка классов по выбранному учебному плану
+const groupedCriteria = computed(() => {
+  return groupBySubjects(reportStore.reportCriteria)
+});
+
 // ************ Модальное окно для добавления критериев в репорт ************
+
+// Запрос на получение критериев по году и предмету
+const getReportCriteria = () => {
+  let config = {
+    params: {
+      years: props.report.group.year_study.id,
+      subjects: props.report.subject.id,
+    }
+  }
+  reportStore.loadReportCriteria(config);
+}
 
 // Создать и показать модальное окно для добавления в репорт выделенных критериев
 // Сделать запрос на вывод в модальное окно критериев
@@ -101,7 +149,7 @@ const showCriterionImportModal = (report) => {
     criterionImportModal = new Modal(`#criterionImportModal${report.id}`, { backdrop: 'static' });
     criterionImportModal.show();
   });
-  reportStore.loadReportCriteria()
+  getReportCriteria();
 }
 
 // Отменить добавление в репорт тем курса и закрыть модальное окно

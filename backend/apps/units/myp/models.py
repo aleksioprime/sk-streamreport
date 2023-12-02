@@ -11,7 +11,7 @@ class ObjectiveLetterChoices(models.TextChoices):
         C = "c", "Критерий C"
         D = "d", "Критерий D"
 
-class StrandLetterChoices(models.TextChoices):
+class StrandLetterChoices(models.IntegerChoices):
         one = 1, "i"
         two = 2, "ii"
         three = 3, "iii"
@@ -23,11 +23,11 @@ class QuestionTypeMypChoices(models.TextChoices):
         conceptual = "conceptual", "Концептуальный"
         debatable = "debatable", "Дискуссионный"
 
-class EducationalLevelChoices(models.TextChoices):
-        level_1 = "first", "Year 1 / Emergent"
-        level_2 = "second", "Year 3 / Capable"
-        level_3 = "third", "Year 5 / Proficient"
-        level_all = None, "Year All"
+class EducationalLevelChoices(models.IntegerChoices):
+        level_1 = 1, "Year 1 / Emergent"
+        level_3 = 3, "Year 3 / Capable"
+        level_5 = 5, "Year 5 / Proficient"
+        level_all = 0, "Year All"
 
 class MypObjective(models.Model):
     """ Предметные цели/критерии оценивания """
@@ -62,7 +62,7 @@ class StrandLevel(models.Model):
     """ Предметные цели по уровням и годам обучения """
     name = models.CharField(max_length=255, verbose_name=_("Описание"), null=True)
     name_rus = models.CharField(max_length=255, verbose_name=_("Описание на рус. языке"), null=True)
-    level = models.CharField(verbose_name=_("Образовательный уровень"), null=True, choices=ObjectiveLetterChoices.choices, max_length=12)
+    level = models.PositiveIntegerField(verbose_name=_("Образовательный уровень"), null=True, choices=EducationalLevelChoices.choices, default=0)
     strand = models.ForeignKey('myp.Strand', verbose_name=_("Стрэнд"), on_delete=models.SET_NULL, null=True, related_name="strand_levels")
     class Meta:
         verbose_name = 'MYP: Предметная цель на уровне'

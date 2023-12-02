@@ -1,4 +1,5 @@
 import django_filters
+from django.db.models import Q
 
 from apps.report.models import (
     ReportPeriod,
@@ -30,7 +31,18 @@ class ReportPeriodFilter(django_filters.FilterSet):
 class ReportCriterionFilter(django_filters.FilterSet):
     class Meta:
         model = ReportCriterion
-        fields = {'subjects', 'author', 'years'}
+        fields = {'subjects', 'years'}
+    def filter_queryset(self, queryset):
+        subjects = self.request.query_params.get('subjects', None)
+        years = self.request.query_params.get('years', None)
+        # queryset = super(ReportCriterionFilter, self).filter_queryset(queryset)
+        if years is not None:
+            queryset = queryset.filter(years=years)
+        if subjects is not None:
+            queryset = queryset.filter(Q(subjects=subjects) | Q(subjects__isnull=True))
+        else:
+            queryset = queryset.filter(subjects__isnull=True)
+        return queryset
 
 class ReportCriterionLevelFilter(django_filters.FilterSet):
     class Meta:

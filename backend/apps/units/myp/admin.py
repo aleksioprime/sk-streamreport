@@ -1,4 +1,4 @@
-from django.contrib.admin import register, ModelAdmin
+from django.contrib.admin import register, ModelAdmin, TabularInline, StackedInline
 from import_export.admin import ImportExportModelAdmin
 
 from apps.units.myp.models import (
@@ -76,6 +76,10 @@ class MypAimModelAdmin(ImportExportModelAdmin):
         "name",
     )
 
+class MypKeyConceptOfSubjectsInline(StackedInline):  # Или admin.StackedInline
+    model = MypKeyConceptOfSubjects
+    extra = 1 
+
 @register(MypKeyConcept)
 class KeyConceptModelAdmin(ImportExportModelAdmin):
     list_display = (
@@ -85,6 +89,7 @@ class KeyConceptModelAdmin(ImportExportModelAdmin):
     list_display_links = (
         "name",
     )
+    inlines = [MypKeyConceptOfSubjectsInline]
 
 @register(MypKeyConceptOfSubjects)
 class KeyConceptOfSubjectsModelAdmin(ImportExportModelAdmin):
@@ -105,6 +110,9 @@ class MypRelatedConceptModelAdmin(ImportExportModelAdmin):
     )
     list_display_links = (
         "name",
+    )
+    filter_horizontal = (
+        'disciplines',
     )
 
 @register(GlobalContext)

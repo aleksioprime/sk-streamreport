@@ -65,7 +65,7 @@ export const useReportStore = defineStore("report", {
       const res = await resources.reportCriterion.getReportCriteria(config);
       if (res.__state === "success") {
         this.reportCriteria = res.data
-        // console.log(res)
+        console.log(res)
       }
     },
     async loadStudentExtraReports(config) {
@@ -202,6 +202,19 @@ export const useReportStore = defineStore("report", {
     },
     async removeReportMentorPrimary(report) {
       return await resources.reportMentorPrimary.removeReportMentorPrimary(report);
+    },
+    // CRUD для результатов по критериям MYP
+    async loadReportSecondaryCriteria(config) {
+      return await resources.reportSecondaryCriterion.getReportSecondaryCriteria(config);
+    },
+    async createReportSecondaryCriterion(report) {
+      return await resources.reportSecondaryCriterion.createReportSecondaryCriterion(report);
+    },
+    async updateReportSecondaryCriterion(report) {
+      return await resources.reportSecondaryCriterion.updateReportSecondaryCriterion(report);
+    },
+    async removeReportSecondaryCriterion(id) {
+      return await resources.reportSecondaryCriterion.removeReportSecondaryCriterion(id);
     },
   }
 });
