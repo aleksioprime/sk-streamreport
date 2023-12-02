@@ -431,6 +431,7 @@ onMounted(() => {
     });
   } else {
     currentAcademicYear.value = generalStore.relevantYear;
+    getStudentExtraReports();
   }
   if (!generalStore.isStudyYearsLoaded) {
     generalStore.loadStudyYears();

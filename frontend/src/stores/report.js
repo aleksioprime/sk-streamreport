@@ -18,9 +18,6 @@ export const useReportStore = defineStore("report", {
     studentExtraReports: [],
     studentMentorReports: [],
     reportTeachers: [],
-    // reportTeachersPrimary: [],
-    // reportTeachersSecondary: [],
-    // reportTeachersHigh: []
   }),
   getters: {
     isReportPeriodsLoaded() {
@@ -215,6 +212,19 @@ export const useReportStore = defineStore("report", {
     },
     async removeReportSecondaryCriterion(id) {
       return await resources.reportSecondaryCriterion.removeReportSecondaryCriterion(id);
+    },
+    // CRUD для результатов по профилю студента IB
+    async loadReportMentorIbProfiles(config) {
+      return await resources.reportMentorIbProfile.getReportMentorIbProfiles(config);
+    },
+    async createReportMentorIbProfile(report) {
+      return await resources.reportMentorIbProfile.createReportMentorIbProfile(report);
+    },
+    async updateReportMentorIbProfile(report) {
+      return await resources.reportMentorIbProfile.updateReportMentorIbProfile(report);
+    },
+    async removeReportMentorIbProfile(id) {
+      return await resources.reportMentorIbProfile.removeReportMentorIbProfile(id);
     },
   }
 });

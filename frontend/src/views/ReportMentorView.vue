@@ -4,59 +4,28 @@
     <div class="py-2">
       <div class="d-flex flex-wrap">
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите учебный год"
-            v-model="currentAcademicYear"
-            :propItems="generalStore.academicYears"
-            showName="name"
-            @select="selectAcademicYear"
-          />
+          <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+            :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
         </div>
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите период"
-            v-model="currentReportPeriod"
-            :propItems="filteredReportPeriod"
-            showName="full_name"
-            :disabled="!Boolean(filteredReportPeriod.length)"
-            @select="selectReportPeriod"
-          />
+          <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+            showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
         </div>
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите параллель"
-            v-model="currentStudyYear"
-            :propItems="generalStore.studyYears"
-            showName="name"
-            @select="selectStudyYear"
-          />
+          <simple-dropdown title="Выберите параллель" v-model="currentStudyYear" :propItems="generalStore.studyYears"
+            showName="name" @select="selectStudyYear" />
         </div>
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите класс"
-            v-model="currentGroup"
-            :propItems="filteredGroup"
-            showName="full_name"
-            :disabled="
-              isEmpty(currentAcademicYear) || isEmpty(currentStudyYear)
-            "
-            @select="selectGroup"
-          />
+          <simple-dropdown title="Выберите класс" v-model="currentGroup" :propItems="filteredGroup" showName="full_name"
+            :disabled="isEmpty(currentAcademicYear) || isEmpty(currentStudyYear)
+              " @select="selectGroup" />
         </div>
-        <button
-          type="button"
-          class="btn btn-secondary m-2"
-          @click="resetSelectedOptions"
-        >
+        <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
           Сброс
         </button>
       </div>
-      <button
-        type="button"
-        class="btn btn-primary m-2"
-        @click="getStudentMentorReports"
-        :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)"
-      >
+      <button type="button" class="btn btn-primary m-2" @click="getStudentMentorReports"
+        :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
         Показать студентов
       </button>
       <hr class="hr" />
@@ -64,88 +33,48 @@
         Тип репорта: {{ currentStudyYear.level_name }}
       </h5>
       <h5>
-        <span v-if="!isEmpty(currentGroup)"
-          >Класс: {{ currentGroup.name }}</span
-        >
+        <span v-if="!isEmpty(currentGroup)">Класс: {{ currentGroup.name }}</span>
       </h5>
       <div v-if="reportStore.studentMentorReports.length">
-        <div
-          v-for="student in reportStore.studentMentorReports"
-          :key="student.id"
-          class="my-3"
-        >
+        <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3">
           <div class="card my-1">
             <div class="card-body d-flex align-items-center">
-              <img
-                :src="student.photo ? student.photo : imageStudent"
-                alt=""
-                width="50"
-                class="me-2 rounded-circle"
-              />
+              <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
               <h4 class="m-0">
                 {{ student.last_name }} {{ student.first_name }}
               </h4>
               <div class="ms-auto">
-                <i
-                  class="bi bi-three-dots dot-menu"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                ></i>
+                <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
                 <ul class="dropdown-menu">
                   <li v-if="!student.reports.length">
-                    <a
-                      class="dropdown-item"
-                      href="##"
-                      @click="createStudentMentorReport(student.id)"
-                      >Добавит репорт</a
-                    >
+                    <a class="dropdown-item" href="##" @click="createStudentMentorReport(student.id)">Добавит репорт</a>
                   </li>
                   <li v-else>
-                    <a
-                      class="dropdown-item"
-                      href="##"
-                      @click="showConfirmationModal(student)"
-                      >Удалить репорт</a
-                    >
+                    <a class="dropdown-item" href="##" @click="showConfirmationModal(student)">Удалить репорт</a>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
-          <div
-            class="accordion"
-            :id="`accordionStudent-${student.id}`"
-            v-if="student.reports.length"
-          >
+          <div class="accordion" :id="`accordionStudent-${student.id}`" v-if="student.reports.length">
             <div class="accordion-item">
               <h2 class="accordion-header" :id="`heading-${student.id}`">
-                <button
-                  class="accordion-button collapsed p-2"
-                  :class="{ 'report-success': student.report.comment }"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  :data-bs-target="`#collapse-${student.id}`"
-                  aria-expanded="true"
-                  :aria-controls="`collapse-${student.id}`"
-                >
+                <button class="accordion-button collapsed p-2" :class="{ 'report-success': student.report.comment }"
+                  type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${student.id}`" aria-expanded="true"
+                  :aria-controls="`collapse-${student.id}`">
                   Репорт студента
                 </button>
               </h2>
-              <div
-                :id="`collapse-${student.id}`"
-                class="accordion-collapse collapse"
-                :aria-labelledby="`heading-${student.id}`"
-              >
+              <div :id="`collapse-${student.id}`" class="accordion-collapse collapse"
+                :aria-labelledby="`heading-${student.id}`">
                 <div class="accordion-body">
                   <div class="my-2">
-                    <editable-area-tiny
-                      class="text-muted"
-                      :propData="student.report.comment"
-                      propName="comment"
-                      @save="handleSave($event, student.report.id)"
-                      :isEditing="isEditing"
-                      @toggleEdit="toggleEdit"
-                    />
+                    <report-mentor-ib-profile :report="student.report"/>
+                  </div>
+                  <hr />
+                  <div class="my-2">
+                    <editable-area-tiny class="text-muted" :propData="student.report.comment" propName="comment"
+                      @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
                   </div>
                   <hr />
                   <div class="d-flex align-items-center">
@@ -172,14 +101,9 @@
       </div>
     </div>
     <!-- Подключение модального окна -->
-    <confirmation-modal
-      @confirm="removeStudentMentorReport"
-      @cancel="cancelRemoveStudentMentorReport"
-    >
+    <confirmation-modal @confirm="removeStudentMentorReport" @cancel="cancelRemoveStudentMentorReport">
       Вы действитель хотите удалить репорт студента:
-      <strong
-        >{{ currentStudent.last_name }} {{ currentStudent.first_name }}?</strong
-      >
+      <strong>{{ currentStudent.last_name }} {{ currentStudent.first_name }}?</strong>
     </confirmation-modal>
   </div>
 </template>
@@ -188,13 +112,20 @@
 import { ref, computed, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import imageStudent from "@/assets/img/student.svg";
+
+import { formatDate } from "@/common/helpers/date";
+
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
 import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
+
+import ReportMentorIbProfile from "@/modules/ReportMentorIbProfile.vue";
+
 import { useGeneralStore } from "@/stores/general";
 import { useReportStore } from "@/stores/report";
 import { useAuthStore } from "@/stores/auth";
-import { formatDate } from "@/common/helpers/date";
+import { useIboStore } from "@/stores/ibo";
+
 
 const currentAcademicYear = ref({});
 const currentStudyYear = ref({});
@@ -205,6 +136,7 @@ const currentStudent = ref({});
 const generalStore = useGeneralStore();
 const reportStore = useReportStore();
 const authStore = useAuthStore();
+const iboStore = useIboStore();
 
 const isEditing = ref(false);
 let confirmationModal = null;
@@ -477,16 +409,21 @@ onMounted(() => {
     generalStore.loadAcademicYears().then(() => {
       currentAcademicYear.value = generalStore.relevantYear;
       getGroups();
+      getStudentMentorReports();
     });
   } else {
     currentAcademicYear.value = generalStore.relevantYear;
     getGroups();
+    getStudentMentorReports();
   }
   if (!generalStore.isStudyYearsLoaded) {
     generalStore.loadStudyYears();
   }
   if (!reportStore.isReportPeriodsLoaded) {
     reportStore.loadReportPeriods();
+  }
+  if (!iboStore.isLearnerProfileLoaded) {
+    iboStore.loadLearnerProfiles();
   }
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });

@@ -32,26 +32,26 @@ class ReportPeriod(models.Model):
         return f"{self.order} период ({self.year})"
 
 class ReportCriterion(models.Model):
-    """ Чек-лист рефлексии """
+    """ Критерии для репорта учителя """
     name = models.CharField(max_length=128, verbose_name=_("Название критерия"), default=None, null=True)
-    subjects = models.ManyToManyField('curriculum.Subject', verbose_name=_("Предметы"), blank=True, related_name="report_criteria")
     author = models.ForeignKey('general.User', verbose_name=_("Автор критерия"), on_delete=models.SET_NULL, null=True, related_name="report_criteria")
     years = models.ManyToManyField('general.StudyYear', verbose_name=_("Параллели"), related_name="report_criteria")
+    subjects = models.ManyToManyField('curriculum.Subject', verbose_name=_("Предметы"), blank=True, related_name="report_criteria")
+    levels = models.ManyToManyField('report.ReportCriterionLevel', verbose_name=_("Уровни достижений"), blank=True, related_name="criterions")
     class Meta:
-        verbose_name = 'Чек-лист рефлексии'
-        verbose_name_plural = 'Чек-листы рефлексии'
+        verbose_name = 'Критерий для репорта учителя'
+        verbose_name_plural = 'Критерии для репорта учителя'
         ordering = ['name']
     def __str__(self):
         return f"{self.name}"
     
 class ReportCriterionLevel(models.Model):
-    """ Уровни чек-листа рефлексии """
-    name = models.CharField(max_length=128, verbose_name=_("Название периода"), default=None, null=True)
+    """ Уровни критериев для репорта учителяи """
+    name = models.CharField(max_length=128, verbose_name=_("Название уровня"), default=None, null=True)
     point = models.PositiveSmallIntegerField(verbose_name=_("Баллы"), default=1)
-    criterion = models.ForeignKey('report.ReportCriterion', verbose_name=_("Чеклист"), on_delete=models.CASCADE, related_name="levels")
     class Meta:
-        verbose_name = 'Чек-листы рефлексии: уровень'
-        verbose_name_plural = 'Чек-листы рефлексии: уровни'
+        verbose_name = 'Критерий для репорта учителя: уровень'
+        verbose_name_plural = 'Критерий для репорта учителя: уровни'
         ordering = ['point', 'name']
     def __str__(self):
         return f"{self.name} ({self.point})"
@@ -155,7 +155,7 @@ class ReportIbProfile(models.Model):
     """ Развитие профиля IB-студента """
     report = models.ForeignKey('report.ReportMentor', verbose_name=_("Репорт наставника"), on_delete=models.CASCADE, null=True, related_name="profiles")
     profile = models.ForeignKey('ibo.LearnerProfile', verbose_name=_("Профиль студента"), on_delete=models.CASCADE, null=True, related_name="reports")
-    level = models.CharField(verbose_name=_("Уровень"), choices=LevelProfilePrimaryChoices.choices, default=None, max_length=6)
+    level = models.CharField(verbose_name=_("Уровень"), choices=LevelProfilePrimaryChoices.choices, default=None, null=True, blank=True, max_length=6)
     class Meta:
         verbose_name = 'Репорты наставника: профили студента IB'
         verbose_name_plural = 'Репорты наставника: профиль студента IB'
@@ -163,7 +163,7 @@ class ReportIbProfile(models.Model):
     def __str__(self):
         return f'{self.profile}: {self.level}'
 
-class ReportMentorPrimary(ReportBaseModel):
+class ReportMentorPrimary(ReportMentor):
     """ Репорты наставника начальных класса """
     class Meta:
         verbose_name = 'Репорт наставника НШ'

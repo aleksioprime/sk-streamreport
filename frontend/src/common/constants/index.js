@@ -35,9 +35,16 @@ export const MARK7 = [
   { value: 7, name: "7" },
 ]
 
-export const REPORT_TYPE = [
+export const REPORT_TYPES = [
   { value: 'noo', name: 'Репорты начальной школы' },
   { value: 'ooo', name: 'Репорты средней школы' },
   { value: 'soo', name: 'Репорты старшей школы' },
   { value: 'dp', name: 'Репорты старшей школы (DP)' },
+]
+
+export const PROFILE_LEVELS = [
+  { value: 'low', name: 'Слегка выражено' },
+  { value: 'medium', name: 'Выражено' },
+  { value: 'high', name: 'Выражено в сильной степени' },
+  { value: null, name: 'Не указано' },
 ]

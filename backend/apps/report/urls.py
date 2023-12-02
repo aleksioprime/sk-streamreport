@@ -44,7 +44,7 @@ urlpatterns = [
     path('report/mentor', ReportMentorViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('report/mentor/<int:pk>', ReportMentorViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/mentor/ibprofile', ReportIbProfileViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('report/mentor/ibprofile/<int:pk>', ReportIbProfileViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('report/mentor/ibprofile/<int:pk>', ReportIbProfileViewSet.as_view({'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/mentor/primary', ReportMentorPrimaryViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('report/mentor/primary/<int:pk>', ReportMentorPrimaryViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/mentor/primary/unit', ReportPrimaryUnitViewSet.as_view({'get': 'list', 'post': 'create'})),

@@ -35,13 +35,8 @@ class ReportPeriodModelAdmin(ImportExportModelAdmin):
         "name",
     )
 
-class ReportLevelInline(StackedInline):  # StackedInline, TabularInline
-    model = ReportCriterionLevel
-    extra = 1
-
 @register(ReportCriterion)
 class ReportCriterionModelAdmin(ImportExportModelAdmin):
-    inlines = [ReportLevelInline]
     list_display = (
         "id",
         "name",
@@ -50,28 +45,19 @@ class ReportCriterionModelAdmin(ImportExportModelAdmin):
     list_display_links = (
         "name",
     )
-    readonly_fields = (
-        "display_levels",
-    )
     filter_horizontal = (
         'subjects',
         'years',
+        'levels',
     )
     autocomplete_fields = (
         'author',
     )
 
-    def display_levels(self, obj):
-        levels = "\n".join([f"{lvl.point} - {lvl.name}" for lvl in obj.levels.all()])
-        return f"{levels}"
-    
-    display_levels.short_description = "Уровни критерия"
-
 @register(ReportCriterionLevel)
 class ReportCriterionLevelModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
-        "criterion",
         "name",
         "point",
     )

@@ -44,10 +44,10 @@ class ReportCriterionFilter(django_filters.FilterSet):
             queryset = queryset.filter(subjects__isnull=True)
         return queryset
 
-class ReportCriterionLevelFilter(django_filters.FilterSet):
-    class Meta:
-        model = ReportCriterionLevel
-        fields = {'criterion'}
+# class ReportCriterionLevelFilter(django_filters.FilterSet):
+#     class Meta:
+#         model = ReportCriterionLevel
+#         fields = {'criterions'}
 
 class ReportCriterionAchievementFilter(django_filters.FilterSet):
     class Meta:

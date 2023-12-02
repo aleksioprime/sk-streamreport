@@ -10,6 +10,7 @@ import { StudentMentorReportPrimaryResource } from "@/services/resources/report/
 import { ReportExtraResource } from "@/services/resources/report/reportExtra.resource";
 import { ReportMentorResource } from "@/services/resources/report/reportMentor.resource";
 import { ReportMentorPrimaryResource } from "@/services/resources/report/reportMentorPrimary.resource";
+import { ReportMentorIbProfileResource } from "@/services/resources/report/reportMentorIbProfile.resource";
 import { ReportTeacherPrimaryResource } from "@/services/resources/report/reportTeacherPrimary.resource";
 import { ReportTeacherSecondaryResource } from "@/services/resources/report/reportTeacherSecondary.resource";
 import { ReportTeacherHighResource } from "@/services/resources/report/reportTeacherHigh.resource";
@@ -21,6 +22,7 @@ import { SubjectResource } from "@/services/resources/curriculum/subject.resourc
 import { CurriculumResource } from "@/services/resources/curriculum/curriculum.resource";
 import { CourseResource } from "@/services/resources/syllabus/course.resource";
 import { ObjectiveResource } from "@/services/resources/myp/objective.resource";
+import { LearnerProfileResource } from "@/services/resources/ibo/learnerProfile.resource";
 
 export default {
     auth: new AuthResource(),
@@ -35,6 +37,7 @@ export default {
     reportExtra: new ReportExtraResource(),
     reportMentor: new ReportMentorResource(),
     reportMentorPrimary: new ReportMentorPrimaryResource(),
+    reportMentorIbProfile: new ReportMentorIbProfileResource(),
     reportTeacherPrimary: new ReportTeacherPrimaryResource(),
     reportTeacherSecondary: new ReportTeacherSecondaryResource(),
     reportTeacherHigh: new ReportTeacherHighResource(),
@@ -46,4 +49,5 @@ export default {
     curriculum: new CurriculumResource(),
     course: new CourseResource(),
     objective: new ObjectiveResource(),
+    learnerProfile: new LearnerProfileResource(),
   };

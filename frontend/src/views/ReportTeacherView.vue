@@ -176,14 +176,14 @@
 import { ref, computed, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import imageStudent from "@/assets/img/student.svg";
-import { MARK5, MARK7, REPORT_TYPE } from "@/common/constants";
+import { MARK5, MARK7, REPORT_TYPES } from "@/common/constants";
 
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
 import SearchDropdown from "@/common/components/SearchDropdown.vue";
 import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
 import ScaleRadio from "@/common/components/ScaleRadio.vue";
-
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
+
 import ReportTeacherTopic from "@/modules/ReportTeacherTopic.vue";
 import ReportTeacherCriteria from "@/modules/ReportTeacherCriteria.vue";
 import ReportTeacherMypCriteria from "@/modules/ReportTeacherMypCriteria.vue";
@@ -215,13 +215,13 @@ let confirmationModal = null;
 const currentReportType = computed(() => {
   const emptyType = { value: null, name: '-' }
   if (currentCurriculum.value.level == 'noo') {
-    return REPORT_TYPE.find(i => i.value == 'noo') || emptyType
+    return REPORT_TYPES.find(i => i.value == 'noo') || emptyType
   } else if (currentCurriculum.value.level == 'ooo') {
-    return REPORT_TYPE.find(i => i.value == 'ooo') || emptyType
+    return REPORT_TYPES.find(i => i.value == 'ooo') || emptyType
   } else if (currentCurriculum.value.level == 'soo' && currentCurriculum.value.ib == true) {
-    return REPORT_TYPE.find(i => i.value == 'dp') || emptyType
+    return REPORT_TYPES.find(i => i.value == 'dp') || emptyType
   } else if (currentCurriculum.value.level == 'soo' && currentCurriculum.value.ib == false) {
-    return REPORT_TYPE.find(i => i.value == 'soo') || emptyType
+    return REPORT_TYPES.find(i => i.value == 'soo') || emptyType
   } else {
     return emptyType
   }

@@ -70,7 +70,7 @@ from apps.report.services import (
 from apps.report.filters import (
     ReportPeriodFilter,
     ReportCriterionFilter,
-    ReportCriterionLevelFilter,
+    # ReportCriterionLevelFilter,
     ReportCriterionAchievementFilter,
     ReportPrimaryTopicFilter,
     ReportTeacherPrimaryFilter,
@@ -125,7 +125,7 @@ class ReportCriterionViewSet(ModelViewSet):
 class ReportCriterionLevelViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_report_criterion_level_queryset()
-    filterset_class = ReportCriterionLevelFilter
+    # filterset_class = ReportCriterionLevelFilter
     serializer_class = ReportCriterionLevelSerializer
 
 # Достижения по критериям в репорте: список, создание, редактирование и удаление
@@ -356,6 +356,15 @@ class ReportIbProfileViewSet(ModelViewSet):
         if self.action == "list":
             return ReportIbProfileListSerializer
         return ReportIbProfileUpdateSerializer
+    
+    # Переопределение метода partial_update для ответа с другим сериализатором
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = ReportIbProfileListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
     
 # Репорты классного руководителя: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
