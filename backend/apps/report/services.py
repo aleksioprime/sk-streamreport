@@ -175,9 +175,9 @@ def get_user_report_extra_queryset(group=None, period=None):
 
 def get_user_report_mentor_primary_queryset(group=None, period=None):
     return User.objects.all().prefetch_related(
-        'reportmentorprimary_student_reports',
+        'reportmentor_student_reports',
         Prefetch(
-                'reportmentorprimary_student_reports', 
+                'reportmentor_student_reports', 
                 queryset=ReportMentorPrimary.objects.filter(group=group, period=period), 
                 to_attr='filtered_reports'
             ),
