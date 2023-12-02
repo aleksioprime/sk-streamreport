@@ -8,8 +8,8 @@ class Syllabus(models.Model):
     years = models.ManyToManyField('general.StudyYear', verbose_name=_("Параллели"), blank=True, related_name="syllabi")
     file = models.FileField(upload_to='courses/', blank=True, verbose_name=_("Файл рабочей программы"))
     class Meta:
-        verbose_name = 'Учебный курс: программа всего курса'
-        verbose_name_plural = 'Учебный курс: программа всего курса'
+        verbose_name = 'Курс: Общая программа'
+        verbose_name_plural = 'Курс: Общие программы'
         ordering = ['subject']
     def __str__(self):
         return f"{self.subject}"
@@ -19,8 +19,8 @@ class Course(models.Model):
     syllabus = models.ForeignKey('syllabus.Syllabus', verbose_name=_("Учебная программа"), on_delete=models.SET_NULL, null=True, related_name="courses")
     year = models.ForeignKey('general.StudyYear', verbose_name=_("Параллель"), on_delete=models.SET_NULL, null=True, related_name="courses")
     class Meta:
-        verbose_name = 'Учебный курс: программа года'
-        verbose_name_plural = 'Учебный курс: программа года'
+        verbose_name = 'Курс: Программа года'
+        verbose_name_plural = 'Курс: Программы года'
         ordering = ['syllabus', 'year']
     def __str__(self):
         return f"{self.syllabus} ({self.year})"
@@ -34,8 +34,8 @@ class CourseChapter(models.Model):
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
     unit = models.ForeignKey('ibo.UnitPlanerBaseModel', verbose_name=_("Юнит"), on_delete=models.SET_NULL, null=True, blank=True, related_name="course_chapters")
     class Meta:
-        verbose_name = 'Раздел курса'
-        verbose_name_plural = 'Разделы курса'
+        verbose_name = 'Курс: Раздел'
+        verbose_name_plural = 'Курс: Разделы'
         ordering = ['course', 'number']
     def __str__(self):
         return f"{self.course}: {self.number}. {self.name}"
@@ -48,8 +48,8 @@ class CourseTopic(models.Model):
     description = models.TextField(verbose_name=_("Описание"), null=True, blank=True)
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=1)
     class Meta:
-        verbose_name = 'Тема курса'
-        verbose_name_plural = 'Темы курса'
+        verbose_name = 'Курс: Тема'
+        verbose_name_plural = 'Курс: Темы'
         ordering = ['chapter', 'number']
     def __str__(self):
         return f"{self.chapter}: {self.number}. {self.name}"
