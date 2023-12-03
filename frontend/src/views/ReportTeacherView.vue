@@ -38,10 +38,10 @@
       </button>
       <hr class="hr" />
       <div class="text-bg-light p-2 rounded">
-        <h5 v-if="!isEmpty(currentCurriculum)" class="mb-2">
+        <h5 v-if="!isEmpty(currentCurriculum)" class="my-2">
           Тип репорта: {{ currentReportType.name }}
         </h5>
-        <h5 v-if="!isEmpty(currentSubject)" class="mb-2">
+        <h5 v-if="!isEmpty(currentSubject)" class="my-2">
           {{ currentSubject.name }}
           <span v-if="currentSubject.group_ib">
             ({{ currentSubject.group_ib.name }}
@@ -58,7 +58,7 @@
               <hr/>
             </div>
             <div v-for="user in generalStore.users" :key="user.id">
-              <div class="d-flex align-items-center my-1">
+              <div class="d-flex align-items-center">
                 <img :src="user.photo ? user.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
                 <div v-if="!checkStudentWithReport(user.id)" class="me-2">
                   {{ user.short_name }}
@@ -107,6 +107,9 @@
                     :aria-labelledby="`heading-${report.id}`">
                     <div class="accordion-body">
                       <div class="my-3">
+                        <report-teacher-myp-strand :report="report" v-if="currentReportType.value == 'ooo'"/>
+                      </div>
+                      <div class="my-3">
                         <report-teacher-myp-criteria :report="report" v-if="currentReportType.value == 'ooo'"/>
                       </div>
                       <div class="my-3" v-if="['ooo', 'soo', 'ib'].includes(currentReportType.value)">
@@ -154,7 +157,7 @@
               </div>
             </div>
           </div>
-          <div class="card" v-else>
+          <div class="card my-2" v-else>
             <div class="card-body">
               <div class="d-flex justify-content-center">
                 Ваших репортов в текущем классе пока нет
@@ -163,7 +166,7 @@
           </div>
         </div>
       </div>
-      <div class="card" v-else>
+      <div class="card my-2" v-else>
         <div class="card-body">
           <div class="d-flex justify-content-center">
             Выберите необходимые параметры для отображения карточек студентов
@@ -193,6 +196,7 @@ import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
 import ReportTeacherTopic from "@/modules/ReportTeacherTopic.vue";
 import ReportTeacherCriteria from "@/modules/ReportTeacherCriteria.vue";
 import ReportTeacherMypCriteria from "@/modules/ReportTeacherMypCriteria.vue";
+import ReportTeacherMypStrand from "@/modules/ReportTeacherMypStrand.vue";
 
 import { useGeneralStore } from "@/stores/general";
 import { useCurriculumStore } from "@/stores/curriculum";
@@ -609,7 +613,13 @@ onMounted(() => {
   if (!unitMypStore.isObjectivesLoaded) {
     unitMypStore.loadObjectives();
   }
-  
+  if (!unitMypStore.isStrandsLoaded && !isEmpty(currentSubject.value)) {
+    unitMypStore.loadStrands({
+      params: {
+        objective__group: currentSubject.value.group_ib.id
+      }
+    });
+  }
   getSubjects();
   getTeacherReports();
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });

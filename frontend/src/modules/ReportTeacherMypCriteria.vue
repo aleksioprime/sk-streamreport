@@ -34,10 +34,9 @@ const props = defineProps({
   },
 });
 
+const reportStore = useReportStore();
 const unitMypStore = useUnitMypStore();
 const emit = defineEmits(["save"]);
-
-const reportStore = useReportStore();
 
 // Фильтр списка MYP критериев по предмету репорта, а также добавление свойства report с данными о добавленных критериях
 const filteredCriteriaMyp = computed(() => {

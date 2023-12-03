@@ -236,5 +236,18 @@ export const useReportStore = defineStore("report", {
     async removeReportMentorIbProfile(id) {
       return await resources.reportMentorIbProfile.removeReportMentorIbProfile(id);
     },
+    // CRUD для результатов по критериям MYP
+    async loadReportSecondaryLevels(config) {
+      return await resources.reportSecondaryLevel.getReportSecondaryLevels(config);
+    },
+    async createReportSecondaryLevel(report) {
+      return await resources.reportSecondaryLevel.createReportSecondaryLevel(report);
+    },
+    async updateReportSecondaryLevel(report) {
+      return await resources.reportSecondaryLevel.updateReportSecondaryLevel(report);
+    },
+    async removeReportSecondaryLevel(id) {
+      return await resources.reportSecondaryLevel.removeReportSecondaryLevel(id);
+    },
   }
 });

@@ -38,7 +38,7 @@ urlpatterns = [
     path('report/teacher/secondary/criterion', ReportSecondaryCriterionViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('report/teacher/secondary/criterion/<int:pk>', ReportSecondaryCriterionViewSet.as_view({'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/teacher/secondary/level', ReportSecondaryLevelViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('report/teacher/secondary/level/<int:pk>', ReportSecondaryLevelViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('report/teacher/secondary/level/<int:pk>', ReportSecondaryLevelViewSet.as_view({'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/teacher/high', ReportTeacherHighViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('report/teacher/high/<int:pk>', ReportTeacherHighViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/mentor', ReportMentorViewSet.as_view({'get': 'list', 'post': 'create'})),

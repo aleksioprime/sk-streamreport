@@ -25,7 +25,7 @@ class MypObjectiveFilter(django_filters.FilterSet):
 class StrandFilter(django_filters.FilterSet):
     class Meta:
         model = Strand
-        fields = {'objective'}
+        fields = {'objective', 'objective__group'}
 
 class StrandLevelFilter(django_filters.FilterSet):
     class Meta:

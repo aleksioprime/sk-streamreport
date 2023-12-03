@@ -155,12 +155,12 @@ class ReportSecondaryLevelModelAdmin(ModelAdmin):
     list_display = (
         "id",
         "report",
-        "objective",
+        "strand",
         "level",
     )
     list_display_links = (
         "report",
-        "objective",
+        "strand",
     )
 
 @register(ReportSecondaryCriterion)

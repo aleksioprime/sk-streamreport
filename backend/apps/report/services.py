@@ -80,8 +80,10 @@ def get_report_secondary_criterion_queryset():
 
 def get_report_secondary_level_queryset():
     return ReportSecondaryLevel.objects.all().select_related(
-        'objective',
+        'strand',
         'level',
+        ).prefetch_related(
+            'strand__achieve_levels'
         )
 
 def get_report_teacher_secondary_queryset():
@@ -105,7 +107,7 @@ def get_report_teacher_secondary_queryset():
             'criterion_marks',
             'criterion_marks__criterion',
             'objective_levels',
-            'objective_levels__objective',
+            'objective_levels__strand',
             'objective_levels__level',
             ).all()
 

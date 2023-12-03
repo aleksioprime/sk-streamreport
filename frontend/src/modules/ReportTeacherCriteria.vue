@@ -49,23 +49,29 @@
         <div>
           <div class="my-2">
             <h5>Общие критерии</h5>
-            <div class="form-check" v-for="criterion in groupedCriteria.withoutSubjects" :key="criterion.id">
-              <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
-                v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
-              <label class="form-check-label" :for="`check-${criterion.id}`">
-                {{ criterion.name }} (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>)
-              </label>
+            <div v-if="groupedCriteria.withoutSubjects && groupedCriteria.withoutSubjects.length">
+              <div class="form-check" v-for="criterion in groupedCriteria.withoutSubjects" :key="criterion.id">
+                <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
+                  v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
+                <label class="form-check-label" :for="`check-${criterion.id}`">
+                  {{ criterion.name }} (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>)
+                </label>
+              </div>
             </div>
+            <div v-else class="my-2">Критериев не найдено</div>
           </div>
           <div class="my-2">
             <h5>Предметные критерии</h5>
-            <div class="form-check" v-for="criterion in groupedCriteria.withSubjects" :key="criterion.id">
-              <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
-                v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
-              <label class="form-check-label" :for="`check-${criterion.id}`">
-                {{ criterion.name }} (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>)
-              </label>
+            <div v-if="groupedCriteria.withoutSubjects && groupedCriteria.withoutSubjects.length">
+              <div class="form-check" v-for="criterion in groupedCriteria.withSubjects" :key="criterion.id">
+                <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
+                  v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
+                <label class="form-check-label" :for="`check-${criterion.id}`">
+                  {{ criterion.name }} (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>)
+                </label>
+              </div>
             </div>
+            <div v-else class="my-2">Критериев не найдено</div>
           </div>
       </div>
       </div>

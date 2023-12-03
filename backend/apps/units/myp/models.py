@@ -41,6 +41,9 @@ class MypObjective(models.Model):
         verbose_name = 'MYP: Предметная цель'
         verbose_name_plural = 'MYP: Предметные цели'
         ordering = ['group', 'letter']
+    @property
+    def full_name(self):
+        return f"{self.letter.upper()}. {self.name}"
     def __str__(self):
         return f"{self.letter} | {self.group}"
 

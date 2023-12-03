@@ -1,4 +1,4 @@
-from django.contrib.admin import register, site, ModelAdmin
+from django.contrib.admin import register, site, ModelAdmin, TabularInline
 from django.contrib.auth.models import Group
 from import_export.admin import ImportExportModelAdmin
 
@@ -210,8 +210,15 @@ class StudyYearModelAdmin(ImportExportModelAdmin):
         "number",
     )
 
+class ClassGroupRoleInline(TabularInline):  # StackedInline, TabularInline
+    model = ClassGroupRole
+    extra = 1
+    autocomplete_fields = ['user']
+
+
 @register(ClassGroup)
 class ClassGroupModelAdmin(ImportExportModelAdmin):
+    inlines = [ClassGroupRoleInline]
     list_display = (
         "id",
         "year_academic",

@@ -52,7 +52,7 @@ class StrandLevelAchievementSerializer(serializers.ModelSerializer):
 
 # Cтрэнды предметных целей по уровням и годам обучения для MYP
 class StrandLevelSerializer(serializers.ModelSerializer):
-    achieve_levels = StrandLevelAchievementSerializer(many=True)
+    # achieve_levels = StrandLevelAchievementSerializer(many=True)
     class Meta:
         model = StrandLevel
         fields = (
@@ -60,7 +60,7 @@ class StrandLevelSerializer(serializers.ModelSerializer):
             "name",
             "name_rus",
             "level",
-            "achieve_levels",
+            # "achieve_levels",
             )
 
 # Cтрэнды предметных целей для MYP
@@ -114,6 +114,7 @@ class MypObjectiveListSerializer(serializers.ModelSerializer):
             "letter",
             "name",
             "name_rus",
+            "full_name",
             "description",
             "description_rus",
             "group",
@@ -122,6 +123,7 @@ class MypObjectiveListSerializer(serializers.ModelSerializer):
 # Вывод списка стрэндов предметных целей для MYP
 class StrandListSerializer(serializers.ModelSerializer):
     objective = MypObjectiveListSerializer()
+    letter_name = serializers.CharField(source='get_letter_display', read_only=True)
     strand_levels = StrandLevelSerializer(many=True)
     class Meta:
         model = Strand
@@ -129,6 +131,7 @@ class StrandListSerializer(serializers.ModelSerializer):
             "id",
             "number",
             "letter",
+            "letter_name",
             "name",
             "name_rus",
             "objective",

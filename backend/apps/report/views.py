@@ -279,6 +279,15 @@ class ReportSecondaryLevelViewSet(ModelViewSet):
             return ReportSecondaryLevelListSerializer
         return ReportSecondaryLevelUpdateSerializer
     
+    # Переопределение метода partial_update для ответа с другим сериализатором
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = ReportSecondaryLevelListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
+    
 # Репорты учителя в средней школе: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
     list=extend_schema(summary='Вывод списка репортов учителя в средней школе', tags=['Репорты: Учителя СрШ']),

@@ -16,12 +16,14 @@ import { ReportTeacherSecondaryResource } from "@/services/resources/report/repo
 import { ReportTeacherHighResource } from "@/services/resources/report/reportTeacherHigh.resource";
 import { ReportPrimaryTopicResource } from "@/services/resources/report/reportPrimaryTopic.resource";
 import { ReportSecondaryCriterionResource } from "@/services/resources/report/reportSecondaryCriterion.resource";
+import { ReportSecondaryLevelResource } from "@/services/resources/report/reportSecondaryLevel.resource";
 import { ReportTeacherAchievementResource } from "@/services/resources/report/reportTeacherAchievement.resource";
 import { StudyYearResource } from "@/services/resources/general/studyYear.resource";
 import { SubjectResource } from "@/services/resources/curriculum/subject.resource";
 import { CurriculumResource } from "@/services/resources/curriculum/curriculum.resource";
 import { CourseResource } from "@/services/resources/syllabus/course.resource";
 import { ObjectiveResource } from "@/services/resources/myp/objective.resource";
+import { StrandResource } from "@/services/resources/myp/strand.resource";
 import { LearnerProfileResource } from "@/services/resources/ibo/learnerProfile.resource";
 
 export default {
@@ -43,11 +45,13 @@ export default {
     reportTeacherHigh: new ReportTeacherHighResource(),
     reportPrimaryTopic: new ReportPrimaryTopicResource(),
     reportSecondaryCriterion: new ReportSecondaryCriterionResource(),
+    reportSecondaryLevel: new ReportSecondaryLevelResource(),
     reportTeacherAchievement: new ReportTeacherAchievementResource(),
     studyYear: new StudyYearResource(),
     subject: new SubjectResource(),
     curriculum: new CurriculumResource(),
     course: new CourseResource(),
     objective: new ObjectiveResource(),
+    strand: new StrandResource(),
     learnerProfile: new LearnerProfileResource(),
   };

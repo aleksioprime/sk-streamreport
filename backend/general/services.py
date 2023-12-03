@@ -16,6 +16,7 @@ def get_group_queryset():
             "year_academic",
             "year_study",
             "year_study__ib",
+            "mentor",
         )
 
 def load_file_excel():

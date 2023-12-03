@@ -1,0 +1,184 @@
+<template>
+  <div>
+    <div class="d-flex align-items-center">
+      <h5>Достижения по критериям MYP</h5>
+      <simple-dropdown class="ms-auto" v-model="currentLevel" :propItems="YEAR_LEVELS" showName="name" :disabled="isYearDisable"/>
+    </div>
+    {{ objectives }}
+    <div v-for="objectives, key in strandsByObjective" :key="key">
+      <div class="my-2"><b>{{ unitMypStore.objectives.find(i => i.id == key).full_name }}</b></div>
+      <div v-for="strand in objectives" :key="strand.id">
+        <div v-if="strand.level_strand">
+          <div class="d-flex align-items-center mb-2">
+            <i class="bi bi-dash-square dot-menu me-2" v-if="strand.level_strand.report" @click="removeReportSecondaryLevel(strand.level_strand.report.id)"></i>
+            <i class="bi bi-plus-square dot-menu me-2" v-else @click="createReportSecondaryLevel(strand.level_strand.id)"></i>
+            <span :class="{ 'select': strand.level_strand.report }">{{ strand.letter_name }}. Students should be able to {{ strand.level_strand.name }}
+            <b v-if="strand.level_strand.report && strand.level_strand.report.level"> - {{ strand.level_strand.report.level.point }}</b>
+            <b v-if="strand.level_strand.report && !strand.level_strand.report.level"> - 0</b>
+          </span>
+          </div>
+          <ul v-if="strand.level_strand.report">
+            <li>
+              <div class="pointer" :class="{ 'select': !strand.level_strand.report.level }" @click="updateReportSecondaryLevel(null, strand.level_strand.report.id)">
+                The student does not reach a standard described by any of the descriptors below
+              </div>
+            </li>
+            <li v-for="achieve in strand.level_strand.report.strand.achieve_levels" :key="achieve.id" @click="updateReportSecondaryLevel(achieve.id, strand.level_strand.report.id)">
+              <div class="pointer" :class="{ 'select': strand.level_strand.report.level && achieve.id == strand.level_strand.report.level.id }">
+                The student {{ achieve.name }} ({{ achieve.point-1 }}-{{ achieve.point }})
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <hr>
+    {{ unitMypStore.objective_levels }}
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useUnitMypStore } from "@/stores/unitMyp";
+import { useReportStore } from "@/stores/report";
+
+import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
+
+const props = defineProps({
+  report: {
+    type: Object,
+    default: {},
+  },
+});
+
+const unitMypStore = useUnitMypStore();
+const reportStore = useReportStore();
+
+const YEAR_LEVELS = [
+  { value: 1, name: 'Year 1 / Emergent' },
+  { value: 3, name: 'Year 3 / Capable' },
+  { value: 5, name: 'Year 5 / Proficient' },
+  { value: 0, name: 'Year All' },
+]
+
+// Вспомогательная функция для проверки объекта на пустое содержимое
+const isEmpty = (obj) => {
+  return Object.keys(obj).length === 0;
+};
+
+const isYearDisable = computed(() => {
+  return reportYear.value ? !isEmpty(reportYear.value) : false
+})
+
+const reportYear = computed(() => {
+  return YEAR_LEVELS.find(i => props.report.objective_levels.length && (i.value == props.report.objective_levels[0].strand.level))
+})
+
+const currentLevel = ref(reportYear.value || { value: 0, name: 'Year All' })
+
+const objectives = computed(() => {
+  return unitMypStore.objectives.filter(i => i.group.id == props.report.subject.group_ib).map((item) => {
+    return {
+      ...item,
+      count_level: props.report.objective_levels.filter(i => i.strand.objective == item.id),
+      count_point: props.report.objective_levels.filter(i => i.strand.objective == item.id)
+    }
+  })
+})
+
+function groupByNestedProperty(items, key, subKey) {
+  return items.reduce((accumulator, item) => {
+    // Получаем ключ для группировки из вложенного свойства текущего элемента
+    const groupKey = item[key][subKey];
+
+    // Если в аккумуляторе еще нет этой группы, создаем ее
+    if (!accumulator[groupKey]) {
+      accumulator[groupKey] = [];
+    }
+
+    // Добавляем текущий элемент в соответствующую группу
+    accumulator[groupKey].push(item);
+
+    return accumulator;
+  }, {}); // Начальное значение аккумулятора - пустой объект
+}
+
+const strandsByObjective = computed(() => {
+  return groupByNestedProperty(unitMypStore.strands.map(strand => {
+    return {
+      ...strand,
+      level_strand: strand.strand_levels.map((item) => {
+        return {
+          ...item,
+          report: props.report.objective_levels.find(
+            (i) => i.strand.id == item.id
+          ),
+        };
+      }).find(i => i.level == currentLevel.value.value)
+    }
+  }), 'objective', 'id')
+});
+
+// Функция редактирования конкретного поля и обновление данных из результата
+const updateReportSecondaryLevel = async (value, id) => {
+  console.log(
+    `Сохраняемое значение для level: ${value} для записи с ID: ${id}`
+  );
+  const updatingData = {
+    id: id,
+    level: value,
+  }
+  reportStore.updateReportSecondaryLevel(updatingData).then((result) => {
+    const index = reportStore.reportTeachers.findIndex(item => item.id === props.report.id);
+    if (index != -1) {
+      reportStore.reportTeachers[index].objective_levels = reportStore.reportTeachers[index].objective_levels.map(item => item.id === result.data.id ? { ...result.data } : item);
+    }
+  });
+};
+
+const createReportSecondaryLevel = (id) => {
+  const data = {
+    report: props.report.id,
+    strand: id,
+  };
+  reportStore.createReportSecondaryLevel(data).then((result) => {
+    getReportSecondaryLevels();
+  });
+};
+
+// Функция запроса на удаление выбранного критерия из оценки репорта
+const removeReportSecondaryLevel = (id) => {
+  reportStore.removeReportSecondaryLevel(id).then(() => {
+    getReportSecondaryLevels();
+  });
+};
+
+// Функция запроса оценок по критериям конкретного репорта и замена этого блока в переменной reportStore
+// Выполняется после добавления или удаления критерия из репорта
+const getReportSecondaryLevels = () => {
+  const config = {
+    params: {
+      report: props.report.id,
+    },
+  };
+  reportStore.loadReportSecondaryLevels(config).then((result) => {
+    const index = reportStore.reportTeachers.findIndex(
+      (item) => item.id === props.report.id
+    );
+    reportStore.reportTeachers[index].objective_levels = [...result.data];
+  });
+};
+
+</script>
+
+<style scoped>
+.select {
+  font-weight: bold;
+}
+.pointer {
+  cursor: pointer;
+}
+.pointer:hover {
+  text-decoration: underline;
+}
+</style>

@@ -104,7 +104,7 @@
           </div>
         </div>
       </div>
-      <div class="card" v-else>
+      <div class="card my-2" v-else>
         <div class="card-body">
           <div class="d-flex justify-content-center">
             Выберите необходимые параметры для отображения карточек студентов
