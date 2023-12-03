@@ -6,6 +6,7 @@ from apps.report.models import (
     ReportCriterionLevel,
     ReportCriterionAchievement,
     ReportPrimaryTopic,
+    ReportTeacher,
     ReportTeacherPrimary,
     ReportSecondaryCriterion,
     ReportSecondaryLevel,
@@ -186,11 +187,68 @@ def get_user_report_mentor_primary_queryset(group=None, period=None):
 
 def get_user_report_mentor_queryset(group=None, period=None):
     return User.objects.all().prefetch_related(
-        'reportmentor_student_reports',
         Prefetch(
                 'reportmentor_student_reports', 
-                queryset=ReportMentor.objects.filter(group=group, period=period), 
+                queryset=ReportMentor.objects.filter(group=group, period=period).select_related(
+                    'author', 
+                    'period',
+                    'period__year',
+                    'group',
+                    'group__year_academic',
+                    'group__year_study',
+                    ), 
                 to_attr='filtered_reports'
+            ),
+        Prefetch(
+                'reportteacher_student_reports', 
+                queryset=ReportTeacherPrimary.objects.filter(group=group, period=period).select_related(
+                    'author',
+                    'period',
+                    'period__year',
+                    'group',
+                    'group__year_academic',
+                    'group__year_study',
+                    'subject',
+                    ), 
+                to_attr='filtered_teacher_primary_reports'
+            ),
+        Prefetch(
+                'reportteacher_student_reports', 
+                queryset=ReportTeacherSecondary.objects.filter(group=group, period=period).select_related(
+                    'author',
+                    'period',
+                    'period__year',
+                    'group',
+                    'group__year_academic',
+                    'group__year_study',
+                    'subject',
+                    ), 
+                to_attr='filtered_teacher_secondary_reports'
+            ),
+        Prefetch(
+                'reportteacher_student_reports', 
+                queryset=ReportTeacherHigh.objects.filter(group=group, period=period).select_related(
+                    'author',
+                    'period',
+                    'period__year',
+                    'group',
+                    'group__year_academic',
+                    'group__year_study',
+                    'subject',
+                    ), 
+                to_attr='filtered_teacher_high_reports'
+            ),
+        Prefetch(
+                'reportextra_student_reports', 
+                queryset=ReportExtra.objects.filter(group=group, period=period).select_related(
+                    'author', 
+                    'period',
+                    'period__year',
+                    'group',
+                    'group__year_academic',
+                    'group__year_study',
+                    ), 
+                to_attr='filtered_extra_reports'
             ),
         'classes',
         )

@@ -168,6 +168,7 @@ class StudyYearListGeneralSerializer(serializers.ModelSerializer):
 class ClassGroupListGeneralSerializer(serializers.ModelSerializer):
     year_academic = AcademicYearListGeneralSerializer()
     year_study = StudyYearListGeneralSerializer()
+    mentor = UserListGeneralSerializer()
     class Meta:
         model = ClassGroup
         fields = (
@@ -177,6 +178,7 @@ class ClassGroupListGeneralSerializer(serializers.ModelSerializer):
             "letter",
             "name",
             "curriculum",
+            "mentor",
             )
 
 # Информация о группе

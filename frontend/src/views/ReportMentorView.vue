@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Репорты наставника</h1>
+    <h1>Репорты руководителя класса</h1>
     <div class="py-2">
       <div class="d-flex flex-wrap">
         <div class="m-2">
@@ -29,61 +29,177 @@
         Показать студентов
       </button>
       <hr class="hr" />
-      <h5 v-if="!isEmpty(currentStudyYear)" class="mb-2">
-        Тип репорта: {{ currentStudyYear.level_name }}
-      </h5>
-      <h5>
-        <span v-if="!isEmpty(currentGroup)">Класс: {{ currentGroup.name }}</span>
-      </h5>
-      <div v-if="reportStore.studentMentorReports.length">
-        <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3">
-          <div class="card my-1">
-            <div class="card-body d-flex align-items-center">
-              <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
-              <h4 class="m-0">
-                {{ student.last_name }} {{ student.first_name }}
-              </h4>
-              <div class="ms-auto">
-                <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                <ul class="dropdown-menu">
-                  <li v-if="!student.reports.length">
-                    <a class="dropdown-item" href="##" @click="createStudentMentorReport(student.id)">Добавит репорт</a>
-                  </li>
-                  <li v-else>
-                    <a class="dropdown-item" href="##" @click="showConfirmationModal(student)">Удалить репорт</a>
-                  </li>
-                </ul>
+      <div class="text-bg-light p-2 rounded">
+        <h5 v-if="!isEmpty(currentStudyYear)" class="mb-2">
+          Тип репорта: {{ currentReportType.name }}
+        </h5>
+      </div>
+      <div v-if="reportStore.studentMentorReports.length" class="row">
+        <div class="col-md-3">
+          <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student">
+            <div v-if="!isEmpty(currentGroup)">
+              <h5>{{ currentGroup.name }} класс</h5> 
+              <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
+              <hr/>
+            </div>
+            <div v-for="student in reportStore.studentMentorReports" :key="student.id">
+              <div class="d-flex align-items-center my-1">
+                <img :src="student.photo ? student.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
+                <a class="select" :href="`#st-${student.id}`">
+                  {{ student.short_name }}
+                </a>
               </div>
             </div>
           </div>
-          <div class="accordion" :id="`accordionStudent-${student.id}`" v-if="student.reports.length">
-            <div class="accordion-item">
-              <h2 class="accordion-header" :id="`heading-${student.id}`">
-                <button class="accordion-button collapsed p-2" :class="{ 'report-success': student.report.comment }"
-                  type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${student.id}`" aria-expanded="true"
-                  :aria-controls="`collapse-${student.id}`">
-                  Репорт студента
-                </button>
-              </h2>
-              <div :id="`collapse-${student.id}`" class="accordion-collapse collapse"
-                :aria-labelledby="`heading-${student.id}`">
-                <div class="accordion-body">
-                  <div class="my-2">
-                    <report-mentor-ib-profile :report="student.report"/>
-                  </div>
-                  <hr />
-                  <div class="my-2">
-                    <editable-area-tiny class="text-muted" :propData="student.report.comment" propName="comment"
-                      @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
-                  </div>
-                  <hr />
-                  <div class="d-flex align-items-center">
-                    <i class="bi bi-person"></i>
-                    <div class="ms-1">
-                      {{ student.report.author.short_name }}
+        </div>
+        <div class="col pe-3">
+          <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3" :id="`st-${student.id}`">
+            <div class="card my-1 anchor-student">
+              <div class="card-body d-flex align-items-center">
+                <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
+                <h4 class="m-0">
+                  {{ student.last_name }} {{ student.first_name }}
+                </h4>
+                <div class="ms-auto">
+                  <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                  <ul class="dropdown-menu">
+                    <li v-if="!student.reports.length">
+                      <a class="dropdown-item" href="##" @click="createStudentMentorReport(student.id)">Добавить репорт
+                        руководителя</a>
+                    </li>
+                    <li v-else>
+                      <a class="dropdown-item" href="##" @click="showConfirmationModal(student)">Удалить репорт
+                        руководителя</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="accordion my-1" :id="`accordionStudent-${student.id}`" v-if="student.reports.length">
+              <div class="accordion-item">
+                <h2 class="accordion-header" :id="`heading-${student.id}`">
+                  <button class="accordion-button collapsed p-2" :class="{ 'report-success': student.report.comment }"
+                    type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${student.id}`"
+                    aria-expanded="true" :aria-controls="`collapse-${student.id}`">
+                    Репорт руководителя класса
+                  </button>
+                </h2>
+                <div :id="`collapse-${student.id}`" class="accordion-collapse collapse"
+                  :aria-labelledby="`heading-${student.id}`">
+                  <div class="accordion-body">
+                    <div class="my-2">
+                      <report-mentor-ib-profile :report="student.report" />
                     </div>
-                    <div class="ms-2">
-                      {{ formatDate(student.report.updated_at) }}
+                    <hr />
+                    <div class="my-2">
+                      <editable-area-tiny class="text-muted" :propData="student.report.comment" propName="comment"
+                        @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
+                    </div>
+                    <hr />
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-person"></i>
+                      <div class="ms-1">
+                        {{ student.report.author.short_name }}
+                      </div>
+                      <div class="ms-2">
+                        {{ formatDate(student.report.updated_at) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accordion my-1" :id="`accordionStudentExtra-${student.report.id}`" v-if="student.reports.length">
+              <div class="accordion-item">
+                <h2 class="accordion-header" :id="`headingExtra-${student.report.id}`">
+                  <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse"
+                    :data-bs-target="`#collapseExtra-${student.report.id}`" aria-expanded="true"
+                    :aria-controls="`collapseExtra-${student.report.id}`">
+                    Репорты сотрудников класса
+                  </button>
+                </h2>
+                <div :id="`collapseExtra-${student.report.id}`" class="accordion-collapse collapse"
+                  :aria-labelledby="`headingExtra-${student.report.id}`">
+                  <div class="accordion-body">
+                    <div v-if="student.extra_reports && student.extra_reports.length">
+                      <div v-for="extra in student.report_extra" :key="extra.id">
+                        <div class="my-2" v-html="extra.comment"></div>
+                        <hr />
+                        <div class="d-flex align-items-center">
+                          <i class="bi bi-person"></i>
+                          <div class="ms-1">
+                            {{ extra.author.short_name }}
+                          </div>
+                          <div class="ms-2">
+                            {{ formatDate(extra.updated_at) }}
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div v-else>
+                      Репорта не найдено!
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accordion my-1" :id="`accordionStudentTeacher-${student.report.id}`"
+              v-if="student.reports.length">
+              <div class="accordion-item">
+                <h2 class="accordion-header" :id="`headingTeacher-${student.report.id}`">
+                  <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse"
+                    :data-bs-target="`#collapseTeacher-${student.report.id}`" aria-expanded="true"
+                    :aria-controls="`collapseTeacher-${student.report.id}`">
+                    Репорты учителей
+                  </button>
+                </h2>
+                <div :id="`collapseTeacher-${student.report.id}`" class="accordion-collapse collapse"
+                  :aria-labelledby="`headingTeacher-${student.report.id}`">
+                  <div class="accordion-body">
+                    <div v-if="student.report_teacher && student.report_teacher.length">
+                      <div v-for="teacher in student.report_teacher" :key="teacher.id">
+                        <div><strong>{{ teacher.subject.name }}</strong> ({{ teacher.period.name }}, {{
+                          teacher.period.year.name }})</div>
+                        <div class="my-2" v-if="teacher.criterion_achievements && teacher.criterion_achievements.length">
+                          <div v-for="cr in teacher.criterion_achievements" :key="cr.id">
+                            {{ cr.criterion.name }}: <b>{{ cr.achievement.name }}</b>
+                          </div>
+                        </div>
+                        <div class="my-2" v-if="teacher.topic_achievements && teacher.topic_achievements.length">
+                          <div v-for="topic in teacher.topic_achievements" :key="topic.id">
+                            {{ topic }}
+                          </div>
+                        </div>
+                        <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
+                          <div v-for="objective in teacher.objective_levels" :key="objective.id">
+                            {{ objective }}
+                          </div>
+                        </div>
+                        <div class="my-2" v-if="teacher.criterion_marks && teacher.criterion_marks.length">
+                          <div v-for="cr in teacher.criterion_marks" :key="cr.id">
+                            {{ cr.criterion.letter.toUpperCase() }}. {{ cr.criterion.name }}: <b>{{ cr.mark }}</b>
+                          </div>
+                        </div>
+                        <div class="my-2" v-if="teacher.final_grade_ib">Итоговая оценка IB: <b>{{ teacher.final_grade_ib
+                        }}</b></div>
+                        <div class="my-2" v-if="teacher.final_grade">Итоговая оценка: <b>{{ teacher.final_grade }}</b>
+                        </div>
+                        <div class="my-2 text-muted" v-html="teacher.comment"></div>
+                        <hr />
+                        <div class="d-flex align-items-center">
+                          <i class="bi bi-person"></i>
+                          <div class="ms-1">
+                            {{ teacher.author.short_name }}
+                          </div>
+                          <div class="ms-2">
+                            {{ formatDate(teacher.updated_at) }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else>
+                      Репортов не найдено!
                     </div>
                   </div>
                 </div>
@@ -145,6 +261,14 @@ let confirmationModal = null;
 const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };
+
+const currentReportType = computed(() => {
+  if (currentStudyYear.value.level == 'noo') {
+    return { value: 'noo', name: 'Репорт начальной школы' }
+  } else {
+    return { value: 'ooo', name: 'Репорт средней или старшей школы' }
+  }
+})
 
 // Фильтр списка периодов репорта по выбранному учебному году
 const filteredReportPeriod = computed(() => {
@@ -256,33 +380,18 @@ const getStudentMentorReports = () => {
   ) {
     return null;
   }
-  if (currentStudyYear.value.level == "noo") {
-    reportStore
-      .loadStudentMentorPrimaryReports({
-        params: {
-          groups: 3,
-          classes: currentGroup.value.id,
-          report_period: currentReportPeriod.value.id,
-          report_group: currentGroup.value.id,
-        },
-      })
-      .then(() => {
-        console.log(reportStore.studentMentorReports);
-      });
-  } else {
-    reportStore
-      .loadStudentMentorReports({
-        params: {
-          groups: 3,
-          classes: currentGroup.value.id,
-          report_period: currentReportPeriod.value.id,
-          report_group: currentGroup.value.id,
-        },
-      })
-      .then(() => {
-        console.log(reportStore.studentMentorReports);
-      });
-  }
+  reportStore
+    .loadStudentMentorReports({
+      params: {
+        groups: 3,
+        classes: currentGroup.value.id,
+        report_period: currentReportPeriod.value.id,
+        report_group: currentGroup.value.id,
+      },
+    })
+    .then(() => {
+      console.log(reportStore.studentMentorReports);
+    });
 };
 
 // Запрос на создание репорта для студента:
@@ -428,3 +537,22 @@ onMounted(() => {
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });
 </script>
+
+<style scoped>
+.list-right-student {
+  top: 10px;
+}
+:target::before {
+    content: "";
+    display: block;
+    height: 90px; /* Высота вашей фиксированной шапки */
+    margin-top: -90px;
+}
+:target .card {
+    animation: blink 1s ease-in-out 0s 3; /* Анимация будет длиться 1 секунду, повторяться 3 раза */
+}
+@keyframes blink {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgb(205, 254, 238); } /* Промежуточный цвет фона для мигания */
+}
+</style>

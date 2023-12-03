@@ -21,6 +21,16 @@ from .common import (
     ReportPeriodListSerializer,
 )
 
+from .report_teacher import (
+    ReportTeacherPrimaryListSerializer,
+    ReportTeacherSecondaryListSerializer,
+    ReportTeacherHighListSerializer,
+)
+
+from .report_extra import (
+    ReportExtraListSerializer
+)
+
 from general.models import (
     User
 )
@@ -240,6 +250,11 @@ class ReportMentorSerializer(serializers.ModelSerializer):
 # Вывод списка пользователей с фильтрацией репортов классных руководителей
 class UserListReportMentorSerializer(serializers.ModelSerializer):
     reports = serializers.SerializerMethodField()
+    teacher_primary_reports = serializers.SerializerMethodField()
+    teacher_secondary_reports = serializers.SerializerMethodField()
+    teacher_high_reports = serializers.SerializerMethodField()
+    extra_reports = serializers.SerializerMethodField()
+    short_name = serializers.CharField(source='get_short_name', read_only=True)
     class Meta:
         model = User
         fields = (
@@ -247,7 +262,12 @@ class UserListReportMentorSerializer(serializers.ModelSerializer):
             "first_name", 
             "last_name",
             "middle_name",
+            "short_name",
             "reports",
+            "teacher_primary_reports",
+            "teacher_secondary_reports",
+            "teacher_high_reports",
+            "extra_reports",
             "photo",
             )
     def get_reports(self, obj):
@@ -255,5 +275,33 @@ class UserListReportMentorSerializer(serializers.ModelSerializer):
         group = self.context['request'].query_params.get('report_group', None)
         if period is not None and  group is not None:
             return ReportMentorSerializer(obj.filtered_reports, many=True).data
+        else:
+            return None
+    def get_teacher_primary_reports(self, obj):
+        period = self.context['request'].query_params.get('report_period', None)
+        group = self.context['request'].query_params.get('report_group', None)
+        if period is not None and  group is not None:
+            return ReportTeacherPrimaryListSerializer(obj.filtered_teacher_primary_reports, many=True).data
+        else:
+            return None
+    def get_teacher_secondary_reports(self, obj):
+        period = self.context['request'].query_params.get('report_period', None)
+        group = self.context['request'].query_params.get('report_group', None)
+        if period is not None and  group is not None:
+            return ReportTeacherSecondaryListSerializer(obj.filtered_teacher_secondary_reports, many=True).data
+        else:
+            return None
+    def get_teacher_high_reports(self, obj):
+        period = self.context['request'].query_params.get('report_period', None)
+        group = self.context['request'].query_params.get('report_group', None)
+        if period is not None and  group is not None:
+            return ReportTeacherHighListSerializer(obj.filtered_teacher_high_reports, many=True).data
+        else:
+            return None
+    def get_extra_reports(self, obj):
+        period = self.context['request'].query_params.get('report_period', None)
+        group = self.context['request'].query_params.get('report_group', None)
+        if period is not None and  group is not None:
+            return ReportExtraListSerializer(obj.filtered_extra_reports, many=True).data
         else:
             return None

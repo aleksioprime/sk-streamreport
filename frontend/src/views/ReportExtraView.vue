@@ -4,149 +4,98 @@
     <div class="py-2">
       <div class="d-flex flex-wrap">
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите учебный год"
-            v-model="currentAcademicYear"
-            :propItems="generalStore.academicYears"
-            showName="name"
-            @select="selectAcademicYear"
-          />
+          <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+            :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
         </div>
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите период"
-            v-model="currentReportPeriod"
-            :propItems="filteredReportPeriod"
-            showName="full_name"
-            :disabled="!Boolean(filteredReportPeriod.length)"
-            @select="selectReportPeriod"
-          />
+          <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+            showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
         </div>
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите параллель"
-            v-model="currentStudyYear"
-            :propItems="generalStore.studyYears"
-            showName="name"
-            @select="selectStudyYear"
-          />
+          <simple-dropdown title="Выберите параллель" v-model="currentStudyYear" :propItems="generalStore.studyYears"
+            showName="name" @select="selectStudyYear" />
         </div>
         <div class="m-2">
-          <simple-dropdown
-            title="Выберите класс"
-            v-model="currentGroup"
-            :propItems="filteredGroup"
-            showName="full_name"
-            :disabled="
-              isEmpty(currentAcademicYear) || isEmpty(currentStudyYear)
-            "
-            @select="selectGroup"
-          />
+          <simple-dropdown title="Выберите класс" v-model="currentGroup" :propItems="filteredGroup" showName="full_name"
+            :disabled="isEmpty(currentAcademicYear) || isEmpty(currentStudyYear)
+              " @select="selectGroup" />
         </div>
-        <button
-          type="button"
-          class="btn btn-secondary m-2"
-          @click="resetSelectedOptions"
-        >
+        <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
           Сброс
         </button>
       </div>
-      <button
-        type="button"
-        class="btn btn-primary m-2"
-        @click="getStudentExtraReports"
-        :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)"
-      >
+      <button type="button" class="btn btn-primary m-2" @click="getStudentExtraReports"
+        :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
         Показать студентов
       </button>
       <hr class="hr" />
-      <div v-if="reportStore.studentExtraReports.length">
-        <div
-          v-for="student in reportStore.studentExtraReports"
-          :key="student.id"
-          class="my-3"
-        >
-          <div class="card my-1">
-            <div class="card-body d-flex align-items-center">
-              <img
-                :src="student.photo ? student.photo : imageStudent"
-                alt=""
-                width="50"
-                class="me-2 rounded-circle"
-              />
-              <h4 class="m-0">
-                {{ student.last_name }} {{ student.first_name }}
-              </h4>
-              <div class="ms-auto">
-                <i
-                  class="bi bi-three-dots dot-menu"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                ></i>
-                <ul class="dropdown-menu">
-                  <li v-if="!student.reports.length">
-                    <a
-                      class="dropdown-item"
-                      href="##"
-                      @click="createStudentExtraReport(student.id)"
-                      >Добавит репорт</a
-                    >
-                  </li>
-                  <li v-else>
-                    <a
-                      class="dropdown-item"
-                      href="##"
-                      @click="showConfirmationModal(student)"
-                      >Удалить репорт</a
-                    >
-                  </li>
-                </ul>
+      <div class="text-bg-light p-2 rounded">
+        <h5 class="my-2">Тип репорта: репорт службы сопровождения</h5>
+      </div>
+      <div v-if="reportStore.studentExtraReports.length" class="row">
+        <div class="col-md-3">
+          <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student">
+            <div v-if="!isEmpty(currentGroup)">
+              <h5>{{ currentGroup.name }} класс</h5> 
+              <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
+              <hr/>
+            </div>
+            <div v-for="student in reportStore.studentExtraReports" :key="student.id">
+              <div class="d-flex align-items-center my-1">
+                <img :src="student.photo ? student.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
+                <a class="select" :href="`#st-${student.id}`">
+                  {{ student.short_name }}
+                </a>
               </div>
             </div>
           </div>
-          <div
-            class="accordion"
-            :id="`accordionStudent-${student.id}`"
-            v-if="student.reports.length"
-          >
-            <div class="accordion-item">
-              <h2 class="accordion-header" :id="`heading-${student.id}`">
-                <button
-                  class="accordion-button collapsed p-2"
-                  :class="{ 'report-success': student.report.comment }"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  :data-bs-target="`#collapse-${student.id}`"
-                  aria-expanded="true"
-                  :aria-controls="`collapse-${student.id}`"
-                >
-                  Репорт студента
-                </button>
-              </h2>
-              <div
-                :id="`collapse-${student.id}`"
-                class="accordion-collapse collapse"
-                :aria-labelledby="`heading-${student.id}`"
-              >
-                <div class="accordion-body">
-                  <div class="my-2">
-                    <editable-area-tiny
-                      class="text-muted"
-                      :propData="student.report.comment"
-                      propName="comment"
-                      @save="handleSave($event, student.report.id)"
-                      :isEditing="isEditing"
-                      @toggleEdit="toggleEdit"
-                    />
-                  </div>
-                  <hr />
-                  <div class="d-flex align-items-center">
-                    <i class="bi bi-person"></i>
-                    <div class="ms-1">
-                      {{ student.report.author.short_name }}
+        </div>
+        <div class="col pe-3">
+          <div v-for="student in reportStore.studentExtraReports" :key="student.id" class="my-3" :id="`st-${student.id}`">
+            <div class="card my-1">
+              <div class="card-body d-flex align-items-center">
+                <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
+                <h4 class="m-0">
+                  {{ student.last_name }} {{ student.first_name }}
+                </h4>
+                <div class="ms-auto">
+                  <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                  <ul class="dropdown-menu">
+                    <li v-if="!student.reports.length">
+                      <a class="dropdown-item" href="##" @click="createStudentExtraReport(student.id)">Добавить репорт</a>
+                    </li>
+                    <li v-else>
+                      <a class="dropdown-item" href="##" @click="showConfirmationModal(student)">Удалить репорт</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="accordion" :id="`accordionStudent-${student.id}`" v-if="student.reports.length">
+              <div class="accordion-item">
+                <h2 class="accordion-header" :id="`heading-${student.id}`">
+                  <button class="accordion-button collapsed p-2" :class="{ 'report-success': student.report.comment }"
+                    type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${student.id}`" aria-expanded="true"
+                    :aria-controls="`collapse-${student.id}`">
+                    Репорт службы сопровождения
+                  </button>
+                </h2>
+                <div :id="`collapse-${student.id}`" class="accordion-collapse collapse"
+                  :aria-labelledby="`heading-${student.id}`">
+                  <div class="accordion-body">
+                    <div class="my-2">
+                      <editable-area-tiny class="text-muted" :propData="student.report.comment" propName="comment"
+                        @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
                     </div>
-                    <div class="ms-2">
-                      {{ formatDate(student.report.updated_at) }}
+                    <hr />
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-person"></i>
+                      <div class="ms-1">
+                        {{ student.report.author.short_name }}
+                      </div>
+                      <div class="ms-2">
+                        {{ formatDate(student.report.updated_at) }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -164,14 +113,9 @@
       </div>
     </div>
     <!-- Подключение модального окна -->
-    <confirmation-modal
-      @confirm="removeStudentExtraReport"
-      @cancel="cancelRemoveStudentExtraReport"
-    >
+    <confirmation-modal @confirm="removeStudentExtraReport" @cancel="cancelRemoveStudentExtraReport">
       Вы действитель хотите удалить репорт студента:
-      <strong
-        >{{ currentStudent.last_name }} {{ currentStudent.first_name }}?</strong
-      >
+      <strong>{{ currentStudent.last_name }} {{ currentStudent.first_name }}?</strong>
     </confirmation-modal>
   </div>
 </template>
@@ -449,5 +393,21 @@ onMounted(() => {
 <style scoped>
 .report-success {
   background-color: rgb(174, 232, 232);
+}
+.list-right-student {
+  top: 10px;
+}
+:target::before {
+    content: "";
+    display: block;
+    height: 90px; /* Высота вашей фиксированной шапки */
+    margin-top: -90px;
+}
+:target .card {
+    animation: blink 1s ease-in-out 0s 3; /* Анимация будет длиться 1 секунду, повторяться 3 раза */
+}
+@keyframes blink {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgb(205, 254, 238); } /* Промежуточный цвет фона для мигания */
 }
 </style>

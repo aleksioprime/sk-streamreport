@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Репорты учителя</h1>
+    <h1>Репорты учителя по предмету</h1>
     <div class="py-2">
       <div class="d-flex flex-wrap">
         <div class="m-2">
@@ -37,20 +37,26 @@
         Сброс
       </button>
       <hr class="hr" />
-      <h5 v-if="!isEmpty(currentCurriculum)" class="mb-2">
-        Тип репорта: {{ currentReportType.name }}
-      </h5>
-      <h5 v-if="!isEmpty(currentSubject)" class="mb-2">
-        {{ currentSubject.name }}
-        <span v-if="currentSubject.group_ib">
-          ({{ currentSubject.group_ib.name }}
-          {{ currentSubject.group_ib.program.toUpperCase() }})</span>:
-        <span v-if="!isEmpty(currentGroup)">{{ currentGroup.name }} класс</span>
-      </h5>
+      <div class="text-bg-light p-2 rounded">
+        <h5 v-if="!isEmpty(currentCurriculum)" class="mb-2">
+          Тип репорта: {{ currentReportType.name }}
+        </h5>
+        <h5 v-if="!isEmpty(currentSubject)" class="mb-2">
+          {{ currentSubject.name }}
+          <span v-if="currentSubject.group_ib">
+            ({{ currentSubject.group_ib.name }}
+            {{ currentSubject.group_ib.program.toUpperCase() }})</span>
+        </h5>
+      </div>
       <!-- Список студентов -->
       <div class="row" v-if="generalStore.users.length">
         <div class="col-md-3">
-          <div class="d-flex flex-column align-items-start justify-content-start mt-2">
+          <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student">
+            <div v-if="!isEmpty(currentGroup)">
+              <h5>{{ currentGroup.name }} класс</h5> 
+              <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
+              <hr/>
+            </div>
             <div v-for="user in generalStore.users" :key="user.id">
               <div class="d-flex align-items-center my-1">
                 <img :src="user.photo ? user.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
@@ -94,7 +100,7 @@
                     <button class="accordion-button collapsed p-2" :class="{ 'report-success': report.comment }"
                       type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${report.id}`"
                       aria-expanded="true" :aria-controls="`collapse-${report.id}`">
-                      Репорт студента
+                      Репорт учителя по предмету: {{ currentSubject.name }}
                     </button>
                   </h2>
                   <div :id="`collapse-${report.id}`" class="accordion-collapse collapse"
@@ -617,5 +623,21 @@ onMounted(() => {
 
 .select {
   font-weight: bold;
+}
+.list-right-student {
+  top: 10px;
+}
+:target::before {
+    content: "";
+    display: block;
+    height: 90px; /* Высота вашей фиксированной шапки */
+    margin-top: -90px;
+}
+:target .card {
+    animation: blink 1s ease-in-out 0s 3; /* Анимация будет длиться 1 секунду, повторяться 3 раза */
+}
+@keyframes blink {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgb(205, 254, 238); } /* Промежуточный цвет фона для мигания */
 }
 </style>

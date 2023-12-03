@@ -79,6 +79,7 @@ class ReportExtraSerializer(serializers.ModelSerializer):
 # Вывод списка пользователей с фильтрацией репортов службы сопровождения
 class UserListReportExtraSerializer(serializers.ModelSerializer):
     reports = serializers.SerializerMethodField()
+    short_name = serializers.CharField(source='get_short_name', read_only=True)
     class Meta:
         model = User
         fields = (
@@ -88,6 +89,7 @@ class UserListReportExtraSerializer(serializers.ModelSerializer):
             "middle_name",
             "reports",
             "photo",
+            "short_name",
             )
     def get_reports(self, obj):
         period = self.context['request'].query_params.get('report_period', None)

@@ -164,9 +164,19 @@ export const useReportStore = defineStore("report", {
       const res = await resources.studentMentorReport.getStudentMentorReports(config);
       if (res.__state === "success") {
         this.studentMentorReports = res.data.map(item => {
+          let report_teacher =[]
+          if (item.teacher_high_reports.length) {
+            report_teacher = [ ...item.teacher_high_reports ]
+          } else if (item.teacher_secondary_reports.length) {
+            report_teacher = [ ...item.teacher_secondary_reports ]
+          } else {
+            report_teacher = [ ...item.teacher_primary_reports ]
+          }
           return {
             ...item,
-            report: item.reports[0]
+            report: item.reports[0],
+            report_extra: item.extra_reports,
+            report_teacher: report_teacher
           };
         });
       }
@@ -180,17 +190,17 @@ export const useReportStore = defineStore("report", {
     async removeReportMentor(report) {
       return await resources.reportMentor.removeReportMentor(report);
     },
-    async loadStudentMentorPrimaryReports(config) {
-      const res = await resources.studentMentorPrimaryReport.getStudentMentorPrimaryReports(config);
-      if (res.__state === "success") {
-        this.studentMentorReports = res.data.map(item => {
-          return {
-            ...item,
-            report: item.reports[0]
-          };
-        });
-      }
-    },
+    // async loadStudentMentorPrimaryReports(config) {
+    //   const res = await resources.studentMentorPrimaryReport.getStudentMentorPrimaryReports(config);
+    //   if (res.__state === "success") {
+    //     this.studentMentorReports = res.data.map(item => {
+    //       return {
+    //         ...item,
+    //         report: item.reports[0]
+    //       };
+    //     });
+    //   }
+    // },
     async createReportMentorPrimary(report) {
       return await resources.reportMentorPrimary.createReportMentorPrimary(report);
     },
