@@ -45,8 +45,12 @@ b:
 bback:
 	docker exec -it backend /bin/sh
 # удаление всех контейнеров проекта
-clear:
-	$(DC) down -v & docker system prune -f & docker rmi $(docker images -q)
-
-# Удаление, сборка с запуском проекта
-deploy: build load-fixtures
+destroy_all:
+	$(DC) down -v
+	docker system prune -f
+	@IMAGES=$$(docker images -q); \
+	if [ -n "$$IMAGES" ]; then \
+		docker rmi $$IMAGES; \
+	else \
+		echo "No Docker images to remove"; \
+	fi
