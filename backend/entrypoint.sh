@@ -11,5 +11,12 @@ then
     echo "PostgreSQL started"
 fi
 
+# Выполнение миграций
+echo "Applying database migrations"
+python manage.py makemigrations
+python manage.py migrate
+
 # Запуск команды (обычно запуск сервера Django)
 exec "$@"
+
+

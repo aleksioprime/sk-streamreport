@@ -197,11 +197,9 @@ def get_user_report_mentor_queryset(group=None, period=None):
                 'reportmentor_student_reports', 
                 queryset=ReportMentor.objects.filter(group=group, period=period).select_related(
                     'author', 
-                    'period',
-                    'period__year',
-                    'group',
-                    'group__year_academic',
-                    'group__year_study',
+                    ).prefetch_related(
+                        'profiles',
+                        'profiles__profile',
                     ), 
                 to_attr='filtered_reports'
             ),
