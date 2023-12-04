@@ -56,6 +56,7 @@ export const useReportStore = defineStore("report", {
             full_name: capitalizeFirstLetter(item.name) 
           };
         });
+        console.log('Получение периодов: ', this.reportPeriods)
       }
     },
     async loadReportCriteria(config) {
@@ -101,11 +102,12 @@ export const useReportStore = defineStore("report", {
     async removeReportTeacherPrimary(report) {
       return await resources.reportTeacherPrimary.removeReportTeacherPrimary(report);
     },
+    // CRUD для репортов учителя средней школы
     async loadReportTeachersSecondary(config) {
       const res = await resources.reportTeacherSecondary.getReportTeachersSecondary(config);
       if (res.__state === "success") {
-        // this.reportTeachersSecondary = res.data
         this.reportTeachers = res.data
+        console.log('Получение репортов учителя средней школы: ', this.reportTeachers)
       }
     },
     async createReportTeacherSecondary(report) {
@@ -190,17 +192,7 @@ export const useReportStore = defineStore("report", {
     async removeReportMentor(report) {
       return await resources.reportMentor.removeReportMentor(report);
     },
-    // async loadStudentMentorPrimaryReports(config) {
-    //   const res = await resources.studentMentorPrimaryReport.getStudentMentorPrimaryReports(config);
-    //   if (res.__state === "success") {
-    //     this.studentMentorReports = res.data.map(item => {
-    //       return {
-    //         ...item,
-    //         report: item.reports[0]
-    //       };
-    //     });
-    //   }
-    // },
+    // CRUD для репортов руководителя класса начальной школы
     async createReportMentorPrimary(report) {
       return await resources.reportMentorPrimary.createReportMentorPrimary(report);
     },

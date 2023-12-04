@@ -2,17 +2,19 @@
   <div>
     <div class="my-2">
       <h5>Предметные критерии</h5>
-      <div v-for="criterion in filteredCriteriaMyp" :key="criterion.id" class="d-flex align-items-center my-2">
-        <div class="me-3" :class="{ 'selected-criterion': criterion.report }">{{ criterion.letter.toUpperCase() }}. {{
-          criterion.name }}</div>
-        <i class="bi bi-dash-square dot-menu me-2" v-if="criterion.report"
-          @click="removeReportSecondaryCriterion(criterion.report.id)"></i>
-        <i v-else class="bi bi-plus-square dot-menu me-2" @click="createReportSecondaryCriterion(criterion.id)"></i>
-        <div class="ms-auto">
-          <scale-radio :elementId="String(report.id) + String(criterion.id)" :data="MARK8"
-            :propValue="criterion.report.mark" propName="mark" @save="handleSave($event, criterion.report.id)"
-            v-if="criterion.report" />
-          <div v-else>Критерий не оценивается</div>
+      <div class="my-3">
+        <div v-for="criterion in filteredCriteriaMyp" :key="criterion.id" class="d-flex align-items-center my-2">
+          <div class="me-3" :class="{ 'selected-criterion': criterion.report }">{{ criterion.letter.toUpperCase() }}. {{
+            criterion.name }}</div>
+          <i class="bi bi-dash-square dot-menu me-2" v-if="criterion.report"
+            @click="removeReportSecondaryCriterion(criterion.report.id)"></i>
+          <i v-else class="bi bi-plus-square dot-menu me-2" @click="createReportSecondaryCriterion(criterion.id)"></i>
+          <div class="ms-auto">
+            <scale-radio :elementId="String(report.id) + String(criterion.id)" :data="MARK8"
+              :propValue="criterion.report.mark" propName="mark" @save="handleSave($event, criterion.report.id)"
+              v-if="criterion.report" />
+            <div v-else>Критерий не оценивается</div>
+          </div>
         </div>
       </div>
     </div>

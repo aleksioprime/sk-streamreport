@@ -25,6 +25,9 @@ def get_myp_objective_queryset():
 def get_strand_queryset():
     return Strand.objects.all().select_related(
         'objective',
+        'objective__group',
+        ).prefetch_related(
+            "strand_levels",
         )
 
 def get_strand_level_queryset():

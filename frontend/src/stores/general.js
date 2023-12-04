@@ -59,12 +59,14 @@ export const useGeneralStore = defineStore("general", {
             name: item.number + ' классы' // Добавление нового свойства name
           };
         });
+        console.log('Получение учебных параллелей: ', this.studyYears)
       }
     },
     async loadAcademicYears() {
       const res = await resources.academicYear.getAcademicYears();
       if (res.__state === "success") {
         this.academicYears = res.data
+        console.log('Получение учебных лет: ', this.academicYears)
       }
     },
     async loadGroups(config) {
@@ -76,13 +78,14 @@ export const useGeneralStore = defineStore("general", {
             full_name: item.name + ' класс' // Добавление нового свойства name
           };
         });
+        console.log('Получение классов: ', this.groups)
       }
     },
     async loadUsers(config) {
       const res = await resources.user.getUsers(config);
       if (res.__state === "success") {
         this.users = res.data
-        // console.log(res.data)
+        console.log('Получение пользователей: ', this.users)
       }
     },
   }

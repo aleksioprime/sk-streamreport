@@ -2,38 +2,59 @@
   <div>
     <div class="d-flex align-items-center">
       <h5>Достижения по критериям MYP</h5>
-      <simple-dropdown class="ms-auto" v-model="currentLevel" :propItems="YEAR_LEVELS" showName="name" :disabled="isYearDisable"/>
+      <simple-dropdown class="ms-auto" v-model="currentLevel" :propItems="YEAR_LEVELS" showName="name"
+        :disabled="isYearDisable" />
     </div>
-    {{ objectives }}
-    <div v-for="objectives, key in strandsByObjective" :key="key">
-      <div class="my-2"><b>{{ unitMypStore.objectives.find(i => i.id == key).full_name }}</b></div>
-      <div v-for="strand in objectives" :key="strand.id">
-        <div v-if="strand.level_strand">
-          <div class="d-flex align-items-center mb-2">
-            <i class="bi bi-dash-square dot-menu me-2" v-if="strand.level_strand.report" @click="removeReportSecondaryLevel(strand.level_strand.report.id)"></i>
-            <i class="bi bi-plus-square dot-menu me-2" v-else @click="createReportSecondaryLevel(strand.level_strand.id)"></i>
-            <span :class="{ 'select': strand.level_strand.report }">{{ strand.letter_name }}. Students should be able to {{ strand.level_strand.name }}
-            <b v-if="strand.level_strand.report && strand.level_strand.report.level"> - {{ strand.level_strand.report.level.point }}</b>
-            <b v-if="strand.level_strand.report && !strand.level_strand.report.level"> - 0</b>
-          </span>
+    <div class="my-2">
+      <div class="accordion" :id="`accordionStrand${report.id}`">
+        <div class="accordion-item" v-for="objectives, key in strandsByObjective" :key="key">
+          <h2 class="accordion-header" :id="`heading${report.id}-${key}`">
+            <button class="accordion-button collapsed py-1 px-2" type="button" data-bs-toggle="collapse"
+              :data-bs-target="`#collapse${report.id}-${key}`" aria-expanded="true" aria-controls="collapseOne">
+              <div class="my-2">{{ unitMypStore.objectives.find(i => i.id == key).full_name }} - <b>{{
+                calculatedObjectives[key][0].avg_point || 'Не оценивается' }}</b></div>
+            </button>
+          </h2>
+          <div :id="`collapse${report.id}-${key}`" class="accordion-collapse collapse"
+            :aria-labelledby="`heading${report.id}-${key}`" :data-bs-parent="`#accordionStrand${report.id}`">
+            <div class="accordion-body">
+              <div v-for="strand in objectives" :key="strand.id">
+                <div v-if="strand.level_strand">
+                  <div class="d-flex align-items-center mb-2">
+                    <i class="bi bi-dash-square dot-menu me-2" v-if="strand.level_strand.report"
+                      @click="removeReportSecondaryLevel(strand.level_strand.report.id)"></i>
+                    <i class="bi bi-plus-square dot-menu me-2" v-else
+                      @click="createReportSecondaryLevel(strand.level_strand.id)"></i>
+                    <span :class="{ 'select': strand.level_strand.report }">{{ strand.letter_name }}. Students should be
+                      able to
+                      {{ strand.level_strand.name }}
+                      <b v-if="strand.level_strand.report && strand.level_strand.report.level"> - {{
+                        strand.level_strand.report.level.point }}</b>
+                      <b v-if="strand.level_strand.report && !strand.level_strand.report.level"> - 0</b>
+                    </span>
+                  </div>
+                  <ul v-if="strand.level_strand.report">
+                    <li>
+                      <div class="pointer" :class="{ 'select': !strand.level_strand.report.level }"
+                        @click="updateReportSecondaryLevel(null, strand.level_strand.report.id)">
+                        The student does not reach a standard described by any of the descriptors below
+                      </div>
+                    </li>
+                    <li v-for="achieve in strand.level_strand.report.strand.achieve_levels" :key="achieve.id"
+                      @click="updateReportSecondaryLevel(achieve.id, strand.level_strand.report.id)">
+                      <div class="pointer"
+                        :class="{ 'select': strand.level_strand.report.level && achieve.id == strand.level_strand.report.level.id }">
+                        The student {{ achieve.name }} ({{ achieve.point - 1 }}-{{ achieve.point }})
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          <ul v-if="strand.level_strand.report">
-            <li>
-              <div class="pointer" :class="{ 'select': !strand.level_strand.report.level }" @click="updateReportSecondaryLevel(null, strand.level_strand.report.id)">
-                The student does not reach a standard described by any of the descriptors below
-              </div>
-            </li>
-            <li v-for="achieve in strand.level_strand.report.strand.achieve_levels" :key="achieve.id" @click="updateReportSecondaryLevel(achieve.id, strand.level_strand.report.id)">
-              <div class="pointer" :class="{ 'select': strand.level_strand.report.level && achieve.id == strand.level_strand.report.level.id }">
-                The student {{ achieve.name }} ({{ achieve.point-1 }}-{{ achieve.point }})
-              </div>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
-    <hr>
-    {{ unitMypStore.objective_levels }}
   </div>
 </template>
 
@@ -76,14 +97,23 @@ const reportYear = computed(() => {
 
 const currentLevel = ref(reportYear.value || { value: 0, name: 'Year All' })
 
-const objectives = computed(() => {
-  return unitMypStore.objectives.filter(i => i.group.id == props.report.subject.group_ib).map((item) => {
+const calculatedObjectives = computed(() => {
+  return groupedByCategory(unitMypStore.objectives.filter(i => i.group.id == props.report.subject.group_ib).map((item) => {
+    const levels = props.report.objective_levels.filter(i => i.strand.objective == item.id).length;
+    const points = props.report.objective_levels.filter(i => i.strand.objective == item.id).reduce((accumulator, item) => {
+      if (item.level && item.level.point != null) {
+        return accumulator + item.level.point;
+      } else {
+        return accumulator;
+      }
+    }, 0)
     return {
       ...item,
-      count_level: props.report.objective_levels.filter(i => i.strand.objective == item.id),
-      count_point: props.report.objective_levels.filter(i => i.strand.objective == item.id)
+      count_level: levels,
+      count_point: points,
+      avg_point: points / levels,
     }
-  })
+  }), 'id')
 })
 
 function groupByNestedProperty(items, key, subKey) {
@@ -98,6 +128,23 @@ function groupByNestedProperty(items, key, subKey) {
 
     // Добавляем текущий элемент в соответствующую группу
     accumulator[groupKey].push(item);
+
+    return accumulator;
+  }, {}); // Начальное значение аккумулятора - пустой объект
+}
+
+function groupedByCategory(items, key) {
+  return items.reduce((accumulator, currentItem) => {
+    // Получаем ключ группировки из текущего элемента
+    const groupKey = currentItem[key];
+
+    // Если такой ключ еще не существует в аккумуляторе, создаем его
+    if (!accumulator[groupKey]) {
+      accumulator[groupKey] = [];
+    }
+
+    // Добавляем текущий элемент в соответствующую группу
+    accumulator[groupKey].push(currentItem);
 
     return accumulator;
   }, {}); // Начальное значение аккумулятора - пустой объект
@@ -175,10 +222,11 @@ const getReportSecondaryLevels = () => {
 .select {
   font-weight: bold;
 }
+
 .pointer {
   cursor: pointer;
 }
+
 .pointer:hover {
   text-decoration: underline;
-}
-</style>
+}</style>

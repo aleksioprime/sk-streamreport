@@ -157,7 +157,9 @@ class StrandLevelAchievementReportListSerializer(serializers.ModelSerializer):
 # 
 class StrandLevelReportSerializer(serializers.ModelSerializer):
     achieve_levels = StrandLevelAchievementReportListSerializer(many=True)
+    strand_letter = serializers.CharField(source='strand.get_letter_display', read_only=True)
     objective = serializers.CharField(source='strand.objective.id', read_only=True)
+    objective_letter = serializers.CharField(source='strand.objective.letter', read_only=True)
     class Meta:
         model = StrandLevel
         fields = (
@@ -167,6 +169,8 @@ class StrandLevelReportSerializer(serializers.ModelSerializer):
             "level",
             "objective",
             "achieve_levels",
+            "objective_letter",
+            "strand_letter",
             )
 
 # Вывод списка баллов по критериям оценки MYP для репорта учителя по предметам средней школы

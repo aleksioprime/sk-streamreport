@@ -38,9 +38,9 @@
         <div class="col-md-3">
           <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student">
             <div v-if="!isEmpty(currentGroup)">
-              <h5>{{ currentGroup.name }} класс</h5> 
+              <h5>{{ currentGroup.name }} класс</h5>
               <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
-              <hr/>
+              <hr />
             </div>
             <div v-for="student in reportStore.studentMentorReports" :key="student.id">
               <div class="d-flex align-items-center my-1">
@@ -53,7 +53,8 @@
           </div>
         </div>
         <div class="col pe-3">
-          <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3" :id="`st-${student.id}`">
+          <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3"
+            :id="`st-${student.id}`">
             <div class="card my-1 anchor-student">
               <div class="card-body d-flex align-items-center">
                 <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
@@ -158,42 +159,58 @@
                   :aria-labelledby="`headingTeacher-${student.report.id}`">
                   <div class="accordion-body">
                     <div v-if="student.report_teacher && student.report_teacher.length">
-                      <div v-for="teacher in student.report_teacher" :key="teacher.id">
-                        <div><strong>{{ teacher.subject.name }}</strong> ({{ teacher.period.name }}, {{
-                          teacher.period.year.name }})</div>
-                        <div class="my-2" v-if="teacher.criterion_achievements && teacher.criterion_achievements.length">
-                          <div v-for="cr in teacher.criterion_achievements" :key="cr.id">
-                            {{ cr.criterion.name }}: <b>{{ cr.achievement.name }}</b>
-                          </div>
-                        </div>
-                        <div class="my-2" v-if="teacher.topic_achievements && teacher.topic_achievements.length">
-                          <div v-for="topic in teacher.topic_achievements" :key="topic.id">
-                            {{ topic }}
-                          </div>
-                        </div>
-                        <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
-                          <div v-for="objective in teacher.objective_levels" :key="objective.id">
-                            {{ objective }}
-                          </div>
-                        </div>
-                        <div class="my-2" v-if="teacher.criterion_marks && teacher.criterion_marks.length">
-                          <div v-for="cr in teacher.criterion_marks" :key="cr.id">
-                            {{ cr.criterion.letter.toUpperCase() }}. {{ cr.criterion.name }}: <b>{{ cr.mark }}</b>
-                          </div>
-                        </div>
-                        <div class="my-2" v-if="teacher.final_grade_ib">Итоговая оценка IB: <b>{{ teacher.final_grade_ib
-                        }}</b></div>
-                        <div class="my-2" v-if="teacher.final_grade">Итоговая оценка: <b>{{ teacher.final_grade }}</b>
-                        </div>
-                        <div class="my-2 text-muted" v-html="teacher.comment"></div>
-                        <hr />
-                        <div class="d-flex align-items-center">
-                          <i class="bi bi-person"></i>
-                          <div class="ms-1">
-                            {{ teacher.author.short_name }}
-                          </div>
-                          <div class="ms-2">
-                            {{ formatDate(teacher.updated_at) }}
+                      <div v-for="teacher in student.report_teacher" :key="teacher.id" class="my-2">
+                        <div class="card">
+                          <div class="card-body">
+                            <div><strong>{{ teacher.subject.name }}</strong> ({{ teacher.period.name }}, {{
+                              teacher.period.year.name }})</div>
+                            <div class="my-2"
+                              v-if="teacher.criterion_achievements && teacher.criterion_achievements.length">
+                              <div v-for="cr in teacher.criterion_achievements" :key="cr.id">
+                                {{ cr.criterion.name }}: <b>{{ cr.achievement.name }}</b>
+                              </div>
+                            </div>
+                            <div class="my-2" v-if="teacher.topic_achievements && teacher.topic_achievements.length">
+                              <div v-for="topic in teacher.topic_achievements" :key="topic.id">
+                                {{ topic }}
+                              </div>
+                            </div>
+                            <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
+                              <div v-for="objective in teacher.objective_levels" :key="objective.id">
+                                <div>
+                                  <b>
+                                    {{ objective.strand.objective_letter.toUpperCase() }}.{{
+                                      objective.strand.strand_letter }}.
+                                    Students should be able to {{ objective.strand.name }}
+                                  </b>
+                                </div>
+                                <div class="ms-3">
+                                  The student {{ objective.level.name }}:
+                                  {{ objective.level.point - 1 }}-{{ objective.level.point }}
+                                </div>
+                              </div>
+                            </div>
+                            <div class="my-2" v-if="teacher.criterion_marks && teacher.criterion_marks.length">
+                              <div v-for="cr in teacher.criterion_marks" :key="cr.id">
+                                {{ cr.criterion.letter.toUpperCase() }}. {{ cr.criterion.name }}: <b>{{ cr.mark }}</b>
+                              </div>
+                            </div>
+                            <div class="my-2" v-if="teacher.final_grade_ib">
+                              Итоговая оценка IB: <b>{{ teacher.final_grade_ib }}</b>
+                            </div>
+                            <div class="my-2" v-if="teacher.final_grade">Итоговая оценка: <b>{{ teacher.final_grade }}</b>
+                            </div>
+                            <div class="my-2 text-muted" v-html="teacher.comment"></div>
+                            <hr />
+                            <div class="d-flex align-items-center">
+                              <i class="bi bi-person"></i>
+                              <div class="ms-1">
+                                {{ teacher.author.short_name }}
+                              </div>
+                              <div class="ms-2">
+                                {{ formatDate(teacher.updated_at) }}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -542,17 +559,31 @@ onMounted(() => {
 .list-right-student {
   top: 10px;
 }
+
 :target::before {
-    content: "";
-    display: block;
-    height: 90px; /* Высота вашей фиксированной шапки */
-    margin-top: -90px;
+  content: "";
+  display: block;
+  height: 90px;
+  /* Высота вашей фиксированной шапки */
+  margin-top: -90px;
 }
+
 :target .card {
-    animation: blink 1s ease-in-out 0s 3; /* Анимация будет длиться 1 секунду, повторяться 3 раза */
+  animation: blink 1s ease-in-out 0s 3;
+  /* Анимация будет длиться 1 секунду, повторяться 3 раза */
 }
+
 @keyframes blink {
-    0%, 100% { background-color: transparent; }
-    50% { background-color: rgb(205, 254, 238); } /* Промежуточный цвет фона для мигания */
+
+  0%,
+  100% {
+    background-color: transparent;
+  }
+
+  50% {
+    background-color: rgb(205, 254, 238);
+  }
+
+  /* Промежуточный цвет фона для мигания */
 }
 </style>

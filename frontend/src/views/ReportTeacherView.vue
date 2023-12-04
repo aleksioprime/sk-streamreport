@@ -421,15 +421,15 @@ const getTeacherReports = () => {
     };
     if (currentCurriculum.value.level == "noo") {
       reportStore.loadReportTeachersPrimary(config).then(() => {
-        console.log(reportStore.reportTeachers);
+        // console.log(reportStore.reportTeachers);
       });
     } else if (currentCurriculum.value.level == "ooo") {
       reportStore.loadReportTeachersSecondary(config).then(() => {
-        console.log(reportStore.reportTeachers);
+        // console.log(reportStore.reportTeachers);
       });
     } else if (currentCurriculum.value.level == "soo") {
       reportStore.loadReportTeachersHigh(config).then(() => {
-        console.log(reportStore.reportTeachers);
+        // console.log(reportStore.reportTeachers);
       });
     } else {
       // console.log('Не выбран уровень')
@@ -524,7 +524,7 @@ const toggleEdit = (state) => {
 
 // Замена обновлённого репорта учителя
 const replaceReportTeacher = (data) => {
-  console.log("Репорт успешно обновлён: ", data);
+  // console.log("Репорт успешно обновлён: ", data);
   const index = reportStore.reportTeachers.findIndex(
     (item) => item.id === data.id
   );

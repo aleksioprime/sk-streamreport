@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex align-items-center mb-2">
-      <h5>Достижения по критериям</h5>
+      <h5>Достижения по критериям Гимназии</h5>
       <div class="ms-auto">
         <i class="bi bi-three-dots dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu">
