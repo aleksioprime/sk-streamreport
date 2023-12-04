@@ -24,3 +24,7 @@ RUN chmod +x ./entrypoint.sh
 
 # Копирование всех файлов из локального проекта в контейнер
 COPY backend .
+
+ENTRYPOINT ["/backend/entrypoint.sh"]
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

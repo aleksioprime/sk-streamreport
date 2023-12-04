@@ -1,112 +1,31 @@
 # Проект StreamReport
 
-## Запуск версии develop:
-1. Скопировать репозиторий в локальную папку проекта
-2. В терминале перейти в папку проекта и выполнить:
-```
-docker-compose up -d --build
-```
-3. Выполнить в контейнере подготовку миграций для базы данных
-```
-docker-compose exec backend python manage.py makemigrations --noinput
-```
-4. Применить в контейнере миграцию базы данных
-```
-docker-compose exec backend python manage.py migrate --noinput
-```
-Может потребоваться перезапуск контейнера backend:
-```
-docker-compose restart backend
-```
-6. Создайть суперпользователя
-```
-docker-compose exec backend python manage.py createsuperuser
-```
+## Запуск у разработчика
 
-## Запуск версии product через Action GitHub на сервере:
-1. Установить на сервер Ubuntu 22.04 Docker и Docker Compose
-```
-apt install make
-```
-2. Убедиться в корректности сборок контейнеров backend и frontend в GitHub и  DockerHub
-3. Скопировать файлы docker-compose.yaml и дополнительные зависимости проекта на сервер (нет в репозитории)
-4. Запустить docker-compose:
-```
-docker-compose up -d --build
-```
-5. Собрать все статические файлы Django в папку static:
-```
-docker-compose exec backend python manage.py collectstatic --no-input --clear
-```
-6. Выполнить миграции в БД:
-```
-docker-compose exec backend python manage.py migrate --noinput
-```
-7. Создать суперпользователя:
-```
-docker-compose exec backend python manage.py createsuperuser
-```
-8. Установить бесплатный сертификат Let's Encrypt (преимущественно делать в самом начале):
-* Установить на сервер Certbot
-```
-sudo apt update
-sudo apt install snapd
-sudo snap install --classic certbot
-certbot certonly --standalone -d skreport.ru -d www.skreport.ru
-```
-* Переместить файлы ключей в папку и перезапустить docker-compose
-```
-sudo cp -rp /etc/letsencrypt/* /root/certs
-docker-compose restart
-```
-* Сделать скрипт исполняемым и открыть CRON
-```
-sudo chmod +x /root/certbot_renew.sh
-crontab -e
-```
-* Добавить запись, которая будет проверять сертификат каждую полночь:
-```
-0 0 * * * /root/scripts/certbot_renew.sh
-```
+Для развёртывания проекта приложения StreamReport у разработчика должно быть установлено:
 
-## Разное
-* Получить список запланированных задач из контейнера celery-beat
-```
-docker-compose exec celery-beat celery -A config inspect scheduled
-```
-* Работа с базами данных PostgreSQL
-Войти в базу данных через psql:
-```
-docker-compose exec database psql --username=igadmin --dbname=igskolkovo
-```
-Посмотреть базу данных и пользователя:
-```
-\c igskolkovo
-```
-Посмотреть таблицы текущей базы данных:
-```
-\dt
-```
-Выход из базы данных
-```
-\q
-```
-* Применение изменений проекта на сервере:
-```
-docker-compose pull
-docker-compose build
-docker-compose down
-docker-compose up -d
-```
-* Удаление всех неиспользуемых контейнеров:
-```
-docker system prune
-```
-* Удаление всех имеющихся контейнеров:
-```
-docker-compose down -v
-docker rmi $(docker images -q)
-```
-```
-docker run nginx ls /etc/nginx/conf.d
-```
+- Система контроля версий Git: https://git-scm.com/downloads
+- Платформа Docker Desktop: https://www.docker.com/get-started
+- Для запуска Makefile: https://chocolatey.org/install:
+```choco install make```
+- Имя и электронная почта глобального пользователя Git:
+```git config --global user.name "имя пользователя"```
+```git config --global user.email "электронная почта"```
+
+Далее выполнить следующие действия:
+
+1. Открыть терминал/командную строку и перейти в каталог проектов.
+    
+Клонировать репозиторий из GitHub (HTTPs):
+```git clone https://github.com/aleksioprime/streamreport.git```
+    
+Клонировать репозиторий из SK (SSH: нужен ssh-ключ):
+    
+```git clone [git@gitlab.sk.ru](mailto:git@gitlab.sk.ru):gymnasium/freshstream.git```
+    
+2. Перейти в папку проекта и развернуть проект с помощью Makefile или Docker Compose:
+
+```cd streamreport```
+```make deploy```
+
+```docker-compose up -d --build```
