@@ -52,7 +52,7 @@
         </div>
         <div class="col pe-3">
           <div v-for="student in reportStore.studentExtraReports" :key="student.id" class="my-3" :id="`st-${student.id}`">
-            <div class="card my-1">
+            <div class="card card-student my-1">
               <div class="card-body d-flex align-items-center">
                 <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
                 <h4 class="m-0">
@@ -403,7 +403,7 @@ onMounted(() => {
     height: 90px; /* Высота вашей фиксированной шапки */
     margin-top: -90px;
 }
-:target .card {
+:target .card-student {
     animation: blink 1s ease-in-out 0s 3; /* Анимация будет длиться 1 секунду, повторяться 3 раза */
 }
 @keyframes blink {

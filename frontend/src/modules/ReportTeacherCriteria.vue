@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex align-items-center mb-2">
-      <h5>Достижения по критериям Гимназии</h5>
+      <h5>Уровни развития навыков</h5>
       <div class="ms-auto">
         <i class="bi bi-three-dots dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu">
@@ -53,8 +53,8 @@
               <div class="form-check" v-for="criterion in groupedCriteria.withoutSubjects" :key="criterion.id">
                 <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
                   v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
-                <label class="form-check-label" :for="`check-${criterion.id}`">
-                  {{ criterion.name }} (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>)
+                <label class="form-check-label" :for="`check-${criterion.id}`">{{ criterion.name }}
+                  <!-- (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>) -->
                 </label>
               </div>
             </div>
@@ -62,12 +62,12 @@
           </div>
           <div class="my-2">
             <h5>Предметные критерии</h5>
-            <div v-if="groupedCriteria.withoutSubjects && groupedCriteria.withoutSubjects.length">
+            <div v-if="groupedCriteria.withSubjects && groupedCriteria.withSubjects.length">
               <div class="form-check" v-for="criterion in groupedCriteria.withSubjects" :key="criterion.id">
                 <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
                   v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
-                <label class="form-check-label" :for="`check-${criterion.id}`">
-                  {{ criterion.name }} (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>)
+                <label class="form-check-label" :for="`check-${criterion.id}`">{{ criterion.name }}
+                  <!-- (<span v-for="level, index in criterion.levels" :key="level.id">{{ level.name }}<span v-if="index+1 != criterion.levels.length">, </span></span>) -->
                 </label>
               </div>
             </div>

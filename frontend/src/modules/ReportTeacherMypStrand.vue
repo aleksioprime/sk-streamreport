@@ -2,8 +2,8 @@
   <div>
     <div class="d-flex align-items-center">
       <h5>Достижения по критериям MYP</h5>
-      <simple-dropdown class="ms-auto" v-model="currentLevel" :propItems="YEAR_LEVELS" showName="name"
-        :disabled="isYearDisable" />
+      <simple-dropdown class="ms-auto" v-model="currentLevel" :propItems="YEAR_LEVELS" showName="name"/>
+        <!-- :disabled="isYearDisable"/> -->
     </div>
     <div class="my-2">
       <div class="accordion" :id="`accordionStrand${report.id}`">
@@ -11,8 +11,8 @@
           <h2 class="accordion-header" :id="`heading${report.id}-${key}`">
             <button class="accordion-button collapsed py-1 px-2" type="button" data-bs-toggle="collapse"
               :data-bs-target="`#collapse${report.id}-${key}`" aria-expanded="true" aria-controls="collapseOne">
-              <div class="my-2">{{ unitMypStore.objectives.find(i => i.id == key).full_name }} - <b>{{
-                calculatedObjectives[key][0].avg_point || 'Не оценивается' }}</b></div>
+              <div class="my-2">{{ unitMypStore.objectives.find(i => i.id == key).full_name }} - <b v-if="calculatedObjectives[key]">
+                {{calculatedObjectives[key][0].avg_point || 'Не оценивается' }}</b></div>
             </button>
           </h2>
           <div :id="`collapse${report.id}-${key}`" class="accordion-collapse collapse"

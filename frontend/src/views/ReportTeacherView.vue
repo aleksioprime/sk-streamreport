@@ -27,10 +27,8 @@
             showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup) || isEmpty(currentCurriculum)" />
         </div>
       </div>
-      <button type="button" class="btn btn-primary m-2" @click="getTeacherReports" :disabled="isEmpty(currentGroup) ||
-        isEmpty(currentReportPeriod) ||
-        isEmpty(currentSubject)
-        ">
+      <button type="button" class="btn btn-primary m-2" @click="getTeacherReports" 
+      :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
         Показать студентов
       </button>
       <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
@@ -51,11 +49,11 @@
       <!-- Список студентов -->
       <div class="row" v-if="generalStore.users.length">
         <div class="col-md-3">
-          <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student">
+          <div class="d-flex flex-column align-items-start justify-content-start m-2 list-menu list-right-student">
             <div v-if="!isEmpty(currentGroup)">
-              <h5>{{ currentGroup.name }} класс</h5> 
+              <h5>{{ currentGroup.name }} класс</h5>
               <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
-              <hr/>
+              <hr />
             </div>
             <div v-for="user in generalStore.users" :key="user.id">
               <div class="d-flex align-items-center">
@@ -76,7 +74,7 @@
           <div v-if="reportStore.reportTeachers.length">
             <div v-for="report in reportStore.reportTeachers" :key="report.id" class="my-3"
               :id="`st-${report.student.id}`">
-              <div class="card my-1">
+              <div class="card card-student my-1">
                 <div class="card-body d-flex align-items-center">
                   <img :src="report.student.photo ? report.student.photo : imageStudent
                     " alt="" width="50" class="me-2 rounded-circle" />
@@ -107,18 +105,17 @@
                     :aria-labelledby="`heading-${report.id}`">
                     <div class="accordion-body">
                       <div class="my-3">
-                        <report-teacher-myp-strand :report="report" v-if="currentReportType.value == 'ooo'"/>
+                        <report-teacher-myp-strand :report="report" v-if="currentReportType.value == 'ooo'" />
                       </div>
                       <div class="my-3">
-                        <report-teacher-myp-criteria :report="report" v-if="currentReportType.value == 'ooo'"/>
+                        <report-teacher-myp-criteria :report="report" v-if="currentReportType.value == 'ooo'" />
                       </div>
                       <div class="my-3" v-if="['ooo', 'soo', 'ib'].includes(currentReportType.value)">
                         <div class="d-flex align-items-center">
                           <h5>Итоговая оценка</h5>
                           <div class="ms-auto">
-                            <scale-radio :elementId="String(report.id)" :data="MARK5"
-                              :propValue="report.final_grade" propName="final_grade"
-                              @save="handleSave($event, report.id)" />
+                            <scale-radio :elementId="String(report.id)" :data="MARK5" :propValue="report.final_grade"
+                              propName="final_grade" @save="handleSave($event, report.id)" />
                           </div>
                         </div>
                       </div>
@@ -126,9 +123,8 @@
                         <div class="d-flex align-items-center">
                           <h5>Итоговая оценка IB</h5>
                           <div class="ms-auto">
-                            <scale-radio :elementId="String(report.id)" :data="MARK7"
-                              :propValue="report.final_grade" propName="final_grade"
-                              @save="handleSave($event, report.id)" />
+                            <scale-radio :elementId="String(report.id)" :data="MARK7" :propValue="report.final_grade"
+                              propName="final_grade" @save="handleSave($event, report.id)" />
                           </div>
                         </div>
                       </div>
@@ -314,6 +310,8 @@ const selectSubject = () => {
     JSON.stringify(currentSubject.value)
   );
   resetStudents();
+  getStrands();
+  unitMypStore.loadObjectives();
 };
 
 // Сброс всех выбранных опций с очисткой списка студентов
@@ -589,6 +587,14 @@ const recoveryOptions = () => {
   }
 };
 
+const getStrands = () => {
+  unitMypStore.loadStrands({
+      params: {
+        objective__group: currentSubject.value.group_ib.id
+      }
+    });
+}
+
 // Запросы и установки при монтировании компонента:
 // Восстановление опций из LocalStorage, загрузка данных в соответствии с опциями (если они не загружены)
 // Создание объекта модального окна из компонента
@@ -613,12 +619,8 @@ onMounted(() => {
   if (!unitMypStore.isObjectivesLoaded) {
     unitMypStore.loadObjectives();
   }
-  if (!unitMypStore.isStrandsLoaded && !isEmpty(currentSubject.value)) {
-    unitMypStore.loadStrands({
-      params: {
-        objective__group: currentSubject.value.group_ib.id
-      }
-    });
+  if (!unitMypStore.isStrandsLoaded && !isEmpty(currentSubject.value) && currentSubject.value.group_ib) {
+    getStrands();
   }
   getSubjects();
   getTeacherReports();
@@ -627,6 +629,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.list-menu {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
 .report-success {
   background-color: rgb(174, 232, 232);
 }
@@ -634,20 +641,35 @@ onMounted(() => {
 .select {
   font-weight: bold;
 }
+
 .list-right-student {
   top: 10px;
 }
+
 :target::before {
-    content: "";
-    display: block;
-    height: 90px; /* Высота вашей фиксированной шапки */
-    margin-top: -90px;
+  content: "";
+  display: block;
+  height: 90px;
+  /* Высота вашей фиксированной шапки */
+  margin-top: -90px;
 }
-:target .card {
-    animation: blink 1s ease-in-out 0s 3; /* Анимация будет длиться 1 секунду, повторяться 3 раза */
+
+:target .card-student {
+  animation: blink 1s ease-in-out 0s 3;
+  /* Анимация будет длиться 1 секунду, повторяться 3 раза */
 }
+
 @keyframes blink {
-    0%, 100% { background-color: transparent; }
-    50% { background-color: rgb(205, 254, 238); } /* Промежуточный цвет фона для мигания */
+
+  0%,
+  100% {
+    background-color: transparent;
+  }
+
+  50% {
+    background-color: rgb(205, 254, 238);
+  }
+
+  /* Промежуточный цвет фона для мигания */
 }
 </style>

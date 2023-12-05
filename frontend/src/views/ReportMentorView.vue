@@ -55,7 +55,7 @@
         <div class="col pe-3">
           <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3"
             :id="`st-${student.id}`">
-            <div class="card my-1 anchor-student">
+            <div class="card card-student my-1 anchor-student">
               <div class="card-body d-flex align-items-center">
                 <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
                 <h4 class="m-0">
@@ -89,7 +89,7 @@
                   :aria-labelledby="`heading-${student.id}`">
                   <div class="accordion-body">
                     <div class="my-2">
-                      <report-mentor-ib-profile :report="student.report" />
+                      <report-mentor-ib-profile :report="student.report" v-if="currentStudyYear.level == 'noo'"/>
                     </div>
                     <hr />
                     <div class="my-2">
@@ -116,7 +116,7 @@
                   <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse"
                     :data-bs-target="`#collapseExtra-${student.report.id}`" aria-expanded="true"
                     :aria-controls="`collapseExtra-${student.report.id}`">
-                    Репорты сотрудников класса
+                    Репорты службы сопровождения
                   </button>
                 </h2>
                 <div :id="`collapseExtra-${student.report.id}`" class="accordion-collapse collapse"
@@ -171,9 +171,22 @@
                               </div>
                             </div>
                             <div class="my-2" v-if="teacher.topic_achievements && teacher.topic_achievements.length">
-                              <div v-for="topic in teacher.topic_achievements" :key="topic.id">
-                                {{ topic }}
-                              </div>
+                                <table class="table table-sm table-bordered">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col" style="width: 50%;">Тема</th>
+                                      <th scope="col" style="min-width: 60px;">Кр.</th>
+                                      <th scope="col" style="width: 50%;">Комментарий</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr v-for="achieve in teacher.topic_achievements" :key="achieve.id">
+                                      <td>{{ achieve.topic.name }}</td>
+                                      <td>{{ achieve.level.toUpperCase() }}</td>
+                                      <td>{{ achieve.comment }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
                             </div>
                             <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
                               <div v-for="objective in teacher.objective_levels" :key="objective.id">
@@ -568,7 +581,7 @@ onMounted(() => {
   margin-top: -90px;
 }
 
-:target .card {
+:target .card-student {
   animation: blink 1s ease-in-out 0s 3;
   /* Анимация будет длиться 1 секунду, повторяться 3 раза */
 }

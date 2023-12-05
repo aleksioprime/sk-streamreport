@@ -51,6 +51,7 @@
         <div v-if="syllabusStore.courses.length">
           <div v-for="course in syllabusStore.courses" :key="course.id">
             <h5>{{ course.syllabus.subject.name }} ({{ course.year.number }} класс)</h5>
+            
             <div v-for="chapter in course.chapters" :key="chapter.id">
               <div class="my-2">
                 <strong>Раздел: {{ chapter.name }}</strong>
@@ -67,6 +68,7 @@
             </div>
           </div>
         </div>
+        <div v-else class="my-2">Учебных тем для импорта не найдено</div>
       </div>
     </simple-modal>
   </div>

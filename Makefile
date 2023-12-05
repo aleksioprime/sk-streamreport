@@ -8,13 +8,12 @@ POSTGRES_DB = igskolkovo
 # Файл docker-compose
 DOCKER_COMPOSE_FILE = ./docker-compose.yml
 
-# Путь к скрипту на хосте
-HOST_SCRIPT_PATH=./docker/develop/load_fixtures.sh
-CONTAINER_SCRIPT_PATH = /load_fixtures.sh
-
 # Команда для запуска docker-compose
 DC = docker-compose -p $(PROJECT_NAME) -f $(DOCKER_COMPOSE_FILE)
 
+# Путь к скрипту на хосте
+HOST_SCRIPT_PATH=./docker/develop/load_fixtures.sh
+CONTAINER_SCRIPT_PATH = /load_fixtures.sh
 CONTAINER_NAME=$(shell $(DC) ps -q backend)
 
 # Удаление, сборка с запуском проекта

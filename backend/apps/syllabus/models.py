@@ -44,7 +44,7 @@ class CourseTopic(models.Model):
     """ Темы курса учебного предмета """
     chapter = models.ForeignKey('syllabus.CourseChapter', verbose_name=_("Раздел"), on_delete=models.CASCADE, null=True, related_name="topics")
     number = models.PositiveIntegerField(verbose_name=_("Номер"), default=1)
-    name = models.CharField(max_length=255, verbose_name=_("Название"))
+    name = models.TextField(verbose_name=_("Название"))
     description = models.TextField(verbose_name=_("Описание"), null=True, blank=True)
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=1)
     class Meta:
