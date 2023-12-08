@@ -176,7 +176,7 @@ class ReportCriterionAchievementViewSet(ModelViewSet):
     destroy=extend_schema(summary='Удаление репорта учителя в начальной школе', tags=['Репорты: Учителя НШ']),
     )
 class ReportTeacherPrimaryViewSet(ModelViewSet):
-    queryset = get_report_teacher_primary_queryset()
+    # queryset = get_report_teacher_primary_queryset()
     filterset_class = ReportTeacherPrimaryFilter
     permission_classes = [IsAuthenticated]
     pagination_class = None
@@ -196,6 +196,10 @@ class ReportTeacherPrimaryViewSet(ModelViewSet):
         self.perform_update(serializer)
         detail_serializer = ReportTeacherPrimaryListSerializer(serializer.instance)
         return Response(detail_serializer.data, status=status.HTTP_200_OK)
+    
+    def get_queryset(self):
+        group = self.request.query_params.get('event_group', None)
+        return get_report_teacher_primary_queryset(group)
 
 # Достижения по темам в репорте НШ: список, создание, редактирование и удаление
 @extend_schema_view(
@@ -299,7 +303,7 @@ class ReportSecondaryLevelViewSet(ModelViewSet):
     )
 class ReportTeacherSecondaryViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = get_report_teacher_secondary_queryset()
+    # queryset = get_report_teacher_secondary_queryset()
     filterset_class = ReportTeacherSecondaryFilter
     
     def get_serializer_class(self):
@@ -317,6 +321,11 @@ class ReportTeacherSecondaryViewSet(ModelViewSet):
         self.perform_update(serializer)
         detail_serializer = ReportTeacherSecondaryRetrieveSerializer(serializer.instance)
         return Response(detail_serializer.data, status=status.HTTP_200_OK)
+
+    def get_queryset(self):
+        group = self.request.query_params.get('group', None)
+        student = self.request.query_params.get('student', None)
+        return get_report_teacher_secondary_queryset(group, student)
     
 
 # Репорты учителя в старшей школе: список, просмотр, создание, редактирование и удаление
@@ -330,7 +339,7 @@ class ReportTeacherSecondaryViewSet(ModelViewSet):
     )
 class ReportTeacherHighViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = get_report_teacher_high_queryset()
+    # queryset = get_report_teacher_high_queryset()
     filterset_class = ReportTeacherHighFilter
     
     def get_serializer_class(self):
@@ -348,6 +357,10 @@ class ReportTeacherHighViewSet(ModelViewSet):
         self.perform_update(serializer)
         detail_serializer = ReportTeacherHighListSerializer(serializer.instance)
         return Response(detail_serializer.data, status=status.HTTP_200_OK)
+    
+    def get_queryset(self):
+        group = self.request.query_params.get('event_group', None)
+        return get_report_teacher_high_queryset(group)
     
 # Оценки профиля студента в репорте классного руководителя: список, создание, редактирование и удаление
 @extend_schema_view(

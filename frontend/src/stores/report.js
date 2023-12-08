@@ -72,7 +72,7 @@ export const useReportStore = defineStore("report", {
         this.studentExtraReports = res.data.map(item => {
           return {
             ...item,
-            report: item.reports[0]
+            report: item.reportextra_student_reports[0] ?? null
           };
         });
       }
@@ -165,20 +165,21 @@ export const useReportStore = defineStore("report", {
     async loadStudentMentorReports(config) {
       const res = await resources.studentMentorReport.getStudentMentorReports(config);
       if (res.__state === "success") {
+        console.log(res)
         this.studentMentorReports = res.data.map(item => {
-          let report_teacher =[]
-          if (item.teacher_high_reports.length) {
-            report_teacher = [ ...item.teacher_high_reports ]
-          } else if (item.teacher_secondary_reports.length) {
-            report_teacher = [ ...item.teacher_secondary_reports ]
-          } else {
-            report_teacher = [ ...item.teacher_primary_reports ]
+          let report_teachers = []
+          if (item.teacher_high_reports && item.teacher_high_reports.length) {
+            report_teachers = [ ...item.teacher_high_reports ]
+          } else if (item.teacher_secondary_reports && item.teacher_secondary_reports.length) {
+            report_teachers = [ ...item.teacher_secondary_reports ]
+          } else if (item.teacher_primary_reports && item.teacher_primary_reports.length) {
+            report_teachers = [ ...item.teacher_primary_reports ]
           }
           return {
             ...item,
-            report: item.reports[0],
-            report_extra: item.extra_reports,
-            report_teacher: report_teacher
+            report: item.reportmentor_student_reports[0] ?? null,
+            report_extras: item.reportextra_student_reports,
+            report_teachers: report_teachers
           };
         });
       }
@@ -197,7 +198,7 @@ export const useReportStore = defineStore("report", {
       return await resources.reportMentorPrimary.createReportMentorPrimary(report);
     },
     async updateReportMentorPrimary(report) {
-      return await resources.reportMentorPrimary.updateReportMentor(report);
+      return await resources.reportMentorPrimary.updateReportMentorPrimary(report);
     },
     async removeReportMentorPrimary(report) {
       return await resources.reportMentorPrimary.removeReportMentorPrimary(report);

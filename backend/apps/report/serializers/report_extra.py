@@ -8,6 +8,8 @@ from .common import (
     UserReportSerializer,
     ClassGroupReportSerializer,
     ReportPeriodListSerializer,
+    StudentReportSerializer,
+    EventParticipationReportSerializer,
 )
 
 from general.models import (
@@ -16,7 +18,7 @@ from general.models import (
 
 # Вывод списка репортов дополнительных сотрудников класса
 class ReportExtraListSerializer(serializers.ModelSerializer):
-    student = UserReportSerializer()
+    student = StudentReportSerializer()
     author = UserReportSerializer()
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
@@ -36,7 +38,7 @@ class ReportExtraListSerializer(serializers.ModelSerializer):
 
 # Подробный просмотр репорта дополнительных сотрудников класса
 class ReportExtraRetrieveSerializer(serializers.ModelSerializer):
-    student = UserReportSerializer()
+    student = StudentReportSerializer()
     author = UserReportSerializer()
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
@@ -63,11 +65,14 @@ class ReportExtraUpdateSerializer(serializers.ModelSerializer):
 
 class ReportExtraSerializer(serializers.ModelSerializer):
     author = UserReportSerializer()
+    student = StudentReportSerializer()
+    group = ClassGroupReportSerializer()
     class Meta:
         model = ReportExtra
         fields = (
             "id",
             "author",
+            "student",
             "period",
             "group",
             "comment",
@@ -78,8 +83,8 @@ class ReportExtraSerializer(serializers.ModelSerializer):
 
 # Вывод списка пользователей с фильтрацией репортов службы сопровождения
 class UserListReportExtraSerializer(serializers.ModelSerializer):
-    reports = serializers.SerializerMethodField()
     short_name = serializers.CharField(source='get_short_name', read_only=True)
+    reportextra_student_reports = ReportExtraSerializer(many=True)
     class Meta:
         model = User
         fields = (
@@ -87,15 +92,8 @@ class UserListReportExtraSerializer(serializers.ModelSerializer):
             "first_name", 
             "last_name",
             "middle_name",
-            "reports",
             "photo",
             "short_name",
+            "reportextra_student_reports",
             )
-    def get_reports(self, obj):
-        period = self.context['request'].query_params.get('report_period', None)
-        group = self.context['request'].query_params.get('report_group', None)
-        if period is not None and  group is not None:
-            return ReportExtraSerializer(obj.filtered_reports, many=True).data
-        else:
-            return None
         

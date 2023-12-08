@@ -15,8 +15,24 @@ from general.models import (
     )
 
 from apps.curriculum.models import (
-    Subject
+    Subject,
     )
+
+from apps.portfolio.models import (
+    EventParticipation,
+    )
+
+# Список участия студента в конкурсах
+class EventParticipationReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventParticipation
+        fields = (
+            "id", 
+            "title", 
+            "result",
+            "date_start",
+            "date_end",
+            )
 
 # Список пользователей
 class UserReportSerializer(serializers.ModelSerializer):
@@ -29,6 +45,21 @@ class UserReportSerializer(serializers.ModelSerializer):
             "last_name",
             "middle_name",
             "short_name",
+            )
+        
+# Список студентов
+class StudentReportSerializer(serializers.ModelSerializer):
+    short_name = serializers.CharField(source='get_short_name', read_only=True)
+    student_events = EventParticipationReportSerializer(many=True)
+    class Meta:
+        model = User
+        fields = (
+            "id", 
+            "first_name", 
+            "last_name",
+            "middle_name",
+            "short_name",
+            "student_events"
             )
 
 # Список учебных лет

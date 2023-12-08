@@ -6,5 +6,5 @@ from apps.portfolio.views import (
 
 urlpatterns = [
     path('portfolio/event/participation', EventParticipationViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('portfolio/event/participation/<int:pk>', EventParticipationViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('portfolio/event/participation/<int:pk>', EventParticipationViewSet.as_view({'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
 ]

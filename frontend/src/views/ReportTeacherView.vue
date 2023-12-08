@@ -27,8 +27,8 @@
             showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup) || isEmpty(currentCurriculum)" />
         </div>
       </div>
-      <button type="button" class="btn btn-primary m-2" @click="getTeacherReports" 
-      :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
+      <button type="button" class="btn btn-primary m-2" @click="getTeacherReports"
+        :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
         Показать студентов
       </button>
       <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
@@ -140,6 +140,10 @@
                           @save="handleSave($event, report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
                       </div>
                       <hr />
+                      <div class="my-2">
+                        <event-participation :report="report" />
+                      </div>
+                      <hr />
                       <div class="d-flex align-items-center">
                         <i class="bi bi-person"></i>
                         <div class="ms-1">{{ report.author.short_name }}</div>
@@ -193,6 +197,7 @@ import ReportTeacherTopic from "@/modules/ReportTeacherTopic.vue";
 import ReportTeacherCriteria from "@/modules/ReportTeacherCriteria.vue";
 import ReportTeacherMypCriteria from "@/modules/ReportTeacherMypCriteria.vue";
 import ReportTeacherMypStrand from "@/modules/ReportTeacherMypStrand.vue";
+import EventParticipation from "@/modules/EventParticipation.vue";
 
 import { useGeneralStore } from "@/stores/general";
 import { useCurriculumStore } from "@/stores/curriculum";
@@ -310,8 +315,8 @@ const selectSubject = () => {
     JSON.stringify(currentSubject.value)
   );
   resetStudents();
+  getObjective();
   getStrands();
-  unitMypStore.loadObjectives();
 };
 
 // Сброс всех выбранных опций с очисткой списка студентов
@@ -415,6 +420,7 @@ const getTeacherReports = () => {
         group: currentGroup.value.id,
         period: currentReportPeriod.value.id,
         subject: currentSubject.value.id,
+        event_group: currentGroup.value.id,
       },
     };
     if (currentCurriculum.value.level == "noo") {
@@ -588,11 +594,21 @@ const recoveryOptions = () => {
 };
 
 const getStrands = () => {
-  unitMypStore.loadStrands({
+  if (currentReportType.value.value == 'ooo' && currentSubject.value.group_ib) {
+    unitMypStore.loadStrands({
       params: {
         objective__group: currentSubject.value.group_ib.id
       }
     });
+  }
+}
+
+const getObjective = () => {
+  if (currentReportType.value.value == 'ooo') {
+    unitMypStore.loadObjectives().then(() => {
+      getStrands();
+    });
+  }
 }
 
 // Запросы и установки при монтировании компонента:
@@ -616,13 +632,9 @@ onMounted(() => {
   }
   if (!generalStore.isGroupsLoaded) {
   }
-  if (!unitMypStore.isObjectivesLoaded) {
-    unitMypStore.loadObjectives();
-  }
-  if (!unitMypStore.isStrandsLoaded && !isEmpty(currentSubject.value) && currentSubject.value.group_ib) {
-    getStrands();
-  }
   getSubjects();
+  getObjective();
+  getStrands();
   getTeacherReports();
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });
@@ -634,6 +646,7 @@ onMounted(() => {
   position: sticky;
   top: 0;
 }
+
 .report-success {
   background-color: rgb(174, 232, 232);
 }

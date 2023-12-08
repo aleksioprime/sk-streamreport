@@ -23,6 +23,10 @@ from general.models import (
     User
 )
 
+from apps.portfolio.models import (
+    EventParticipation,
+)
+
 def get_report_period_queryset():
     return ReportPeriod.objects.all().select_related(
         'year',
@@ -51,7 +55,7 @@ def get_report_primary_achievement_queryset():
         'topic',
         )
 
-def get_report_teacher_primary_queryset():
+def get_report_teacher_primary_queryset(group):
     return ReportTeacherPrimary.objects.all().select_related(
         'student',
         'author',
@@ -71,7 +75,13 @@ def get_report_teacher_primary_queryset():
             'criterion_achievements__criterion__levels',
             'topic_achievements',
             'topic_achievements__topic',
+            Prefetch(
+                    'student__student_events', 
+                    queryset=EventParticipation.objects.filter(group=group)
+                ),
             )
+
+
 
 def get_report_secondary_criterion_queryset():
     return ReportSecondaryCriterion.objects.all().select_related(
@@ -87,7 +97,8 @@ def get_report_secondary_level_queryset():
             'strand__achieve_levels',
         )
 
-def get_report_teacher_secondary_queryset():
+def get_report_teacher_secondary_queryset(group, student):
+    print(f'Параметры запроса: {group}, {student}')
     return ReportTeacherSecondary.objects.select_related(
         'student',
         'author',
@@ -113,9 +124,13 @@ def get_report_teacher_secondary_queryset():
             'objective_levels__strand__strand__objective',
             'objective_levels__strand__achieve_levels',
             'objective_levels__level',
+            Prefetch(
+                    'student__student_events', 
+                    queryset=EventParticipation.objects.filter(group=group)
+                ),
             )
 
-def get_report_teacher_high_queryset():
+def get_report_teacher_high_queryset(group):
     return ReportTeacherHigh.objects.all().select_related(
         'student',
         'author',
@@ -128,6 +143,10 @@ def get_report_teacher_high_queryset():
         ).prefetch_related(
             'criterion_achievements',
             'criterion_achievements__criterion',
+            Prefetch(
+                    'student__student_events', 
+                    queryset=EventParticipation.objects.filter(group=group)
+                ),
             )
 
 def get_report_ibprofile_queryset():
@@ -169,15 +188,21 @@ def get_report_extra_queryset():
         'group',
         )
 
+# Запрос на репорты сорудников класса
 def get_user_report_extra_queryset(group=None, period=None):
     return User.objects.all().prefetch_related(
-        'reportextra_student_reports',
         Prefetch(
                 'reportextra_student_reports', 
-                queryset=ReportExtra.objects.filter(group=group, period=period), 
-                to_attr='filtered_reports'
+                queryset=ReportExtra.objects.filter(group=group, period=period).select_related(
+                    'student',
+                    'author',
+                    'group',
+                    'group__year_academic',
+                    'group__year_study',
+                ).prefetch_related(
+                    'student__student_events',
+                ), 
             ),
-        'classes',
         )
 
 def get_user_report_mentor_primary_queryset(group=None, period=None):
@@ -192,67 +217,48 @@ def get_user_report_mentor_primary_queryset(group=None, period=None):
         )
 
 def get_user_report_mentor_queryset(group=None, period=None):
-    return User.objects.all().prefetch_related(
+    return User.objects.prefetch_related(
         Prefetch(
                 'reportmentor_student_reports', 
                 queryset=ReportMentor.objects.filter(group=group, period=period).select_related(
                     'author', 
+                    'student',
+                    'group',
+                    'group__year_academic',
+                    'group__year_study',
                     ).prefetch_related(
+                        'student__student_events',
                         'profiles',
                         'profiles__profile',
                     ), 
-                to_attr='filtered_reports'
             ),
         Prefetch(
                 'reportteacher_student_reports', 
                 queryset=ReportTeacherPrimary.objects.filter(group=group, period=period).select_related(
                     'author',
-                    'student',
-                    'period',
-                    'period__year',
-                    'group',
-                    'group__year_academic',
-                    'group__year_study',
                     'subject',
                     ).prefetch_related(
                         'criterion_achievements',
                         'criterion_achievements__achievement',
                         'criterion_achievements__criterion',
-                        'criterion_achievements__criterion__author',
-                        'criterion_achievements__criterion__subjects',
-                        'criterion_achievements__criterion__years',
-                        'criterion_achievements__criterion__levels',
                         'topic_achievements',
                         'topic_achievements__topic',
                         ), 
-                to_attr='filtered_teacher_primary_reports'
+                to_attr='filtered_teacher_primary_reports',
             ),
         Prefetch(
                 'reportteacher_student_reports', 
                 queryset=ReportTeacherSecondary.objects.filter(group=group, period=period).select_related(
                     'author',
-                    'period',
-                    'student',
-                    'period__year',
-                    'group',
-                    'group__year_academic',
-                    'group__year_study',
                     'subject',
                     ).prefetch_related(
                         'criterion_achievements',
                         'criterion_achievements__achievement',
                         'criterion_achievements__criterion',
-                        'criterion_achievements__criterion__author',
-                        'criterion_achievements__criterion__subjects',
-                        'criterion_achievements__criterion__years',
-                        'criterion_achievements__criterion__levels',
                         'criterion_marks',
                         'criterion_marks__criterion',
                         'objective_levels',
                         'objective_levels__strand',
-                        'objective_levels__strand__strand',
-                        'objective_levels__strand__strand__objective',
-                        'objective_levels__strand__achieve_levels',
                         'objective_levels__level',
                     ),  
                 to_attr='filtered_teacher_secondary_reports'
@@ -261,31 +267,18 @@ def get_user_report_mentor_queryset(group=None, period=None):
                 'reportteacher_student_reports', 
                 queryset=ReportTeacherHigh.objects.filter(group=group, period=period).select_related(
                     'author',
-                    'student',
-                    'period',
-                    'period__year',
-                    'group',
-                    'group__year_academic',
-                    'group__year_study',
                     'subject',
                     ).prefetch_related(
                         'criterion_achievements',
                         'criterion_achievements__criterion',
+                        'criterion_achievements__achievement',
                         ), 
                 to_attr='filtered_teacher_high_reports'
             ),
         Prefetch(
                 'reportextra_student_reports', 
                 queryset=ReportExtra.objects.filter(group=group, period=period).select_related(
-                    'student',
-                    'author', 
-                    'period',
-                    'period__year',
-                    'group',
-                    'group__year_academic',
-                    'group__year_study',
-                    ), 
-                to_attr='filtered_extra_reports'
+                    'author',
+                )
             ),
-        'classes',
         )

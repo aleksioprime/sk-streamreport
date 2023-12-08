@@ -2,8 +2,8 @@
   <div>
     <div class="d-flex align-items-center">
       <h5>Достижения по критериям MYP</h5>
-      <simple-dropdown class="ms-auto" v-model="currentLevel" :propItems="YEAR_LEVELS" showName="name"/>
-        <!-- :disabled="isYearDisable"/> -->
+      <simple-dropdown class="ms-auto" v-model="currentLevel" :propItems="YEAR_LEVELS" showName="name"
+        :disabled="isYearDisable"/>
     </div>
     <div class="my-2">
       <div class="accordion" :id="`accordionStrand${report.id}`">

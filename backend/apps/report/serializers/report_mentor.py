@@ -5,6 +5,11 @@ from apps.report.models import (
     ReportIbProfile,
     ReportMentorPrimary,
     ReportPrimaryUnit,
+    ReportExtra,
+    ReportTeacherPrimary,
+    ReportCriterionAchievement,
+    ReportSecondaryCriterion,
+    ReportSecondaryLevel
     )
 
 from apps.ibo.models import (
@@ -19,12 +24,19 @@ from .common import (
     UserReportSerializer,
     ClassGroupReportSerializer,
     ReportPeriodListSerializer,
+    EventParticipationReportSerializer,
+    StudentReportSerializer,
+    ReportCriterionLevelSerializer,
+    ReportCriterionListSerializer
 )
 
 from .report_teacher import (
     ReportTeacherPrimaryListSerializer,
     ReportTeacherSecondaryListSerializer,
     ReportTeacherHighListSerializer,
+    SubjectReportSerializer,
+    ReportPrimaryTopicListSerializer,
+    ReportCriterionAchievementListSerializer
 )
 
 from .report_extra import (
@@ -65,7 +77,7 @@ class ReportIbProfileUpdateSerializer(serializers.ModelSerializer):
 
 # Вывод списка репортов классного руководителя
 class ReportMentorListSerializer(serializers.ModelSerializer):
-    student = UserReportSerializer()
+    student = StudentReportSerializer()
     author = UserReportSerializer()
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
@@ -84,7 +96,7 @@ class ReportMentorListSerializer(serializers.ModelSerializer):
         
 # Подробный просмотр репорта классного руководителя
 class ReportMentorRetrieveSerializer(serializers.ModelSerializer):
-    student = UserReportSerializer()
+    student = StudentReportSerializer()
     author = UserReportSerializer()
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
@@ -141,7 +153,7 @@ class ReportPrimaryUnitUpdateSerializer(serializers.ModelSerializer):
         
 # Список репортов классного руководителя начальной школы
 class ReportMentorPrimaryListSerializer(serializers.ModelSerializer):
-    student = UserReportSerializer()
+    student = StudentReportSerializer()
     author = UserReportSerializer()
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
@@ -160,7 +172,7 @@ class ReportMentorPrimaryListSerializer(serializers.ModelSerializer):
 
 # Подробный просмотр репорта классного руководителя начальной школы
 class ReportMentorPrimaryRetrieveSerializer(serializers.ModelSerializer):
-    student = UserReportSerializer()
+    student = StudentReportSerializer()
     author = UserReportSerializer()
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
@@ -230,9 +242,14 @@ class UserListReportMentorPrimarySerializer(serializers.ModelSerializer):
             return None
         
 
+
+# ******************* Сериализаторы списка студентов в репортах наставника *****************
+
 class ReportMentorSerializer(serializers.ModelSerializer):
     author = UserReportSerializer()
+    student = StudentReportSerializer()
     profiles = ReportIbProfileListSerializer(many=True)
+    group = ClassGroupReportSerializer()
     class Meta:
         model = ReportMentor
         fields = (
@@ -247,14 +264,105 @@ class ReportMentorSerializer(serializers.ModelSerializer):
             "updated_at",
             )
 
+# Вывод списка репортов дополнительных сотрудников класса
+class ReportExtraSerializer(serializers.ModelSerializer):
+    author = UserReportSerializer()
+    class Meta:
+        model = ReportExtra
+        fields = (
+            "id",
+            "student",
+            "author",
+            "period",
+            "group",
+            "comment",
+            "created_at",
+            "updated_at",
+            "role",
+            )
+        
+# Вывод списка достижений по критериям для репортов учителя
+class ReportCriterionAchievementSerializer(serializers.ModelSerializer):
+    criterion_name = serializers.CharField(source='criterion.name', read_only=True)
+    achievement_name = serializers.CharField(source='achievement.name', read_only=True)
+    class Meta:
+        model = ReportCriterionAchievement
+        fields = (
+            'criterion_name',
+            'achievement_name',
+            'id',
+            'report'
+        )
+
+class ReportSecondaryCriterionSerializer(serializers.ModelSerializer):
+    criterion_name = serializers.CharField(source='criterion.name', read_only=True)
+    class Meta:
+        model = ReportSecondaryCriterion
+        fields = (
+            "id",
+            "report",
+            "criterion_name",
+            "mark"
+            )
+
+class ReportSecondaryLevelSerializer(serializers.ModelSerializer):
+    level_name = serializers.CharField(source='level.name', read_only=True)
+    strand_name = serializers.CharField(source='strand.name', read_only=True)
+    class Meta:
+        model = ReportSecondaryLevel
+        fields = (
+            "id",
+            "report",
+            "level_name",
+            "strand_name",
+            )
+
+class ReportTeacherSerializer(serializers.ModelSerializer):
+    author = UserReportSerializer()
+    subject = SubjectReportSerializer()
+    criterion_achievements = ReportCriterionAchievementSerializer(many=True)
+    class Meta:
+        model = ReportTeacherPrimary
+        fields = (
+            "id",
+            "student",
+            "author",
+            "period",
+            "group",
+            "subject",
+            "comment",
+            "created_at",
+            "updated_at",
+            'criterion_achievements'
+            )
+
+class ReportTeacherPrimarySerializer(ReportTeacherSerializer):
+    topic_achievements = ReportPrimaryTopicListSerializer(many=True)
+    class Meta(ReportTeacherSerializer.Meta):
+        fields = ReportTeacherSerializer.Meta.fields + (
+            'topic_achievements',
+            )
+        
+class ReportTeacherSecondarySerializer(ReportTeacherSerializer):
+    criterion_marks = ReportSecondaryCriterionSerializer(many=True)
+    objective_levels = ReportSecondaryLevelSerializer(many=True)
+    class Meta(ReportTeacherSerializer.Meta):
+        fields = ReportTeacherSerializer.Meta.fields + (
+            'criterion_marks',
+            'objective_levels'
+            )
+class ReportTeacherHighSerializer(ReportTeacherSerializer):
+    class Meta(ReportTeacherSerializer.Meta):
+        fields = ReportTeacherSerializer.Meta.fields
+
 # Вывод списка пользователей с фильтрацией репортов классных руководителей
 class UserListReportMentorSerializer(serializers.ModelSerializer):
-    reports = serializers.SerializerMethodField()
     teacher_primary_reports = serializers.SerializerMethodField()
     teacher_secondary_reports = serializers.SerializerMethodField()
     teacher_high_reports = serializers.SerializerMethodField()
-    extra_reports = serializers.SerializerMethodField()
     short_name = serializers.CharField(source='get_short_name', read_only=True)
+    reportmentor_student_reports = ReportMentorSerializer(many=True)
+    reportextra_student_reports = ReportExtraSerializer(many=True)
     class Meta:
         model = User
         fields = (
@@ -263,45 +371,31 @@ class UserListReportMentorSerializer(serializers.ModelSerializer):
             "last_name",
             "middle_name",
             "short_name",
-            "reports",
             "teacher_primary_reports",
             "teacher_secondary_reports",
             "teacher_high_reports",
-            "extra_reports",
             "photo",
+            "reportmentor_student_reports",
+            "reportextra_student_reports",
             )
-    def get_reports(self, obj):
-        period = self.context['request'].query_params.get('report_period', None)
-        group = self.context['request'].query_params.get('report_group', None)
-        if period is not None and  group is not None:
-            return ReportMentorSerializer(obj.filtered_reports, many=True).data
-        else:
-            return None
     def get_teacher_primary_reports(self, obj):
         period = self.context['request'].query_params.get('report_period', None)
         group = self.context['request'].query_params.get('report_group', None)
         if period is not None and  group is not None:
-            return ReportTeacherPrimaryListSerializer(obj.filtered_teacher_primary_reports, many=True).data
+            return ReportTeacherPrimarySerializer(obj.filtered_teacher_primary_reports, many=True).data
         else:
-            return None
+            return []
     def get_teacher_secondary_reports(self, obj):
         period = self.context['request'].query_params.get('report_period', None)
         group = self.context['request'].query_params.get('report_group', None)
         if period is not None and  group is not None:
-            return ReportTeacherSecondaryListSerializer(obj.filtered_teacher_secondary_reports, many=True).data
+            return ReportTeacherSecondarySerializer(obj.filtered_teacher_secondary_reports, many=True).data
         else:
-            return None
+            return []
     def get_teacher_high_reports(self, obj):
         period = self.context['request'].query_params.get('report_period', None)
         group = self.context['request'].query_params.get('report_group', None)
         if period is not None and  group is not None:
-            return ReportTeacherHighListSerializer(obj.filtered_teacher_high_reports, many=True).data
+            return ReportTeacherHighSerializer(obj.filtered_teacher_high_reports, many=True).data
         else:
-            return None
-    def get_extra_reports(self, obj):
-        period = self.context['request'].query_params.get('report_period', None)
-        group = self.context['request'].query_params.get('report_group', None)
-        if period is not None and  group is not None:
-            return ReportExtraListSerializer(obj.filtered_extra_reports, many=True).data
-        else:
-            return None
+            return []

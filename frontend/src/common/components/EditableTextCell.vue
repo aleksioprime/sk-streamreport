@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex align-items-center wrapper">
-    <div v-if="!editMode" class="cell-text" @click="enableEditMode">{{ text || "Нажмите, чтобы написать комментарий" }}
+    <div v-if="!editMode" class="cell-text" @click="enableEditMode">{{ text || "Нажмите, чтобы что-то написать" }}
     </div>
-    <textarea v-else id="cell-input" ref="inputRef" type="text" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"
-      class="form-control"></textarea>
+    <input v-else id="cell-input" ref="inputRef" type="text" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"
+      class="form-control">
   </div>
 </template>
 

@@ -61,7 +61,7 @@
                 <div class="ms-auto">
                   <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
                   <ul class="dropdown-menu">
-                    <li v-if="!student.reports.length">
+                    <li v-if="!student.report">
                       <a class="dropdown-item" href="##" @click="createStudentExtraReport(student.id)">Добавить репорт</a>
                     </li>
                     <li v-else>
@@ -71,7 +71,7 @@
                 </div>
               </div>
             </div>
-            <div class="accordion" :id="`accordionStudent-${student.id}`" v-if="student.reports.length">
+            <div class="accordion" :id="`accordionStudent-${student.id}`" v-if="student.report">
               <div class="accordion-item">
                 <h2 class="accordion-header" :id="`heading-${student.id}`">
                   <button class="accordion-button collapsed p-2" :class="{ 'report-success': student.report.comment }"
@@ -86,6 +86,10 @@
                     <div class="my-2">
                       <editable-area-tiny class="text-muted" :propData="student.report.comment" propName="comment"
                         @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
+                    </div>
+                    <hr />
+                    <div class="my-2">
+                      <event-participation :report="student.report" />
                     </div>
                     <hr />
                     <div class="d-flex align-items-center">
@@ -124,12 +128,17 @@
 import { ref, computed, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import imageStudent from "@/assets/img/student.svg";
+
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
 import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
+
+import EventParticipation from "@/modules/EventParticipation.vue";
+
 import { useGeneralStore } from "@/stores/general";
 import { useReportStore } from "@/stores/report";
 import { useAuthStore } from "@/stores/auth";
+
 import { formatDate } from "@/common/helpers/date";
 
 const currentAcademicYear = ref({});
@@ -270,7 +279,7 @@ const getStudentExtraReports = () => {
         },
       })
       .then(() => {
-        // console.log(reportStore.studentExtraReports)
+        console.log(reportStore.studentExtraReports)
       });
   }
 };

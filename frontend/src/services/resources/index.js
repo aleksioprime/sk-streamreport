@@ -25,6 +25,7 @@ import { CourseResource } from "@/services/resources/syllabus/course.resource";
 import { ObjectiveResource } from "@/services/resources/myp/objective.resource";
 import { StrandResource } from "@/services/resources/myp/strand.resource";
 import { LearnerProfileResource } from "@/services/resources/ibo/learnerProfile.resource";
+import { EventParticipationResource } from "@/services/resources/portfolio/eventParticipation.resource";
 
 export default {
     auth: new AuthResource(),
@@ -54,4 +55,5 @@ export default {
     objective: new ObjectiveResource(),
     strand: new StrandResource(),
     learnerProfile: new LearnerProfileResource(),
+    eventParticipation: new EventParticipationResource(),
   };

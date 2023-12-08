@@ -8,6 +8,8 @@ class EventParticipation(models.Model):
     author = models.ForeignKey('general.User', verbose_name=_("Автор"), on_delete=models.SET_NULL, null=True, related_name="author_events")
     title = models.CharField(max_length=255, verbose_name=_("Название"))
     result = models.TextField(verbose_name=_("Результаты"), null=True, blank=True)
+    date_start = models.DateField(verbose_name=_("Дата начала"), null=True)
+    date_end = models.DateField(verbose_name=_("Дата окончания"), null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, verbose_name=_("Создан"))
     updated_at = models.DateTimeField(auto_now=True, null=True, verbose_name=_("Изменён"))
     class Meta:

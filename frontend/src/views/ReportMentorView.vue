@@ -64,7 +64,7 @@
                 <div class="ms-auto">
                   <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
                   <ul class="dropdown-menu">
-                    <li v-if="!student.reports.length">
+                    <li v-if="!student.report">
                       <a class="dropdown-item" href="##" @click="createStudentMentorReport(student.id)">Добавить репорт
                         руководителя</a>
                     </li>
@@ -76,7 +76,7 @@
                 </div>
               </div>
             </div>
-            <div class="accordion my-1" :id="`accordionStudent-${student.id}`" v-if="student.reports.length">
+            <div class="accordion my-1" :id="`accordionStudent-${student.id}`" v-if="student.report">
               <div class="accordion-item">
                 <h2 class="accordion-header" :id="`heading-${student.id}`">
                   <button class="accordion-button collapsed p-2" :class="{ 'report-success': student.report.comment }"
@@ -97,6 +97,10 @@
                         @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
                     </div>
                     <hr />
+                    <div class="my-2">
+                      <event-participation :report="student.report" />
+                    </div>
+                    <hr />
                     <div class="d-flex align-items-center">
                       <i class="bi bi-person"></i>
                       <div class="ms-1">
@@ -110,21 +114,22 @@
                 </div>
               </div>
             </div>
-            <div class="accordion my-1" :id="`accordionStudentExtra-${student.report.id}`" v-if="student.reports.length">
+            <div class="accordion my-1" :id="`accordionStudentExtra-${student.id}`" v-if="student.report_extras.length">
               <div class="accordion-item">
-                <h2 class="accordion-header" :id="`headingExtra-${student.report.id}`">
+                <h2 class="accordion-header" :id="`headingExtra-${student.id}`">
                   <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse"
-                    :data-bs-target="`#collapseExtra-${student.report.id}`" aria-expanded="true"
-                    :aria-controls="`collapseExtra-${student.report.id}`">
+                    :data-bs-target="`#collapseExtra-${student.id}`" aria-expanded="true"
+                    :aria-controls="`collapseExtra-${student.id}`">
                     Репорты службы сопровождения
                   </button>
                 </h2>
-                <div :id="`collapseExtra-${student.report.id}`" class="accordion-collapse collapse"
-                  :aria-labelledby="`headingExtra-${student.report.id}`">
+                <div :id="`collapseExtra-${student.id}`" class="accordion-collapse collapse"
+                  :aria-labelledby="`headingExtra-${student.id}`">
                   <div class="accordion-body">
-                    <div v-if="student.extra_reports && student.extra_reports.length">
-                      <div v-for="extra in student.report_extra" :key="extra.id">
-                        <div class="my-2" v-html="extra.comment"></div>
+                    <div v-if="student.report_extras.length">
+                      <div v-for="extra in student.report_extras" :key="extra.id">
+                        <div class="my-2" v-html="extra.comment" v-if="extra.comment"></div>
+                        <div v-else>Нет информации</div>
                         <hr />
                         <div class="d-flex align-items-center">
                           <i class="bi bi-person"></i>
@@ -145,29 +150,28 @@
                 </div>
               </div>
             </div>
-            <div class="accordion my-1" :id="`accordionStudentTeacher-${student.report.id}`"
-              v-if="student.reports.length">
+            <div class="accordion my-1" :id="`accordionStudentTeacher-${student.id}`"
+              v-if="student.report_teachers.length">
               <div class="accordion-item">
-                <h2 class="accordion-header" :id="`headingTeacher-${student.report.id}`">
+                <h2 class="accordion-header" :id="`headingTeacher-${student.id}`">
                   <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse"
-                    :data-bs-target="`#collapseTeacher-${student.report.id}`" aria-expanded="true"
-                    :aria-controls="`collapseTeacher-${student.report.id}`">
+                    :data-bs-target="`#collapseTeacher-${student.id}`" aria-expanded="true"
+                    :aria-controls="`collapseTeacher-${student.id}`">
                     Репорты учителей
                   </button>
                 </h2>
-                <div :id="`collapseTeacher-${student.report.id}`" class="accordion-collapse collapse"
-                  :aria-labelledby="`headingTeacher-${student.report.id}`">
+                <div :id="`collapseTeacher-${student.id}`" class="accordion-collapse collapse"
+                  :aria-labelledby="`headingTeacher-${student.id}`">
                   <div class="accordion-body">
-                    <div v-if="student.report_teacher && student.report_teacher.length">
-                      <div v-for="teacher in student.report_teacher" :key="teacher.id" class="my-2">
+                    <div v-if="student.report_teachers && student.report_teachers.length">
+                      <div v-for="teacher in student.report_teachers" :key="teacher.id" class="my-2">
                         <div class="card">
                           <div class="card-body">
-                            <div><strong>{{ teacher.subject.name }}</strong> ({{ teacher.period.name }}, {{
-                              teacher.period.year.name }})</div>
+                            <div><strong>{{ teacher.subject.name }}</strong></div>
                             <div class="my-2"
                               v-if="teacher.criterion_achievements && teacher.criterion_achievements.length">
                               <div v-for="cr in teacher.criterion_achievements" :key="cr.id">
-                                {{ cr.criterion.name }}: <b>{{ cr.achievement.name }}</b>
+                                {{ cr.criterion_name }}: <b>{{ cr.achievement_name || 'Нет оценки' }}</b>
                               </div>
                             </div>
                             <div class="my-2" v-if="teacher.topic_achievements && teacher.topic_achievements.length">
@@ -182,30 +186,29 @@
                                   <tbody>
                                     <tr v-for="achieve in teacher.topic_achievements" :key="achieve.id">
                                       <td>{{ achieve.topic.name }}</td>
-                                      <td>{{ achieve.level.toUpperCase() }}</td>
+                                      <td><span v-if="achieve.level">{{ achieve.level.toUpperCase() || '-' }}</span></td>
                                       <td>{{ achieve.comment }}</td>
                                     </tr>
                                   </tbody>
                                 </table>
                             </div>
                             <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
+                              <div class="my-2">Уровень Objective:</div>
                               <div v-for="objective in teacher.objective_levels" :key="objective.id">
                                 <div>
                                   <b>
-                                    {{ objective.strand.objective_letter.toUpperCase() }}.{{
-                                      objective.strand.strand_letter }}.
-                                    Students should be able to {{ objective.strand.name }}
+                                    Students should be able to {{ objective.strand_name }}
                                   </b>
                                 </div>
                                 <div class="ms-3">
-                                  The student {{ objective.level.name }}:
-                                  {{ objective.level.point - 1 }}-{{ objective.level.point }}
+                                  The student {{ objective.level_name || 'does not reach a standard described by any of the descriptors below' }}
                                 </div>
                               </div>
                             </div>
                             <div class="my-2" v-if="teacher.criterion_marks && teacher.criterion_marks.length">
+                              <div class="my-2">Оценки по критериям</div>
                               <div v-for="cr in teacher.criterion_marks" :key="cr.id">
-                                {{ cr.criterion.letter.toUpperCase() }}. {{ cr.criterion.name }}: <b>{{ cr.mark }}</b>
+                                {{ cr.criterion_name }}: <b>{{ cr.mark }}</b>
                               </div>
                             </div>
                             <div class="my-2" v-if="teacher.final_grade_ib">
@@ -213,7 +216,9 @@
                             </div>
                             <div class="my-2" v-if="teacher.final_grade">Итоговая оценка: <b>{{ teacher.final_grade }}</b>
                             </div>
-                            <div class="my-2 text-muted" v-html="teacher.comment"></div>
+                            <hr />
+                            <div class="my-2 text-muted" v-html="teacher.comment" v-if="teacher.comment"></div>
+                            <div v-else>Нет информации</div>
                             <hr />
                             <div class="d-flex align-items-center">
                               <i class="bi bi-person"></i>
@@ -266,6 +271,7 @@ import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
 
 import ReportMentorIbProfile from "@/modules/ReportMentorIbProfile.vue";
+import EventParticipation from "@/modules/EventParticipation.vue";
 
 import { useGeneralStore } from "@/stores/general";
 import { useReportStore } from "@/stores/report";
