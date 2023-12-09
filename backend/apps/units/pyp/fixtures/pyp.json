@@ -1,0 +1,132 @@
+[
+    {
+        "model": "pyp.transdisciplinarytheme",
+        "pk": 1,
+        "fields": {
+            "name": "Who we are",
+            "name_rus": "Кто мы",
+            "description": "An inquiry into the nature of the self; beliefs and values; personal, physical, mental, social and spiritual health; human relationships including families, friends, communities and cultures; rights and responsibilities; what it means to be human.",
+            "description_rus": "Исследование своего характера; наших убеждений и ценностей; личного, физического, умственного, социального и духовного здоровья; взаимоотношений между людьми, включая семьи, друзей, сообществ и культур; наших прав и обязанностей; того, что значит быть человеком."
+        }
+    },
+    {
+        "model": "pyp.transdisciplinarytheme",
+        "pk": 2,
+        "fields": {
+            "name": "Where we are in place and time",
+            "name_rus": "Где мы по месту и времени",
+            "description": "An inquiry into orientation in place and time; personal histories; homes and journeys; the discoveries, explorations and migrations of humankind; the relationships between and the interconnectedness of individuals and civilizations, from local and global perspectives.",
+            "description_rus": "Исследование нашей ориентации в пространстве и во времени; наших личных историй; наших домов и того, как мы путешествуем; открытий, исследований и\nпереселений человека; взаимоотношений и взаимосвязей между индивидуальными личностями и цивилизациями, как с локальной так и с глобальной точки зрения"
+        }
+    },
+    {
+        "model": "pyp.transdisciplinarytheme",
+        "pk": 3,
+        "fields": {
+            "name": "How we express ourselves",
+            "name_rus": "Как мы выражаем себя",
+            "description": "An inquiry into the ways in which we discover and express ideas, feelings, nature, culture, beliefs and values; the ways in which we reflect on, extend and enjoy our creativity; our appreciation of the aesthetic.",
+            "description_rus": "Исследование способов, по средствам которых мы открываем и выражаем идеи, чувства, характер, культуру, ценности и верования; способов, по средствам которых мы анализируем наше творчество, расширяем его и получаем удовольствие; исследование того, как мы ценим эстетику"
+        }
+    },
+    {
+        "model": "pyp.transdisciplinarytheme",
+        "pk": 4,
+        "fields": {
+            "name": "How the world works",
+            "name_rus": "Как работает мир",
+            "description": "An inquiry into the natural world and its laws; the interaction between the natural world (physical and biological) and human societies; how humans use their understanding of scientific principles; the impact of scientific and technological advances on society and on the environment.",
+            "description_rus": "Исследование мира природы и его законов; взаимодействия между миром природы (живой и неживой) и человеческих обществ; как люди используют свое понимание научных принципов; влияние научного и технологического прогресса на общество и окружающую среду."
+        }
+    },
+    {
+        "model": "pyp.transdisciplinarytheme",
+        "pk": 5,
+        "fields": {
+            "name": "How we organize ourselves",
+            "name_rus": "Как мы организуем себя",
+            "description": "An inquiry into the interconnectedness of human- made systems and communities; the structure and function of organizations; societal decision-making; economic activities and their impact on humankind and the environment.",
+            "description_rus": "Исследование взаимосвязи систем, созданных человеком, и сообществ; структура и функция организаций; принятие решений в обществе; виды экономической деятельности и их вклад в человечество и окружающую среду."
+        }
+    },
+    {
+        "model": "pyp.transdisciplinarytheme",
+        "pk": 6,
+        "fields": {
+            "name": "Sharing the Planet",
+            "name_rus": "Планета - наш общий дом",
+            "description": "An inquiry into rights and responsibilities in the struggle to share finite resources with other people and with other living things; communities and the relationships within and between them; access to equal opportunities; peace and conflict resolution",
+            "description_rus": "Исследование прав и обязанностей перед другими людьми и живыми существами, с которыми мы вместе пользуемся природными богатствами; сообществ и отношений, как внутри этих сообществ, так и между ними; мира и разрешения конфликтов."
+        }
+    },
+    {
+        "model": "pyp.pypkeyconcept",
+        "pk": 1,
+        "fields": {
+            "name": "Form",
+            "name_rus": "Форма",
+            "description": null,
+            "description_rus": null
+        }
+    },
+    {
+        "model": "pyp.pypkeyconcept",
+        "pk": 2,
+        "fields": {
+            "name": "Function",
+            "name_rus": "Функция",
+            "description": null,
+            "description_rus": null
+        }
+    },
+    {
+        "model": "pyp.pypkeyconcept",
+        "pk": 3,
+        "fields": {
+            "name": "Causation",
+            "name_rus": "Причина",
+            "description": null,
+            "description_rus": null
+        }
+    },
+    {
+        "model": "pyp.pypkeyconcept",
+        "pk": 4,
+        "fields": {
+            "name": "Change",
+            "name_rus": "Изменение",
+            "description": null,
+            "description_rus": null
+        }
+    },
+    {
+        "model": "pyp.pypkeyconcept",
+        "pk": 5,
+        "fields": {
+            "name": "Responsibility",
+            "name_rus": "Ответственность",
+            "description": null,
+            "description_rus": null
+        }
+    },
+    {
+        "model": "pyp.pypkeyconcept",
+        "pk": 6,
+        "fields": {
+            "name": "Connection",
+            "name_rus": "Связь ",
+            "description": null,
+            "description_rus": null
+        }
+    },
+    {
+        "model": "pyp.pypkeyconcept",
+        "pk": 7,
+        "fields": {
+            "name": "Perspective",
+            "name_rus": "Точка зрения",
+            "description": null,
+            "description_rus": null
+        }
+    }
+]

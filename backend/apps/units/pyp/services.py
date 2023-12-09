@@ -10,7 +10,7 @@ from apps.units.pyp.models import (
 
 def get_pyp_unit_planner_queryset():
     return PypUnitPlanner.objects.all().select_related(
-        'year'
+        'year',
         'transdisciplinary_theme',
         ).prefetch_related(
             'teachers',

@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 
 class LevelAchievementPrimaryChoices(models.TextChoices):
@@ -74,6 +76,7 @@ class ReportBaseModel(models.Model):
 class ReportTeacher(ReportBaseModel):
     """ Связанная модель репортов преподавателей с общими полями """
     subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"), on_delete=models.SET_NULL, null=True, related_name="reports")
+    extra_subjects = models.ManyToManyField('curriculum.Subject', verbose_name=_("Дополнительные предметы"), blank=True, related_name="extra_reports")
     class Meta:
         ordering = ['period', 'subject', 'student', 'author']
         verbose_name = 'Репорт учителя'
@@ -81,11 +84,17 @@ class ReportTeacher(ReportBaseModel):
 
 class ReportCriterionAchievement(models.Model):
     criterion = models.ForeignKey('report.ReportCriterion', verbose_name=_("Чеклист"), on_delete=models.SET_NULL, null=True, related_name="reports")
-    achievement = models.ForeignKey('report.ReportCriterionLevel', verbose_name=_("Достижение по чеклисту"), on_delete=models.SET_NULL, null=True, blank=True, related_name="reports")
+    achievement = models.ForeignKey('report.ReportCriterionLevel', verbose_name=_("Достижение по критерию"), on_delete=models.SET_NULL, null=True, blank=True, related_name="reports")
     report = models.ForeignKey('report.ReportTeacher', verbose_name=_("Репорт учителя"), on_delete=models.CASCADE, null=True, related_name="criterion_achievements")
+    # report_mentor = models.ForeignKey('report.ReportMentor', verbose_name=_("Репорт наставника"), on_delete=models.CASCADE, null=True, related_name="criterion_achievements")
+    # report_extra = models.ForeignKey('report.ReportExtra', verbose_name=_("Репорт службы сопровождения"), on_delete=models.CASCADE, null=True, related_name="criterion_achievements")
+    # Поля для Generic Relation
+    # content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    # object_id = models.PositiveIntegerField()
+    # content_object = GenericForeignKey('content_type', 'object_id')
     class Meta:
-        verbose_name = 'Репорты учителя: достижение по чеклисту'
-        verbose_name_plural = 'Репорты учителя: достижения по чеклисту'
+        verbose_name = 'Репорты: достижение по критерию'
+        verbose_name_plural = 'Репорты: достижения по критериям'
 
 class ReportTeacherPrimary(ReportTeacher):
     """ Репорты по предметам начальной школы """

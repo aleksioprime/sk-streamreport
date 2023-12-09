@@ -212,7 +212,7 @@ class PypUnitPlannerListSerializer(serializers.ModelSerializer):
     teachers = UserPypSerializer(many=True)
     authors = UserPypSerializer(many=True)
     year = StudyYearPypSerializer()
-    transdisciplinary_theme = PypKeyConceptListSerializer()
+    transdisciplinary_theme = TransdisciplinaryThemeListSerializer()
     class Meta:
         model = PypUnitPlanner
         fields = (

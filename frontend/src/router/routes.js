@@ -54,4 +54,22 @@ export const routes = [
         middlewares: [isLoggedIn],
       },
     },
+    {
+      path: "/unit/pyp",
+      name: "unitPyp",
+      component: () => import("@/views/UnitPypView.vue"),
+      meta: { 
+        layout: "DefaultLayout",
+        middlewares: [isLoggedIn],
+      },
+    },
+    {
+      path: "/unit/pyp/:id",
+      name: "unitPypDetail",
+      component: () => import("@/views/UnitPypDetail.vue"),
+      meta: { 
+        layout: "DefaultLayout",
+        middlewares: [isLoggedIn],
+      },
+    },
 ]

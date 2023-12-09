@@ -25,8 +25,8 @@ class PypKeyConcept(models.Model):
     description = models.TextField(verbose_name=_("Описание"), null=True)
     description_rus = models.TextField(verbose_name=_("Описание на рус. языке"), null=True)
     class Meta:
-        verbose_name = 'MYP: Ключевой концепт'
-        verbose_name_plural = 'MYP: Ключевые концепты'
+        verbose_name = 'PYP: Ключевой концепт'
+        verbose_name_plural = 'PYP: Ключевые концепты'
         ordering = ['name']
     def __str__(self):
         return "{}".format(self.name)

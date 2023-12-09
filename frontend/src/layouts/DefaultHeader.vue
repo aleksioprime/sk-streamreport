@@ -16,7 +16,7 @@
               Учебные планы
             </a>
             <div class="dropdown-menu">
-              <router-link :to="{ name: 'home' }" class="dropdown-item">Юниты PYP</router-link>
+              <router-link :to="{ name: 'unitPyp' }" class="dropdown-item">Юниты PYP</router-link>
               <router-link :to="{ name: 'home' }" class="dropdown-item">Юниты MYP</router-link>
               <router-link :to="{ name: 'home' }" class="dropdown-item">Юниты DP</router-link>
               <router-link :to="{ name: 'home' }" class="dropdown-item">Курсы</router-link>
