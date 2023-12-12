@@ -30,6 +30,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  propName: {
+    type: String,
+    default: ''
+  },
   title: {
     type: String,
     default: '',
@@ -47,7 +51,7 @@ const selectedItem = ref(props.modelValue);
 const selectItem = (item) => {
   selectedItem.value = item;
   emit('update:modelValue', selectedItem.value);
-  emit('select');
+  emit('select', { value: selectedItem.value.id, propName: props.propName });
 };
 
 // Следим за изменениями modelValue, чтобы обновлять локальное состояние

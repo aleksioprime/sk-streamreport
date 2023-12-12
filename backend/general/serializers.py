@@ -161,6 +161,7 @@ class StudyYearListGeneralSerializer(serializers.ModelSerializer):
             "level",
             "ib",
             "level_name",
+            "name",
             )
     
 

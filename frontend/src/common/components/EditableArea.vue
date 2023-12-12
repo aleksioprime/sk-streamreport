@@ -5,9 +5,9 @@
       <textarea v-else ref="inputRef" class="form-control bottom-border-only" rows="3" v-model="text" @blur="toggleEditMode" @keyup="handleKeyup"></textarea>
     </div>
     <div class="me-0 ms-2 text-muted small">
-      <a href="#" @click="enableEditMode" v-if="!editMode">Изменить</a>
+      <a href="##" @click="enableEditMode" v-if="!editMode">Изменить</a>
       <div v-else>
-        <a href="#" @click="toggleEditMode" >Отмена</a>
+        <a href="##" @click="toggleEditMode" >Отмена</a>
       </div>
     </div>
     
@@ -41,6 +41,7 @@ const inputRef = ref(null);
 // Следим за изменениями modelValue, чтобы обновлять локальное состояние
 watch(() => props.modelValue, (newVal) => {
   text.value = newVal;
+  originalText.value = newVal;
 });
 
 const toggleEditMode = (event) => {

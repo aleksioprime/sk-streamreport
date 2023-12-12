@@ -14,14 +14,13 @@ def get_pyp_unit_planner_queryset():
         'transdisciplinary_theme',
         ).prefetch_related(
             'teachers',
-            'authors',
             'teacher_roles',
             'ibprofiles',
             'reflection_posts',
             'key_concepts',
             'inquiry_lines',
             'related_concepts',
-            'atl_develops'
+            'atl_develops',
             )
 
 def get_transdisciplinary_theme_queryset():

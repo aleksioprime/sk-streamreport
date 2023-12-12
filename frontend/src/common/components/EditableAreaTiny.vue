@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex align-items-center">
     <div class="flex-grow-1">
       <div v-if="!editMode">
         <div v-if="text" v-html="text" class="custom-style"></div>
@@ -35,7 +35,7 @@
 
 <script setup>
 import Editor from '@tinymce/tinymce-vue'
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   propData: {
@@ -58,6 +58,12 @@ const text = ref(props.propData);
 const tinyLoading = ref(false);
 
 const emit = defineEmits(['save', 'toggleEdit']);
+
+// Следим за изменениями modelValue, чтобы обновлять локальное состояние
+watch(() => props.propData, (newVal) => {
+  text.value = newVal;
+  originalText.value = newVal;
+});
 
 // Активация режима редактирования
 const enableEditMode = () => {

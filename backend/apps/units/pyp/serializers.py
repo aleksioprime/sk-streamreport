@@ -151,6 +151,7 @@ class PypAtlDevelopUpdateSerializer(serializers.ModelSerializer):
     
 # Список пользователей
 class UserPypSerializer(serializers.ModelSerializer):
+    short_name = serializers.CharField(source='get_short_name', read_only=True)
     class Meta:
         model = User
         fields = (
@@ -158,6 +159,7 @@ class UserPypSerializer(serializers.ModelSerializer):
             "first_name", 
             "last_name",
             "middle_name",
+            "short_name",
             )
 
 # Список учебных параллелей
@@ -168,6 +170,7 @@ class StudyYearPypSerializer(serializers.ModelSerializer):
             "id",
             "number",
             "level",
+            "name",
             )
 
 # Список качеств портрета студента IB
@@ -210,7 +213,6 @@ class UnitReflectionPostPypSerializer(serializers.ModelSerializer):
 # Вывод списка планнеров в PYP
 class PypUnitPlannerListSerializer(serializers.ModelSerializer):
     teachers = UserPypSerializer(many=True)
-    authors = UserPypSerializer(many=True)
     year = StudyYearPypSerializer()
     transdisciplinary_theme = TransdisciplinaryThemeListSerializer()
     class Meta:
@@ -220,7 +222,6 @@ class PypUnitPlannerListSerializer(serializers.ModelSerializer):
             "order",
             "title",
             "teachers",
-            "authors",
             "year",
             "hours",
             "description",
@@ -302,3 +303,14 @@ class PypUnitPlannerUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PypUnitPlanner
         fields = '__all__'
+    # def update(self, instance, validated_data):
+    #     if 'teachers' in validated_data:
+    #         if not validated_data['teachers']:
+    #             # Если список пуст, очищаем связь
+    #             instance.teachers.clear()
+    #         else:
+    #             # Если список не пуст, обновляем связь
+    #             instance.teachers.set(validated_data['teachers'])
+    #         validated_data.pop('teachers')
+
+    #     return super().update(instance, validated_data)

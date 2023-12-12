@@ -123,6 +123,9 @@ class StudyYear(models.Model):
     number = models.PositiveIntegerField(verbose_name=_("Номер параллели"))
     ib = models.OneToOneField('general.StudyYearIb', verbose_name=_("Параллель по IB"), on_delete=models.SET_NULL, null=True, related_name="year")
     level = models.CharField(verbose_name=_("Уровень образования"), choices=LevelNationChoices.choices, default=None, max_length=4)
+    @property
+    def name(self):
+        return f"{self.number} классы"
     class Meta:
         verbose_name = 'Параллель обучения'
         verbose_name_plural = 'Параллели обучения'

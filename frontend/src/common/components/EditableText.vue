@@ -1,13 +1,13 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex align-items-center">
     <div class="w-100">
       <span v-if="!editMode">{{ text }}</span>
       <input v-else ref="inputRef" type="text" v-model="text" @blur="toggleEditMode" @keyup="handleKeyup"
         class="form-control bottom-border-only">
     </div>
     <div class="me-0 ms-2 text-muted small">
-      <a href="#" @click="enableEditMode" v-if="!editMode">Изменить</a>
-      <a href="#" @click="toggleEditMode" v-else>Отмена</a>
+      <a href="##" @click="enableEditMode" v-if="!editMode">Изменить</a>
+      <a href="##" @click="toggleEditMode" v-else>Отмена</a>
     </div>
     
   </div>
@@ -19,10 +19,7 @@ import { ref, watch, nextTick } from 'vue';
 
 // Определяем пропс и эмит
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: ''
-  },
+  modelValue: [String, Number],
   propName: {
     type: String,
     default: ''
@@ -40,6 +37,7 @@ const inputRef = ref(null);
 // Следим за изменениями modelValue, чтобы обновлять локальное состояние
 watch(() => props.modelValue, (newVal) => {
   text.value = newVal;
+  originalText.value = newVal;
 });
 
 const toggleEditMode = (event) => {

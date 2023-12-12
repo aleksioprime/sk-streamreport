@@ -53,7 +53,7 @@ class UnitPlanerBaseModel(models.Model):
     title = models.CharField(max_length=255, verbose_name=_("Название юнита"))
     order = models.PositiveSmallIntegerField(verbose_name=_("Номер"), default=0)
     teachers = models.ManyToManyField('general.User', verbose_name=_("Учителя"), related_name="teacher_unitplans")
-    authors = models.ManyToManyField('general.User', verbose_name=_("Authors"), through='ibo.UnitTeacherRoles', related_name="author_unitplans")
+    authors = models.ManyToManyField('general.User', verbose_name=_("Авторы"), through='ibo.UnitTeacherRoles', related_name="author_unitplans")
     year = models.ForeignKey('general.StudyYear', verbose_name=_("Год обучения"), on_delete=models.SET_NULL, null=True, related_name="unitplans")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Кол-во часов"), default=0)
     description = models.TextField(verbose_name=_("Описание"), null=True, blank=True)
@@ -70,7 +70,7 @@ class UnitTeacherRoles(models.Model):
     """ Роли авторов юнита PYP """
     unit = models.ForeignKey('ibo.UnitPlanerBaseModel', verbose_name=_("Юнит"), on_delete=models.CASCADE, related_name="teacher_roles")
     user = models.ForeignKey('general.User', verbose_name=_("Пользователь"), on_delete=models.CASCADE, related_name="unit_roles")
-    role = models.CharField(max_length=32, verbose_name=_("Роль"), null=True)
+    role = models.CharField(max_length=32, verbose_name=_("Роль"), blank=True, null=True)
     class Meta:
         verbose_name = 'UnitPlan: Роль автора юнита'
         verbose_name_plural = 'UnitPlan: Роли автора юнита'

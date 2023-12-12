@@ -5,7 +5,22 @@ const rules = {
   required: {
     rule: (value) => {
       const data = isRef(value) ? value.value : value;
-      return !!data?.trim();
+      // Проверка на массив
+      if (Array.isArray(data)) {
+        return data.length > 0;
+      }
+      // Проверка на объект (но не на null и не на массив)
+      else if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
+        // Проверяем, есть ли хотя бы одно непустое свойство
+        return Object.values(data).some(val => val != null && val !== '');
+      }
+      // Проверка на строку
+      else if (typeof data === 'number') {
+        return !isNaN(data) && data !== null;
+      } 
+      else {
+        return !!data?.trim();
+      }
     },
     message: "Поле обязательно для заполнения",
   },

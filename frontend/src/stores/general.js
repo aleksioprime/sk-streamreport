@@ -56,7 +56,7 @@ export const useGeneralStore = defineStore("general", {
         this.studyYears = res.data.map(item => {
           return {
             ...item, // Копирование всех существующих свойств
-            name: item.number + ' классы' // Добавление нового свойства name
+            // name: item.number + ' классы' // Добавление нового свойства name
           };
         });
         console.log('Получение учебных параллелей: ', this.studyYears)

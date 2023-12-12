@@ -1,0 +1,6566 @@
+[
+    {
+        "model": "syllabus.syllabus",
+        "pk": 3,
+        "fields": {
+            "subject": 1,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 4,
+        "fields": {
+            "subject": 4,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 5,
+        "fields": {
+            "subject": 2,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 6,
+        "fields": {
+            "subject": 6,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 7,
+        "fields": {
+            "subject": 10,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 8,
+        "fields": {
+            "subject": 16,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 9,
+        "fields": {
+            "subject": 9,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 10,
+        "fields": {
+            "subject": 8,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 11,
+        "fields": {
+            "subject": 17,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 12,
+        "fields": {
+            "subject": 5,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 13,
+        "fields": {
+            "subject": 3,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 14,
+        "fields": {
+            "subject": 12,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 15,
+        "fields": {
+            "subject": 15,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 16,
+        "fields": {
+            "subject": 13,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.syllabus",
+        "pk": 17,
+        "fields": {
+            "subject": 14,
+            "file": "",
+            "authors": [
+                1
+            ],
+            "years": [
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 9,
+        "fields": {
+            "syllabus": 3,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 10,
+        "fields": {
+            "syllabus": 3,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 11,
+        "fields": {
+            "syllabus": 3,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 12,
+        "fields": {
+            "syllabus": 3,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 13,
+        "fields": {
+            "syllabus": 4,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 14,
+        "fields": {
+            "syllabus": 4,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 15,
+        "fields": {
+            "syllabus": 4,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 16,
+        "fields": {
+            "syllabus": 4,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 17,
+        "fields": {
+            "syllabus": 5,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 18,
+        "fields": {
+            "syllabus": 5,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 19,
+        "fields": {
+            "syllabus": 5,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 20,
+        "fields": {
+            "syllabus": 5,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 21,
+        "fields": {
+            "syllabus": 6,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 22,
+        "fields": {
+            "syllabus": 6,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 23,
+        "fields": {
+            "syllabus": 6,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 24,
+        "fields": {
+            "syllabus": 6,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 25,
+        "fields": {
+            "syllabus": 7,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 26,
+        "fields": {
+            "syllabus": 7,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 27,
+        "fields": {
+            "syllabus": 7,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 28,
+        "fields": {
+            "syllabus": 7,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 29,
+        "fields": {
+            "syllabus": 8,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 30,
+        "fields": {
+            "syllabus": 8,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 31,
+        "fields": {
+            "syllabus": 8,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 32,
+        "fields": {
+            "syllabus": 8,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 33,
+        "fields": {
+            "syllabus": 9,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 34,
+        "fields": {
+            "syllabus": 9,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 35,
+        "fields": {
+            "syllabus": 9,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 36,
+        "fields": {
+            "syllabus": 9,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 37,
+        "fields": {
+            "syllabus": 10,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 38,
+        "fields": {
+            "syllabus": 10,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 39,
+        "fields": {
+            "syllabus": 10,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 40,
+        "fields": {
+            "syllabus": 10,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 41,
+        "fields": {
+            "syllabus": 11,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 42,
+        "fields": {
+            "syllabus": 11,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 43,
+        "fields": {
+            "syllabus": 11,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 44,
+        "fields": {
+            "syllabus": 11,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 45,
+        "fields": {
+            "syllabus": 12,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 46,
+        "fields": {
+            "syllabus": 12,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 47,
+        "fields": {
+            "syllabus": 12,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 48,
+        "fields": {
+            "syllabus": 12,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 49,
+        "fields": {
+            "syllabus": 13,
+            "year": 1
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 50,
+        "fields": {
+            "syllabus": 13,
+            "year": 2
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 51,
+        "fields": {
+            "syllabus": 13,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 52,
+        "fields": {
+            "syllabus": 13,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 53,
+        "fields": {
+            "syllabus": 14,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 54,
+        "fields": {
+            "syllabus": 14,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 55,
+        "fields": {
+            "syllabus": 15,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 56,
+        "fields": {
+            "syllabus": 15,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 57,
+        "fields": {
+            "syllabus": 16,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 58,
+        "fields": {
+            "syllabus": 16,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 59,
+        "fields": {
+            "syllabus": 17,
+            "year": 3
+        }
+    },
+    {
+        "model": "syllabus.course",
+        "pk": 60,
+        "fields": {
+            "syllabus": 17,
+            "year": 4
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 3,
+        "fields": {
+            "course": 9,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": "",
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 4,
+        "fields": {
+            "course": 9,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 5,
+        "fields": {
+            "course": 10,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": "",
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 6,
+        "fields": {
+            "course": 10,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 7,
+        "fields": {
+            "course": 11,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 8,
+        "fields": {
+            "course": 11,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 9,
+        "fields": {
+            "course": 12,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 10,
+        "fields": {
+            "course": 12,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 11,
+        "fields": {
+            "course": 13,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 12,
+        "fields": {
+            "course": 13,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 13,
+        "fields": {
+            "course": 14,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 14,
+        "fields": {
+            "course": 14,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 15,
+        "fields": {
+            "course": 15,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 16,
+        "fields": {
+            "course": 15,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 17,
+        "fields": {
+            "course": 16,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 18,
+        "fields": {
+            "course": 16,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 19,
+        "fields": {
+            "course": 17,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 20,
+        "fields": {
+            "course": 17,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 21,
+        "fields": {
+            "course": 18,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 22,
+        "fields": {
+            "course": 18,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 23,
+        "fields": {
+            "course": 19,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 24,
+        "fields": {
+            "course": 19,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 25,
+        "fields": {
+            "course": 20,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 26,
+        "fields": {
+            "course": 20,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 27,
+        "fields": {
+            "course": 21,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 28,
+        "fields": {
+            "course": 21,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 29,
+        "fields": {
+            "course": 22,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 30,
+        "fields": {
+            "course": 22,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 31,
+        "fields": {
+            "course": 23,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 32,
+        "fields": {
+            "course": 23,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 33,
+        "fields": {
+            "course": 24,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 34,
+        "fields": {
+            "course": 24,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 35,
+        "fields": {
+            "course": 25,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 36,
+        "fields": {
+            "course": 25,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 37,
+        "fields": {
+            "course": 26,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 38,
+        "fields": {
+            "course": 26,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 39,
+        "fields": {
+            "course": 27,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 40,
+        "fields": {
+            "course": 27,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 41,
+        "fields": {
+            "course": 28,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 42,
+        "fields": {
+            "course": 28,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 43,
+        "fields": {
+            "course": 29,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 44,
+        "fields": {
+            "course": 29,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 45,
+        "fields": {
+            "course": 30,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 46,
+        "fields": {
+            "course": 30,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 47,
+        "fields": {
+            "course": 31,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 48,
+        "fields": {
+            "course": 31,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 49,
+        "fields": {
+            "course": 32,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 50,
+        "fields": {
+            "course": 32,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 51,
+        "fields": {
+            "course": 33,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 52,
+        "fields": {
+            "course": 33,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 53,
+        "fields": {
+            "course": 34,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 54,
+        "fields": {
+            "course": 34,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 55,
+        "fields": {
+            "course": 35,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 56,
+        "fields": {
+            "course": 35,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 57,
+        "fields": {
+            "course": 36,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 58,
+        "fields": {
+            "course": 36,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 59,
+        "fields": {
+            "course": 37,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 60,
+        "fields": {
+            "course": 37,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 61,
+        "fields": {
+            "course": 38,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 62,
+        "fields": {
+            "course": 38,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 63,
+        "fields": {
+            "course": 39,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 64,
+        "fields": {
+            "course": 39,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 65,
+        "fields": {
+            "course": 40,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 66,
+        "fields": {
+            "course": 40,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 67,
+        "fields": {
+            "course": 41,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 68,
+        "fields": {
+            "course": 41,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 69,
+        "fields": {
+            "course": 42,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 70,
+        "fields": {
+            "course": 42,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 71,
+        "fields": {
+            "course": 43,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 72,
+        "fields": {
+            "course": 43,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 73,
+        "fields": {
+            "course": 44,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 74,
+        "fields": {
+            "course": 44,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 75,
+        "fields": {
+            "course": 45,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 76,
+        "fields": {
+            "course": 45,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 77,
+        "fields": {
+            "course": 46,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 78,
+        "fields": {
+            "course": 46,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 79,
+        "fields": {
+            "course": 47,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 80,
+        "fields": {
+            "course": 47,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 81,
+        "fields": {
+            "course": 48,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 82,
+        "fields": {
+            "course": 48,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 83,
+        "fields": {
+            "course": 49,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 84,
+        "fields": {
+            "course": 49,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 85,
+        "fields": {
+            "course": 50,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 86,
+        "fields": {
+            "course": 50,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 87,
+        "fields": {
+            "course": 51,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 88,
+        "fields": {
+            "course": 51,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 89,
+        "fields": {
+            "course": 52,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 90,
+        "fields": {
+            "course": 52,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 91,
+        "fields": {
+            "course": 53,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 92,
+        "fields": {
+            "course": 53,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 93,
+        "fields": {
+            "course": 54,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 94,
+        "fields": {
+            "course": 54,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 95,
+        "fields": {
+            "course": 55,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 96,
+        "fields": {
+            "course": 55,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 97,
+        "fields": {
+            "course": 56,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 98,
+        "fields": {
+            "course": 56,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 99,
+        "fields": {
+            "course": 57,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 100,
+        "fields": {
+            "course": 57,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 101,
+        "fields": {
+            "course": 58,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 102,
+        "fields": {
+            "course": 58,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 103,
+        "fields": {
+            "course": 59,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 104,
+        "fields": {
+            "course": 59,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 105,
+        "fields": {
+            "course": 60,
+            "number": 1,
+            "name": "1 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursechapter",
+        "pk": 106,
+        "fields": {
+            "course": 60,
+            "number": 2,
+            "name": "2 полугодие",
+            "description": null,
+            "hours": 0,
+            "unit": null
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 20,
+        "fields": {
+            "chapter": 3,
+            "number": 1,
+            "name": "Ориентация в тетради",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 21,
+        "fields": {
+            "chapter": 3,
+            "number": 2,
+            "name": "Знание прописных букв, умение переводить печатный текст в письменный",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 22,
+        "fields": {
+            "chapter": 3,
+            "number": 3,
+            "name": "Письмо под диктовку слогов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 23,
+        "fields": {
+            "chapter": 3,
+            "number": 4,
+            "name": "Запись слова и высказывания в тетради в соответствии с нормами каллиграфии",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 24,
+        "fields": {
+            "chapter": 3,
+            "number": 5,
+            "name": "Контроль и оценка правильности собственной и чужой записи слова (высказывания), аргументация своей оценки",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 25,
+        "fields": {
+            "chapter": 5,
+            "number": 1,
+            "name": "Запись слов в соответствии с нормами каллиграфии",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 26,
+        "fields": {
+            "chapter": 5,
+            "number": 2,
+            "name": "Оформление работы в соответствии с орфографическими нормами и требованиями",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 27,
+        "fields": {
+            "chapter": 5,
+            "number": 3,
+            "name": "Фонетика. Звукобуквенный анализ слов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 28,
+        "fields": {
+            "chapter": 5,
+            "number": 4,
+            "name": "Словарные слова",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 29,
+        "fields": {
+            "chapter": 5,
+            "number": 5,
+            "name": "Орфограмма \"ЖИ-ШИ, ЧА-ЩА, ЧУ-ЩУ\"",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 30,
+        "fields": {
+            "chapter": 5,
+            "number": 6,
+            "name": "Орфограмма \"Разделительный ь знак\"",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 31,
+        "fields": {
+            "chapter": 5,
+            "number": 7,
+            "name": "Орфограмма \"Ь - показатель мягкости\"",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 32,
+        "fields": {
+            "chapter": 5,
+            "number": 8,
+            "name": "Орфограмма \"Безударная гласна в корне слова\"",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 33,
+        "fields": {
+            "chapter": 5,
+            "number": 9,
+            "name": "Орфограмма \"Звонкие и глухие согласные в корне слова\"",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 34,
+        "fields": {
+            "chapter": 5,
+            "number": 10,
+            "name": "Орфограмма \"Непроизносимый согласный\"",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 35,
+        "fields": {
+            "chapter": 5,
+            "number": 11,
+            "name": "Орфограммы суффиксов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 36,
+        "fields": {
+            "chapter": 5,
+            "number": 12,
+            "name": "Использование правил переноса слов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 37,
+        "fields": {
+            "chapter": 5,
+            "number": 13,
+            "name": "Выделение изученных орфограмм",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 38,
+        "fields": {
+            "chapter": 5,
+            "number": 14,
+            "name": "Изменение формы слова",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 39,
+        "fields": {
+            "chapter": 5,
+            "number": 15,
+            "name": "Умение подбирать и распознавать однокоренные слова",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 40,
+        "fields": {
+            "chapter": 5,
+            "number": 16,
+            "name": "Распознавание частей речи (существительное, прилагательное, глагол)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 41,
+        "fields": {
+            "chapter": 5,
+            "number": 17,
+            "name": "Характеристика предложения по цели высказывания и интонации",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 42,
+        "fields": {
+            "chapter": 5,
+            "number": 18,
+            "name": "Восстановление деформированного текста",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 43,
+        "fields": {
+            "chapter": 5,
+            "number": 19,
+            "name": "Списывание",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 44,
+        "fields": {
+            "chapter": 5,
+            "number": 20,
+            "name": "Диктанты",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 45,
+        "fields": {
+            "chapter": 5,
+            "number": 21,
+            "name": "Тесты",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 46,
+        "fields": {
+            "chapter": 5,
+            "number": 22,
+            "name": "Активность на уроке",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 47,
+        "fields": {
+            "chapter": 7,
+            "number": 1,
+            "name": "Оформление работы",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 48,
+        "fields": {
+            "chapter": 7,
+            "number": 2,
+            "name": "Правило оформления предложения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 49,
+        "fields": {
+            "chapter": 7,
+            "number": 3,
+            "name": "Орфограмма “ь”-показатель мягкости согласного",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 50,
+        "fields": {
+            "chapter": 7,
+            "number": 4,
+            "name": "“Разделительный ъ и ь”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 51,
+        "fields": {
+            "chapter": 7,
+            "number": 5,
+            "name": "Безударный гласный звук в корне слова",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 52,
+        "fields": {
+            "chapter": 7,
+            "number": 6,
+            "name": "Парный звонкий/глухой согласный звук в корне",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 53,
+        "fields": {
+            "chapter": 7,
+            "number": 7,
+            "name": "Непроизносимый согласный звук в корне",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 54,
+        "fields": {
+            "chapter": 7,
+            "number": 8,
+            "name": "Правописание приставок",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 55,
+        "fields": {
+            "chapter": 7,
+            "number": 9,
+            "name": "Правописание суффиксов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 56,
+        "fields": {
+            "chapter": 7,
+            "number": 10,
+            "name": "Правописание о, ё после шипящих",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 57,
+        "fields": {
+            "chapter": 7,
+            "number": 11,
+            "name": "Правописание и, ы после ц",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 58,
+        "fields": {
+            "chapter": 7,
+            "number": 12,
+            "name": "Соединительные гласные о, е в сложных словах",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 59,
+        "fields": {
+            "chapter": 7,
+            "number": 13,
+            "name": "Использование правил переноса слов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 60,
+        "fields": {
+            "chapter": 7,
+            "number": 14,
+            "name": "Знаки препинания при однородных членах предложения, выделение однородных членов предложения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 61,
+        "fields": {
+            "chapter": 7,
+            "number": 15,
+            "name": "Списывание текста",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 62,
+        "fields": {
+            "chapter": 7,
+            "number": 16,
+            "name": "Запись текста под диктовку",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 63,
+        "fields": {
+            "chapter": 7,
+            "number": 17,
+            "name": "Контроль и оценка правильности собственной и чужой записи слов (предложений), аргументация своей оценки",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 64,
+        "fields": {
+            "chapter": 7,
+            "number": 18,
+            "name": "Фонетический разбор слова",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 65,
+        "fields": {
+            "chapter": 7,
+            "number": 19,
+            "name": "Разбор слова по составу (морфемный разбор)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 66,
+        "fields": {
+            "chapter": 7,
+            "number": 20,
+            "name": "Характеристика предложения по цели высказывания и интонации",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 67,
+        "fields": {
+            "chapter": 7,
+            "number": 21,
+            "name": "Разбор предложения по членам предложения (главные и второстепенные члены предложения)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 68,
+        "fields": {
+            "chapter": 7,
+            "number": 22,
+            "name": "Построение полного (устного) ответа на вопрос учителя, аргументация ответа",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 69,
+        "fields": {
+            "chapter": 9,
+            "number": 1,
+            "name": "Качество выполнения письменных работ (оформление, почерк, полный объем, аккуратность)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 70,
+        "fields": {
+            "chapter": 9,
+            "number": 2,
+            "name": "Орфограммы корня, суффикса и приставки",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 71,
+        "fields": {
+            "chapter": 9,
+            "number": 3,
+            "name": "Различение частей речи",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 72,
+        "fields": {
+            "chapter": 9,
+            "number": 4,
+            "name": "Грамматические признаки глагола",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 73,
+        "fields": {
+            "chapter": 9,
+            "number": 5,
+            "name": "Орфограмма “Безударный гласный в окончании существительных”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 74,
+        "fields": {
+            "chapter": 9,
+            "number": 6,
+            "name": "Орфограмма “Безударный гласный в окончаниях прилагательных”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 75,
+        "fields": {
+            "chapter": 9,
+            "number": 7,
+            "name": "Использование правил переноса слов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 76,
+        "fields": {
+            "chapter": 9,
+            "number": 8,
+            "name": "Списывание текста",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 77,
+        "fields": {
+            "chapter": 9,
+            "number": 9,
+            "name": "Запись текста под диктовку",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 78,
+        "fields": {
+            "chapter": 9,
+            "number": 10,
+            "name": "Фонетический разбор",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 79,
+        "fields": {
+            "chapter": 9,
+            "number": 11,
+            "name": "Разбор слов по составу",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 80,
+        "fields": {
+            "chapter": 9,
+            "number": 12,
+            "name": "Морфологический разбор существительного",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 81,
+        "fields": {
+            "chapter": 9,
+            "number": 13,
+            "name": "Морфологический разбор прилагательного",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 82,
+        "fields": {
+            "chapter": 9,
+            "number": 14,
+            "name": "Разбор предложения по членам предложения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 83,
+        "fields": {
+            "chapter": 9,
+            "number": 15,
+            "name": "Выделение однородных членов предложения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 84,
+        "fields": {
+            "chapter": 9,
+            "number": 16,
+            "name": "Синтаксический разбор предложения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 85,
+        "fields": {
+            "chapter": 11,
+            "number": 1,
+            "name": "Знание состава числа в пределах 10",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 86,
+        "fields": {
+            "chapter": 11,
+            "number": 2,
+            "name": "Умение прибавлять и вычитать в пределах 10",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 87,
+        "fields": {
+            "chapter": 11,
+            "number": 3,
+            "name": "Представления о точке, прямой линии, отрезке, геометрических фигурах.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 88,
+        "fields": {
+            "chapter": 11,
+            "number": 4,
+            "name": "Умение решать простые задачи",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 89,
+        "fields": {
+            "chapter": 11,
+            "number": 5,
+            "name": "Ориентация в тетради",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 90,
+        "fields": {
+            "chapter": 13,
+            "number": 1,
+            "name": "Запись слов в соответствии с нормами каллиграфии",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 91,
+        "fields": {
+            "chapter": 13,
+            "number": 2,
+            "name": "Оформление работы в соответствии с нормами и требованиями",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 92,
+        "fields": {
+            "chapter": 13,
+            "number": 3,
+            "name": "Сравнение чисел",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 93,
+        "fields": {
+            "chapter": 13,
+            "number": 4,
+            "name": "Сложение и вычитание в пределах 20",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 94,
+        "fields": {
+            "chapter": 13,
+            "number": 5,
+            "name": "Сложение и вычитание в пределах 100 без перехода через десяток",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 95,
+        "fields": {
+            "chapter": 13,
+            "number": 6,
+            "name": "Составление краткой записи/ схемы к задаче",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 96,
+        "fields": {
+            "chapter": 13,
+            "number": 7,
+            "name": "Решение простых арифметических задач в одно действие",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 97,
+        "fields": {
+            "chapter": 13,
+            "number": 8,
+            "name": "Решение составных арифметических задач в два действия",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 98,
+        "fields": {
+            "chapter": 13,
+            "number": 9,
+            "name": "Построение геометрических фигур при помощи измерительной линейки",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 99,
+        "fields": {
+            "chapter": 13,
+            "number": 10,
+            "name": "Нахождение периметра фигуры",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 100,
+        "fields": {
+            "chapter": 13,
+            "number": 11,
+            "name": "Преобразование величин (сантиметр - дециметр - метр), сравнение величин",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 101,
+        "fields": {
+            "chapter": 13,
+            "number": 12,
+            "name": "Владение терминологией",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 102,
+        "fields": {
+            "chapter": 13,
+            "number": 13,
+            "name": "Решение уравнений",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 103,
+        "fields": {
+            "chapter": 13,
+            "number": 14,
+            "name": "Активность на уроке",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 104,
+        "fields": {
+            "chapter": 13,
+            "number": 15,
+            "name": "Аккуратность в записи работы",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 105,
+        "fields": {
+            "chapter": 13,
+            "number": 16,
+            "name": "Активность на уроке",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 106,
+        "fields": {
+            "chapter": 13,
+            "number": 17,
+            "name": "Темп работы",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 107,
+        "fields": {
+            "chapter": 15,
+            "number": 1,
+            "name": "Оформление работы",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 108,
+        "fields": {
+            "chapter": 15,
+            "number": 2,
+            "name": "Знание названий компонентов арифметических действий и их нахождение",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 109,
+        "fields": {
+            "chapter": 15,
+            "number": 3,
+            "name": "Порядок вычисления значений выражений со скобками и без",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 110,
+        "fields": {
+            "chapter": 15,
+            "number": 4,
+            "name": "Устные вычисления в пределах 100",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 111,
+        "fields": {
+            "chapter": 15,
+            "number": 5,
+            "name": "Письменные приемы сложения и вычитания в пределах 100",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 112,
+        "fields": {
+            "chapter": 15,
+            "number": 6,
+            "name": "Знание таблицы умножения и деления ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 113,
+        "fields": {
+            "chapter": 15,
+            "number": 7,
+            "name": "Работа с текстовой задачей (простой и составной)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 114,
+        "fields": {
+            "chapter": 15,
+            "number": 8,
+            "name": "Решение уравнений",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 115,
+        "fields": {
+            "chapter": 15,
+            "number": 9,
+            "name": "Единицы измерения массы, длины, вместимости. Соотношение между единицами измерения. Работа с величинами (преобразование, сравнение)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 116,
+        "fields": {
+            "chapter": 15,
+            "number": 10,
+            "name": "Нахождение периметра фигуры",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 117,
+        "fields": {
+            "chapter": 15,
+            "number": 11,
+            "name": "Построение геометрических фигур: прямая, отрезок, луч, ломаная, прямоугольник. Нахождение длины ломаной.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 118,
+        "fields": {
+            "chapter": 17,
+            "number": 1,
+            "name": "Качество работы",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 119,
+        "fields": {
+            "chapter": 17,
+            "number": 2,
+            "name": "Письменное сложение и вычитание",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 120,
+        "fields": {
+            "chapter": 17,
+            "number": 3,
+            "name": "Письменное умножение многозначных чисел на однозначное",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 121,
+        "fields": {
+            "chapter": 17,
+            "number": 4,
+            "name": "Письменное деление многозначных чисел на однозначное",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 122,
+        "fields": {
+            "chapter": 17,
+            "number": 5,
+            "name": "Решение выражений на порядок действий",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 123,
+        "fields": {
+            "chapter": 17,
+            "number": 6,
+            "name": "Преобразование величин",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 124,
+        "fields": {
+            "chapter": 17,
+            "number": 7,
+            "name": "Действия с величинами",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 125,
+        "fields": {
+            "chapter": 17,
+            "number": 8,
+            "name": "Решение уравнений",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 126,
+        "fields": {
+            "chapter": 17,
+            "number": 9,
+            "name": "Решение задач на движение",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 127,
+        "fields": {
+            "chapter": 17,
+            "number": 10,
+            "name": "Решение табличных задач",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 128,
+        "fields": {
+            "chapter": 17,
+            "number": 11,
+            "name": "Решение задач на нахождение целого по части и части по целому",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 129,
+        "fields": {
+            "chapter": 17,
+            "number": 12,
+            "name": "Решение геометрических задач",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 130,
+        "fields": {
+            "chapter": 17,
+            "number": 13,
+            "name": "Активность на уроке",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 131,
+        "fields": {
+            "chapter": 19,
+            "number": 1,
+            "name": "Темп чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 132,
+        "fields": {
+            "chapter": 19,
+            "number": 2,
+            "name": "Понимание прочитанного",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 133,
+        "fields": {
+            "chapter": 19,
+            "number": 3,
+            "name": "Выразительность чтения наизусть",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 134,
+        "fields": {
+            "chapter": 19,
+            "number": 4,
+            "name": "Составление рассказа по сюжетной картинке",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 135,
+        "fields": {
+            "chapter": 19,
+            "number": 5,
+            "name": "Различение гласных и согласных звуков, букв",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 136,
+        "fields": {
+            "chapter": 19,
+            "number": 6,
+            "name": "Составление звуковой схемы слова",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 137,
+        "fields": {
+            "chapter": 19,
+            "number": 7,
+            "name": "Деление слова на слоги",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 138,
+        "fields": {
+            "chapter": 19,
+            "number": 8,
+            "name": "Выделение ударного слога",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 139,
+        "fields": {
+            "chapter": 21,
+            "number": 1,
+            "name": "Темп чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 140,
+        "fields": {
+            "chapter": 21,
+            "number": 2,
+            "name": "Понимание прочитанного",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 141,
+        "fields": {
+            "chapter": 21,
+            "number": 3,
+            "name": "Безошибочность чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 142,
+        "fields": {
+            "chapter": 21,
+            "number": 4,
+            "name": "Выразительность чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 143,
+        "fields": {
+            "chapter": 21,
+            "number": 5,
+            "name": "Выразительность чтения наизусть (передача настроения, замысла, верные паузы и логические ударения)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 144,
+        "fields": {
+            "chapter": 21,
+            "number": 6,
+            "name": "Умение найти в тексте необходимую информацию",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 145,
+        "fields": {
+            "chapter": 21,
+            "number": 7,
+            "name": "Определение темы и главной мысли текста",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 146,
+        "fields": {
+            "chapter": 21,
+            "number": 8,
+            "name": "Пересказ текста по готовому плану",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 147,
+        "fields": {
+            "chapter": 21,
+            "number": 9,
+            "name": "Построение полного (устного) ответа в ходе обсуждения произвения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 148,
+        "fields": {
+            "chapter": 21,
+            "number": 10,
+            "name": "Активность на уроке в обсуждении текстов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 149,
+        "fields": {
+            "chapter": 21,
+            "number": 11,
+            "name": "Построение полного (устного) ответа на вопрос учителя, аргументация своего согласия (несогласия) для участников учебного диалога",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 150,
+        "fields": {
+            "chapter": 21,
+            "number": 12,
+            "name": "Активность на уроке в обсуждении текстов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 151,
+        "fields": {
+            "chapter": 23,
+            "number": 1,
+            "name": "Темп чтения вслух",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 152,
+        "fields": {
+            "chapter": 23,
+            "number": 2,
+            "name": "Понимание прочитанного",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 153,
+        "fields": {
+            "chapter": 23,
+            "number": 3,
+            "name": "Безошибочность чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 154,
+        "fields": {
+            "chapter": 23,
+            "number": 4,
+            "name": "Выразительность чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 155,
+        "fields": {
+            "chapter": 23,
+            "number": 5,
+            "name": "Выразительность чтения наизусть",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 156,
+        "fields": {
+            "chapter": 23,
+            "number": 6,
+            "name": "Работа с текстовым материалом",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 157,
+        "fields": {
+            "chapter": 23,
+            "number": 7,
+            "name": "Пересказ прочитанного",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 158,
+        "fields": {
+            "chapter": 23,
+            "number": 8,
+            "name": "Определение жанра произведения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 159,
+        "fields": {
+            "chapter": 23,
+            "number": 9,
+            "name": "Активность на уроке и обсуждение текстов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 160,
+        "fields": {
+            "chapter": 23,
+            "number": 10,
+            "name": "Умение ориентироваться в содержании текста, отвечать на вопросы, используя явно заданную в тексте информацию",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 161,
+        "fields": {
+            "chapter": 23,
+            "number": 11,
+            "name": "Умение упорядочивать, ранжировать и группировать информацию ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 162,
+        "fields": {
+            "chapter": 23,
+            "number": 12,
+            "name": "Умение интерпретировать информацию, отвечать на вопросы, используя неявно заданную информацию ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 163,
+        "fields": {
+            "chapter": 23,
+            "number": 13,
+            "name": "Умение определять место и роль иллюстративного ряда в тексте, лексическое значение слова (словосочетания) в тексте ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 164,
+        "fields": {
+            "chapter": 23,
+            "number": 14,
+            "name": "Умение применять информацию из текста при решении учебно-практических задач ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 165,
+        "fields": {
+            "chapter": 23,
+            "number": 15,
+            "name": "Умение  формулировать выводы, основываясь на тексте; находить аргументы, подтверждающие вывод ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 166,
+        "fields": {
+            "chapter": 23,
+            "number": 16,
+            "name": "Умение Интерпретировать произведение (художественное, музыкальное, живописное и др.), исходя из особенностей жанра, стиля, присутствующих в них средств художественной выразительности и образной системы ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 167,
+        "fields": {
+            "chapter": 23,
+            "number": 17,
+            "name": "Умение высказывать оценочные суждения и свою точку зрения о прочитанном тексте ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 168,
+        "fields": {
+            "chapter": 23,
+            "number": 18,
+            "name": "Умение сопоставлять различные точки зрения, соотносить позицию автора с собственной точкой зрения. Устанавливать сходство и различие в оценках явлений, отраженных в произведении ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 169,
+        "fields": {
+            "chapter": 23,
+            "number": 19,
+            "name": "Умение различать художественные произведения разных жанров (рассказ, басня, сказка, загадка, пословица), умение привести примеры этих произведений\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 170,
+        "fields": {
+            "chapter": 23,
+            "number": 20,
+            "name": "Постановка вопросов, ответы на вопросы по содержанию произведения, подтверждение ответов примерами из текста",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 171,
+        "fields": {
+            "chapter": 23,
+            "number": 21,
+            "name": "Понимание информации, представленной в неявном виде, установка связей, отношений, не высказанных в тексте напрямую",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 172,
+        "fields": {
+            "chapter": 23,
+            "number": 22,
+            "name": "Объяснение значения слова с опорой на контекст произведения, с использованием словарей и другой справочной литературы",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 173,
+        "fields": {
+            "chapter": 23,
+            "number": 23,
+            "name": "Составление характеристики персонажа",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 174,
+        "fields": {
+            "chapter": 23,
+            "number": 24,
+            "name": "Подбор заголовка, соответствующего содержанию и общему смыслу текста",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 175,
+        "fields": {
+            "chapter": 23,
+            "number": 25,
+            "name": "Ориентирование в содержании художественного, учебного и научно-популярного текста, понимание его смысла (при чтении вслух и про себя, при прослушивании",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 176,
+        "fields": {
+            "chapter": 23,
+            "number": 26,
+            "name": "Реконструкция текста с использованием различных способов работы с «деформированным» текстом: восстановление последовательности событий, установка причинно- следственных связей, установка причинно- следственных связей",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 177,
+        "fields": {
+            "chapter": 23,
+            "number": 27,
+            "name": "Нахождение в тексте требуемой информации (конкретные сведения, факты, заданной в явном виде, описания), заданной в явном виде",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 178,
+        "fields": {
+            "chapter": 25,
+            "number": 1,
+            "name": "Темп чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 179,
+        "fields": {
+            "chapter": 25,
+            "number": 2,
+            "name": "Понимание прочитанного",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 180,
+        "fields": {
+            "chapter": 25,
+            "number": 3,
+            "name": "Безошибочность чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 181,
+        "fields": {
+            "chapter": 25,
+            "number": 4,
+            "name": "Выразительность чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 182,
+        "fields": {
+            "chapter": 25,
+            "number": 5,
+            "name": "Выразительность чтения наизусть",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 183,
+        "fields": {
+            "chapter": 25,
+            "number": 6,
+            "name": "Работа с тестовым материалом",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 184,
+        "fields": {
+            "chapter": 25,
+            "number": 7,
+            "name": "Активность на уроке в обсуждении текстов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 185,
+        "fields": {
+            "chapter": 27,
+            "number": 1,
+            "name": "Узнавать флаг и герб России",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 186,
+        "fields": {
+            "chapter": 27,
+            "number": 2,
+            "name": "Узнавать некоторые достопримечательности столицы ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 187,
+        "fields": {
+            "chapter": 27,
+            "number": 3,
+            "name": "Проводить наблюдения в окружающем мире",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 188,
+        "fields": {
+            "chapter": 27,
+            "number": 4,
+            "name": "Различтать растения, животных, созвездия",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 189,
+        "fields": {
+            "chapter": 27,
+            "number": 5,
+            "name": "Сравнивать животных, относить их к определенным группам",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 190,
+        "fields": {
+            "chapter": 29,
+            "number": 1,
+            "name": "Тема: Где мы живем",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 191,
+        "fields": {
+            "chapter": 29,
+            "number": 2,
+            "name": "Тема: Природа",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 192,
+        "fields": {
+            "chapter": 29,
+            "number": 3,
+            "name": "Формулирование вопросов или проблемы",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 193,
+        "fields": {
+            "chapter": 29,
+            "number": 4,
+            "name": "Умение ясно и четко выражать идеи",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 194,
+        "fields": {
+            "chapter": 29,
+            "number": 5,
+            "name": "Работа с разными источниками информации",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 195,
+        "fields": {
+            "chapter": 29,
+            "number": 6,
+            "name": "Активность на уроке",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 196,
+        "fields": {
+            "chapter": 33,
+            "number": 1,
+            "name": "Земля и человечество",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 197,
+        "fields": {
+            "chapter": 33,
+            "number": 2,
+            "name": "Страницы всемироной истории и истории России.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 198,
+        "fields": {
+            "chapter": 33,
+            "number": 3,
+            "name": "Написание пробной версии работы МЦКО",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 199,
+        "fields": {
+            "chapter": 33,
+            "number": 4,
+            "name": "Устные ответы, пересказ изученного материла",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 200,
+        "fields": {
+            "chapter": 33,
+            "number": 5,
+            "name": "Самостоятельное выполнение творческих работ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 201,
+        "fields": {
+            "chapter": 33,
+            "number": 6,
+            "name": "Умение задавать вопросы.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 202,
+        "fields": {
+            "chapter": 33,
+            "number": 7,
+            "name": "Работа с картой.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 203,
+        "fields": {
+            "chapter": 35,
+            "number": 1,
+            "name": "Техника безопасности и правила поведения на уроке физической культуры.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 204,
+        "fields": {
+            "chapter": 35,
+            "number": 2,
+            "name": "Раздел «Легкая атлетика».\n1. Изучение знаний техники безопасности и правил поведения на уроке физической культуры.\n2. Разучивание техники беговых (скоростно-силовых) и прыжковых упражнений.\n- Техники челночного бега 3х10м\n- Техники прыжка в длину с места.\n- Техники равномерного. \n3. Совершенствование прохождения полосы препятствия с элементами легкоатлетических упражнений.\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 205,
+        "fields": {
+            "chapter": 35,
+            "number": 3,
+            "name": "Раздел «Гимнастика и фитнес».\n1. Изучение знаний техники безопасности и правил поведения на уроке физической культуры.\n2.Изучение и закрепление техники базовых строевых упражнений, гимнастических стоек и общефизических упражнений.\n3. Разучивание комплекса фитнес разминки. \n4. Разучивание элементов акробатических упражнений, упражнений на развитие физических качеств (сила, гибкость, координация, баланс). \n5.Совершенствование прохождения полосы препятствий с элементами гимнастических упражнений.\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 206,
+        "fields": {
+            "chapter": 37,
+            "number": 1,
+            "name": "Техника безопасности и правила поведения на уроке физической культуры.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 207,
+        "fields": {
+            "chapter": 37,
+            "number": 2,
+            "name": "Раздел «Легкая атлетика».\n1. Знание техники безопасности и правил поведения на уроке физической культуры.\n2. Совершенствование техники беговых (скоростно-силовых) и прыжковых упражнений.\n- Техники челночного бега 3х10м, 5х10м.\n- Техники прыжка в длину с места.\n- Техники равномерного и эстафетного бега. \n3. Совершенствование прохождения полосы препятствия с элементами легкоатлетических упражнений.\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 208,
+        "fields": {
+            "chapter": 37,
+            "number": 3,
+            "name": "Раздел «Гимнастика и фитнес».\n1. Знание техники безопасности и правил поведения на уроке физической культуры.\n2.Закрепление и совершенствование изучения техники строевых упражнений, гимнастических стоек и общефизических упражнений.\n3. Фитнес разминка. \n4. Совершенствование элементов акробатических упражнений, упражнений на развитие физических качеств (сила, гибкость, координация, баланс). \n5.Совершенствование прохождения полосы препятствий с элементами гимнастических упражнений.\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 209,
+        "fields": {
+            "chapter": 37,
+            "number": 4,
+            "name": "Спортивные игры, направление баскетбол",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 210,
+        "fields": {
+            "chapter": 39,
+            "number": 1,
+            "name": "Техника безопасности и правила поведения на уроке физической культуры.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 211,
+        "fields": {
+            "chapter": 39,
+            "number": 2,
+            "name": "Раздел «Легкая атлетика».\n1. Знание техники безопасности и правил поведения на уроке физической культуры.\n2. Совершенствование техники беговых (скоростно-силовых) и прыжковых упражнений.\n- Техники челночного бега 4х9м, 3х10м, 5х10м.\n- Техники прыжка в длину с места.\n- Техники равномерного и эстафетного бега 4х60м. \n3. Совершенствование прохождения полосы препятствия с элементами легкоатлетических упражнений комплекс №1.\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 212,
+        "fields": {
+            "chapter": 39,
+            "number": 3,
+            "name": "Раздел «Гимнастика и фитнес».\n1. Знание техники безопасности и правил поведения на уроке физической культуры.\n2.Закрепление и совершенствование изучения техники строевых упражнений, гимнастических стоек и общефизических упражнений.\n3. Фитнес разминка с предметами. \n4. Совершенствование элементов акробатических упражнений, упражнений на развитие физических качеств (сила, гибкость, координация, баланс). \n5.Совершенствование прохождения полосы препятствий с элементами гимнастических упражнений комплекс №1.\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 213,
+        "fields": {
+            "chapter": 41,
+            "number": 1,
+            "name": "Техника безопасности и правила поведения на уроке физической культуры.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 214,
+        "fields": {
+            "chapter": 41,
+            "number": 2,
+            "name": "Раздел «Легкая атлетика».\n1. Знание техники безопасности и правил поведения на уроке по лёгкой атлетике.\n2. Повторение техники беговых (скоростно-силовых) и прыжковых упражнений.\n- Техники челночного бега 4х9м, 3х10м, 5х10м.\n- Техники прыжка в длину с места.\n- Техники равномерного и эстафетного бега 4х100м. \n3. Совершенствование прохождения полосы препятствия с элементами легкоатлетических упражнений комплекс №2.\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 215,
+        "fields": {
+            "chapter": 41,
+            "number": 3,
+            "name": "Раздел «Гимнастика и фитнес».\n1. Знание техники безопасности и правил поведения на уроке физической культуры.\n2.Закрепление и совершенствование изучения техники строевых упражнений, гимнастических стоек и общефизических упражнений.\n3. Фитнес разминка с предметами. \n4. Совершенствование элементов акробатических упражнений, упражнений на развитие физических качеств (сила, гибкость, координация, баланс). \n5.Совершенствование прохождения полосы препятствий с элементами гимнастических упражнений комплекс №2,3.\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 216,
+        "fields": {
+            "chapter": 43,
+            "number": 1,
+            "name": "Техника безопасности и правила поведения на бортике бассейна и прилегающих помещениях.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 217,
+        "fields": {
+            "chapter": 43,
+            "number": 2,
+            "name": "Комплекс ОРУ и специальных упражнений и имитационных упражнений на бортике бассейна.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 218,
+        "fields": {
+            "chapter": 43,
+            "number": 3,
+            "name": "“Кроль на спине” по элементам и в полной координации.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 219,
+        "fields": {
+            "chapter": 43,
+            "number": 4,
+            "name": "Стартовый прыжок из воды при плавании “Кроль на спине”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 220,
+        "fields": {
+            "chapter": 43,
+            "number": 5,
+            "name": "Техника плавания “Кроль на груди” по элементам и в полной координации с подвижной опорой и без.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 221,
+        "fields": {
+            "chapter": 43,
+            "number": 6,
+            "name": "Спад в воду с бортика бассейна",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 222,
+        "fields": {
+            "chapter": 45,
+            "number": 1,
+            "name": "Техника безопасности и правила поведения на бортике бассейна и прилегающих помещениях.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 223,
+        "fields": {
+            "chapter": 45,
+            "number": 2,
+            "name": "Комплекс ОРУ и специальных упражнений и имитационных упражнений на бортике бассейна.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 224,
+        "fields": {
+            "chapter": 45,
+            "number": 3,
+            "name": "“Кроль на спине” по элементам и в полной координации.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 225,
+        "fields": {
+            "chapter": 45,
+            "number": 4,
+            "name": "Стартовый прыжок из воды при плавании “Кроль на спине”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 226,
+        "fields": {
+            "chapter": 45,
+            "number": 5,
+            "name": "Техника плавания “Кроль на груди” по элементам и в полной координации с подвижной опорой и без.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 227,
+        "fields": {
+            "chapter": 45,
+            "number": 6,
+            "name": "Поворот “Маятник”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 228,
+        "fields": {
+            "chapter": 45,
+            "number": 7,
+            "name": "Стартовый прыжок с бортика бассейна при плавании “Кроль на груди” с последующим продвижением “Стрелочка” с работой ног.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 229,
+        "fields": {
+            "chapter": 45,
+            "number": 8,
+            "name": "Подготовительные упражнения для поворота «Сальто»",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 230,
+        "fields": {
+            "chapter": 47,
+            "number": 1,
+            "name": "Техника безопасности и правила поведения на бортике бассейна и прилегающих помещениях.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 231,
+        "fields": {
+            "chapter": 47,
+            "number": 2,
+            "name": "Комплекс ОРУ и специальных упражнений и имитационных упражнений на бортике бассейна.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 232,
+        "fields": {
+            "chapter": 47,
+            "number": 3,
+            "name": "“Кроль на спине” по элементам и в полной координации.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 233,
+        "fields": {
+            "chapter": 47,
+            "number": 4,
+            "name": "Стартовый прыжок из воды при плавании “Кроль на спине”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 234,
+        "fields": {
+            "chapter": 47,
+            "number": 5,
+            "name": "Техника плавания “Кроль на груди” по элементам и в полной координации с подвижной и без.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 235,
+        "fields": {
+            "chapter": 47,
+            "number": 6,
+            "name": "Поворот “Маятник”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 236,
+        "fields": {
+            "chapter": 47,
+            "number": 7,
+            "name": "Стартовый прыжок с бортика бассейна при плавании “Кроль на груди” с последующим продвижением",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 237,
+        "fields": {
+            "chapter": 47,
+            "number": 8,
+            "name": "Кувырок «Сальто»",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 238,
+        "fields": {
+            "chapter": 49,
+            "number": 1,
+            "name": "Техника безопасности и правила поведения на бортике бассейна и прилегающих помещениях.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 239,
+        "fields": {
+            "chapter": 49,
+            "number": 2,
+            "name": "Комплекс ОРУ и специальных упражнений и имитационных упражнений на бортике бассейна.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 240,
+        "fields": {
+            "chapter": 49,
+            "number": 3,
+            "name": "“Кроль на спине”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 241,
+        "fields": {
+            "chapter": 49,
+            "number": 4,
+            "name": "-специальные упражнения для формирования техники ‑ плавание в полной координации.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 242,
+        "fields": {
+            "chapter": 49,
+            "number": 5,
+            "name": "Стартовый прыжок из воды при плавании “Кроль на спине”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 243,
+        "fields": {
+            "chapter": 49,
+            "number": 6,
+            "name": "Техника плавания “Кроль на груди”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 244,
+        "fields": {
+            "chapter": 49,
+            "number": 7,
+            "name": "-по элементам со спец.плав. средствами",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 245,
+        "fields": {
+            "chapter": 49,
+            "number": 8,
+            "name": "-в полной координации с подвижной опорой и без.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 246,
+        "fields": {
+            "chapter": 49,
+            "number": 9,
+            "name": "Поворот “Маятник”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 247,
+        "fields": {
+            "chapter": 49,
+            "number": 10,
+            "name": "Стартовый прыжок с бортика бассейна при плавании “Кроль на груди” с последующим продвижением “Стрелочка” с работой ног.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 248,
+        "fields": {
+            "chapter": 49,
+            "number": 11,
+            "name": "Кувырок «Сальто»",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 249,
+        "fields": {
+            "chapter": 51,
+            "number": 1,
+            "name": "Навыки слушания музыки",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 250,
+        "fields": {
+            "chapter": 51,
+            "number": 2,
+            "name": "Пение как самовыражениею",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 251,
+        "fields": {
+            "chapter": 51,
+            "number": 3,
+            "name": "Знание музыкальных инструментов в оркестре",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 252,
+        "fields": {
+            "chapter": 51,
+            "number": 4,
+            "name": "Я солист.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 253,
+        "fields": {
+            "chapter": 51,
+            "number": 5,
+            "name": "Музыкальная азбука",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 254,
+        "fields": {
+            "chapter": 53,
+            "number": 1,
+            "name": "Мелодия.\nЭлементы музыкального языка (темп, тембр, регистр, динамика, ритм, мелодия, аккомпанемент и др ). Уметь объяснить значение соответствующих терминов и их различать. ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 255,
+        "fields": {
+            "chapter": 53,
+            "number": 2,
+            "name": "Ритм в маршах, песнях, танцах. Исполнять и создавать различные ритмические рисунки.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 256,
+        "fields": {
+            "chapter": 53,
+            "number": 3,
+            "name": "Как меняется музыка. (жанры: танец, песня, марш). Навыки слушания музыки: различать на слух принципы развития: повтор, контраст, варьирование.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 257,
+        "fields": {
+            "chapter": 53,
+            "number": 4,
+            "name": "Я солист. Пение а капелла и в сопровождении инструментов. \nИсполнять народные произведения различных жанров с сопровождением и без сопровождения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 258,
+        "fields": {
+            "chapter": 53,
+            "number": 5,
+            "name": "Народные музыкальные инструменты. Определять на слух и называть знакомые народные музыкальные инструменты.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 259,
+        "fields": {
+            "chapter": 53,
+            "number": 6,
+            "name": "Кто автор?\nОпределять принадлежность музыкальных произведений и их фрагментов к композиторскому или народному творчеству.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 260,
+        "fields": {
+            "chapter": 53,
+            "number": 7,
+            "name": "Фольклор. \nУчаствовать в коллективной игре/импровизации (вокальной, инструментальной, танцевальной) на основе освоенных фольклорных жанров.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 261,
+        "fields": {
+            "chapter": 55,
+            "number": 1,
+            "name": "Инстументы оркестра.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 262,
+        "fields": {
+            "chapter": 55,
+            "number": 2,
+            "name": "Пение как самовыражение",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 263,
+        "fields": {
+            "chapter": 55,
+            "number": 3,
+            "name": "Я солист.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 264,
+        "fields": {
+            "chapter": 55,
+            "number": 4,
+            "name": "Композиторы венской школы.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 265,
+        "fields": {
+            "chapter": 55,
+            "number": 5,
+            "name": "Умею слушать и понимать музку.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 266,
+        "fields": {
+            "chapter": 57,
+            "number": 1,
+            "name": "Венские классики.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 267,
+        "fields": {
+            "chapter": 57,
+            "number": 2,
+            "name": "Знание инструментов симфонического оркестра",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 268,
+        "fields": {
+            "chapter": 57,
+            "number": 3,
+            "name": "Бетховен , симфонии №5, №9",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 269,
+        "fields": {
+            "chapter": 57,
+            "number": 4,
+            "name": "Пение как самовыражение.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 270,
+        "fields": {
+            "chapter": 57,
+            "number": 5,
+            "name": "Умение чисто интонировать.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 271,
+        "fields": {
+            "chapter": 59,
+            "number": 1,
+            "name": "Знакомство с Мастером Изображения ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 272,
+        "fields": {
+            "chapter": 59,
+            "number": 2,
+            "name": "Основные средства изображения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 273,
+        "fields": {
+            "chapter": 59,
+            "number": 3,
+            "name": "Художники и зрители. Разноцветные краски",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 274,
+        "fields": {
+            "chapter": 61,
+            "number": 1,
+            "name": "Как и чем работает художник. ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 275,
+        "fields": {
+            "chapter": 61,
+            "number": 2,
+            "name": "Изображение и фантазия ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 276,
+        "fields": {
+            "chapter": 63,
+            "number": 1,
+            "name": "Искусство в твоем доме. ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 277,
+        "fields": {
+            "chapter": 63,
+            "number": 2,
+            "name": "Искусство на улицах города.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 278,
+        "fields": {
+            "chapter": 63,
+            "number": 3,
+            "name": "Транспорт в городе",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 279,
+        "fields": {
+            "chapter": 65,
+            "number": 1,
+            "name": "Истоки родного искусства",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 280,
+        "fields": {
+            "chapter": 65,
+            "number": 2,
+            "name": "Города нашей земли.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 281,
+        "fields": {
+            "chapter": 65,
+            "number": 3,
+            "name": "Художественная культура ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 282,
+        "fields": {
+            "chapter": 67,
+            "number": 1,
+            "name": "Знакомство с театром. История возникновения театра. Виды театра.  Игры на знакомство и воображение. ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 283,
+        "fields": {
+            "chapter": 67,
+            "number": 2,
+            "name": "Правила поведения в театре.Этюд \"Человек-предмет\".  Игры на внимание, память и воображение. ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 284,
+        "fields": {
+            "chapter": 67,
+            "number": 3,
+            "name": "Новогодний спектакль \"Щелкунчик\"",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 285,
+        "fields": {
+            "chapter": 69,
+            "number": 1,
+            "name": "Тренинги на внимание, фантазию, воображегние",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 286,
+        "fields": {
+            "chapter": 69,
+            "number": 2,
+            "name": "Танцы народов мира",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 287,
+        "fields": {
+            "chapter": 69,
+            "number": 3,
+            "name": "Новогодний спектакль",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 288,
+        "fields": {
+            "chapter": 71,
+            "number": 1,
+            "name": "Массовые празднества и театрализованные представления в Древней Греции и Древнем Риме. История возникновения театра. Актерские тренинги",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 289,
+        "fields": {
+            "chapter": 71,
+            "number": 2,
+            "name": "этюд. Работа над сценарием, репетиция и показ этюдов. ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 290,
+        "fields": {
+            "chapter": 71,
+            "number": 3,
+            "name": "Новогоднее мероприятие. ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 291,
+        "fields": {
+            "chapter": 73,
+            "number": 1,
+            "name": "Тренинги по актерскому мастерству",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 292,
+        "fields": {
+            "chapter": 73,
+            "number": 2,
+            "name": "Традиции и ценности театра",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 293,
+        "fields": {
+            "chapter": 73,
+            "number": 3,
+            "name": "Новогодний бал",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 294,
+        "fields": {
+            "chapter": 75,
+            "number": 1,
+            "name": "Работа с клавиатурой. Правила печати. Отработка навыка слепой печати.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 295,
+        "fields": {
+            "chapter": 75,
+            "number": 2,
+            "name": "Вставка геометрических фигур. Инструмент \"заливка\". Текстовый редактор MS Word.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 296,
+        "fields": {
+            "chapter": 75,
+            "number": 3,
+            "name": "Создание диаграмм. Виды диаграмм: гистограммы и круговые диаграммы.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 297,
+        "fields": {
+            "chapter": 75,
+            "number": 4,
+            "name": "Работа с графическими изображениями. Поиск, сохранение, вставка изображений.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 298,
+        "fields": {
+            "chapter": 75,
+            "number": 5,
+            "name": "Составление алгоритмов (логических цепочек). Линейные алгоритмы.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 299,
+        "fields": {
+            "chapter": 75,
+            "number": 6,
+            "name": "Работа с текстом. Набор текста. Форматирование.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 300,
+        "fields": {
+            "chapter": 75,
+            "number": 7,
+            "name": "Чтение и создание таблиц, \nсхем, графов",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 301,
+        "fields": {
+            "chapter": 75,
+            "number": 8,
+            "name": "Составление алгоритмов\n (логических цепочек). Циклы.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 302,
+        "fields": {
+            "chapter": 75,
+            "number": 9,
+            "name": "Составление алгоритмов (логических цепочек). \nАлгоритмы с условием.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 303,
+        "fields": {
+            "chapter": 77,
+            "number": 1,
+            "name": "Работа с клавиатурой. Правила печати. Отработка навыка слепой печати.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 304,
+        "fields": {
+            "chapter": 77,
+            "number": 2,
+            "name": "Таблицы. Заполнение таблицы данными. Инструмент \"заливка\". Текстовый редактор MS Word.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 305,
+        "fields": {
+            "chapter": 77,
+            "number": 3,
+            "name": "Создание презентации в MS Power Point. Вставка изображений, копирование и вставка текста (cmd+C, cmd+V). Добавление переходов, поиск, сохранение, вставка изображений в формате png и gif.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 306,
+        "fields": {
+            "chapter": 77,
+            "number": 4,
+            "name": "Составление алгоритмов (логических цепочек). Линейные алгоритмы.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 307,
+        "fields": {
+            "chapter": 77,
+            "number": 5,
+            "name": "Работа с текстом. \nКопирование и вставка текста.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 308,
+        "fields": {
+            "chapter": 77,
+            "number": 6,
+            "name": "Составление алгоритмов (логических цепочек). Циклы.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 309,
+        "fields": {
+            "chapter": 77,
+            "number": 7,
+            "name": "Схемы и графы. \nЧтение, поиск пути\n по схеме.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 310,
+        "fields": {
+            "chapter": 77,
+            "number": 8,
+            "name": "Составление алгоритмов \n(логических цепочек).\n Алгоритмы с уловием.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 311,
+        "fields": {
+            "chapter": 77,
+            "number": 9,
+            "name": "Работа с текстом. \nФорматирование.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 312,
+        "fields": {
+            "chapter": 79,
+            "number": 1,
+            "name": "Работа с клавиатурой. Правила печати. Отработка навыка слепой печати.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 313,
+        "fields": {
+            "chapter": 79,
+            "number": 2,
+            "name": "Текстовый редактор MS Word. Таблицы. Заполнение таблицы данными. Инструмент \"заливка\". ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 314,
+        "fields": {
+            "chapter": 79,
+            "number": 3,
+            "name": "Создание презентации в MS Power Point. Вставка изображений, копирование и вставка текста (cmd+C, cmd+V). Добавление переходов, поиск, сохранение, вставка изображений в формате png и gif.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 315,
+        "fields": {
+            "chapter": 79,
+            "number": 4,
+            "name": "Изучение понятия \"диаграмма\". Построение круговых и столбчатых диаграмм.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 316,
+        "fields": {
+            "chapter": 79,
+            "number": 5,
+            "name": "Составление алгоритмов (логических цепочек). Линейные алгоритмы.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 317,
+        "fields": {
+            "chapter": 79,
+            "number": 6,
+            "name": "Работа с текстом.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 318,
+        "fields": {
+            "chapter": 79,
+            "number": 7,
+            "name": "Составление алгоритмов\n (логических цепочек). \nАлгоритмы с условием.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 319,
+        "fields": {
+            "chapter": 79,
+            "number": 8,
+            "name": "Составление алгоритмов \n(логических цепочек).\n Циклы.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 320,
+        "fields": {
+            "chapter": 79,
+            "number": 9,
+            "name": "Работа с электронными\n таблицами.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 321,
+        "fields": {
+            "chapter": 79,
+            "number": 10,
+            "name": "Инфографика.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 322,
+        "fields": {
+            "chapter": 81,
+            "number": 1,
+            "name": "Работа с текстовыми редакторами.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 323,
+        "fields": {
+            "chapter": 81,
+            "number": 2,
+            "name": "Работа с клавиатурой. Правила печати. Отработка навыка слепой печати",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 324,
+        "fields": {
+            "chapter": 81,
+            "number": 3,
+            "name": "Инфографика.\n\n",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 325,
+        "fields": {
+            "chapter": 81,
+            "number": 4,
+            "name": "Круговые диаграммы. Линейчатые и столбчатые диаграммы. Диаграммы с накоплением и графики. Практическая работа в MS Power Point. ",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 326,
+        "fields": {
+            "chapter": 81,
+            "number": 5,
+            "name": "Управление исполнителем. Создание собственного исполнителя. Подсчет событий. Решение обратных задач с алгоритмами и программированием. Практические работы в среде программирования.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 327,
+        "fields": {
+            "chapter": 81,
+            "number": 6,
+            "name": "Поиск, отбор, сохранение, вставка графических изображений.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 328,
+        "fields": {
+            "chapter": 83,
+            "number": 1,
+            "name": "English ABC",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 329,
+        "fields": {
+            "chapter": 83,
+            "number": 2,
+            "name": "Letter blends",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 330,
+        "fields": {
+            "chapter": 83,
+            "number": 3,
+            "name": "Family",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 331,
+        "fields": {
+            "chapter": 83,
+            "number": 4,
+            "name": "CVC reading",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 332,
+        "fields": {
+            "chapter": 83,
+            "number": 5,
+            "name": "How Christmas started",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 333,
+        "fields": {
+            "chapter": 83,
+            "number": 6,
+            "name": "Christmas symbols",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 334,
+        "fields": {
+            "chapter": 83,
+            "number": 7,
+            "name": "Summative assessment: Alphabet. Letter recognition. Writing (copying)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 335,
+        "fields": {
+            "chapter": 85,
+            "number": 1,
+            "name": "Numbers 1-50",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 336,
+        "fields": {
+            "chapter": 85,
+            "number": 2,
+            "name": "Introduction phrases",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 337,
+        "fields": {
+            "chapter": 85,
+            "number": 3,
+            "name": "Colours",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 338,
+        "fields": {
+            "chapter": 85,
+            "number": 4,
+            "name": "School stationary",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 339,
+        "fields": {
+            "chapter": 85,
+            "number": 5,
+            "name": "Pronouns",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 340,
+        "fields": {
+            "chapter": 85,
+            "number": 6,
+            "name": "Family members",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 341,
+        "fields": {
+            "chapter": 85,
+            "number": 7,
+            "name": "Summative assessment 1. Reading.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 342,
+        "fields": {
+            "chapter": 85,
+            "number": 8,
+            "name": "Toys",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 343,
+        "fields": {
+            "chapter": 85,
+            "number": 9,
+            "name": "Present Simple of the verb “To be”",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 344,
+        "fields": {
+            "chapter": 85,
+            "number": 10,
+            "name": "Plural nouns. Irregular plurals.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 345,
+        "fields": {
+            "chapter": 85,
+            "number": 11,
+            "name": "Possessive case",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 346,
+        "fields": {
+            "chapter": 85,
+            "number": 12,
+            "name": " We have covered the following sounds: /e/, /i:/, /u:/, /ae/, /^/,/o/, /a/, /e/, /u/, /eu/, /ie/, /ea/",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 347,
+        "fields": {
+            "chapter": 85,
+            "number": 13,
+            "name": "Demonstratives this/that/these/those",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 348,
+        "fields": {
+            "chapter": 85,
+            "number": 14,
+            "name": "Summative assessment 2. Listening.",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 349,
+        "fields": {
+            "chapter": 85,
+            "number": 15,
+            "name": "Professions and actions",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 350,
+        "fields": {
+            "chapter": 87,
+            "number": 1,
+            "name": "Food",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 351,
+        "fields": {
+            "chapter": 87,
+            "number": 2,
+            "name": "Some/Any",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 352,
+        "fields": {
+            "chapter": 87,
+            "number": 3,
+            "name": "Countries",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 353,
+        "fields": {
+            "chapter": 87,
+            "number": 4,
+            "name": "To be (affirmative, negative, questions)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 354,
+        "fields": {
+            "chapter": 87,
+            "number": 5,
+            "name": "Appearance",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 355,
+        "fields": {
+            "chapter": 87,
+            "number": 6,
+            "name": "Have got  (affirmative, negative, questions)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 356,
+        "fields": {
+            "chapter": 87,
+            "number": 7,
+            "name": "Household chores",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 357,
+        "fields": {
+            "chapter": 87,
+            "number": 8,
+            "name": "Present continuous (affirmative, negative, interrogative)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 358,
+        "fields": {
+            "chapter": 87,
+            "number": 9,
+            "name": "Sport",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 359,
+        "fields": {
+            "chapter": 87,
+            "number": 10,
+            "name": "Can/can't (affirmative, negative, questions)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 360,
+        "fields": {
+            "chapter": 87,
+            "number": 11,
+            "name": "Prepositions of movement",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 361,
+        "fields": {
+            "chapter": 87,
+            "number": 12,
+            "name": "In Town",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 362,
+        "fields": {
+            "chapter": 87,
+            "number": 13,
+            "name": "Prepositions of place",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 363,
+        "fields": {
+            "chapter": 87,
+            "number": 14,
+            "name": "Summative Assessment - Writing",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 364,
+        "fields": {
+            "chapter": 87,
+            "number": 15,
+            "name": "Clothes",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 365,
+        "fields": {
+            "chapter": 87,
+            "number": 16,
+            "name": "Summative Assessment - Listening",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 366,
+        "fields": {
+            "chapter": 87,
+            "number": 17,
+            "name": "Jobs",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 367,
+        "fields": {
+            "chapter": 87,
+            "number": 18,
+            "name": "Present Simple (affirmative, negative, questions)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 368,
+        "fields": {
+            "chapter": 87,
+            "number": 19,
+            "name": "Adverbs of frequency",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 369,
+        "fields": {
+            "chapter": 89,
+            "number": 1,
+            "name": "Present simple (affirmative, negative, interrogative)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 370,
+        "fields": {
+            "chapter": 89,
+            "number": 2,
+            "name": "Present continuous (affirmative, negative, interrogative)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 371,
+        "fields": {
+            "chapter": 89,
+            "number": 3,
+            "name": "At the doctor's",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 372,
+        "fields": {
+            "chapter": 89,
+            "number": 4,
+            "name": "Modal verbs (should, must, have to)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 373,
+        "fields": {
+            "chapter": 89,
+            "number": 5,
+            "name": "Summative Assessment - Reading",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 374,
+        "fields": {
+            "chapter": 89,
+            "number": 6,
+            "name": "Personal object pronouns",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 375,
+        "fields": {
+            "chapter": 89,
+            "number": 7,
+            "name": "Food and containers",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 376,
+        "fields": {
+            "chapter": 89,
+            "number": 8,
+            "name": "A lot/much/many",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 377,
+        "fields": {
+            "chapter": 89,
+            "number": 9,
+            "name": " A few/A little",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 378,
+        "fields": {
+            "chapter": 89,
+            "number": 10,
+            "name": "Some/Any/No - Somebody/Something",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 379,
+        "fields": {
+            "chapter": 89,
+            "number": 11,
+            "name": "Possessive pronouns",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 380,
+        "fields": {
+            "chapter": 89,
+            "number": 12,
+            "name": "Knights and castles",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 381,
+        "fields": {
+            "chapter": 89,
+            "number": 13,
+            "name": "Summative Assessment - Listening",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 382,
+        "fields": {
+            "chapter": 89,
+            "number": 14,
+            "name": "Past Simple regular (affirmative, negative, interrogative)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 383,
+        "fields": {
+            "chapter": 91,
+            "number": 1,
+            "name": "Числа от 1 до 5",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 384,
+        "fields": {
+            "chapter": 91,
+            "number": 2,
+            "name": "Числа от 5 до 10",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 385,
+        "fields": {
+            "chapter": 91,
+            "number": 3,
+            "name": "Числа от 10 до 20",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 386,
+        "fields": {
+            "chapter": 91,
+            "number": 4,
+            "name": "Знакомство, приветствия и прощания",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 387,
+        "fields": {
+            "chapter": 91,
+            "number": 5,
+            "name": "Вежливые слова",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 388,
+        "fields": {
+            "chapter": 91,
+            "number": 6,
+            "name": "Возраст",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 389,
+        "fields": {
+            "chapter": 91,
+            "number": 7,
+            "name": "Семья",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 390,
+        "fields": {
+            "chapter": 93,
+            "number": 1,
+            "name": "Повторение, числа",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 391,
+        "fields": {
+            "chapter": 93,
+            "number": 2,
+            "name": "Дата в китайском языке",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 392,
+        "fields": {
+            "chapter": 93,
+            "number": 3,
+            "name": "С днем рождения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 393,
+        "fields": {
+            "chapter": 93,
+            "number": 4,
+            "name": "Семья",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 394,
+        "fields": {
+            "chapter": 93,
+            "number": 5,
+            "name": "Национальности",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 395,
+        "fields": {
+            "chapter": 93,
+            "number": 6,
+            "name": "Как спросить разрешение",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 396,
+        "fields": {
+            "chapter": 93,
+            "number": 7,
+            "name": "Одежда",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 397,
+        "fields": {
+            "chapter": 95,
+            "number": 1,
+            "name": "Знакомство, приветствия и прощания",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 398,
+        "fields": {
+            "chapter": 95,
+            "number": 2,
+            "name": "Счет до 20",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 399,
+        "fields": {
+            "chapter": 95,
+            "number": 3,
+            "name": "Цвета",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 400,
+        "fields": {
+            "chapter": 95,
+            "number": 4,
+            "name": "Животные",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 401,
+        "fields": {
+            "chapter": 95,
+            "number": 5,
+            "name": "Оборот Il y a / Il n'y a pas de",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 402,
+        "fields": {
+            "chapter": 95,
+            "number": 6,
+            "name": "Фрукты и овощи",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 403,
+        "fields": {
+            "chapter": 95,
+            "number": 7,
+            "name": "Развитие умения чтения: правила чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 404,
+        "fields": {
+            "chapter": 95,
+            "number": 8,
+            "name": "Развитие  умения письма",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 405,
+        "fields": {
+            "chapter": 97,
+            "number": 1,
+            "name": "Простое будущее время",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 406,
+        "fields": {
+            "chapter": 97,
+            "number": 2,
+            "name": "Согласование прилагательных, обозначающих характер",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 407,
+        "fields": {
+            "chapter": 97,
+            "number": 3,
+            "name": "Числительные, обозначающие даты",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 408,
+        "fields": {
+            "chapter": 97,
+            "number": 4,
+            "name": "Меню в ресторане, этикет",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 409,
+        "fields": {
+            "chapter": 97,
+            "number": 5,
+            "name": "Спряжение глаголов 3 группы в настоящем времени: être, avoir, aller, vouloir, pouvoir",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 410,
+        "fields": {
+            "chapter": 97,
+            "number": 6,
+            "name": "Спросить/указатьдорогу",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 411,
+        "fields": {
+            "chapter": 97,
+            "number": 7,
+            "name": "Профессии",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 412,
+        "fields": {
+            "chapter": 99,
+            "number": 1,
+            "name": "Знакомство, приветствия и прощания",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 413,
+        "fields": {
+            "chapter": 99,
+            "number": 2,
+            "name": "Счет до 30",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 414,
+        "fields": {
+            "chapter": 99,
+            "number": 3,
+            "name": "Правила чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 415,
+        "fields": {
+            "chapter": 99,
+            "number": 4,
+            "name": "Семья",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 416,
+        "fields": {
+            "chapter": 99,
+            "number": 5,
+            "name": "Глагол \"иметь\"",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 417,
+        "fields": {
+            "chapter": 99,
+            "number": 6,
+            "name": "Календарь",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 418,
+        "fields": {
+            "chapter": 99,
+            "number": 7,
+            "name": "Погода",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 419,
+        "fields": {
+            "chapter": 99,
+            "number": 8,
+            "name": "Страноведение",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 420,
+        "fields": {
+            "chapter": 99,
+            "number": 9,
+            "name": "Рождество, Новый год",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 421,
+        "fields": {
+            "chapter": 101,
+            "number": 1,
+            "name": "Семья, внешность",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 422,
+        "fields": {
+            "chapter": 101,
+            "number": 2,
+            "name": "Календарь, зима, Новый год",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 423,
+        "fields": {
+            "chapter": 101,
+            "number": 3,
+            "name": "Семья",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 424,
+        "fields": {
+            "chapter": 101,
+            "number": 4,
+            "name": "Зимние виды спорта",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 425,
+        "fields": {
+            "chapter": 101,
+            "number": 5,
+            "name": "Рождество, Новый год",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 426,
+        "fields": {
+            "chapter": 101,
+            "number": 6,
+            "name": "Праздники в Испании и Росии",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 427,
+        "fields": {
+            "chapter": 103,
+            "number": 1,
+            "name": "Знакомство, приветствия и прощания",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 428,
+        "fields": {
+            "chapter": 103,
+            "number": 2,
+            "name": "Правила чтения",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 429,
+        "fields": {
+            "chapter": 103,
+            "number": 3,
+            "name": "Семья",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 430,
+        "fields": {
+            "chapter": 103,
+            "number": 4,
+            "name": "глагол kommen",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 431,
+        "fields": {
+            "chapter": 103,
+            "number": 5,
+            "name": "Страны",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 432,
+        "fields": {
+            "chapter": 103,
+            "number": 6,
+            "name": "Животные",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 433,
+        "fields": {
+            "chapter": 103,
+            "number": 7,
+            "name": "глагол können",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 434,
+        "fields": {
+            "chapter": 103,
+            "number": 8,
+            "name": "Что я уменю делать? (глаголы)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 435,
+        "fields": {
+            "chapter": 103,
+            "number": 9,
+            "name": "Спряжение глаолов в настоящем времени",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 436,
+        "fields": {
+            "chapter": 103,
+            "number": 10,
+            "name": "Рождество, Новый год",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 437,
+        "fields": {
+            "chapter": 105,
+            "number": 1,
+            "name": "Каникулы (повторение)",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 438,
+        "fields": {
+            "chapter": 105,
+            "number": 2,
+            "name": "Прошедшее время Perfekt с глаголом haben",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 439,
+        "fields": {
+            "chapter": 105,
+            "number": 3,
+            "name": "Прошедшее время Perfekt с глаголом sein",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 440,
+        "fields": {
+            "chapter": 105,
+            "number": 4,
+            "name": "Виды спорта",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 441,
+        "fields": {
+            "chapter": 105,
+            "number": 5,
+            "name": "Сравнительная и превосходная степени прилагательных",
+            "description": null,
+            "hours": 1
+        }
+    },
+    {
+        "model": "syllabus.coursetopic",
+        "pk": 442,
+        "fields": {
+            "chapter": 105,
+            "number": 6,
+            "name": "Рождество, Новый год",
+            "description": null,
+            "hours": 1
+        }
+    }
+]

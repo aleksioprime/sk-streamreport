@@ -27,6 +27,7 @@ import { StrandResource } from "@/services/resources/myp/strand.resource";
 import { LearnerProfileResource } from "@/services/resources/ibo/learnerProfile.resource";
 import { EventParticipationResource } from "@/services/resources/portfolio/eventParticipation.resource";
 import { PypUnitPlannerResource } from "@/services/resources/pyp/pypUnitPlanner.resource";
+import { TransdisciplinaryThemeResource } from "@/services/resources/pyp/transdisciplinaryTheme.resource";
 
 export default {
     auth: new AuthResource(),
@@ -58,4 +59,5 @@ export default {
     learnerProfile: new LearnerProfileResource(),
     eventParticipation: new EventParticipationResource(),
     pypUnitPlanner: new PypUnitPlannerResource(),
+    transdisciplinaryTheme: new TransdisciplinaryThemeResource(),
   };
