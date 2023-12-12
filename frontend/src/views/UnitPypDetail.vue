@@ -1,25 +1,32 @@
 <template>
   <div>
     <h1>PYP: Просмотр и редактирование юнита</h1>
-    <div class="row" v-if="generalStore.users.length">
+    <div class="row">
       <div class="col-md-3">
-        <div class="d-flex flex-column list-menu pt-3">
+        <div class="d-flex flex-column list-menu pt-3 ps-4">
           <a href="#base">Основная информация</a>
-          <a href="#central_idea">Центральная идея</a>
-          <a href="#reflections_initial">Начальная рефлексия</a>
-          <a href="#prior_learning">Предшествующий опыт</a>
-          <a href="#conncetions">Связи: трансдисциплинарные и прошлые</a>
-          <a href="#learning_goals">Цели обучения и критерии успеха</a>
-          <a href="#questions_teacher">Вопросы учителей</a>
-          <a href="#questions_student">Вопросы студентов</a>
-          <a href="#engaging_learning">Создание вовлеченного обучения</a>
-          <a href="#supporting_agency">Поддержание свободного волеизъявления студентов</a>
-          <a href="#questions_all">Вопросы</a>
-          <a href="#ongoing_assessment">Текущее оценивание</a>
-          <a href="#resources">Гибкое использование ресурсов</a>
-          <a href="#peer_self_assessment">Самооценка учащихся и отзывы сверстников</a>
-          <a href="#reflections_ongoing">Текущее оценивание</a>
-          <a href="#reflections_additional">Дополнительная рефлексия по предметам</a>
+          <a href="#central_idea" :class="checkField('central_idea')">Центральная идея</a>
+          <a href="#key_concepts" :class="checkField('key_concepts')">Ключевые концепты</a>
+          <a href="#related_concepts" :class="checkField('related_concepts')">Сопутствующие концепты</a>
+          <a href="#ibprofiles" :class="checkField('ibprofiles')">Качества портрета студента</a>
+          <a href="#lines_inquiry" :class="checkField('lines_inquiry')">Линии исследования</a>
+          <a href="#atl_develops" :class="checkField('atl_develops')">Навыки ATL</a>
+          <a href="#action" :class="checkField('action')">Действия</a>
+          <a href="#reflections_initial" :class="checkField('reflections_initial')">Начальная рефлексия</a>
+          <a href="#prior_learning" :class="checkField('prior_learning')">Предшествующий опыт</a>
+          <a href="#connections" :class="checkField('connections')">Связи: трансдисциплинарные и прошлые</a>
+          <a href="#learning_goals" :class="checkField('learning_goals')">Цели обучения и критерии успеха</a>
+          <a href="#questions_teacher" :class="checkField('questions_teacher')">Вопросы учителей</a>
+          <a href="#questions_student" :class="checkField('questions_student')">Вопросы студентов</a>
+          <a href="#engaging_learning" :class="checkField('engaging_learning')">Создание вовлеченного обучения</a>
+          <a href="#supporting_agency" :class="checkField('supporting_agency')">Поддержание свободного волеизъявления студентов</a>
+          <a href="#questions_all" :class="checkField('questions_all')">Вопросы</a>
+          <a href="#ongoing_assessment" :class="checkField('ongoing_assessment')">Текущее оценивание</a>
+          <a href="#resources" :class="checkField('resources')">Гибкое использование ресурсов</a>
+          <a href="#peer_self_assessment" :class="checkField('peer_self_assessment')">Самооценка учащихся и отзывы сверстников</a>
+          <a href="#reflections_ongoing" :class="checkField('reflections_ongoing')">Текущее оценивание</a>
+          <a href="#reflections_additional" :class="checkField('reflections_additional')">Дополнительная рефлексия по предметам</a>
+          <a href="#reflection_posts" :class="checkField('reflection_posts')">Рефлексия</a>
         </div>
       </div>
       <div class="col pt-3">
@@ -90,11 +97,48 @@
             </div>
           </div>
           <div class="my-3">
+            <h5 id="key_concepts">Ключевые концепты</h5>
+            <small>
+              Определяют ли ключевые концепции направление исследования и предоставляют ли возможности для установления
+              связей между предметами и за их пределами?
+            </small>
+            <editable-checkbox v-model="unitPypStore.pypUnit.key_concepts" :propItems="unitPypStore.pypKeyConcepts"
+              propName="key_concepts" showName="name" @select="handleSave($event, unitPypStore.pypUnit.id)" />
+          </div>
+          <div class="my-3">
+            <h5 id="related_concepts">Сопутствующие концепции</h5>
+            <small>
+              Предоставляют ли предметные концепции линзу для концептуального понимания конкретного предмета?
+            </small>
+            <unit-pyp-related-concept :unit="unitPypStore.pypUnit" />
+          </div>
+          <div class="my-3">
+            <h5 id="ibprofiles">Качества портрета студента</h5>
+            <small>
+              Какие возможности появятся для развития, демонстрации и усиления качеств портрета студента?
+            </small>
+            <unit-profile-develop :unit="unitPypStore.pypUnit" />
+          </div>
+          <div class="my-3">
+            <h5 id="lines_inquiry">Линии исследования</h5>
+            <small>Какие вопросы учителя и провокации будут формировать линии исследования?<br>
+              Линии исследования:
+              <ul>
+                <li>Проясняют и развивают понимание центральной идеи</li>
+                <li>Определить область исследования и помочь сфокусировать обучение и преподавание?</li>
+              </ul>
+            </small>
+            <unit-pyp-lines-of-inquiry :unit="unitPypStore.pypUnit" />
+          </div>
+          <div class="my-3">
+            <h5 id="atl_develops">Подходы к обучению (навыки ATL)</h5>
+            <unit-pyp-atl-develop :unit="unitPypStore.pypUnit" />
+          </div>
+          <div class="my-3">
             <h5 id="action">Действия</h5>
             <small>
               Какие существуют возможности для использования предшествующего обучения для поддержки потенциальных
-              действий,
-              инициированных учащимися?
+              действий, инициированных учащимися?
             </small>
             <div class="card">
               <div class="card-body">
@@ -320,6 +364,10 @@
               </div>
             </div>
           </div>
+          <div class="my-3">
+            <h5 id="reflection_posts">Рефлексия</h5>
+            <unit-reflection-post :unit="unitPypStore.pypUnit" program="pyp" />
+          </div>
         </div>
         <div v-else class="d-flex align-items-center justify-content-center">
           <span class="loader"></span>
@@ -337,12 +385,22 @@ import EditableArea from "@/common/components/EditableArea.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
 import SearchDropdownMultiple from "@/common/components/SearchDropdownMultiple.vue";
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
+import EditableCheckbox from "@/common/components/EditableCheckbox.vue";
+
+import UnitPypRelatedConcept from "@/modules/UnitPypRelatedConcept.vue";
+import UnitPypAtlDevelop from "@/modules/UnitPypAtlDevelop.vue";
+import UnitProfileDevelop from "@/modules/UnitProfileDevelop.vue";
+import UnitPypLinesOfInquiry from "@/modules/UnitPypLinesOfInquiry.vue";
+import UnitReflectionPost from "@/modules/UnitReflectionPost.vue";
 
 import { useUnitPypStore } from "@/stores/unitPyp";
 const unitPypStore = useUnitPypStore();
 
 import { useGeneralStore } from "@/stores/general";
 const generalStore = useGeneralStore();
+
+import { useIboStore } from "@/stores/ibo";
+const iboStore = useIboStore();
 
 const route = useRoute()
 
@@ -378,7 +436,23 @@ onMounted(() => {
     }
   );
   unitPypStore.loadTransdisciplinaryThemes();
+  unitPypStore.loadPypAtlClusters();
+  unitPypStore.loadPypKeyConcepts();
+  iboStore.loadLearnerProfiles();
 });
+
+const checkField = (field) => {
+  const data = unitPypStore.pypUnit[field]
+  if (Array.isArray(data)) {
+    return data.length > 0 ? 'check' : null;
+  } else if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
+    return Object.values(data).some(val => val != null && val !== '') ? 'check' : null;
+  } else if (typeof data === 'number') {
+    return !isNaN(data) && data !== null ? 'check' : null;
+  } else {
+    return !!data?.trim() ? 'check' : null;
+  }
+}
 </script>
 
 <style scoped>
@@ -386,8 +460,31 @@ onMounted(() => {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
+  height: 100vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
 }
-
+.list-menu::-webkit-scrollbar {
+  display: none;
+}
+.list-menu a {
+  position: relative;
+}
+.list-menu a:before {
+  content: "";
+  left: -20px;
+  top: 4px;
+  position:absolute;
+  float: left;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  background: url('@/assets/img/check-no.png') no-repeat 50% / 100%;
+}
+.list-menu a.check:before {
+  background: url('@/assets/img/check-yes.png') no-repeat 50% / 100%;
+}
 :target::before {
   content: "";
   display: block;
@@ -413,4 +510,5 @@ onMounted(() => {
   }
 
   /* Промежуточный цвет фона для мигания */
-}</style>
+}
+</style>

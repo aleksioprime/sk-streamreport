@@ -62,6 +62,10 @@
                   {{ student.last_name }} {{ student.first_name }}
                 </h4>
                 <div class="ms-auto">
+                  <i class="bi bi-file-earmark-word dot-menu" @click="exportReportToWord(student.report)"
+                    v-if="student.report"></i>
+                </div>
+                <div class="ms-2">
                   <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
                   <ul class="dropdown-menu">
                     <li v-if="!student.report">
@@ -89,7 +93,7 @@
                   :aria-labelledby="`heading-${student.id}`">
                   <div class="accordion-body">
                     <div class="my-2">
-                      <report-mentor-ib-profile :report="student.report" v-if="currentStudyYear.level == 'noo'"/>
+                      <report-mentor-ib-profile :report="student.report" v-if="currentStudyYear.level == 'noo'" />
                     </div>
                     <hr />
                     <div class="my-2">
@@ -175,22 +179,22 @@
                               </div>
                             </div>
                             <div class="my-2" v-if="teacher.topic_achievements && teacher.topic_achievements.length">
-                                <table class="table table-sm table-bordered">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col" style="width: 50%;">Тема</th>
-                                      <th scope="col" style="min-width: 60px;">Кр.</th>
-                                      <th scope="col" style="width: 50%;">Комментарий</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr v-for="achieve in teacher.topic_achievements" :key="achieve.id">
-                                      <td>{{ achieve.topic.name }}</td>
-                                      <td><span v-if="achieve.level">{{ achieve.level.toUpperCase() || '-' }}</span></td>
-                                      <td>{{ achieve.comment }}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
+                              <table class="table table-sm table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th scope="col" style="width: 50%;">Тема</th>
+                                    <th scope="col" style="min-width: 60px;">Кр.</th>
+                                    <th scope="col" style="width: 50%;">Комментарий</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr v-for="achieve in teacher.topic_achievements" :key="achieve.id">
+                                    <td>{{ achieve.topic.name }}</td>
+                                    <td><span v-if="achieve.level">{{ achieve.level.toUpperCase() || '-' }}</span></td>
+                                    <td>{{ achieve.comment }}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
                             </div>
                             <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
                               <div class="my-2">Уровень Objective:</div>
@@ -201,7 +205,8 @@
                                   </b>
                                 </div>
                                 <div class="ms-3">
-                                  The student {{ objective.level_name || 'does not reach a standard described by any of the descriptors below' }}
+                                  The student {{ objective.level_name || 
+                                  'does not reach a standard described by any of thedescriptors below' }}
                                 </div>
                               </div>
                             </div>
@@ -263,6 +268,7 @@
 import { ref, computed, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import imageStudent from "@/assets/img/student.svg";
+import { resolveBlob } from "@/common/helpers/download";
 
 import { formatDate } from "@/common/helpers/date";
 
@@ -572,6 +578,25 @@ onMounted(() => {
   }
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });
+
+const exportReportToWord = (report) => {
+  const config = {
+    responseType: 'blob',
+  }
+  if (currentStudyYear.value.level == 'noo') {
+    reportStore.exportReportMentorPrimary(report.id, config).then((result) => {
+      console.log(result);
+      resolveBlob(result);
+    });
+  } else {
+    reportStore.exportReportMentor(report.id, config).then((result) => {
+      console.log(result);
+      resolveBlob(result);
+    });
+  }
+
+}
+
 </script>
 
 <style scoped>

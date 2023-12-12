@@ -10,7 +10,7 @@
           <Editor api-key="j30bef5hr2ipfdbu7b9lww7t4oez2v6f27c94otp9to2j9mk" :init="{
             plugins: 'lists link wordcount autoresize',
             menubar: false,
-            toolbar: 'undo redo | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist ',
+            toolbar: 'bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist ',
             setup: (ed) => {
               ed.on('init', () => { tinyLoading = true });
             }

@@ -8,11 +8,11 @@ from apps.units.pyp.models import (
     PypAtlSkill,
     PypLinesOfInquiry,
     PypRelatedConcept,
-    PypAtlDevelop
+    PypAtlDevelop,
+    PypAtlCluster
     )
 
 from apps.ibo.models import (
-    AtlCluster,
     AtlCategory,
     LearnerProfile,
     IbProfileDevelop,
@@ -59,10 +59,10 @@ class AtlCategoryPypSerializer(serializers.ModelSerializer):
             )
 
 # Вывод списка кластеров ATL
-class AtlClusterPypSerializer(serializers.ModelSerializer):
+class PypAtlClusterListSerializer(serializers.ModelSerializer):
     category = AtlCategoryPypSerializer()
     class Meta:
-        model = AtlCluster
+        model = PypAtlCluster
         fields = (
             "id",
             "name",
@@ -72,7 +72,6 @@ class AtlClusterPypSerializer(serializers.ModelSerializer):
 
 # Вывод списка групп навыков ATL в PYP
 class PypAtlGroupListSerializer(serializers.ModelSerializer):
-    cluster = AtlClusterPypSerializer()
     class Meta:
         model = PypAtlGroup
         fields = (
@@ -80,13 +79,12 @@ class PypAtlGroupListSerializer(serializers.ModelSerializer):
             "name",
             "name_rus",
             "cluster",
-            "pyp_skills",
             )
         
 # Вывод списка навыков ATL в PYP
 class PypAtlSkillListSerializer(serializers.ModelSerializer):
     group = PypAtlGroupListSerializer()
-    cluster = AtlClusterPypSerializer()
+    cluster = PypAtlClusterListSerializer()
     class Meta:
         model = PypAtlSkill
         fields = (

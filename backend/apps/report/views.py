@@ -4,7 +4,14 @@ from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
 
+from docx import Document
+from docxtpl import DocxTemplate
+from django.http.response import StreamingHttpResponse
+import os
+from io import BytesIO
+from django.conf import settings
 
 from apps.report.serializers import (
     ReportPeriodListSerializer,
@@ -409,6 +416,23 @@ class ReportMentorViewSet(ModelViewSet):
             return ReportMentorRetrieveSerializer
         return ReportMentorUpdateSerializer
     
+    @action(detail=True, methods=["get"])
+    def report_export_word(self, request, pk=None):
+        report = self.get_object()
+        document = DocxTemplate(os.path.join(settings.BASE_DIR, 'documents', 'reports', 'test.docx'))
+        document.render({
+            'test': 'test',
+        })
+        buffer = BytesIO()
+        document.save(buffer)
+        buffer.seek(0)
+        response = StreamingHttpResponse(
+            streaming_content=buffer,  # use the stream's content
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = f'attachment;filename=test.docx'
+        response["Content-Encoding"] = 'UTF-8'
+        return response
+    
 
 # Результаты юнита в репорте классного руководителя НШ: список, создание, редактирование и удаление
 @extend_schema_view(
@@ -447,6 +471,23 @@ class ReportMentorPrimaryViewSet(ModelViewSet):
         elif self.action == "retrieve":
             return ReportMentorPrimaryRetrieveSerializer
         return ReportMentorPrimaryUpdateSerializer
+    
+    @action(detail=True, methods=["get"])
+    def report_export_word(self, request, pk=None):
+        report = self.get_object()
+        document = DocxTemplate(os.path.join(settings.BASE_DIR, 'documents', 'reports', 'test.docx'))
+        document.render({
+            'test': 'test',
+        })
+        buffer = BytesIO()
+        document.save(buffer)
+        buffer.seek(0)
+        response = StreamingHttpResponse(
+            streaming_content=buffer,  # use the stream's content
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = f'attachment;filename=test.docx'
+        response["Content-Encoding"] = 'UTF-8'
+        return response
     
 # Репорты дополнительных сотрудников класса: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(

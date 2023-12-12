@@ -25,9 +25,17 @@ import { CourseResource } from "@/services/resources/syllabus/course.resource";
 import { ObjectiveResource } from "@/services/resources/myp/objective.resource";
 import { StrandResource } from "@/services/resources/myp/strand.resource";
 import { LearnerProfileResource } from "@/services/resources/ibo/learnerProfile.resource";
+import { UnitReflectionPostResource } from "@/services/resources/ibo/unitReflectionPost.resource";
+import { IbProfileDevelopResource } from "@/services/resources/ibo/ibProfileDevelop.resource";
 import { EventParticipationResource } from "@/services/resources/portfolio/eventParticipation.resource";
-import { PypUnitPlannerResource } from "@/services/resources/pyp/pypUnitPlanner.resource";
 import { TransdisciplinaryThemeResource } from "@/services/resources/pyp/transdisciplinaryTheme.resource";
+import { PypAtlSkillResource } from "@/services/resources/pyp/pypAtlSkill.resource";
+import { PypKeyConceptResource } from "@/services/resources/pyp/pypKeyConcept.resource";
+import { PypAtlClusterResource } from "@/services/resources/pyp/pypAtlCluster.resource";
+import { PypUnitPlannerResource } from "@/services/resources/pyp/pypUnitPlanner.resource";
+import { PypAtlDevelopResource } from "@/services/resources/pyp/pypAtlDevelop.resource";
+import { PypLinesOfInquiryResource } from "@/services/resources/pyp/pypLinesOfInquiry.resource";
+import { PypRelatedConceptResource } from "@/services/resources/pyp/pypRelatedConcept.resource";
 
 export default {
     auth: new AuthResource(),
@@ -57,7 +65,15 @@ export default {
     objective: new ObjectiveResource(),
     strand: new StrandResource(),
     learnerProfile: new LearnerProfileResource(),
+    ibProfileDevelop: new IbProfileDevelopResource(),
+    unitReflectionPost: new UnitReflectionPostResource(),
     eventParticipation: new EventParticipationResource(),
     pypUnitPlanner: new PypUnitPlannerResource(),
     transdisciplinaryTheme: new TransdisciplinaryThemeResource(),
+    pypKeyConcept: new PypKeyConceptResource(),
+    pypAtlSkill: new PypAtlSkillResource(),
+    pypAtlCluster: new PypAtlClusterResource(),
+    pypAtlDevelop: new PypAtlDevelopResource(),
+    pypLinesOfInquiry: new PypLinesOfInquiryResource(),
+    pypRelatedConcept: new PypRelatedConceptResource(),
   };

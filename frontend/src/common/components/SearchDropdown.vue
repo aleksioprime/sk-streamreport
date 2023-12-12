@@ -3,7 +3,7 @@
     <div class="dropdown">
       <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuModule" data-bs-toggle="dropdown"
         aria-expanded="false">
-        {{ selectedItem[showName] || title }}
+        {{ truncateText(selectedItem[showName], 50) || title }}
       </button>
       <ul class="dropdown-menu pt-0" aria-labelledby="dropdownMenuModule">
         <li class="px-2 pt-2 sticky-top bg-light">
@@ -11,7 +11,7 @@
           <hr class="dropdown-divider">
         </li>
         <li v-for="(item, index) in filteredList" :key="index" @click="selectItem(item)">
-          <a class="dropdown-item" :class="{active: item == selectedItem}" href="#">{{ item[showName] }}</a>
+          <a class="dropdown-item" :class="{active: item == selectedItem}" href="##">{{ item[showName] }}</a>
         </li>
         <!-- <li v-if="filteredList.length > showNumber" @click="loadItems">
           <a href='#' class="small text-muted link-show">Показать еще...</a>
@@ -23,7 +23,7 @@
   
 <script setup>
 import { ref, computed, watch } from 'vue';
-
+import { truncateText } from '@/common/helpers/text'
 const BASE_NUMBER = 10
 
 const props = defineProps({
@@ -83,6 +83,7 @@ watch(() => props.modelValue, (newVal) => {
 }
 .dropdown-menu {
   max-height: 400px;
+  max-width: 70vh;
   overflow-y: scroll;
 }
 </style>

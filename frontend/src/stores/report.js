@@ -193,6 +193,9 @@ export const useReportStore = defineStore("report", {
     async removeReportMentor(report) {
       return await resources.reportMentor.removeReportMentor(report);
     },
+    async exportReportMentor(id, config) {
+      return await resources.reportMentor.exportReportMentor(id, config);
+    },
     // CRUD для репортов руководителя класса начальной школы
     async createReportMentorPrimary(report) {
       return await resources.reportMentorPrimary.createReportMentorPrimary(report);
@@ -202,6 +205,9 @@ export const useReportStore = defineStore("report", {
     },
     async removeReportMentorPrimary(report) {
       return await resources.reportMentorPrimary.removeReportMentorPrimary(report);
+    },
+    async exportReportMentorPrimary(id, config) {
+      return await resources.reportMentorPrimary.exportReportMentorPrimary(id, config);
     },
     // CRUD для результатов по критериям MYP
     async loadReportSecondaryCriteria(config) {

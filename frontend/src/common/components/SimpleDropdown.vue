@@ -7,7 +7,7 @@
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuModule">
         <li v-for="(item, index) in propItems" :key="index" @click="selectItem(item)">
-          <a class="dropdown-item" :class="{active: item == selectedItem}" href="##">{{ item[showName] }}</a>
+          <a class="dropdown-item" :class="{'active': item == selectedItem}" href="##">{{ item[showName] }}</a>
         </li>
       </ul>
     </div>

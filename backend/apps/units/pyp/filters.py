@@ -5,6 +5,7 @@ from apps.units.pyp.models import (
     PypLinesOfInquiry,
     PypRelatedConcept,
     PypAtlDevelop,
+    PypAtlSkill,
 )
 
 class PypUnitPlannerFilter(django_filters.FilterSet):
@@ -26,3 +27,8 @@ class PypAtlDevelopFilter(django_filters.FilterSet):
     class Meta:
         model = PypAtlDevelop
         fields = {'unit'}
+
+class PypAtlSkillFilter(django_filters.FilterSet):
+    class Meta:
+        model = PypAtlSkill
+        fields = {'cluster'}

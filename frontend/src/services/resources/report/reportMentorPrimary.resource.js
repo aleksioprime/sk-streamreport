@@ -5,12 +5,16 @@ export class ReportMentorPrimaryResource extends CrudService {
     super("/api/report/mentor/primary");
   }
 
-  getReportsMentorPrimary() {
-    return this.get();
+  getReportsMentorPrimary(config) {
+    return this.get(config);
   }
 
   createReportMentorPrimary(report) {
     return this.post(report);
+  }
+
+  exportReportMentorPrimary(id, config) {
+    return this.$get(`${this.resource}/${id}/export`, config);
   }
 
   updateReportMentorPrimary(report) {

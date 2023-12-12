@@ -53,18 +53,25 @@
     <div>
       <div v-for="unit in unitPypStore.pypUnits" :key="unit.id">
         <div class="card my-1">
-          <div class="card-body d-flex align-items-center">
-            <h5 class="mb-0">
-              <router-link :to="{ name: 'unitPypDetail', params: { id: unit.id } }" class="dropdown-item">{{ unit.title
-              }}</router-link>
-            </h5>
-            <div class="ms-auto">
-              <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="##" @click="showConfirmationModal(unit)">Удалить репорт</a>
-                </li>
-              </ul>
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <h5 class="mb-0">
+                <router-link :to="{ name: 'unitPypDetail', params: { id: unit.id } }" class="dropdown-item">
+                  {{ unit.title }}</router-link>
+              </h5>
+              <div class="ms-auto">
+                <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" href="##" @click="showConfirmationModal(unit)">Удалить юнит</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div>{{ unit.year.name }}</div>
+            <div class="my-2">
+              <i class="bi bi-person me-1"></i>
+              <span v-for="teacher, index in unit.teachers" :key="teacher.id">{{ teacher.short_name }}<span v-if="unit.teachers.length != index + 1">, </span></span>
             </div>
           </div>
         </div>

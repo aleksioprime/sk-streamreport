@@ -18,7 +18,7 @@
           <hr class="dropdown-divider">
         </li>
         <li v-for="(item, index) in filteredList" :key="index" @click="selectItem(item)">
-          <a class="dropdown-item" :class="{ active: isSelected(item) }" href="#">{{ item[showName] }}</a>
+          <a class="dropdown-item" :class="{ 'active': isSelected(item) }" href="#">{{ item[showName] }}</a>
         </li>
       </ul>
     </div>

@@ -2,7 +2,7 @@
   <div class="d-flex">
     <div class="w-100">
       <span v-if="!editMode">{{ text }}</span>
-      <textarea v-else ref="inputRef" class="form-control bottom-border-only" rows="3" v-model="text" @blur="toggleEditMode" @keyup="handleKeyup"></textarea>
+      <textarea v-else ref="inputRef" class="form-control bottom-border-only" rows="1" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"></textarea>
     </div>
     <div class="me-0 ms-2 text-muted small">
       <a href="##" @click="enableEditMode" v-if="!editMode">Изменить</a>
@@ -52,7 +52,8 @@ const toggleEditMode = (event) => {
 };
 
 const handleKeyup = (event) => {
-  if (event.key === 'Enter') {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault(); // Предотвратить перенос текста на новую строку
     originalText.value = text.value; // Сохраняем новое значение
     editMode.value = false;
     emit('update:modelValue', text.value);
@@ -68,6 +69,10 @@ const enableEditMode = () => {
   editMode.value = true;
   nextTick(() => {
     inputRef.value.focus();
+    inputRef.value.addEventListener('input', function () {
+      this.style.height = 'auto'; // Сбросить текущую высоту
+      this.style.height = this.scrollHeight + 'px'; // Установить новую высоту
+    });
   });
 };
 

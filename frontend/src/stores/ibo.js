@@ -21,5 +21,31 @@ export const useIboStore = defineStore("ibo", {
         console.log("IB Learner Profiles успешно получены: ", res.data)
       }
     },
+
+    async loadUnitReflectionPosts(config) {
+      return await resources.unitReflectionPost.getUnitReflectionPosts(config);
+    },
+    async createUnitReflectionPost(post) {
+      return await resources.unitReflectionPost.createUnitReflectionPost(post);
+    },
+    async updateUnitReflectionPost(post) {
+      return await resources.unitReflectionPost.updateUnitReflectionPost(post);
+    },
+    async removeUnitReflectionPost(id) {
+      return await resources.unitReflectionPost.removeUnitReflectionPost(id);
+    },
+
+    async loadIbProfileDevelops(config) {
+      return await resources.ibProfileDevelop.getIbProfileDevelops(config);
+    },
+    async createIbProfileDevelop(post) {
+      return await resources.ibProfileDevelop.createIbProfileDevelop(post);
+    },
+    async updateIbProfileDevelop(post) {
+      return await resources.ibProfileDevelop.updateIbProfileDevelop(post);
+    },
+    async removeIbProfileDevelop(id) {
+      return await resources.ibProfileDevelop.removeIbProfileDevelop(id);
+    },
   }
 });
