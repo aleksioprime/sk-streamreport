@@ -18,8 +18,9 @@
             </td>
             <td>
               <div class="d-flex flex-column">
-                <editable-date-cell :propDate="event.date_start" propName="date_start" @save="handleSave($event, event.id)"/>
-                <editable-date-cell :propDate="event.date_end" propName="date_end" @save="handleSave($event, event.id)"/>
+                <editable-date-cell :propDate="event.date_start" propName="date_start"
+                  @save="handleSave($event, event.id)" />
+                <editable-date-cell :propDate="event.date_end" propName="date_end" @save="handleSave($event, event.id)" />
               </div>
             </td>
             <td>
@@ -55,18 +56,17 @@
               <label :for="`date-${report.id}`" class="col-form-label">Выберите даты:</label>
             </div>
             <div class="col-auto">
-              <div :id="`date-${report.id}`" class="btn-group">
-                <button type="button" class="btn btn-outline-secondary">
-                  <span v-if="newEventParticipate.dateRange.start && newEventParticipate.dateRange.end">
+              <div :id="`date-${report.id}`" class="d-flex align-items-center">
+                <div class="me-2">
+                  <div v-if="newEventParticipate.dateRange.start && newEventParticipate.dateRange.end">
                     {{ newEventParticipate.dateRange.start.toLocaleDateString() }}
                     - {{ newEventParticipate.dateRange.end.toLocaleDateString() }}
-                  </span>
+                  </div>
                   <span v-else>Не выбраны даты</span>
-                </button>
-                <button class="btn btn-secondary dropdown-toggle dropdown-toggle-split" type="button"
-                  data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                  <span class="visually-hidden">Toggle Dropdown</span>
-                </button>
+                </div>
+                <i class="bi bi-calendar3 button-calendar" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                  aria-expanded="false">
+                </i>
                 <div class="dropdown-menu p-0 border-0 text-body-secondary">
                   <div>
                     <VDatePicker v-model.range="newEventParticipate.dateRange" />
@@ -75,10 +75,13 @@
               </div>
             </div>
           </div>
+          <small class="text-danger">{{ validations.dateRange.error }}</small>
           <input v-model="newEventParticipate.title" type="text" class="form-control my-2"
             placeholder="Введите название мероприятия">
+          <small class="text-danger">{{ validations.title.error }}</small>
           <textarea v-model="newEventParticipate.result" class="form-control bottom-border-only my-2" rows="3"
             placeholder="Опишите результаты участия"></textarea>
+          <small class="text-danger">{{ validations.result.error }}</small>
           <div class="d-flex items-align-center justify-content-end">
             <button class="btn btn-success" @click="createEventParticipation">Добавить</button>
             <button class="btn btn-secondary ms-2" @click="createFormHide">Отмена</button>
@@ -103,6 +106,7 @@ import { useAuthStore } from "@/stores/auth";
 import { usePortfolioStore } from "@/stores/portfolio";
 
 import { formatToYYYYMMDD, formatDateToReadable } from "@/common/helpers/date.js";
+import { validateFields, clearValidationErrors } from '@/common/validator'
 
 const props = defineProps({
   report: {
@@ -110,6 +114,23 @@ const props = defineProps({
     default: {}
   },
 });
+
+const setEmptyValidations = () => ({
+  title: {
+    error: '',
+    rules: ['required']
+  },
+  result: {
+    error: '',
+    rules: ['required']
+  },
+  dateRange: {
+    error: '',
+    rules: ['required']
+  },
+})
+
+const validations = ref(setEmptyValidations())
 
 const authStore = useAuthStore();
 const portfolioStore = usePortfolioStore();
@@ -135,10 +156,22 @@ const createFormShow = () => {
 const createFormHide = () => {
   createMode.value = false;
   newEventParticipate.value = { ...defaultEventParticipate }
+  clearValidationErrors(validations.value);
 }
 
 // Создание мероприятия
 const createEventParticipation = () => {
+  if (!validateFields(
+    {
+      title: newEventParticipate.value.title,
+      result: newEventParticipate.value.result,
+      dateRange: newEventParticipate.value.dateRange,
+    },
+    validations.value
+  )) {
+    return
+  }
+
   const {
     title,
     result,
@@ -228,4 +261,12 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.button-calendar {
+  cursor: pointer;
+}
+
+.button-calendar:hover {
+  font-size: 1.2rem;
+}
+</style>

@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <div class="w-100">
-      <span v-if="!editMode">{{ text }}</span>
+      <span v-if="!editMode">{{ text || 'Нет информации' }}</span>
       <textarea v-else ref="inputRef" class="form-control bottom-border-only" rows="1" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"></textarea>
     </div>
     <div class="me-0 ms-2 text-muted small">

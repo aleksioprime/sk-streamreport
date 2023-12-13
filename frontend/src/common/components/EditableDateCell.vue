@@ -1,16 +1,16 @@
 <template>
   <div class="col-auto my-1">
-    <div class="btn-group">
-      <button type="button" class="btn btn-outline-secondary">
+    <div class="d-flex align-items-center">
+      <div class="me-2">
         <span v-if="date">
           {{ formatDateToReadable(date) }}
         </span>
         <span v-else>Не выбраны даты</span>
-      </button>
-      <button class="btn btn-secondary dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown"
+      </div>
+      <i class="bi bi-calendar3 button-calendar" data-bs-toggle="dropdown"
         data-bs-auto-close="true" aria-expanded="false">
         <span class="visually-hidden">Toggle Dropdown</span>
-      </button>
+    </i>
       <div class="dropdown-menu p-0 border-0 text-body-secondary">
         <div>
           <VDatePicker v-model="date" @dayclick="handleSelect"/>
@@ -44,3 +44,9 @@ const handleSelect = (date) => {
 }
 
 </script>
+
+<style scoped>
+.button-calendar {
+  cursor: pointer;
+}
+</style>

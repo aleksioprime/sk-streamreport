@@ -3,16 +3,18 @@
     <div class="d-flex align-items-center">
       <h5>Достижения по критериям MYP</h5>
       <simple-dropdown class="ms-auto" v-model="currentLevel" :propItems="YEAR_LEVELS" showName="name"
-        :disabled="isYearDisable"/>
+        :disabled="isYearDisable" />
     </div>
-    <div class="my-2">
+    <small>Экспериментальная функция</small>
+    <div class="mb-2">
       <div class="accordion" :id="`accordionStrand${report.id}`">
         <div class="accordion-item" v-for="objectives, key in strandsByObjective" :key="key">
           <h2 class="accordion-header" :id="`heading${report.id}-${key}`">
             <button class="accordion-button collapsed py-1 px-2" type="button" data-bs-toggle="collapse"
               :data-bs-target="`#collapse${report.id}-${key}`" aria-expanded="true" aria-controls="collapseOne">
-              <div class="my-2">{{ unitMypStore.objectives.find(i => i.id == key).full_name }} - <b v-if="calculatedObjectives[key]">
-                {{calculatedObjectives[key][0].avg_point || 'Не оценивается' }}</b></div>
+              <div class="my-2">{{ unitMypStore.objectives.find(i => i.id == key).full_name }} - <b
+                  v-if="calculatedObjectives[key]">
+                  {{ calculatedObjectives[key][0].avg_point || 'Не оценивается' }}</b></div>
             </button>
           </h2>
           <div :id="`collapse${report.id}-${key}`" class="accordion-collapse collapse"
@@ -62,7 +64,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useUnitMypStore } from "@/stores/unitMyp";
 import { useReportStore } from "@/stores/report";
-
+import { YEAR_LEVELS } from "@/common/constants";
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
 
 const props = defineProps({
@@ -74,13 +76,6 @@ const props = defineProps({
 
 const unitMypStore = useUnitMypStore();
 const reportStore = useReportStore();
-
-const YEAR_LEVELS = [
-  { value: 1, name: 'Year 1 / Emergent' },
-  { value: 3, name: 'Year 3 / Capable' },
-  { value: 5, name: 'Year 5 / Proficient' },
-  { value: 0, name: 'Year All' },
-]
 
 // Вспомогательная функция для проверки объекта на пустое содержимое
 const isEmpty = (obj) => {
@@ -95,7 +90,25 @@ const reportYear = computed(() => {
   return YEAR_LEVELS.find(i => props.report.objective_levels.length && (i.value == props.report.objective_levels[0].strand.level))
 })
 
-const currentLevel = ref(reportYear.value || { value: 0, name: 'Year All' })
+const currentLevel = computed(() => {
+    if (reportYear.value) {
+      return reportYear.value
+    } else {
+      if ([5, 6].includes(props.report.group.year_study.number)) {
+        return YEAR_LEVELS.find(i => i.value == 1)
+      } else if ([7, 8].includes(props.report.group.year_study.number)) {
+        return YEAR_LEVELS.find(i => i.value == 3)
+      } else if ([9].includes(props.report.group.year_study.number)) {
+        return YEAR_LEVELS.find(i => i.value == 5)
+      } else {
+        return YEAR_LEVELS.find(i => i.value == 0)
+      }
+    }
+  }
+)
+
+
+
 
 const calculatedObjectives = computed(() => {
   return groupedByCategory(unitMypStore.objectives.filter(i => i.group.id == props.report.subject.group_ib).map((item) => {
@@ -229,4 +242,5 @@ const getReportSecondaryLevels = () => {
 
 .pointer:hover {
   text-decoration: underline;
-}</style>
+}
+</style>

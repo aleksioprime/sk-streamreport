@@ -201,6 +201,9 @@ def get_user_report_extra_queryset(group=None, period=None):
                     'group__year_study',
                 ).prefetch_related(
                     'student__student_events',
+                    'criterion_achievements',
+                    'criterion_achievements__achievement',
+                    'criterion_achievements__criterion',
                 ), 
             ),
         )

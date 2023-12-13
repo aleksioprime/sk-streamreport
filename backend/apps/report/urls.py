@@ -50,10 +50,11 @@ urlpatterns = [
     path('report/mentor/primary/<int:pk>', ReportMentorPrimaryViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/mentor/primary/<int:pk>/export', ReportMentorPrimaryViewSet.as_view({'get': 'report_export_word'})),
     path('report/mentor/primary/unit', ReportPrimaryUnitViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('report/mentor/primary/unit/<int:pk>', ReportPrimaryUnitViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('report/mentor/primary/unit/<int:pk>', ReportPrimaryUnitViewSet.as_view({'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/extra', ReportExtraViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('report/extra/<int:pk>', ReportExtraViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
     path('report/extra/student', UserReportExtraViewSet.as_view({'get': 'list'})),
     path('report/mentor/student', UserReportMentorViewSet.as_view({'get': 'list'})),
+    path('report/mentor/student/<int:pk>/export', UserReportMentorViewSet.as_view({'get': 'report_export_word'})),
     path('report/mentor/primary/student', UserReportMentorPrimaryViewSet.as_view({'get': 'list'})),
 ]

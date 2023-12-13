@@ -162,6 +162,7 @@ const showUnitPypCreateModal = () => {
 const cancelUnitPypCreateModal = () => {
   unitPypCreateModal.hide();
   newPypUnit.value = { ...defaultPypUnit };
+  clearValidationErrors(validations.value);
 }
 
 // Подтвердить и отправить запрос на создание юнита PYP

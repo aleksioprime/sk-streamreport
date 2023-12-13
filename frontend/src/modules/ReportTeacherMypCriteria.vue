@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="my-2">
-      <h5>Предметные критерии</h5>
+      <h5>Баллы по критериям MYP</h5>
       <div class="my-3">
         <div v-for="criterion in filteredCriteriaMyp" :key="criterion.id" class="d-flex align-items-center my-2">
           <div class="me-3" :class="{ 'selected-criterion': criterion.report }">{{ criterion.letter.toUpperCase() }}. {{

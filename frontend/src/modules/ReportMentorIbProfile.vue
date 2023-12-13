@@ -4,9 +4,6 @@
       <h5>IB Learner Profile</h5>
       <div v-for="profile in filteredlearnerProfiles" :key="profile.id" class="d-flex align-items-center my-2">
         <div class="me-3" :class="{ 'selected-profile': profile.report }">{{ profile.name }}</div>
-        <i class="bi bi-dash-square dot-menu me-2" v-if="profile.report"
-          @click="removeReportMentorIbProfile(profile.report.id)"></i>
-        <i v-else class="bi bi-plus-square dot-menu me-2" @click="createReportMentorIbProfile(profile.id)"></i>
         <div class="ms-auto">
           <div v-if="profile.report" >
             <editable-dropdown-cell :propData="profile.report.level" :propItems="PROFILE_LEVELS" 
@@ -14,14 +11,18 @@
           </div>
           <div v-else>Профиль не оценивается</div>
         </div>
+        <div>
+          <i class="bi bi-dash-square dot-menu ms-2" v-if="profile.report"
+          @click="removeReportMentorIbProfile(profile.report.id)"></i>
+          <i v-else class="bi bi-plus-square dot-menu ms-2" @click="createReportMentorIbProfile(profile.id)"></i>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useIboStore } from "@/stores/ibo";
 import { useReportStore } from "@/stores/report";
 import { PROFILE_LEVELS } from "@/common/constants";

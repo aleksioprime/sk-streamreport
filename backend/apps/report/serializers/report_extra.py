@@ -10,6 +10,7 @@ from .common import (
     ReportPeriodListSerializer,
     StudentReportSerializer,
     EventParticipationReportSerializer,
+    ReportCriterionAchievementListSerializer,
 )
 
 from general.models import (
@@ -22,6 +23,7 @@ class ReportExtraListSerializer(serializers.ModelSerializer):
     author = UserReportSerializer()
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
+    criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
         model = ReportExtra
         fields = (
@@ -33,6 +35,7 @@ class ReportExtraListSerializer(serializers.ModelSerializer):
             "comment",
             "created_at",
             "updated_at",
+            "criterion_achievements",
             "role",
             )
 
@@ -67,6 +70,7 @@ class ReportExtraSerializer(serializers.ModelSerializer):
     author = UserReportSerializer()
     student = StudentReportSerializer()
     group = ClassGroupReportSerializer()
+    criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
         model = ReportExtra
         fields = (
@@ -78,6 +82,7 @@ class ReportExtraSerializer(serializers.ModelSerializer):
             "comment",
             "created_at",
             "updated_at",
+            "criterion_achievements",
             "role",
             )
 

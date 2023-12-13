@@ -34,12 +34,12 @@ class ReportPeriod(models.Model):
         return f"{self.order} период ({self.year})"
 
 class ReportCriterion(models.Model):
-    """ Критерии для репорта учителя """
+    """ Критерии для репорта """
     name = models.CharField(max_length=128, verbose_name=_("Название критерия"), default=None, null=True)
     author = models.ForeignKey('general.User', verbose_name=_("Автор критерия"), on_delete=models.SET_NULL, null=True, related_name="report_criteria")
     years = models.ManyToManyField('general.StudyYear', verbose_name=_("Параллели"), related_name="report_criteria")
     subjects = models.ManyToManyField('curriculum.Subject', verbose_name=_("Предметы"), blank=True, related_name="report_criteria")
-    levels = models.ManyToManyField('report.ReportCriterionLevel', verbose_name=_("Уровни достижений"), blank=True, related_name="criterions")
+    levels = models.ManyToManyField('report.ReportCriterionLevel', through='report.ReportCriterionLevelDescription', verbose_name=_("Уровни достижений"), blank=True, related_name="criterions")
     class Meta:
         verbose_name = 'Критерий для репорта учителя'
         verbose_name_plural = 'Критерии для репорта учителя'
@@ -48,7 +48,7 @@ class ReportCriterion(models.Model):
         return f"{self.name}"
     
 class ReportCriterionLevel(models.Model):
-    """ Уровни критериев для репорта учителяи """
+    """ Уровни критериев для репорта """
     name = models.CharField(max_length=128, verbose_name=_("Название уровня"), default=None, null=True)
     point = models.PositiveSmallIntegerField(verbose_name=_("Баллы"), default=1)
     class Meta:
@@ -57,6 +57,18 @@ class ReportCriterionLevel(models.Model):
         ordering = ['point', 'name']
     def __str__(self):
         return f"{self.name} ({self.point})"
+    
+class ReportCriterionLevelDescription(models.Model):
+    """ Шаблоны результатов по уровням критериев """
+    description = models.TextField(verbose_name=_("Описание результата"), null=True, blank=True)
+    criterion = models.ForeignKey('report.ReportCriterion', verbose_name=_("Критерий"), on_delete=models.CASCADE, related_name="descriptions")
+    level = models.ForeignKey('report.ReportCriterionLevel', verbose_name=_("Уровень"), on_delete=models.CASCADE, related_name="descriptions")
+    class Meta:
+        verbose_name = 'Критерий для репорта учителя: уровень'
+        verbose_name_plural = 'Критерий для репорта учителя: уровни'
+        ordering = ['criterion', 'level']
+    def __str__(self):
+        return f"{self.criterion} ({self.level})"
 
 class ReportBaseModel(models.Model):
     """ Абстрактная модель репортов с общими полями """
@@ -86,8 +98,8 @@ class ReportCriterionAchievement(models.Model):
     criterion = models.ForeignKey('report.ReportCriterion', verbose_name=_("Чеклист"), on_delete=models.SET_NULL, null=True, related_name="reports")
     achievement = models.ForeignKey('report.ReportCriterionLevel', verbose_name=_("Достижение по критерию"), on_delete=models.SET_NULL, null=True, blank=True, related_name="reports")
     report = models.ForeignKey('report.ReportTeacher', verbose_name=_("Репорт учителя"), on_delete=models.CASCADE, null=True, related_name="criterion_achievements")
-    # report_mentor = models.ForeignKey('report.ReportMentor', verbose_name=_("Репорт наставника"), on_delete=models.CASCADE, null=True, related_name="criterion_achievements")
-    # report_extra = models.ForeignKey('report.ReportExtra', verbose_name=_("Репорт службы сопровождения"), on_delete=models.CASCADE, null=True, related_name="criterion_achievements")
+    report_mentor = models.ForeignKey('report.ReportMentor', verbose_name=_("Репорт наставника"), on_delete=models.CASCADE, null=True, related_name="criterion_achievements")
+    report_extra = models.ForeignKey('report.ReportExtra', verbose_name=_("Репорт службы сопровождения"), on_delete=models.CASCADE, null=True, related_name="criterion_achievements")
     # Поля для Generic Relation
     # content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     # object_id = models.PositiveIntegerField()
@@ -106,12 +118,17 @@ class ReportPrimaryTopic(models.Model):
     """ Академические достижения в репорте начальной школы """
     report = models.ForeignKey('report.ReportTeacherPrimary', verbose_name=_("Репорт"), on_delete=models.CASCADE, null=True, related_name="topic_achievements")
     topic = models.ForeignKey('syllabus.CourseTopic', verbose_name=_("Тема"), on_delete=models.CASCADE, null=True, related_name="topic_achievements")
+    topic_name = models.TextField(verbose_name=_("Тема (дополнительное текстовое поле)"), null=True, blank=True)
     level = models.CharField(verbose_name=_("Уровень"), choices=LevelAchievementPrimaryChoices.choices, null=True, default=None, max_length=4)
     comment = models.TextField(verbose_name=_("Комментарий"), null=True, blank=True)
     class Meta:
         verbose_name = 'Репорты учителя НШ: академические достижения'
         verbose_name_plural = 'Репорты учителя НШ: академические достижения'
         ordering = ['report', 'topic']
+    def save(self, *args, **kwargs):
+        if self.topic:
+            self.topic_name = self.topic.name
+        super().save(*args, **kwargs)
     def __str__(self):
         return f'{self.topic}: {self.level}'
 

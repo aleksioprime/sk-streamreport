@@ -27,7 +27,8 @@ from .common import (
     EventParticipationReportSerializer,
     StudentReportSerializer,
     ReportCriterionLevelSerializer,
-    ReportCriterionListSerializer
+    ReportCriterionListSerializer,
+    StudyYearReportSerializer
 )
 
 from .report_teacher import (
@@ -124,13 +125,17 @@ class ReportMentorUpdateSerializer(serializers.ModelSerializer):
 # TODO: Добавить необходимые поля для отображения
 # Список UnitPlanner начальной школы (PYP)
 class PypUnitPlannerReportSerializer(serializers.ModelSerializer):
+    teachers = UserReportSerializer(many=True)
+    year = StudyYearReportSerializer()
     class Meta:
         model = PypUnitPlanner
         fields = (
             "id",
             "title",
+            "teachers",
+            "year",
             "transdisciplinary_theme",
-            "central_idea"
+            "central_idea",
             )
 
 # Список результатов юнитов для репорта классного руководителя начальной школы
@@ -157,6 +162,7 @@ class ReportMentorPrimaryListSerializer(serializers.ModelSerializer):
     author = UserReportSerializer()
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
+    pyp_units = ReportPrimaryUnitListSerializer(many=True)
     class Meta:
         model = ReportMentorPrimary
         fields = (
@@ -166,6 +172,7 @@ class ReportMentorPrimaryListSerializer(serializers.ModelSerializer):
             "period",
             "group",
             "comment",
+            "pyp_units",
             "created_at",
             "updated_at",
             )
@@ -250,6 +257,7 @@ class ReportMentorSerializer(serializers.ModelSerializer):
     student = StudentReportSerializer()
     profiles = ReportIbProfileListSerializer(many=True)
     group = ClassGroupReportSerializer()
+    pyp_units = serializers.SerializerMethodField()
     class Meta:
         model = ReportMentor
         fields = (
@@ -260,9 +268,15 @@ class ReportMentorSerializer(serializers.ModelSerializer):
             "group",
             "comment",
             "profiles",
+            "pyp_units",
             "created_at",
             "updated_at",
             )
+    def get_pyp_units(self, obj):
+        if hasattr(obj, 'reportmentorprimary'):
+            return ReportPrimaryUnitListSerializer(obj.reportmentorprimary.pyp_units, many=True).data
+        return None
+        
 
 # Вывод списка репортов дополнительных сотрудников класса
 class ReportExtraSerializer(serializers.ModelSerializer):

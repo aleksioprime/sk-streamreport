@@ -13,10 +13,6 @@ export class ReportMentorPrimaryResource extends CrudService {
     return this.post(report);
   }
 
-  exportReportMentorPrimary(id, config) {
-    return this.$get(`${this.resource}/${id}/export`, config);
-  }
-
   updateReportMentorPrimary(report) {
     return this.patch(report);
   }

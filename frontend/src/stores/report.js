@@ -122,8 +122,8 @@ export const useReportStore = defineStore("report", {
     async loadReportTeachersHigh(config) {
       const res = await resources.reportTeacherHigh.getReportTeachersHigh(config);
       if (res.__state === "success") {
-        // this.reportTeachersHigh = res.data
         this.reportTeachers = res.data
+        console.log('Получение репортов учителя старшей школы: ', this.reportTeachers)
       }
     },
     async createReportTeacherHigh(report) {
@@ -149,16 +149,16 @@ export const useReportStore = defineStore("report", {
       return await resources.reportPrimaryTopic.removeReportPrimaryTopic(id);
     },
     // CRUD для достижений студентов по критериям учителя
-    async loadReportTeacherAchievements(config) {
+    async loadReportAchievements(config) {
       return await resources.reportTeacherAchievement.getReportTeacherAchievements(config);
     },
-    async createReportTeacherAchievement(report) {
+    async createReportAchievement(report) {
       return await resources.reportTeacherAchievement.createReportTeacherAchievement(report);
     },
-    async updateReportTeacherAchievement(report) {
+    async updateReportAchievement(report) {
       return await resources.reportTeacherAchievement.updateReportTeacherAchievement(report);
     },
-    async removeReportTeacherAchievement(id) {
+    async removeReportAchievement(id) {
       return await resources.reportTeacherAchievement.removeReportTeacherAchievement(id);
     },
     
@@ -184,6 +184,10 @@ export const useReportStore = defineStore("report", {
         });
       }
     },
+    async exportStudentMentorReport(id, config) {
+      return await resources.studentMentorReport.exportStudentMentorReport(id, config);
+    },
+    
     async createReportMentor(report) {
       return await resources.reportMentor.createReportMentor(report);
     },
@@ -193,9 +197,9 @@ export const useReportStore = defineStore("report", {
     async removeReportMentor(report) {
       return await resources.reportMentor.removeReportMentor(report);
     },
-    async exportReportMentor(id, config) {
-      return await resources.reportMentor.exportReportMentor(id, config);
-    },
+    // async exportReportMentor(id, config) {
+    //   return await resources.reportMentor.exportReportMentor(id, config);
+    // },
     // CRUD для репортов руководителя класса начальной школы
     async createReportMentorPrimary(report) {
       return await resources.reportMentorPrimary.createReportMentorPrimary(report);
@@ -206,9 +210,9 @@ export const useReportStore = defineStore("report", {
     async removeReportMentorPrimary(report) {
       return await resources.reportMentorPrimary.removeReportMentorPrimary(report);
     },
-    async exportReportMentorPrimary(id, config) {
-      return await resources.reportMentorPrimary.exportReportMentorPrimary(id, config);
-    },
+    // async exportReportMentorPrimary(id, config) {
+    //   return await resources.reportMentorPrimary.exportReportMentorPrimary(id, config);
+    // },
     // CRUD для результатов по критериям MYP
     async loadReportSecondaryCriteria(config) {
       return await resources.reportSecondaryCriterion.getReportSecondaryCriteria(config);
@@ -234,6 +238,19 @@ export const useReportStore = defineStore("report", {
     },
     async removeReportMentorIbProfile(id) {
       return await resources.reportMentorIbProfile.removeReportMentorIbProfile(id);
+    },
+    // CRUD для результатов по исследованию в начальной школе
+    async loadReportMentorPrimaryUnits(config) {
+      return await resources.reportMentorPrimaryUnit.getReportMentorPrimaryUnits(config);
+    },
+    async createReportMentorPrimaryUnit(report) {
+      return await resources.reportMentorPrimaryUnit.createReportMentorPrimaryUnit(report);
+    },
+    async updateReportMentorPrimaryUnit(report) {
+      return await resources.reportMentorPrimaryUnit.updateReportMentorPrimaryUnit(report);
+    },
+    async removeReportMentorPrimaryUnit(id) {
+      return await resources.reportMentorPrimaryUnit.removeReportMentorPrimaryUnit(id);
     },
     // CRUD для результатов по критериям MYP
     async loadReportSecondaryLevels(config) {

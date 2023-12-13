@@ -83,6 +83,10 @@
                 <div :id="`collapse-${student.id}`" class="accordion-collapse collapse"
                   :aria-labelledby="`heading-${student.id}`">
                   <div class="accordion-body">
+                    <div class="my-3">
+                      <report-criteria :report="student.report" typeReport="extra" />
+                    </div>
+                    <hr />
                     <div class="my-2">
                       <editable-area-tiny class="text-muted" :propData="student.report.comment" propName="comment"
                         @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
@@ -132,6 +136,7 @@ import imageStudent from "@/assets/img/student.svg";
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
 import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
+import ReportCriteria from "@/modules/ReportCriteria.vue";
 
 import EventParticipation from "@/modules/EventParticipation.vue";
 

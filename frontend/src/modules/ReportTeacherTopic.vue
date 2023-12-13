@@ -9,30 +9,49 @@
         </ul>
       </div>
     </div>
+    <div class="mb-2">
+      <a data-bs-toggle="collapse" href="#collapseCriteria" role="button" aria-expanded="false"
+        aria-controls="collapseCriteria">
+        Критерии
+      </a>
+      <div class="collapse" id="collapseCriteria">
+        <div v-for="cr in ACADEMIC_CRITERIA" :key="cr.value" class="card card-body my-1 p-2">
+          <small>
+            <strong>{{ cr.value }}: </strong>
+            <span>{{ cr.description }}</span>
+          </small>
+        </div>
+      </div>
+    </div>
     <table class="table table-sm table-bordered" v-if="report.topic_achievements.length">
       <thead>
         <tr>
           <th scope="col" style="width: 40%;">Тема</th>
           <th scope="col" style="min-width: 120px;">Достижение</th>
           <th scope="col" style="width: 60%;">Комментарий</th>
+          <th scope="col" style="min-width: 30px;"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="achieve in report.topic_achievements" :key="achieve.id">
           <td>
-            <span class="me-2">{{ achieve.topic.name }}</span>
+            <span class="me-2">{{ achieve.topic_name }}</span>
+          </td>
+          <td>
+            <editable-dropdown-cell :propData="achieve.level" :propItems="reportStore.levels" showName="name"
+              propName="level" saveName="value" @save="handleSave($event, achieve.id)" />
+          </td>
+          <td>
+            <editable-textarea-cell :propData="achieve.comment" propName="comment"
+              @save="handleSave($event, achieve.id)" />
+          </td>
+          <td>
             <i class="bi bi-dash-square inline-button" @click="showConfirmationModal(achieve)"></i>
-            <confirmation-modal v-if="achieve.id == currentPrimaryTopic.id" :nameModal="`confirmationDeleteTopic${achieve.id}`" @confirm="removePrimaryTopic"
+            <confirmation-modal v-if="achieve.id == currentPrimaryTopic.id"
+              :nameModal="`confirmationDeleteTopic${achieve.id}`" @confirm="removePrimaryTopic"
               @cancel="cancelRemovePrimaryTopic">
               Вы действитель хотите удалить эту тему?
             </confirmation-modal>
-          </td>
-          <td>
-            <editable-dropdown-cell :propData="achieve.level" :propItems="reportStore.levels" 
-            showName="name" propName="level" saveName="value" @save="handleSave($event, achieve.id)" />
-          </td>
-          <td>
-            <editable-textarea-cell :propData="achieve.comment" propName="comment" @save="handleSave($event, achieve.id)" />
           </td>
         </tr>
       </tbody>
@@ -51,7 +70,7 @@
         <div v-if="syllabusStore.courses.length">
           <div v-for="course in syllabusStore.courses" :key="course.id">
             <h5>{{ course.syllabus.subject.name }} ({{ course.year.number }} класс)</h5>
-            
+
             <div v-for="chapter in course.chapters" :key="chapter.id">
               <div class="my-2">
                 <strong>Раздел: {{ chapter.name }}</strong>
@@ -84,6 +103,7 @@ import SimpleModal from '@/common/components/SimpleModal.vue';
 import { useReportStore } from "@/stores/report";
 import { useAuthStore } from "@/stores/auth";
 import { useSyllabusStore } from "@/stores/syllabus";
+import { ACADEMIC_CRITERIA } from "@/common/constants";
 
 const props = defineProps({
   report: {
@@ -122,7 +142,7 @@ const showTopicImportModal = (report) => {
     params: {
       year: report.group.year_study.id,
       syllabus__subject: report.subject.id
-    } 
+    }
   })
 }
 
@@ -218,12 +238,11 @@ const getReportPrimaryTopics = () => {
 }
 
 onMounted(() => {
-  
+
 })
 </script>
 
 <style>
-
 .dots {
   font-size: 1.2rem;
 }

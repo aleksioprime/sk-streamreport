@@ -451,6 +451,27 @@ class ReportPrimaryUnitViewSet(ModelViewSet):
             return ReportPrimaryUnitListSerializer
         return ReportPrimaryUnitUpdateSerializer
     
+    # Переопределение метода create для массового создания объектов
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data,list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        if isinstance(serializer.instance, list):
+            data = [ReportPrimaryUnitListSerializer(instance).data for instance in serializer.instance]
+        else:
+            data = ReportPrimaryUnitListSerializer(serializer.instance).data
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    # Переопределение метода partial_update для ответа с другим сериализатором
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = ReportPrimaryUnitListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
+    
 # Репорты классного руководителя начальной школы: список, просмотр, создание, редактирование и удаление
 @extend_schema_view(
     list=extend_schema(summary='Вывод списка репортов классного руководителя НШ', tags=['Репорты: Классный руководитель НШ']),
@@ -545,6 +566,23 @@ class UserReportMentorPrimaryViewSet(ModelViewSet):
     def get_serializer_class(self):
         return UserListReportMentorPrimarySerializer
     
+    @action(detail=True, methods=["get"])
+    def report_export_word(self, request, pk=None):
+        report = self.get_object()
+        document = DocxTemplate(os.path.join(settings.BASE_DIR, 'documents', 'reports', 'test.docx'))
+        document.render({
+            'test': 'test',
+        })
+        buffer = BytesIO()
+        document.save(buffer)
+        buffer.seek(0)
+        response = StreamingHttpResponse(
+            streaming_content=buffer,  # use the stream's content
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = f'attachment;filename=test.docx'
+        response["Content-Encoding"] = 'UTF-8'
+        return response
+    
 
 # Список студентов с репортами классных руководитедей: список, 
 @extend_schema_view(
@@ -562,3 +600,22 @@ class UserReportMentorViewSet(ModelViewSet):
     
     def get_serializer_class(self):
         return UserListReportMentorSerializer
+    
+    @action(detail=True, methods=["get"])
+    def report_export_word(self, request, pk=None):
+        level = self.request.query_params.get('level', None)
+        student = self.get_object()
+        print(student.reportextra_student_reports.first())
+        document = DocxTemplate(os.path.join(settings.BASE_DIR, 'documents', 'reports', 'test.docx'))
+        document.render({
+            'test': student.first_name,
+        })
+        buffer = BytesIO()
+        document.save(buffer)
+        buffer.seek(0)
+        response = StreamingHttpResponse(
+            streaming_content=buffer,  # use the stream's content
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = f'attachment;filename=test.docx'
+        response["Content-Encoding"] = 'UTF-8'
+        return response

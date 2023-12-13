@@ -52,7 +52,7 @@ class ReportCriterionFilter(django_filters.FilterSet):
 class ReportCriterionAchievementFilter(django_filters.FilterSet):
     class Meta:
         model = ReportCriterionAchievement
-        fields = {'report'}
+        fields = {'report', 'report_extra', 'report_mentor'}
 
 class ReportPrimaryTopicFilter(django_filters.FilterSet):
     class Meta:

@@ -5,6 +5,7 @@ from apps.report.models import (
     ReportPeriod,
     ReportCriterion,
     ReportCriterionLevel,
+    ReportCriterionLevelDescription,
     ReportTeacher,
     ReportCriterionAchievement,
     ReportTeacherPrimary,
@@ -35,8 +36,13 @@ class ReportPeriodModelAdmin(ImportExportModelAdmin):
         "name",
     )
 
+class ReportCriterionLevelDescriptionInline(StackedInline):  # StackedInline, TabularInline
+    model = ReportCriterionLevelDescription
+    extra = 1
+
 @register(ReportCriterion)
 class ReportCriterionModelAdmin(ImportExportModelAdmin):
+    inlines = [ReportCriterionLevelDescriptionInline]
     list_display = (
         "id",
         "name",
@@ -48,11 +54,12 @@ class ReportCriterionModelAdmin(ImportExportModelAdmin):
     filter_horizontal = (
         'subjects',
         'years',
-        'levels',
     )
     autocomplete_fields = (
         'author',
     )
+
+
 
 @register(ReportCriterionLevel)
 class ReportCriterionLevelModelAdmin(ImportExportModelAdmin):
@@ -63,6 +70,18 @@ class ReportCriterionLevelModelAdmin(ImportExportModelAdmin):
     )
     list_display_links = (
         "name",
+    )
+
+@register(ReportCriterionLevelDescription)
+class ReportCriterionLevelDescriptionModelAdmin(ImportExportModelAdmin):
+    list_display = (
+        "id",
+        "criterion",
+        "level",
+        "description",
+    )
+    list_display_links = (
+        "criterion",
     )
 
 @register(ReportTeacher)

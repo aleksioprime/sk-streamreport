@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="d-flex align-items-center mb-2">
-      <h5>Уровни развития навыков</h5>
+    <div class="d-flex align-items-center">
+      <h5>Результаты по критериям</h5>
       <div class="ms-auto">
         <i class="bi bi-three-dots dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu">
@@ -9,36 +9,42 @@
         </ul>
       </div>
     </div>
+    <small>Экспериментальная функция</small>
     <div v-if="report.criterion_achievements.length">
       <table class="table table-sm table-bordered">
-      <thead>
-        <tr>
-          <th scope="col" style="width: 100%;">Критерий</th>
-          <th scope="col" style="min-width: 120px;">Результат</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="achievement in report.criterion_achievements" :key="achievement.id">
-          <td>
-            <span class="me-2">{{ achievement.criterion.name }}</span>
-            <i class="bi bi-dash-square inline-button" @click="showConfirmationModal(achievement)"></i>
-            <confirmation-modal v-if="achievement.id == currentTeacherCriterion.id" :nameModal="`confirmationDeleteCriterion${achievement.id}`" @confirm="removeTeacherCriterion"
-              @cancel="cancelRemoveTeacherCriterion">
-              Вы действитель хотите удалить этот критерий?
-            </confirmation-modal>
-          </td>
-          <td>
-            <editable-dropdown-cell :propData="achievement.achievement" :propItems="achievement.criterion.levels" 
-            showName="name" propName="achievement" title="Выберите уровень" saveName="id" @save="handleSave($event, achievement.id)" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <thead>
+          <tr>
+            <th scope="col" style="width: 100%;">Критерий</th>
+            <th scope="col" style="min-width: 120px;">Результат</th>
+            <th style="min-width: 30px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="achievement in report.criterion_achievements" :key="achievement.id">
+            <td>
+              <span class="me-2">{{ achievement.criterion.name }}</span>
+            </td>
+            <td>
+              <editable-dropdown-cell :propData="achievement.achievement" :propItems="achievement.criterion.levels"
+                showName="name" propName="achievement" title="Выберите уровень" saveName="id"
+                @save="handleSave($event, achievement.id)" />
+            </td>
+            <td>
+              <i class="bi bi-dash-square inline-button" @click="showConfirmationModal(achievement)"></i>
+              <confirmation-modal v-if="achievement.id == currentCriterion.id"
+                :nameModal="`confirmationDeleteCriterion${achievement.id}`" @confirm="removeCriterion"
+                @cancel="cancelRemoveCriterion">
+                Вы действитель хотите удалить этот критерий?
+              </confirmation-modal>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="card" v-else>
       <div class="card-body">
         <div class="d-flex justify-content-center">
-          Оценки по критериям пока нет
+          Результатов по критериям пока нет
         </div>
       </div>
     </div>
@@ -60,9 +66,9 @@
             </div>
             <div v-else class="my-2">Критериев не найдено</div>
           </div>
-          <div class="my-2">
+          <div class="my-2" v-if="groupedCriteria.withSubjects">
             <h5>Предметные критерии</h5>
-            <div v-if="groupedCriteria.withSubjects && groupedCriteria.withSubjects.length">
+            <div v-if="groupedCriteria.withSubjects.length">
               <div class="form-check" v-for="criterion in groupedCriteria.withSubjects" :key="criterion.id">
                 <input class="form-check-input" type="checkbox" :value="criterion.id" :id="`check-${criterion.id}`"
                   v-model="choiceCriteria" :disabled="checkDisableCriterion(criterion.id)">
@@ -73,7 +79,7 @@
             </div>
             <div v-else class="my-2">Критериев не найдено</div>
           </div>
-      </div>
+        </div>
       </div>
     </simple-modal>
   </div>
@@ -94,6 +100,10 @@ const props = defineProps({
     type: Object,
     default: {}
   },
+  typeReport: {
+    type: String,
+    default: ''
+  }
 });
 
 const authStore = useAuthStore();
@@ -103,7 +113,7 @@ let criterionImportModal = null
 let confirmationModal = null
 
 const currentReport = ref({})
-const currentTeacherCriterion = ref({})
+const currentCriterion = ref({})
 const choiceCriteria = ref([])
 
 // Условие отключения чекбокса для критерия, который уже была добавлена в репорт
@@ -141,7 +151,7 @@ const getReportCriteria = () => {
   let config = {
     params: {
       years: props.report.group.year_study.id,
-      subjects: props.report.subject.id,
+      subjects: props.report.subject ? props.report.subject.id : null,
     }
   }
   reportStore.loadReportCriteria(config);
@@ -170,28 +180,50 @@ const cancelCriterionImportModal = () => {
 const confirmCriterionImportModal = () => {
   // console.log('Импорт критерив в репорт студента: ', choiceCriteria.value)
   criterionImportModal.hide();
-  const creatingData = choiceCriteria.value.map(number => ({
-    criterion: number,
-    report: props.report.id
-  }));
-  reportStore.createReportTeacherAchievement(creatingData).then((result) => {
+  const creatingData = choiceCriteria.value.map(number => {
+    let config = {
+      criterion: number,
+      report: null,
+      report_extra: null
+    }
+    if (props.typeReport == 'teacher') {
+      config.report = props.report.id
+    } else if (props.typeReport == 'extra') {
+      config.report_extra = props.report.id
+    } 
+    return config
+  });
+  reportStore.createReportAchievement(creatingData).then((result) => {
     // console.log(result)
-    getReportTeacherAchievements();
+    getReportAchievements();
   })
   choiceCriteria.value = [];
   currentReport.value = {};
 }
 
 // Функция запроса достижений по критериям конкретного репорта и замена этого блока в переменной reportStore
-const getReportTeacherAchievements = () => {
-  const config = {
+const getReportAchievements = () => {
+  let config = {
     params: {
-      report: props.report.id
+      report: null,
+      report_extra: null
     }
   }
-  reportStore.loadReportTeacherAchievements(config).then((result) => {
-    const index = reportStore.reportTeachers.findIndex(item => item.id === props.report.id);
-    reportStore.reportTeachers[index].criterion_achievements = [...result.data]
+  if (props.typeReport == 'teacher') {
+    config.params.report = props.report.id
+  } else if (props.typeReport == 'extra') {
+    config.params.report_extra = props.report.id
+  }
+  reportStore.loadReportAchievements(config).then((result) => {
+    console.log(result)
+    if (props.typeReport == 'teacher') {
+      const index = reportStore.reportTeachers.findIndex(item => item.id === props.report.id);
+      reportStore.reportTeachers[index].criterion_achievements = [...result.data]
+    } else if (props.typeReport == 'extra') {
+      const index = reportStore.studentExtraReports.findIndex(item => item.report.id === props.report.id);
+      reportStore.studentExtraReports[index].report.criterion_achievements = [...result.data]
+    }
+
   })
 }
 
@@ -199,7 +231,7 @@ const getReportTeacherAchievements = () => {
 
 // Открыть модальное окно для подтверждения удаления выбранного критерия из репорта
 const showConfirmationModal = (achievement) => {
-  currentTeacherCriterion.value = achievement
+  currentCriterion.value = achievement
   nextTick(() => {
     confirmationModal = new Modal(`#confirmationDeleteCriterion${achievement.id}`, { backdrop: 'static' });
     confirmationModal.show();
@@ -207,17 +239,17 @@ const showConfirmationModal = (achievement) => {
 }
 
 // Отменить удаление выбранного критерия из репорта и закрыть окно
-const cancelRemoveTeacherCriterion = () => {
+const cancelRemoveCriterion = () => {
   confirmationModal.hide();
-  currentTeacherCriterion.value = {};
+  currentCriterion.value = {};
 }
 
 // Подтвердить и отправить запрос на удаление выбранного критерия из репорта
 // Запросить обновлённый список критериев из репорта и заменить переменную в reportStore
-const removeTeacherCriterion = () => {
-  // console.log('Запрос на удаление достижения по теме: ', currentTeacherCriterion.value);
-  reportStore.removeReportTeacherAchievement(currentTeacherCriterion.value.id).then(() => {
-    getReportTeacherAchievements();
+const removeCriterion = () => {
+  // console.log('Запрос на удаление достижения по теме: ', currentCriterion.value);
+  reportStore.removeReportAchievement(currentCriterion.value.id).then(() => {
+    getReportAchievements();
   })
   confirmationModal.hide();
 }
@@ -229,13 +261,21 @@ const handleSave = async (editData, id) => {
     id: id,
     [editData.propName]: editData.value,
   }
-  reportStore.updateReportTeacherAchievement(updatingData).then((result) => {
+  reportStore.updateReportAchievement(updatingData).then((result) => {
     // console.log('Результаты критерия успешно обновлены: ', result);
     // Перезапись отредактированного объекта в report
-    authStore.showMessageSuccess(`Результаты по критерию у студента ${props.report.student.short_name} успешно сохранены!`);
-    const index = reportStore.reportTeachers.findIndex(item => item.id === props.report.id);
-    if (index != -1) {
-      reportStore.reportTeachers[index].criterion_achievements = reportStore.reportTeachers[index].criterion_achievements.map(item => item.id === result.data.id ? { ...result.data } : item);
+    console.log(result)
+    authStore.showMessageSuccess(`Результаты по критерию у студента успешно сохранены!`);
+    if (props.typeReport == 'teacher') {
+      const index = reportStore.reportTeachers.findIndex(item => item.id === props.report.id);
+      if (index != -1) {
+        reportStore.reportTeachers[index].criterion_achievements = reportStore.reportTeachers[index].criterion_achievements.map(item => item.id === result.data.id ? { ...result.data } : item);
+      }
+    } else if (props.typeReport == 'extra') {
+      const index = reportStore.studentExtraReports.findIndex(item => item.report.id === props.report.id);
+      if (index != -1) {
+        reportStore.studentExtraReports[index].report.criterion_achievements = reportStore.studentExtraReports[index].report.criterion_achievements.map(item => item.id === result.data.id ? { ...result.data } : item);
+      }
     }
   })
 };

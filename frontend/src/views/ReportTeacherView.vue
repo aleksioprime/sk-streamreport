@@ -95,7 +95,7 @@
               <div class="accordion" :id="`accordionStudent-${report.id}`">
                 <div class="accordion-item">
                   <h2 class="accordion-header" :id="`heading-${report.id}`">
-                    <button class="accordion-button collapsed p-2" :class="{ 'report-success': report.comment }"
+                    <button class="accordion-button collapsed p-2"
                       type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${report.id}`"
                       aria-expanded="true" :aria-controls="`collapse-${report.id}`">
                       Репорт учителя по предмету: {{ currentSubject.name }}
@@ -110,26 +110,26 @@
                       <div class="my-3">
                         <report-teacher-myp-criteria :report="report" v-if="currentReportType.value == 'ooo'" />
                       </div>
-                      <div class="my-3" v-if="['ooo', 'soo', 'ib'].includes(currentReportType.value)">
+                      <div class="my-3" v-if="['ooo', 'soo', 'dp'].includes(currentReportType.value)">
                         <div class="d-flex align-items-center">
-                          <h5>Итоговая оценка</h5>
+                          <h5 class="mb-0">Итоговая оценка</h5>
                           <div class="ms-auto">
-                            <scale-radio :elementId="String(report.id)" :data="MARK5" :propValue="report.final_grade"
+                            <scale-radio :elementId="String(report.id) + 'grade'" :data="MARK5" :propValue="report.final_grade"
                               propName="final_grade" @save="handleSave($event, report.id)" />
                           </div>
                         </div>
                       </div>
                       <div class="my-3" v-if="currentReportType.value == 'dp'">
                         <div class="d-flex align-items-center">
-                          <h5>Итоговая оценка IB</h5>
+                          <h5 class="mb-0">Итоговая оценка IB</h5>
                           <div class="ms-auto">
-                            <scale-radio :elementId="String(report.id)" :data="MARK7" :propValue="report.final_grade"
-                              propName="final_grade" @save="handleSave($event, report.id)" />
+                            <scale-radio :elementId="String(report.id) + 'grade_ib'" :data="MARK7" :propValue="report.final_grade_ib"
+                              propName="final_grade_ib" @save="handleSave($event, report.id)" />
                           </div>
                         </div>
                       </div>
                       <div class="my-3">
-                        <report-teacher-criteria :report="report" />
+                        <report-criteria :report="report" typeReport="teacher" v-if="currentReportType.value != 'noo'" />
                       </div>
                       <div class="my-2">
                         <report-teacher-topic :report="report" v-if="currentReportType.value == 'noo'" />
@@ -194,7 +194,7 @@ import ScaleRadio from "@/common/components/ScaleRadio.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
 
 import ReportTeacherTopic from "@/modules/ReportTeacherTopic.vue";
-import ReportTeacherCriteria from "@/modules/ReportTeacherCriteria.vue";
+import ReportCriteria from "@/modules/ReportCriteria.vue";
 import ReportTeacherMypCriteria from "@/modules/ReportTeacherMypCriteria.vue";
 import ReportTeacherMypStrand from "@/modules/ReportTeacherMypStrand.vue";
 import EventParticipation from "@/modules/EventParticipation.vue";

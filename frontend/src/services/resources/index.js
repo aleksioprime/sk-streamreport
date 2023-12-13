@@ -7,6 +7,7 @@ import { ReportCriterionResource } from "@/services/resources/report/reportCrite
 import { StudentExtraReportResource } from "@/services/resources/report/studentExtraReport.resource";
 import { StudentMentorReportResource } from "@/services/resources/report/studentMentorReport.resource";
 import { StudentMentorReportPrimaryResource } from "@/services/resources/report/studentMentorReportPrimary.resource";
+import { ReportMentorPrimaryUnitResource } from "@/services/resources/report/reportMentorPrimaryUnit.resource";
 import { ReportExtraResource } from "@/services/resources/report/reportExtra.resource";
 import { ReportMentorResource } from "@/services/resources/report/reportMentor.resource";
 import { ReportMentorPrimaryResource } from "@/services/resources/report/reportMentorPrimary.resource";
@@ -50,6 +51,7 @@ export default {
     reportExtra: new ReportExtraResource(),
     reportMentor: new ReportMentorResource(),
     reportMentorPrimary: new ReportMentorPrimaryResource(),
+    reportMentorPrimaryUnit: new ReportMentorPrimaryUnitResource(),
     reportMentorIbProfile: new ReportMentorIbProfileResource(),
     reportTeacherPrimary: new ReportTeacherPrimaryResource(),
     reportTeacherSecondary: new ReportTeacherSecondaryResource(),

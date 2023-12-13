@@ -62,7 +62,7 @@
                   {{ student.last_name }} {{ student.first_name }}
                 </h4>
                 <div class="ms-auto">
-                  <i class="bi bi-file-earmark-word dot-menu" @click="exportReportToWord(student.report)"
+                  <i class="bi bi-file-earmark-word dot-menu" @click="exportReportToWord(student)"
                     v-if="student.report"></i>
                 </div>
                 <div class="ms-2">
@@ -94,6 +94,9 @@
                   <div class="accordion-body">
                     <div class="my-2">
                       <report-mentor-ib-profile :report="student.report" v-if="currentStudyYear.level == 'noo'" />
+                    </div>
+                    <div class="my-2">
+                      <report-mentor-primary-unit :report="student.report" v-if="currentStudyYear.level == 'noo'" />
                     </div>
                     <hr />
                     <div class="my-2">
@@ -277,6 +280,7 @@ import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
 
 import ReportMentorIbProfile from "@/modules/ReportMentorIbProfile.vue";
+import ReportMentorPrimaryUnit from "@/modules/ReportMentorPrimaryUnit.vue";
 import EventParticipation from "@/modules/EventParticipation.vue";
 
 import { useGeneralStore } from "@/stores/general";
@@ -579,21 +583,25 @@ onMounted(() => {
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });
 
-const exportReportToWord = (report) => {
-  const config = {
+const exportReportToWord = (student) => {
+  let config = {
     responseType: 'blob',
+    params: {
+        report_period: currentReportPeriod.value.id,
+        report_group: currentGroup.value.id,
+      }
   }
   if (currentStudyYear.value.level == 'noo') {
-    reportStore.exportReportMentorPrimary(report.id, config).then((result) => {
-      console.log(result);
-      resolveBlob(result);
-    });
-  } else {
-    reportStore.exportReportMentor(report.id, config).then((result) => {
-      console.log(result);
-      resolveBlob(result);
-    });
+    config.params.level = 'noo';
+  } else if (currentStudyYear.value.level == 'ooo') {
+    config.params.level = 'ooo';
+  } else if (currentStudyYear.value.level == 'soo') {
+    config.params.level = 'soo';
   }
+  reportStore.exportStudentMentorReport(student.id, config).then((result) => {
+      console.log(result);
+      resolveBlob(result);
+    });
 
 }
 

@@ -8,4 +8,8 @@ export class StudentMentorReportPrimaryResource extends CrudService {
   getStudentMentorPrimaryReports(config) {
     return this.get(config);
   }
+
+  // exportStudentMentorPrimaryReport(id, config) {
+  //   return this.$get(`${this.resource}/${id}/export`, config);
+  // }
 }

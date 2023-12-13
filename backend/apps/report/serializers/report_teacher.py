@@ -53,6 +53,7 @@ class ReportPrimaryTopicListSerializer(serializers.ModelSerializer):
             "id",
             "report",
             "topic",
+            "topic_name",
             "level",
             "comment",
             )
