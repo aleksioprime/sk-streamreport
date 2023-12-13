@@ -30,6 +30,8 @@ load_fixtures() {
     python manage.py loaddata ibo.json
     python manage.py loaddata myp.json
     python manage.py loaddata report.json
+    python manage.py loaddata pyp.json
+    python manage.py loaddata syllabus.json
     # Добавьте дополнительные команды для загрузки других фикстур
 }
 

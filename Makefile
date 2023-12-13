@@ -21,7 +21,7 @@ build:
 	$(DC) down -v
 	$(DC) up -d --build
 # Загрузка фикстур
-load-fixtures:
+load_fixtures:
 	docker cp $(HOST_SCRIPT_PATH) $(CONTAINER_NAME):$(CONTAINER_SCRIPT_PATH)
 	$(DC) exec backend sh $(CONTAINER_SCRIPT_PATH) ${SQL_HOST} ${SQL_PORT}
 	docker exec $(CONTAINER_NAME) rm $(CONTAINER_SCRIPT_PATH)
