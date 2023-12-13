@@ -1,11 +1,11 @@
 from django.contrib.admin import register, ModelAdmin, TabularInline, StackedInline
 from import_export.admin import ImportExportModelAdmin
+from django import forms
 
 from apps.report.models import (
     ReportPeriod,
     ReportCriterion,
     ReportCriterionLevel,
-    ReportCriterionLevelDescription,
     ReportTeacher,
     ReportCriterionAchievement,
     ReportTeacherPrimary,
@@ -19,6 +19,7 @@ from apps.report.models import (
     ReportMentorPrimary,
     ReportPrimaryUnit,
     ReportExtra,
+    TypeReportChoices
 )
 
 @register(ReportPeriod)
@@ -36,17 +37,30 @@ class ReportPeriodModelAdmin(ImportExportModelAdmin):
         "name",
     )
 
-class ReportCriterionLevelDescriptionInline(StackedInline):  # StackedInline, TabularInline
-    model = ReportCriterionLevelDescription
+class ReportCriterionLevelInline(StackedInline):  # StackedInline, TabularInline
+    model = ReportCriterionLevel
     extra = 1
 
+# Кастомное поле формы, которое обрабатывает данные между ArrayField и CheckboxSelectMultiple
+class MultipleCheckboxField(forms.MultipleChoiceField):
+    widget = forms.CheckboxSelectMultiple
+
+    def to_python(self, value):
+        if not value:
+            return []
+        return value
+
+    def prepare_value(self, value):
+        return value if value else []
+    
 @register(ReportCriterion)
 class ReportCriterionModelAdmin(ImportExportModelAdmin):
-    inlines = [ReportCriterionLevelDescriptionInline]
+    inlines = [ReportCriterionLevelInline]
     list_display = (
         "id",
         "name",
         "author",
+        "type",
     )
     list_display_links = (
         "name",
@@ -58,30 +72,28 @@ class ReportCriterionModelAdmin(ImportExportModelAdmin):
     autocomplete_fields = (
         'author',
     )
-
-
+    # переопределяем метод: для определённых полей заменяем виджет, иначе вызываем родительскую реализацию
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == "type":
+            return MultipleCheckboxField(
+                label=db_field.verbose_name,
+                initial=db_field.default,
+                choices=TypeReportChoices.choices,
+                help_text=db_field.help_text
+            )
+        return super().formfield_for_dbfield(db_field, **kwargs)
 
 @register(ReportCriterionLevel)
 class ReportCriterionLevelModelAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
+        "criterion",
         "name",
         "point",
-    )
-    list_display_links = (
-        "name",
-    )
-
-@register(ReportCriterionLevelDescription)
-class ReportCriterionLevelDescriptionModelAdmin(ImportExportModelAdmin):
-    list_display = (
-        "id",
-        "criterion",
-        "level",
         "description",
     )
     list_display_links = (
-        "criterion",
+        "name",
     )
 
 @register(ReportTeacher)

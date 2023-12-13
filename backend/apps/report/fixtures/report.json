@@ -42,5 +42,917 @@
             "date_start": "2024-01-01",
             "date_end": "2024-06-02"
         }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 1,
+        "fields": {
+            "name": "Адаптационный период",
+            "author": 92,
+            "type": "[\"extra\"]",
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 2,
+        "fields": {
+            "name": "Уровень сформированности учебной мотивации",
+            "author": 92,
+            "type": "[\"extra\"]",
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 3,
+        "fields": {
+            "name": "Уровень работоспособности/реакция на школьные нагрузки",
+            "author": 92,
+            "type": "[\"extra\"]",
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 4,
+        "fields": {
+            "name": "Эмоциональный фон",
+            "author": 92,
+            "type": "[\"extra\"]",
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 5,
+        "fields": {
+            "name": "Соблюдение установленных правил и требований",
+            "author": 92,
+            "type": "[\"extra\"]",
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 6,
+        "fields": {
+            "name": "Взаимоотношения со сверстниками",
+            "author": 92,
+            "type": "[\"extra\"]",
+            "years": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 7,
+        "fields": {
+            "name": "Позитивно взаимодействует со сверстниками",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 8,
+        "fields": {
+            "name": "Умеет самостоятельно решать конфликты",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 9,
+        "fields": {
+            "name": "Быстро включается в работу. Активно работает на уроках",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 10,
+        "fields": {
+            "name": "Демонстрирует зрелость в поведении и суждениях",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 11,
+        "fields": {
+            "name": "Нацелен на достижение результата, целеустремлен",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 12,
+        "fields": {
+            "name": "Проявляет стойкость при столкновении с трудностями и настойчивость при достижении цели",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 13,
+        "fields": {
+            "name": "Успешно адаптируется к меняющимся условиям",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 14,
+        "fields": {
+            "name": "Ведет себя в соответствии со школьными правилами",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 15,
+        "fields": {
+            "name": "Эмоциональное стабильное состояние",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 16,
+        "fields": {
+            "name": "Проявляет агрессию",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterion",
+        "pk": 17,
+        "fields": {
+            "name": "Проявляет тревожность",
+            "author": 74,
+            "type": "[\"extra\"]",
+            "years": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "subjects": []
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 1,
+        "fields": {
+            "description": "Адаптационный период прошёл спокойно, студент достаточно быстро адаптировался к школьным условиям",
+            "criterion": 1,
+            "name": "A",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 2,
+        "fields": {
+            "description": "Адаптационный период проходил то достаточно спокойно, то возникали различные трудности, при этом продолжительные сильные отрицательные переживания не выявлены",
+            "criterion": 1,
+            "name": "B",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 3,
+        "fields": {
+            "description": "Студент испытывал значительные трудности в привыкании к школе",
+            "criterion": 1,
+            "name": "C",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 4,
+        "fields": {
+            "description": "Студент имеет положительную мотивацию к школе, достаточно быстро и спокойно усваивает программный материал",
+            "criterion": 2,
+            "name": "A",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 5,
+        "fields": {
+            "description": "В целом студент понимает наглядное пояснение учителя, усваивает основной материал учебных программ, однако на текущий период социальные связи более значимы, чем учебный процесс",
+            "criterion": 2,
+            "name": "B",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 6,
+        "fields": {
+            "description": "Игровая мотивация преобладает над учебной. Учебный материал усваивается фрагментарно, студент не проявляет ярко выраженного интереса к занятиям",
+            "criterion": 2,
+            "name": "C",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 7,
+        "fields": {
+            "description": "Студент демонстрирует оптимальную работоспособность, активен в течение дня, нагрузки соответствуют возможностям студента",
+            "criterion": 3,
+            "name": "A",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 8,
+        "fields": {
+            "description": "Студент демонстрирует состояние усталости, самовосстановление  работоспособности происходит за счет периодического снижения активности. Энергетический потенциал невысок, но вполне достаточен для успешной деятельности в привычных спокойных условиях",
+            "criterion": 3,
+            "name": "B",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 9,
+        "fields": {
+            "description": "Студент демонстрирует переутомление, низкую работоспособность. Нагрузки превышают возможности студента на текущий момент, требуется их снижение",
+            "criterion": 3,
+            "name": "C",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 10,
+        "fields": {
+            "description": "Преобладают положительные эмоции, студент настроен оптимистично",
+            "criterion": 4,
+            "name": "A",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 11,
+        "fields": {
+            "description": "Эмоционально состояние стабильное. Студент испытывает как позитивные эмоции, так и негативные, может самостоятельно справиться с ними",
+            "criterion": 4,
+            "name": "B",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 12,
+        "fields": {
+            "description": "У студента преобладают отрицательные эмоции, доминирует плохое настроение и негативное отношение к учебному процессу",
+            "criterion": 4,
+            "name": "C",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 13,
+        "fields": {
+            "description": "Студент осознает круг своих обязанностей и соблюдает школьные требования",
+            "criterion": 5,
+            "name": "A",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 14,
+        "fields": {
+            "description": "Студент может нарушать установленные правила, тем не менее старается прислушиваться к требованиям педагога",
+            "criterion": 5,
+            "name": "B",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 15,
+        "fields": {
+            "description": "Студент регулярно нарушает установленные правила поведения и требования, предьявляемые взрослым",
+            "criterion": 5,
+            "name": "C",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 16,
+        "fields": {
+            "description": "Студент активно взаимодействует со сверстниками",
+            "criterion": 6,
+            "name": "A",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 17,
+        "fields": {
+            "description": "Студент поддерживает дружеские отношения с многими одноклассниками",
+            "criterion": 6,
+            "name": "B",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 18,
+        "fields": {
+            "description": "Студент мало общается с одноклассниками, больше предпочитает быть один. Могут возникать конфликтные ситуации",
+            "criterion": 6,
+            "name": "C",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 19,
+        "fields": {
+            "description": "",
+            "criterion": 7,
+            "name": "Редко"
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 20,
+        "fields": {
+            "description": "",
+            "criterion": 7,
+            "name": "Иногда"
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 21,
+        "fields": {
+            "description": "",
+            "criterion": 7,
+            "name": "Часто"
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 22,
+        "fields": {
+            "description": "",
+            "criterion": 8,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 23,
+        "fields": {
+            "description": "",
+            "criterion": 8,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 24,
+        "fields": {
+            "description": "",
+            "criterion": 8,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 25,
+        "fields": {
+            "description": "",
+            "criterion": 8,
+            "name": "Всегда",
+            "point": 4
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 26,
+        "fields": {
+            "description": "",
+            "criterion": 9,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 27,
+        "fields": {
+            "description": "",
+            "criterion": 9,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 28,
+        "fields": {
+            "description": "",
+            "criterion": 9,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 29,
+        "fields": {
+            "description": "",
+            "criterion": 9,
+            "name": "Всегда",
+            "point": 4
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 30,
+        "fields": {
+            "description": "",
+            "criterion": 10,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 31,
+        "fields": {
+            "description": "",
+            "criterion": 10,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 32,
+        "fields": {
+            "description": "",
+            "criterion": 10,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 33,
+        "fields": {
+            "description": "",
+            "criterion": 10,
+            "name": "Всегда",
+            "point": 4
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 34,
+        "fields": {
+            "description": "",
+            "criterion": 11,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 35,
+        "fields": {
+            "description": "",
+            "criterion": 11,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 36,
+        "fields": {
+            "description": "",
+            "criterion": 11,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 37,
+        "fields": {
+            "description": "",
+            "criterion": 11,
+            "name": "Всегда",
+            "point": 4
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 38,
+        "fields": {
+            "description": "",
+            "criterion": 12,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 39,
+        "fields": {
+            "description": "",
+            "criterion": 12,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 40,
+        "fields": {
+            "description": "",
+            "criterion": 12,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 41,
+        "fields": {
+            "description": "",
+            "criterion": 12,
+            "name": "Всегда",
+            "point": 4
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 42,
+        "fields": {
+            "description": "",
+            "criterion": 13,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 43,
+        "fields": {
+            "description": "",
+            "criterion": 13,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 44,
+        "fields": {
+            "description": "",
+            "criterion": 13,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 45,
+        "fields": {
+            "description": "",
+            "criterion": 13,
+            "name": "Всегда",
+            "point": 4
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 46,
+        "fields": {
+            "description": "",
+            "criterion": 14,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 47,
+        "fields": {
+            "description": "",
+            "criterion": 14,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 48,
+        "fields": {
+            "description": "",
+            "criterion": 14,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 49,
+        "fields": {
+            "description": "",
+            "criterion": 14,
+            "name": "Всегда",
+            "point": 4
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 50,
+        "fields": {
+            "description": "",
+            "criterion": 15,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 51,
+        "fields": {
+            "description": "",
+            "criterion": 15,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 52,
+        "fields": {
+            "description": "",
+            "criterion": 15,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 53,
+        "fields": {
+            "description": "",
+            "criterion": 15,
+            "name": "Всегда",
+            "point": 4
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 54,
+        "fields": {
+            "description": "",
+            "criterion": 16,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 55,
+        "fields": {
+            "description": "",
+            "criterion": 16,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 56,
+        "fields": {
+            "description": "",
+            "criterion": 16,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 57,
+        "fields": {
+            "description": "",
+            "criterion": 16,
+            "name": "Всегда",
+            "point": 4
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 58,
+        "fields": {
+            "description": "",
+            "criterion": 17,
+            "name": "Редко",
+            "point": 1
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 59,
+        "fields": {
+            "description": "",
+            "criterion": 17,
+            "name": "Иногда",
+            "point": 2
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 60,
+        "fields": {
+            "description": "",
+            "criterion": 17,
+            "name": "Часто",
+            "point": 3
+        }
+    },
+    {
+        "model": "report.reportcriterionlevel",
+        "pk": 61,
+        "fields": {
+            "description": "",
+            "criterion": 17,
+            "name": "Всегда",
+            "point": 4
+        }
     }
 ]
