@@ -1,5 +1,6 @@
 # Ignore enviroment variables
 .env.prod*
+.env.db*
 celerybeat-schedule
 celerybeat-schedule*
 
