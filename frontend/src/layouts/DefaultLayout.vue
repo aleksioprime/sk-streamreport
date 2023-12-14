@@ -5,7 +5,6 @@
       <slot />
     </div>
     <default-footer />
-    
   </div>
 </template>
   

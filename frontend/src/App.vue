@@ -1,17 +1,28 @@
 <template>
   <div>
+    <!-- TODO: Настроить всплывающие сообщения -->
     <div v-show="authStore.alertSuccess" class="alert alert-success animate__animated block" :class="authStore.animationClass">
       {{ authStore.alertSuccessMessage }}
     </div>
-    <app-layout v-if="isLoaded">
+    <!-- TODO: Настроить шаблонизатор -->
+    <!-- <app-layout v-if="isLoaded">
       <router-view />
-    </app-layout>
+    </app-layout> -->
+    <template v-if="isLoaded">
+      <app-layout-default v-if="authStore.user">
+        <router-view />
+      </app-layout-default>
+      <div v-else>
+        <router-view />
+      </div>
+    </template>
+    
   </div>
 </template>
 
 <script setup>
 import AppLayout from "@/layouts/AppLayout.vue";
-// import AppLayoutDefault from "@/layouts/DefaultLayout.vue";
+import AppLayoutDefault from "@/layouts/DefaultLayout.vue";
 import { onMounted, ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import JwtService from "@/services/jwt/jwt.service";
