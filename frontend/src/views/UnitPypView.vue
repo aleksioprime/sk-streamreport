@@ -63,7 +63,7 @@
                 <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
                 <ul class="dropdown-menu">
                   <li>
-                    <a class="dropdown-item" href="##" @click="showConfirmationModal(unit)">Удалить юнит</a>
+                    <a class="dropdown-item" href="javascript:void(0)" @click.prevent="showConfirmationModal(unit)">Удалить юнит</a>
                   </li>
                 </ul>
               </div>

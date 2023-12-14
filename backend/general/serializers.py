@@ -7,8 +7,14 @@ from general.models import (
     ClassGroup,
     AcademicYear,
     StudyYear,
-    StudyYearIb
+    StudyYearIb,
+    ClassGroupRole,
     )
+
+from apps.curriculum.models import (
+    TeachingLoad,
+    Subject
+)
 
 # Кастомный сериализатор для ответа при JWT-аутентификации (неактивен)
 # class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -79,30 +85,6 @@ class GroupGeneralSerializer(serializers.ModelSerializer):
             "id", 
             "name",
             )
-
-# Информация о пользователе
-class UserRetrieveSerializer(serializers.ModelSerializer):
-    groups = GroupGeneralSerializer(many=True)
-    departments = DepartmentListSerializer(many=True)
-    full_name = serializers.CharField(source='get_full_name', read_only=True)
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "first_name",
-            "last_name",
-            "middle_name",
-            "full_name",
-            "email",
-            "gender",
-            "position",
-            "photo",
-            "departments",
-            "groups",
-            "classes",
-            "dnevnik_id",
-            "dnevnik_user_id",
-        )
 
 # Импорт пользователей
 class UserImportSerializer(serializers.ModelSerializer):
@@ -200,4 +182,86 @@ class ClassRetrieveSerializer(serializers.ModelSerializer):
             "mentor",
             "extra",
             "curriculum",
+        )
+
+
+class SubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields = (
+            "id",
+            "name",
+            "name_eng",
+            "group_ib",
+            "group_fgos",
+            "dnevnik_id",
+            "department",
+            "level",
+            "need_report"
+            )
+
+class ClassGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClassGroup
+        fields = (
+            "id",
+            "year_academic",
+            "year_study",
+            "letter",
+            "name",
+            "curriculum",
+            "mentor",
+            )
+
+class TeachingLoadSerializer(serializers.ModelSerializer):
+    year = AcademicYearListGeneralSerializer()
+    subject = SubjectSerializer()
+    groups = ClassGroupSerializer(many=True)
+    class Meta:
+        model = TeachingLoad
+        fields = (
+            "id",
+            "year",
+            "subject",
+            "groups",
+            "hours"
+        )
+
+class ClassGroupRoleSerializer(serializers.ModelSerializer):
+    group = ClassGroupSerializer()
+    class Meta:
+        model = ClassGroupRole
+        fields = (
+            "id",
+            "group",
+            "role"
+        )
+
+# Информация о пользователе
+class UserRetrieveSerializer(serializers.ModelSerializer):
+    groups = GroupGeneralSerializer(many=True)
+    departments = DepartmentListSerializer(many=True)
+    teaching_loads = TeachingLoadSerializer(many=True)
+    full_name = serializers.CharField(source='get_full_name', read_only=True)
+    group_roles = ClassGroupRoleSerializer(many=True)
+    classes = ClassGroupSerializer(many=True)
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "full_name",
+            "email",
+            "gender",
+            "position",
+            "photo",
+            "departments",
+            "teaching_loads",
+            "groups",
+            "classes",
+            "group_roles",
+            "dnevnik_id",
+            "dnevnik_user_id",
         )

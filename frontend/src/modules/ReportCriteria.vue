@@ -5,7 +5,7 @@
       <div class="ms-auto">
         <i class="bi bi-three-dots dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="##" @click="showCriterionImportModal(report)">Добавить критерии</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0)" @click.prevent="showCriterionImportModal(report)">Добавить критерии</a></li>
         </ul>
       </div>
     </div>
@@ -20,7 +20,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="achievement in report.criterion_achievements" :key="achievement.id">
+          <template v-for="achievement in report.criterion_achievements" :key="achievement.id">
+          <tr >
             <td>
               <span class="me-2">{{ achievement.criterion.name }}</span>
             </td>
@@ -29,7 +30,7 @@
                 showName="name" propName="achievement" title="Выберите уровень" saveName="id"
                 @save="handleSave($event, achievement.id)" />
             </td>
-            <td>
+            <td rowspan="2">
               <i class="bi bi-dash-square inline-button" @click="showConfirmationModal(achievement)"></i>
               <confirmation-modal v-if="achievement.id == currentCriterion.id"
                 :nameModal="`confirmationDeleteCriterion${achievement.id}`" @confirm="removeCriterion"
@@ -38,6 +39,10 @@
               </confirmation-modal>
             </td>
           </tr>
+          <tr>
+            <td colspan="2">{{ achievement.achievement.description }}</td>
+          </tr>
+        </template>
         </tbody>
       </table>
     </div>

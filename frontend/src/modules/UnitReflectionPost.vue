@@ -26,14 +26,14 @@
           </div>
         </div>
       </div>
-      <a href="##" @click="createFormShow">Добавить рефлексию</a>
+      <a href="javascript:void(0)" @click.prevent="createFormShow">Добавить рефлексию</a>
     </div>
     <div class="card" v-else>
       <!-- Сообщение о том, что данных нет -->
       <div class="card-body">
         <div class="d-flex flex-column align-items-center">
           <div>Нет информации</div>
-          <a href="##" @click="createFormShow">Добавить</a>
+          <a href="javascript:void(0)" @click.prevent="createFormShow">Добавить</a>
         </div>
       </div>
     </div>

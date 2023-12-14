@@ -55,6 +55,7 @@ class SubjectListSerializer(serializers.ModelSerializer):
     group_ib = IbSubjectGroupSerializer()
     group_fgos = FgosSubjectGroupSerializer()
     department = DepartmentCurriculumSerializer()
+    level_name = serializers.CharField(source='get_level_display', read_only=True)
     class Meta:
         model = Subject
         fields = (
@@ -66,6 +67,7 @@ class SubjectListSerializer(serializers.ModelSerializer):
             "dnevnik_id",
             "department",
             "level",
+            "level_name",
             "need_report"
             )
 
@@ -171,6 +173,7 @@ class ClassGroupListCurriculumSerializer(serializers.ModelSerializer):
             "year_academic",
             "year_study",
             "letter",
+            "name",
             )
 
 # Вывод списка преподавательской нагрузки
@@ -189,3 +192,9 @@ class TeachingLoadListSerializer(serializers.ModelSerializer):
             "groups",
             "hours"
             )
+        
+
+class TeachingLoadUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeachingLoad
+        fields = '__all__'

@@ -2,7 +2,7 @@
   <div>
     <div class="dropdown">
       <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuModule" data-bs-toggle="dropdown"
-        aria-expanded="false">
+        aria-expanded="false" :disabled="disabled">
         {{ truncateText(selectedItem[showName], 50) || title }}
       </button>
       <ul class="dropdown-menu pt-0" aria-labelledby="dropdownMenuModule">
@@ -11,7 +11,7 @@
           <hr class="dropdown-divider">
         </li>
         <li v-for="(item, index) in filteredList" :key="index" @click="selectItem(item)">
-          <a class="dropdown-item" :class="{active: item == selectedItem}" href="##">{{ item[showName] }}</a>
+          <a class="dropdown-item" :class="{active: item == selectedItem}" href="javascript:void(0)">{{ item[showName] }}</a>
         </li>
         <!-- <li v-if="filteredList.length > showNumber" @click="loadItems">
           <a href='#' class="small text-muted link-show">Показать еще...</a>
@@ -42,6 +42,10 @@ const props = defineProps({
   title: {
     type: String,
     default: '',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   }
 });
 

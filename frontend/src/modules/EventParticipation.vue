@@ -37,14 +37,14 @@
           </tr>
         </tbody>
       </table>
-      <a href="##" @click="createFormShow">Добавить</a>
+      <a href="javascript:void(0)" @click.prevent="createFormShow">Добавить</a>
     </div>
 
     <div class="card" v-else>
       <div class="card-body">
         <div class="d-flex flex-column align-items-center">
           <div>У студента нет участий в мероприятиях</div>
-          <a href="##" @click="createFormShow">Добавить</a>
+          <a href="javascript:void(0)" @click.prevent="createFormShow">Добавить</a>
         </div>
       </div>
     </div>

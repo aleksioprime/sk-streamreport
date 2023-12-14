@@ -3,15 +3,15 @@
     <div v-show="authStore.alertSuccess" class="alert alert-success animate__animated block" :class="authStore.animationClass">
       {{ authStore.alertSuccessMessage }}
     </div>
-    <app-layout-default>
-      <router-view v-if="isLoaded" />
-    </app-layout-default>
+    <app-layout v-if="isLoaded">
+      <router-view />
+    </app-layout>
   </div>
 </template>
 
 <script setup>
 import AppLayout from "@/layouts/AppLayout.vue";
-import AppLayoutDefault from "@/layouts/DefaultLayout.vue";
+// import AppLayoutDefault from "@/layouts/DefaultLayout.vue";
 import { onMounted, ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import JwtService from "@/services/jwt/jwt.service";

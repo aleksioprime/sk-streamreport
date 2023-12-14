@@ -5,7 +5,7 @@
       <div class="ms-auto">
         <i class="bi bi-three-dots dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="##" @click="showTopicImportModal(report)">Добавить темы</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0)" @click.prevent="showTopicImportModal(report)">Добавить темы</a></li>
         </ul>
       </div>
     </div>
@@ -74,8 +74,8 @@
             <div v-for="chapter in course.chapters" :key="chapter.id">
               <div class="my-2">
                 <strong>Раздел: {{ chapter.name }}</strong>
-                <a href="##" @click="selectChapterTopics(chapter)" class="mx-2">Выделить всё</a>
-                <a href="##" @click="unSelectChapterTopics(chapter)" class="mx-2">Снять выделение</a>
+                <a href="javascript:void(0)" @click.prevent="selectChapterTopics(chapter)" class="mx-2">Выделить всё</a>
+                <a href="javascript:void(0)" @click.prevent="unSelectChapterTopics(chapter)" class="mx-2">Снять выделение</a>
               </div>
               <div class="form-check" v-for="topic in chapter.topics" :key="topic.id">
                 <input class="form-check-input" type="checkbox" :value="topic.id" :id="`check-${topic.id}`"

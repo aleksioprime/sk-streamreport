@@ -7,7 +7,8 @@ from general.models import (
 from apps.ibo.models import (
     LearnerProfile,
     IbProfileDevelop,
-    UnitReflectionPost
+    UnitReflectionPost,
+    AtlCategory
 )
 
 # Список пользователей
@@ -34,7 +35,16 @@ class LearnerProfileListSerializer(serializers.ModelSerializer):
             "description",
             "description_rus",
             )
-        
+
+# 
+class AtlCategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AtlCategory
+        fields = (
+            "id", 
+            "name", 
+            "name_rus",
+            )
 
 # Список развития качеств портрета студента IB в юните
 class IbProfileDevelopListSerializer(serializers.ModelSerializer):

@@ -3,6 +3,8 @@ from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveMode
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
+from rest_framework import status
 
 from apps.curriculum.serializers import (
     SubjectListSerializer, 
@@ -10,6 +12,7 @@ from apps.curriculum.serializers import (
     CurriculumRetrieveSerializer,
     CurriculumLoadListSerializer,
     TeachingLoadListSerializer,
+    TeachingLoadUpdateSerializer,
 )
 
 from apps.curriculum.services import (
@@ -75,7 +78,7 @@ class CurriculumLoadViewSet(ListModelMixin, GenericViewSet):
 @extend_schema_view(
     list=extend_schema(summary='Список нагрузки учителей', tags=['Ученые планы: Нагрузка учителей']),
     )
-class TeachingLoadViewSet(ListModelMixin, GenericViewSet):
+class TeachingLoadViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     filterset_class = TeachingLoadFilter
 
@@ -83,6 +86,29 @@ class TeachingLoadViewSet(ListModelMixin, GenericViewSet):
         return get_teaching_load_queryset()
 
     def get_serializer_class(self):
-        return TeachingLoadListSerializer
+        if self.action == "list":
+            return TeachingLoadListSerializer
+        return TeachingLoadUpdateSerializer
+    
+    # Переопределение метода create для массового создания объектов
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data,list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        if isinstance(serializer.instance, list):
+            data = [TeachingLoadListSerializer(instance).data for instance in serializer.instance]
+        else:
+            data = TeachingLoadListSerializer(serializer.instance).data
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    # Переопределение метода partial_update для ответа с другим сериализатором
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        detail_serializer = TeachingLoadListSerializer(serializer.instance)
+        return Response(detail_serializer.data, status=status.HTTP_200_OK)
     
     

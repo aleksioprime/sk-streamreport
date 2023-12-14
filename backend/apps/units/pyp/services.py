@@ -26,10 +26,10 @@ def get_pyp_unit_planner_queryset():
             'inquiry_lines__key_concept',
             'related_concepts',
             'atl_develops',
-            'atl_develops__atl',
-            'atl_develops__atl__group',
-            'atl_develops__atl__cluster',
-            'atl_develops__atl__cluster__category',
+            'atl_develops__skill',
+            'atl_develops__skill__group',
+            'atl_develops__skill__cluster',
+            'atl_develops__skill__cluster__category',
             )
 
 def get_transdisciplinary_theme_queryset():
@@ -62,7 +62,7 @@ def get_pyp_related_concept_queryset():
 
 def get_pyp_atl_develop_queryset():
     return PypAtlDevelop.objects.all().select_related(
-        'atl',
-        'atl__cluster',
-        'atl__cluster__category'
+        'skill',
+        'skill__cluster',
+        'skill__cluster__category'
         )

@@ -62,10 +62,10 @@
                   <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
                   <ul class="dropdown-menu">
                     <li v-if="!student.report">
-                      <a class="dropdown-item" href="##" @click="createStudentExtraReport(student.id)">Добавить репорт</a>
+                      <a class="dropdown-item" href="javascript:void(0)" @click.prevent="createStudentExtraReport(student.id)">Добавить репорт</a>
                     </li>
                     <li v-else>
-                      <a class="dropdown-item" href="##" @click="showConfirmationModal(student)">Удалить репорт</a>
+                      <a class="dropdown-item" href="javascript:void(0)" @click.prevent="showConfirmationModal(student)">Удалить репорт</a>
                     </li>
                   </ul>
                 </div>

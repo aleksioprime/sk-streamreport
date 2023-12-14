@@ -8,7 +8,9 @@ from rest_framework import status
 from apps.ibo.services import (
     get_learner_profile_queryset,
     get_ib_profile_develop_queryset,
-    get_unit_reflection_post_queryset
+    get_unit_reflection_post_queryset,
+    get_learner_profile_queryset,
+    get_atl_category_queryset
 )
 
 from apps.ibo.serializers import (
@@ -16,7 +18,8 @@ from apps.ibo.serializers import (
     IbProfileDevelopUpdateSerializer,
     IbProfileDevelopListSerializer,
     UnitReflectionPostListSerializer,
-    UnitReflectionPostUpdateSerializer
+    UnitReflectionPostUpdateSerializer,
+    AtlCategoryListSerializer
 )
 
 from apps.ibo.filters import (
@@ -32,6 +35,15 @@ class LearnerProfileViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_learner_profile_queryset()
     serializer_class = LearnerProfileListSerializer
+
+# Качества профиля студента IB: список
+@extend_schema_view(
+    list=extend_schema(summary='Вывод списка качеств профиля студента IB', tags=['IB: Качества профиля студента']),
+    )
+class AtlCategoryViewSet(ListModelMixin, GenericViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = get_atl_category_queryset()
+    serializer_class = AtlCategoryListSerializer
 
 # Развитие Ib Learner Profile в юните: список, создание, редактирование и удаление
 @extend_schema_view(

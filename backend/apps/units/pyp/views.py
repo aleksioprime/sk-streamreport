@@ -27,7 +27,8 @@ from apps.units.pyp.filters import (
     PypLinesOfInquiryFilter,
     PypRelatedConceptFilter,
     PypAtlDevelopFilter,
-    PypAtlSkillFilter
+    PypAtlSkillFilter,
+    PypAtlClusterFilter
 )
 
 from apps.units.pyp.services import (
@@ -90,6 +91,7 @@ class PypAtlClusterViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     queryset = get_pyp_atl_cluster_queryset()
     serializer_class = PypAtlClusterListSerializer
+    filterset_class = PypAtlClusterFilter
 
 # Навыки ATL в PYP: список
 @extend_schema_view(

@@ -111,10 +111,14 @@ class PypRelatedConceptModelAdmin(ModelAdmin):
 @register(PypAtlDevelop)
 class PypAtlDevelopModelAdmin(ModelAdmin):
     list_display = (
-        "atl",
+        "category",
+        "cluster",
+        "skill",
         "action",
         "unit"
     )
     list_display_links = (
-        "atl",
+        "category",
+        "cluster",
+        "skill",
     )

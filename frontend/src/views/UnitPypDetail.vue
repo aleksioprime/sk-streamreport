@@ -436,7 +436,7 @@ onMounted(() => {
     }
   );
   unitPypStore.loadTransdisciplinaryThemes();
-  unitPypStore.loadPypAtlClusters();
+  iboStore.loadAtlCategories();
   unitPypStore.loadPypKeyConcepts();
   iboStore.loadLearnerProfiles();
 });

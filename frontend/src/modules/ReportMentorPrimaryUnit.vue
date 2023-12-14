@@ -5,7 +5,7 @@
       <div class="ms-auto">
         <i class="bi bi-three-dots dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="##" @click="showUnitImportModal(report)">Добавить юниты</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0)" @click.prevent="showUnitImportModal(report)">Добавить юниты</a></li>
         </ul>
       </div>
     </div>

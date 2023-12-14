@@ -5,9 +5,9 @@
       <textarea v-else ref="inputRef" class="form-control bottom-border-only" rows="1" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"></textarea>
     </div>
     <div class="me-0 ms-2 text-muted small">
-      <a href="##" @click="enableEditMode" v-if="!editMode">Изменить</a>
+      <a href="javascript:void(0)" @click.prevent="enableEditMode" v-if="!editMode">Изменить</a>
       <div v-else>
-        <a href="##" @click="toggleEditMode" >Отмена</a>
+        <a href="javascript:void(0)" @click.prevent="toggleEditMode" >Отмена</a>
       </div>
     </div>
     

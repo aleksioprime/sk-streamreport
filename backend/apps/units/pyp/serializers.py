@@ -131,12 +131,16 @@ class PypRelatedConceptUpdateSerializer(serializers.ModelSerializer):
 
 # Вывод списка пунктов развития ATL-навыков в юните PYP
 class PypAtlDevelopListSerializer(serializers.ModelSerializer):
-    atl = PypAtlSkillListSerializer()
+    category = AtlCategoryPypSerializer()
+    cluster = PypAtlClusterListSerializer()
+    skill = PypAtlSkillListSerializer()
     class Meta:
         model = PypAtlDevelop
         fields = (
             "id",
-            "atl",
+            "cluster",
+            "category",
+            "skill",
             "action",
             "unit",
             )

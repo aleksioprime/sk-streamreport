@@ -121,12 +121,14 @@ class PypRelatedConcept(models.Model):
       
 class PypAtlDevelop(models.Model):
     """ Развитие ATL-навыков в юните PYP """
-    atl = models.ForeignKey('pyp.PypAtlSkill', verbose_name=_("Навык ATL"), on_delete=models.CASCADE, related_name="atl_develops")
+    category = models.ForeignKey('ibo.AtlCategory', verbose_name=_("Категория ATL"), on_delete=models.CASCADE, related_name="pyp_develops")
+    cluster = models.ForeignKey('pyp.PypAtlCluster', verbose_name=_("Кластер ATL"), on_delete=models.CASCADE, null=True, blank=True, related_name="atl_develops")
+    skill = models.ForeignKey('pyp.PypAtlSkill', verbose_name=_("Навык ATL"), on_delete=models.CASCADE, null=True, blank=True, related_name="atl_develops")
     action = models.TextField(verbose_name=_("Описание учебных действий"), null=True, blank=True)
     unit = models.ForeignKey('pyp.PypUnitPlanner', verbose_name=_("Юнит PYP"), on_delete=models.CASCADE, related_name="atl_develops")
     class Meta:
         verbose_name = 'PYP: UnitPlan - Развитие ATL'
         verbose_name_plural = 'PYP: UnitPlans - Развитие ATL'
-        ordering = ['unit', 'atl']
+        ordering = ['unit', 'category', 'cluster', 'skill']
     def __str__(self):
-        return f"{self.atl} ({self.action})"
+        return f"{self.skill} ({self.action})"

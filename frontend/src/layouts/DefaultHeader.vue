@@ -17,9 +17,6 @@
             </a>
             <div class="dropdown-menu">
               <router-link :to="{ name: 'unitPyp' }" class="dropdown-item">Юниты PYP</router-link>
-              <router-link :to="{ name: 'home' }" class="dropdown-item">Юниты MYP</router-link>
-              <router-link :to="{ name: 'home' }" class="dropdown-item">Юниты DP</router-link>
-              <router-link :to="{ name: 'home' }" class="dropdown-item">Курсы</router-link>
             </div>
           </li>
           <li class="nav-item dropdown">
@@ -32,14 +29,14 @@
               <router-link :to="{ name: 'reportMentor' }" class="dropdown-item">Репорты руководителя класса</router-link>
             </div>
           </li>
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Портфолио
             </a>
             <div class="dropdown-menu">
               <router-link :to="{ name: 'home' }" class="dropdown-item">Участие в мероприятиях</router-link>
             </div>
-          </li>
+          </li> -->
         </ul>
         <div class="navbar-text d-flex align-items-center dropdown ms-2" v-if="authStore.isAuthenticated">
           <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

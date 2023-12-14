@@ -6,8 +6,8 @@
         class="form-control bottom-border-only">
     </div>
     <div class="me-0 ms-2 text-muted small">
-      <a href="##" @click="enableEditMode" v-if="!editMode">Изменить</a>
-      <a href="##" @click="toggleEditMode" v-else>Отмена</a>
+      <a href="javascript:void(0)" @click.prevent="enableEditMode" v-if="!editMode">Изменить</a>
+      <a href="javascript:void(0)" @click.prevent="toggleEditMode" v-else>Отмена</a>
     </div>
     
   </div>

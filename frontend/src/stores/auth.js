@@ -43,6 +43,7 @@ export const useAuthStore = defineStore("auth", {
         return;
       } else {
         this.setUser(res1.data);
+        console.log('Получены данные авторизированного пользователя: ', res1.data)
       }
     },
 

@@ -5,6 +5,7 @@ import resources from "@/services/resources";
 export const useIboStore = defineStore("ibo", {
   state: () => ({
     learnerProfiles: [],
+    atlCategories: [],
   }),
   getters: {
     isLearnerProfileLoaded() {
@@ -21,7 +22,13 @@ export const useIboStore = defineStore("ibo", {
         console.log("IB Learner Profiles успешно получены: ", res.data)
       }
     },
-
+    async loadAtlCategories(config) {
+      const res = await resources.atlCategory.getAtlCategories(config);
+      if (res.__state === "success") {
+        this.atlCategories = res.data
+        console.log('Категории ATL успешно загружены: ', res.data)
+      }
+    },
     async loadUnitReflectionPosts(config) {
       return await resources.unitReflectionPost.getUnitReflectionPosts(config);
     },
