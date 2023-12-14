@@ -10,10 +10,14 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./backend/.env/.env.db
+    networks:
+      - main
 
   redis:
     container_name: redis
     image: redis:6
+  networks:
+      - main
 
   celery:
     container_name: celery
@@ -26,6 +30,8 @@ services:
       - database
       - backend
       - redis
+    networks:
+      - main
   
   celery-beat:
     container_name: celery-beat
@@ -35,6 +41,8 @@ services:
     depends_on:
       - backend
       - redis
+    networks:
+      - main
 
   backend:
     container_name: backend
@@ -50,6 +58,8 @@ services:
       - redis
     env_file:
       - ./backend/.env/.env.prod
+    networks:
+      - main
 
   frontend:
     container_name: frontend
@@ -61,9 +71,15 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    networks:
+      - main
     
 volumes:
   postgres_data:
   static:
   media:
+
+networks:
+  main:
+    driver: bridge
 
