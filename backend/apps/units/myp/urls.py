@@ -1,0 +1,46 @@
+from django.urls import path
+
+from apps.units.myp.views import (
+    MypUnitPlannerViewSet,
+    MypUnitPlannerIdViewSet,
+    MypObjectiveViewSet,
+    StrandViewSet,
+    StrandLevelViewSet,
+    StrandLevelAchievementViewSet,
+    MypAimViewSet,
+    MypKeyConceptViewSet,
+    MypRelatedConceptViewSet,
+    GlobalContextViewSet,
+    GlobalContextExplorationViewSet,
+    MypAtlSkillViewSet,
+    MypInquiryQuestionViewSet,
+    MypAtlDevelopViewSet,
+    MypInquiryQuestionIduViewSet,
+    MypAtlDevelopIduViewSet,
+    )
+
+
+urlpatterns = [
+    path('myp/objective', MypObjectiveViewSet.as_view({'get': 'list'})),
+    path('myp/strand', StrandViewSet.as_view({'get': 'list'})),
+    path('myp/strand/level', StrandLevelViewSet.as_view({'get': 'list'})),
+    path('myp/strand/level/achievement', StrandLevelAchievementViewSet.as_view({'get': 'list'})),
+    path('myp/aim', MypAimViewSet.as_view({'get': 'list'})),
+    path('myp/keyconcept', MypKeyConceptViewSet.as_view({'get': 'list'})),
+    path('myp/relatedconcept', MypRelatedConceptViewSet.as_view({'get': 'list'})),
+    path('myp/globalcontext', GlobalContextViewSet.as_view({'get': 'list'})),
+    path('myp/globalcontext/exploration', GlobalContextExplorationViewSet.as_view({'get': 'list'})),
+    path('myp/atl', MypAtlSkillViewSet.as_view({'get': 'list'})),
+    path('myp/unit', MypUnitPlannerViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('myp/unit/<int:pk>', MypUnitPlannerViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('myp/unit/inquiry', MypInquiryQuestionViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('myp/unit/inquiry/<int:pk>', MypInquiryQuestionViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('myp/unit/atl', MypAtlDevelopViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('myp/unit/atl/<int:pk>', MypAtlDevelopViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('myp/unit/idu', MypUnitPlannerIdViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('myp/unit/idu/<int:pk>', MypUnitPlannerIdViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('myp/unit/idu/inquiry', MypInquiryQuestionIduViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('myp/unit/idu/inquiry/<int:pk>', MypInquiryQuestionIduViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+    path('myp/unit/idu/atl', MypAtlDevelopIduViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('myp/unit/idu/atl/<int:pk>', MypAtlDevelopIduViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
+]

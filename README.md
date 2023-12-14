@@ -1,95 +1,31 @@
-# Проект Stream Report
+# Проект StreamReport
 
-## Запуск приложения у разработчика
-Клонировать репозиторий в выделенный для этого каталог
-```
-git clone git@gitlab.sk.ru:gymnasium/freshstream.git
-```
-### Запуск СУБД
-Выполняется через Docker один раз после клонирования репозитория
-1. Установить Docker Desktop (https://www.docker.com/products/docker-desktop/)
-2. Запустить Docker Desktop и в поиске ввести *postgres*
-3. Перейти на вкладку Images, выбрать верхний найденный образ *postgres* и нажать RUN
-4. В выпадающем списке Optional settings указать порт (Host port), тома хранения данных (Volumes), переменные окружения (Environment variables). Используются следующие данные:
+## Запуск у разработчика
 
-Host port: 32770
+Для развёртывания проекта приложения StreamReport у разработчика должно быть установлено:
 
-Volumes:
+- Система контроля версий Git: https://git-scm.com/downloads
+- Платформа Docker Desktop: https://www.docker.com/get-started
+- Для запуска Makefile: https://chocolatey.org/install:
+```choco install make```
+- Имя и электронная почта глобального пользователя Git:
+```git config --global user.name "имя пользователя"```
+```git config --global user.email "электронная почта"```
 
-- Host path: postgres
-- Container path: /var/lib/postgresql/data/
+Далее выполнить следующие действия:
 
-Environment variables:
+1. Открыть терминал/командную строку и перейти в каталог проектов.
+    
+Клонировать репозиторий из GitHub (HTTPs):
+```git clone https://github.com/aleksioprime/streamreport.git```
+    
+Клонировать репозиторий из SK (SSH: нужен ssh-ключ):
+    
+```git clone [git@gitlab.sk.ru](mailto:git@gitlab.sk.ru):gymnasium/freshstream.git```
+    
+2. Перейти в папку проекта и развернуть проект с помощью Makefile или Docker Compose:
 
-- POSTGRES_DB=igskolkovo
-- POSTGRES_USER=igadmin
-- POSTGRES_PASSWORD=Pox{@K
+```cd streamreport```
+```make deploy```
 
-5. Нажать *RUN*
-
-### Запуск backend
-1. Открыть терминал и перейти в каталог backend проекта 
-```
-cd backend
-```
-2. Запустить стартовые команды
-
-- Для операционной системы MacOS:
-```
-source run_mac.command
-```
-- Для операционной системы Windows:
-```
-run_win.bat
-```
-
-3. В случае необходимости взаимодействия с Django необходимо завершить работу сервера (Ctrl + C) и выполнить команды.
-
-Для подготовки и миграции данных:
-```
-python manage.py makemigrations
-python manage.py migrate
-```
-Для импорта данных из фикстур в формате json:
-```
-python manage.py loaddata data.json
-python manage.py loaddata --exclude auth.permission --exclude contenttypes ../data/fixtures/data.json
-```
-Для экспорта данных в фикстуры в формате json:
-```
-python manage.py dumpdata > data.json 
-python -Xutf8 manage.py dumpdata > data.json 
-```
-Для запуска сервера:
-```
-python manage.py runserver
-```
-При первом запуске (находясь в терминале в папке backend проекта) необходимо создать виртуальную среду Python (используется версия 3.7.9) по пути **C:\venv\freshstream** для Windows или **~/venv/freshstream** для MacOS и установить необходимые библиотеки для Python.
-
-Для MacOS:
-```
-pip3 install virtualenv
-python3 -m venv ~/venv/freshstream
-source ~/venv/freshstream/bin/activate
-pip3 install -r requirements.txt
-```
-Для Windows:
-```
-pip install virtualenv
-python -m venv C:\venv\freshstream
-C:\venv\freshstream\Scripts\activate.bat
-pip install -r requirements.txt
-```
-### Запуск frontend
-1. Открыть терминал и перейти в каталог frontend проекта
-```
-cd frontend
-```
-При первом запуске после клонирования репозитория необходимо установить Node.js (https://nodejs.org/en) и выполнить команду:
-```
-npm install
-```
-2. Запустить сервер разработчика Vue.js:
-```
-npm run serve
-```
+```docker-compose up -d --build```

@@ -1,43 +1,60 @@
 <template>
-  <div style="min-width: 400px">
-    <base-navbar v-if="isAuthenticated" />
-    <router-view :class="{ 'container': isAuthenticated }" class="main"/>
-    <base-footbar v-if="isAuthenticated"/>
+  <div>
+    <div v-show="authStore.alertSuccess" class="alert alert-success animate__animated block" :class="authStore.animationClass">
+      {{ authStore.alertSuccessMessage }}
+    </div>
+    <app-layout v-if="isLoaded">
+      <router-view />
+    </app-layout>
   </div>
 </template>
 
-<script>
-import 'bootstrap/dist/css/bootstrap.min.css';
-import BaseNavbar from '@/components/BaseNavbar';
-import BaseFootbar from '@/components/BaseFootbar';
-import { mapGetters } from 'vuex'
+<script setup>
+import AppLayout from "@/layouts/AppLayout.vue";
+// import AppLayoutDefault from "@/layouts/DefaultLayout.vue";
+import { onMounted, ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
+import JwtService from "@/services/jwt/jwt.service";
+import router from "./router";
+import { useRoute } from "vue-router";
 
-export default {
-  components: {
-    BaseNavbar, BaseFootbar
-  },
-  data() {
-    return {
+const route = useRoute();
+const isLoaded = ref(false);
+const authStore = useAuthStore();
 
-    };
-  },
-  methods: {
+const checkLoggedIn = async () => {
+  const token = JwtService.getAccessToken();
 
-  },
-  mounted() {
-  },
-  computed: {
-    ...mapGetters(['isAuthenticated']),
-  },
-}
+  if (!token) {
+    isLoaded.value = true;
+    return;
+  }
+
+  try {
+    await authStore.whoami();
+    const { redirect } = route.query;
+    await router.push(redirect ? redirect : { name: "home" });
+  } catch (e) {
+    JwtService.destroyTokens();
+    console.error(e);
+  } finally {
+    isLoaded.value = true;
+  }
+};
+
+onMounted(() => {
+  checkLoggedIn();
+});
 </script>
 
-<style>
-@import '@/assets/css/base.css';
-.main {
-  /* max-width: 960px; */
-  /* margin: 0 auto; */
-  /* padding: 20px; */
-  min-height: calc(100vh - 220px);
+<style scoped>
+.block {
+  position: fixed;
+  top: 10px;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1;
+  text-align: center;
+  /* Дополнительные стили для всплывающего сообщения */
 }
 </style>
