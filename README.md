@@ -21,7 +21,7 @@
     
 Клонировать репозиторий из SK (SSH: нужен ssh-ключ):
     
-```git clone [git@gitlab.sk.ru](mailto:git@gitlab.sk.ru):gymnasium/freshstream.git```
+```git clone git@gitlab.sk.ru:gymnasium/freshstream.git```
     
 2. Перейти в папку проекта и развернуть проект с помощью Makefile или Docker Compose:
 
