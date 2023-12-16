@@ -36,12 +36,12 @@
                 <div class="d-flex">
                   <simple-dropdown class="my-2" title="Выберите кластер" v-model="atl.cluster"
                     :propItems="unitPypStore.pypAtlClusters.filter(i => i.category.id == atl.category.id)"
-                    propName="cluster" showName="name" @select="handleSave($event, atl.id)" />
+                    propName="cluster" showName="name_rus" @select="handleSave($event, atl.id)" />
                   <i class="bi bi-x-square ms-auto inline-button" @click="editMode = false"></i>
                 </div>
-                <simple-dropdown class="my-2" title="Выберите навык" v-model="atl.skill"
+                <simple-dropdown v-if="atl.cluster" class="my-2" title="Выберите навык" v-model="atl.skill"
                   :propItems="unitPypStore.pypAtlSkills.filter(i => i.cluster.id == atl.cluster.id)" propName="skill"
-                  showName="name" @select="handleSave($event, atl.id)" />
+                  showName="name_rus" @select="handleSave($event, atl.id)" />
               </td>
             </tr>
           </template>
@@ -66,11 +66,11 @@
             <simple-dropdown class="my-2 me-2" title="Выберите категорию ATL" v-model="newAtlDevelop.category"
               :propItems="iboStore.atlCategories" showName="name" propName="category" @select="selectCategory" />
             <simple-dropdown class="my-2" title="Выберите кластер ATL" v-model="newAtlDevelop.cluster"
-              :propItems="unitPypStore.pypAtlClusters" showName="name" propName="cluster" @select="selectCluster"
+              :propItems="unitPypStore.pypAtlClusters" showName="name_rus" propName="cluster" @select="selectCluster"
               :disabled="!newAtlDevelop.category.id" />
           </div>
           <search-dropdown class="my-2" title="Выберите навык ATL" v-model="newAtlDevelop.skill"
-            :propItems="unitPypStore.pypAtlSkills" showName="name" propName="skill"
+            :propItems="unitPypStore.pypAtlSkills" showName="name_rus" propName="skill"
             :disabled="!newAtlDevelop.cluster.id" />
           <textarea v-model="newAtlDevelop.action" class="form-control bottom-border-only my-2" rows="3"
             placeholder="Опишите действия"></textarea>

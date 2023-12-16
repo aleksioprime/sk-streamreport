@@ -161,10 +161,10 @@
             <div class="card mb-4">
               <div class="card-body">
                 <p class="mb-2"><span class="text-primary font-italic me-1">Наставничество</span></p>
-                <div v-if="authStore.user.classes.length">Вы являетесь наставником в классах:
+                <div v-if="authStore.user.mentor_classes.length">Вы являетесь наставником в классах:
                   <strong>
-                    <span v-for="group, index in authStore.user.classes" :key="group.id">{{ group.name }}
-                      <span v-if="authStore.user.classes.length != index + 1">, </span>
+                    <span v-for="group, index in authStore.user.mentor_classes" :key="group.id">{{ group.name }}
+                      <span v-if="authStore.user.mentor_classes.length != index + 1">, </span>
                     </span>
                   </strong>
                 </div>

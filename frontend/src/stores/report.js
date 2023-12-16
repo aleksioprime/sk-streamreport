@@ -72,7 +72,8 @@ export const useReportStore = defineStore("report", {
         this.studentExtraReports = res.data.map(item => {
           return {
             ...item,
-            report: item.reportextra_student_reports[0] ?? null
+            report: item.reportextra_student_reports[0] ?? null,
+            reports: item.reportextra_student_reports
           };
         });
       }

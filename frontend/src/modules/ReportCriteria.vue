@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex align-items-center">
       <h5>Результаты по критериям</h5>
-      <div class="ms-auto">
+      <div class="ms-auto" v-if="allowedMode">
         <i class="bi bi-three-dots dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="javascript:void(0)" @click.prevent="showCriterionImportModal(report)">Добавить критерии</a></li>
@@ -16,7 +16,7 @@
           <tr>
             <th scope="col" style="width: 100%;">Критерий</th>
             <th scope="col" style="min-width: 120px;">Результат</th>
-            <th style="min-width: 30px;"></th>
+            <th style="min-width: 30px;" v-if="allowedMode"></th>
           </tr>
         </thead>
         <tbody>
@@ -28,9 +28,9 @@
             <td>
               <editable-dropdown-cell :propData="achievement.achievement" :propItems="achievement.criterion.levels"
                 showName="name" propName="achievement" title="Выберите уровень" saveName="id"
-                @save="handleSave($event, achievement.id)" />
+                @save="handleSave($event, achievement.id)" :disabled="!allowedMode"/>
             </td>
-            <td rowspan="2">
+            <td rowspan="2" v-if="allowedMode">
               <i class="bi bi-dash-square inline-button" @click="showConfirmationModal(achievement)"></i>
               <confirmation-modal v-if="achievement.id == currentCriterion.id"
                 :nameModal="`confirmationDeleteCriterion${achievement.id}`" @confirm="removeCriterion"
@@ -40,7 +40,9 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2">{{ achievement.achievement.description }}</td>
+            <td colspan="2">
+              <div v-if="achievement.achievement">{{ achievement.achievement.description }}</div>
+            </td>
           </tr>
         </template>
         </tbody>
@@ -108,6 +110,10 @@ const props = defineProps({
   typeReport: {
     type: String,
     default: ''
+  },
+  allowedMode: {
+    type: Boolean,
+    default: true,
   }
 });
 

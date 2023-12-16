@@ -264,7 +264,7 @@ class PypUnitPlannerRetrieveSerializer(serializers.ModelSerializer):
             "action",
             "reflections_initial",
             "prior_learning",
-            "conncetions",
+            "connections",
             "learning_goals",
             "questions_teacher",
             "questions_student",

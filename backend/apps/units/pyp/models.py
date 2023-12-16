@@ -76,7 +76,7 @@ class PypUnitPlanner(UnitPlanerBaseModel):
     action = models.TextField(verbose_name=_("Действия"), null=True, blank=True)
     reflections_initial = models.TextField(verbose_name=_("Начальная рефлексия"), null=True, blank=True)
     prior_learning = models.TextField(verbose_name=_("Предшествующий опыт"), null=True, blank=True)
-    conncetions = models.TextField(verbose_name=_("Трансдисциплинарные и прошлые связи"), null=True, blank=True)
+    connections = models.TextField(verbose_name=_("Трансдисциплинарные и прошлые связи"), null=True, blank=True)
     learning_goals = models.TextField(verbose_name=_("Цели обучения и критерии успеха"), null=True, blank=True)
     questions_teacher = models.TextField(verbose_name=_("Вопросы учителя"), null=True, blank=True)
     questions_student = models.TextField(verbose_name=_("Вопросы студента"), null=True, blank=True)

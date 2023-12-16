@@ -244,7 +244,7 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
     teaching_loads = TeachingLoadSerializer(many=True)
     full_name = serializers.CharField(source='get_full_name', read_only=True)
     group_roles = ClassGroupRoleSerializer(many=True)
-    classes = ClassGroupSerializer(many=True)
+    mentor_classes = ClassGroupSerializer(many=True)
     class Meta:
         model = User
         fields = (
@@ -260,7 +260,7 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
             "departments",
             "teaching_loads",
             "groups",
-            "classes",
+            "mentor_classes",
             "group_roles",
             "dnevnik_id",
             "dnevnik_user_id",

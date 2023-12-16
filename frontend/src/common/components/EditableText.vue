@@ -1,11 +1,11 @@
 <template>
   <div class="d-flex align-items-center">
     <div class="w-100">
-      <span v-if="!editMode">{{ text }}</span>
+      <span v-if="!editMode">{{ text || 'Нет информации' }}</span>
       <input v-else ref="inputRef" type="text" v-model="text" @blur="toggleEditMode" @keyup="handleKeyup"
         class="form-control bottom-border-only">
     </div>
-    <div class="me-0 ms-2 text-muted small">
+    <div class="me-0 ms-2 text-muted small" v-if="allowedMode">
       <a href="javascript:void(0)" @click.prevent="enableEditMode" v-if="!editMode">Изменить</a>
       <a href="javascript:void(0)" @click.prevent="toggleEditMode" v-else>Отмена</a>
     </div>
@@ -23,6 +23,10 @@ const props = defineProps({
   propName: {
     type: String,
     default: ''
+  },
+  allowedMode: {
+    type: Boolean,
+    default: true,
   }
 });
 

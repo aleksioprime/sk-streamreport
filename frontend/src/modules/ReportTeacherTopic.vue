@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex align-items-center mb-2">
       <h5>Академические достижения</h5>
-      <div class="ms-auto">
+      <div class="ms-auto" v-if="allowedMode">
         <i class="bi bi-three-dots dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="javascript:void(0)" @click.prevent="showTopicImportModal(report)">Добавить темы</a></li>
@@ -29,7 +29,7 @@
           <th scope="col" style="width: 40%;">Тема</th>
           <th scope="col" style="min-width: 120px;">Достижение</th>
           <th scope="col" style="width: 60%;">Комментарий</th>
-          <th scope="col" style="min-width: 30px;"></th>
+          <th scope="col" style="min-width: 30px;" v-if="allowedMode"></th>
         </tr>
       </thead>
       <tbody>
@@ -39,13 +39,13 @@
           </td>
           <td>
             <editable-dropdown-cell :propData="achieve.level" :propItems="reportStore.levels" showName="name"
-              propName="level" saveName="value" @save="handleSave($event, achieve.id)" />
+              propName="level" saveName="value" @save="handleSave($event, achieve.id)" :disabled="!allowedMode"/>
           </td>
           <td>
             <editable-textarea-cell :propData="achieve.comment" propName="comment"
-              @save="handleSave($event, achieve.id)" />
+              @save="handleSave($event, achieve.id)" :allowedMode="allowedMode"/>
           </td>
-          <td>
+          <td v-if="allowedMode">
             <i class="bi bi-dash-square inline-button" @click="showConfirmationModal(achieve)"></i>
             <confirmation-modal v-if="achieve.id == currentPrimaryTopic.id"
               :nameModal="`confirmationDeleteTopic${achieve.id}`" @confirm="removePrimaryTopic"
@@ -110,6 +110,10 @@ const props = defineProps({
     type: Object,
     default: {}
   },
+  allowedMode: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 const authStore = useAuthStore();

@@ -4,7 +4,7 @@
       <span v-if="!editMode">{{ text || 'Нет информации' }}</span>
       <textarea v-else ref="inputRef" class="form-control bottom-border-only" rows="1" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"></textarea>
     </div>
-    <div class="me-0 ms-2 text-muted small">
+    <div class="me-0 ms-2 text-muted small" v-if="allowedMode">
       <a href="javascript:void(0)" @click.prevent="enableEditMode" v-if="!editMode">Изменить</a>
       <div v-else>
         <a href="javascript:void(0)" @click.prevent="toggleEditMode" >Отмена</a>
@@ -27,6 +27,10 @@ const props = defineProps({
   propName: {
     type: String,
     default: ''
+  },
+  allowedMode: {
+    type: Boolean,
+    default: true,
   }
 });
 

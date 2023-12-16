@@ -12,7 +12,7 @@
         </thead>
         <tbody>
           <tr v-for="profile in unit.ibprofiles" :key="profile.id">
-            <td>{{ profile.profile.name }}</td>
+            <td>{{ profile.profile.name }} <span v-if="profile.profile.name_rus">({{ profile.profile.name_rus }})</span></td>
             <td>
               <editable-textarea-cell :propData="profile.description" propName="description" @save="handleSave($event, profile.id)" />
             </td>
@@ -43,7 +43,7 @@
       <div class="card my-2">
         <div class="card-body">
           <search-dropdown class="my-2" title="Выберите профиль" v-model="newIbProfileDevelop.profile"
-            :propItems="iboStore.learnerProfiles" showName="name" propName="profile" />
+            :propItems="iboStore.learnerProfiles" showName="name_rus" propName="profile" />
           <textarea v-model="newIbProfileDevelop.description" class="form-control bottom-border-only my-2" rows="3"
             placeholder="Опишите развитие выбранного навыка"></textarea>
           <div class="d-flex items-align-center justify-content-end">

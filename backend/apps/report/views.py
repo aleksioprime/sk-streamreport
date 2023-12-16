@@ -71,7 +71,10 @@ from apps.report.services import (
     get_report_extra_queryset,
     get_user_report_extra_queryset,
     get_user_report_mentor_primary_queryset,
-    get_user_report_mentor_queryset
+    get_user_report_mentor_queryset,
+    export_report_noo_msword,
+    export_report_ooo_msword,
+    export_report_soo_msword,
 )
 
 from apps.report.filters import (
@@ -602,20 +605,13 @@ class UserReportMentorViewSet(ModelViewSet):
         return UserListReportMentorSerializer
     
     @action(detail=True, methods=["get"])
-    def report_export_word(self, request, pk=None):
+    def report_export_word(self, request, pk=None):  
         level = self.request.query_params.get('level', None)
         student = self.get_object()
-        print(student.reportextra_student_reports.first())
-        document = DocxTemplate(os.path.join(settings.BASE_DIR, 'documents', 'reports', 'test.docx'))
-        document.render({
-            'test': student.first_name,
-        })
-        buffer = BytesIO()
-        document.save(buffer)
-        buffer.seek(0)
-        response = StreamingHttpResponse(
-            streaming_content=buffer,  # use the stream's content
-            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-        response['Content-Disposition'] = f'attachment;filename=test.docx'
-        response["Content-Encoding"] = 'UTF-8'
-        return response
+        period_id = self.request.query_params.get('report_period', None)
+        if level == 'noo':
+            return export_report_noo_msword(student, period_id)
+        elif level == 'ooo':
+            return export_report_ooo_msword(student, period_id)
+        else:
+            return export_report_soo_msword(student, period_id)

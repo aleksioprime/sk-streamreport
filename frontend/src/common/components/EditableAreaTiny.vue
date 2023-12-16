@@ -10,7 +10,7 @@
           <Editor api-key="j30bef5hr2ipfdbu7b9lww7t4oez2v6f27c94otp9to2j9mk" :init="{
             plugins: 'lists link wordcount autoresize',
             menubar: false,
-            toolbar: 'bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist ',
+            toolbar: 'bold italic | forecolor | bullist numlist | link ',
             setup: (ed) => {
               ed.on('init', () => { tinyLoading = true });
             }
@@ -21,13 +21,15 @@
         </div>
       </div>
     </div>
-    <div v-if="!editMode">
-      <button type="button" class="btn btn-link text-muted small" v-if="!isEditing"
-        @click="enableEditMode">Изменить</button>
-    </div>
-    <div v-else class="ms-auto d-flex flex-column align-items-start">
-      <button type="button" class="btn btn-link small" @click="submitUpdate">Сохранить</button>
-      <button type="button" class="btn btn-link text-muted small" @click="cancelUpdate">Отмена</button>
+    <div v-if="allowedMode">
+      <div v-if="!editMode">
+        <button type="button" class="btn btn-link text-muted small" v-if="!isEditing"
+          @click="enableEditMode">Изменить</button>
+      </div>
+      <div v-else class="ms-auto d-flex flex-column align-items-start">
+        <button type="button" class="btn btn-link small" @click="submitUpdate">Сохранить</button>
+        <button type="button" class="btn btn-link text-muted small" @click="cancelUpdate">Отмена</button>
+      </div>
     </div>
 
   </div>
@@ -49,6 +51,10 @@ const props = defineProps({
   isEditing: {
     type: Boolean,
     default: false,
+  },
+  allowedMode: {
+    type: Boolean,
+    default: true,
   }
 });
 

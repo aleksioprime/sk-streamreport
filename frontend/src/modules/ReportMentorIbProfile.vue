@@ -7,11 +7,12 @@
         <div class="ms-auto">
           <div v-if="profile.report" >
             <editable-dropdown-cell :propData="profile.report.level" :propItems="PROFILE_LEVELS" 
-            showName="name" propName="level" saveName="value" @save="handleSave($event, profile.report.id)" />
+            showName="name" propName="level" saveName="value" @save="handleSave($event, profile.report.id)" 
+            :disabled="!allowedMode"/>
           </div>
           <div v-else>Профиль не оценивается</div>
         </div>
-        <div>
+        <div v-if="allowedMode">
           <i class="bi bi-dash-square dot-menu ms-2" v-if="profile.report"
           @click="removeReportMentorIbProfile(profile.report.id)"></i>
           <i v-else class="bi bi-plus-square dot-menu ms-2" @click="createReportMentorIbProfile(profile.id)"></i>
@@ -33,6 +34,10 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  allowedMode: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 const emit = defineEmits(["save"]);

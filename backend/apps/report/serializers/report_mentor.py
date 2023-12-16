@@ -6,7 +6,10 @@ from apps.report.models import (
     ReportMentorPrimary,
     ReportPrimaryUnit,
     ReportExtra,
+    ReportTeacher,
     ReportTeacherPrimary,
+    ReportTeacherSecondary,
+    ReportTeacherHigh,
     ReportCriterionAchievement,
     ReportSecondaryCriterion,
     ReportSecondaryLevel
@@ -277,33 +280,18 @@ class ReportMentorSerializer(serializers.ModelSerializer):
             return ReportPrimaryUnitListSerializer(obj.reportmentorprimary.pyp_units, many=True).data
         return None
         
-
-# Вывод списка репортов дополнительных сотрудников класса
-class ReportExtraSerializer(serializers.ModelSerializer):
-    author = UserReportSerializer()
-    class Meta:
-        model = ReportExtra
-        fields = (
-            "id",
-            "student",
-            "author",
-            "period",
-            "group",
-            "comment",
-            "created_at",
-            "updated_at",
-            "role",
-            )
         
 # Вывод списка достижений по критериям для репортов учителя
 class ReportCriterionAchievementSerializer(serializers.ModelSerializer):
     criterion_name = serializers.CharField(source='criterion.name', read_only=True)
     achievement_name = serializers.CharField(source='achievement.name', read_only=True)
+    achievement_description = serializers.CharField(source='achievement.description', read_only=True)
     class Meta:
         model = ReportCriterionAchievement
         fields = (
             'criterion_name',
             'achievement_name',
+            'achievement_description',
             'id',
             'report'
         )
@@ -336,7 +324,7 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
     subject = SubjectReportSerializer()
     criterion_achievements = ReportCriterionAchievementSerializer(many=True)
     class Meta:
-        model = ReportTeacherPrimary
+        model = ReportTeacher
         fields = (
             "id",
             "student",
@@ -350,12 +338,32 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
             'criterion_achievements'
             )
 
+# Вывод списка репортов дополнительных сотрудников класса
+class ReportExtraSerializer(serializers.ModelSerializer):
+    author = UserReportSerializer()
+    criterion_achievements = ReportCriterionAchievementSerializer(many=True)
+    class Meta:
+        model = ReportExtra
+        fields = (
+            "id",
+            "student",
+            "author",
+            "period",
+            "group",
+            "comment",
+            "criterion_achievements",
+            "created_at",
+            "updated_at",
+            "role",
+            )
+
 class ReportTeacherPrimarySerializer(ReportTeacherSerializer):
     topic_achievements = ReportPrimaryTopicListSerializer(many=True)
     class Meta(ReportTeacherSerializer.Meta):
         fields = ReportTeacherSerializer.Meta.fields + (
             'topic_achievements',
             )
+        model = ReportTeacherPrimary
         
 class ReportTeacherSecondarySerializer(ReportTeacherSerializer):
     criterion_marks = ReportSecondaryCriterionSerializer(many=True)
@@ -363,11 +371,18 @@ class ReportTeacherSecondarySerializer(ReportTeacherSerializer):
     class Meta(ReportTeacherSerializer.Meta):
         fields = ReportTeacherSerializer.Meta.fields + (
             'criterion_marks',
-            'objective_levels'
+            'objective_levels',
+            'final_grade',
             )
+        model = ReportTeacherSecondary
+        
 class ReportTeacherHighSerializer(ReportTeacherSerializer):
     class Meta(ReportTeacherSerializer.Meta):
-        fields = ReportTeacherSerializer.Meta.fields
+        fields = ReportTeacherSerializer.Meta.fields + (
+            'final_grade',
+            'final_grade_ib',
+        )
+        model = ReportTeacherHigh
 
 # Вывод списка пользователей с фильтрацией репортов классных руководителей
 class UserListReportMentorSerializer(serializers.ModelSerializer):

@@ -7,13 +7,13 @@
         </span>
         <span v-else>Не выбраны даты</span>
       </div>
-      <i class="bi bi-calendar3 button-calendar" data-bs-toggle="dropdown"
-        data-bs-auto-close="true" aria-expanded="false">
+      <i class="bi bi-calendar3 button-calendar" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false"
+        v-if="allowedMode">
         <span class="visually-hidden">Toggle Dropdown</span>
-    </i>
+      </i>
       <div class="dropdown-menu p-0 border-0 text-body-secondary">
         <div>
-          <VDatePicker v-model="date" @dayclick="handleSelect"/>
+          <VDatePicker v-model="date" @dayclick="handleSelect" />
         </div>
       </div>
     </div>
@@ -30,6 +30,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  allowedMode: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 // Определяем в emit событие сохранение поля

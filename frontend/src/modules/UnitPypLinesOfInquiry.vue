@@ -14,7 +14,7 @@
           <tr v-for="il in unit.inquiry_lines" :key="il.id">
             <td>
               <simple-dropdown class="my-2" title="Выберите ключевой концепт" v-model="il.key_concept"
-                :propItems="unitPypStore.pypKeyConcepts" propName="key_concept" showName="name" @select="handleSave($event, il.id)" />
+                :propItems="filteredPypKeyConcepts" propName="key_concept" showName="name_rus" @select="handleSave($event, il.id)" />
             </td>
             <td>
               <editable-text-cell :propData="il.name" propName="name" @save="handleSave($event, il.id)" />
@@ -47,7 +47,7 @@
         <div class="card-body">
           <input type="text" class="form-control my-2" v-model="newLinesOfInquiry.name" placeholder="Напишите линию исследования">
           <simple-dropdown class="my-2" title="Выберите ключевой концепт" v-model="newLinesOfInquiry.key_concept"
-            :propItems="unitPypStore.pypKeyConcepts" showName="name"/>
+            :propItems="filteredPypKeyConcepts" showName="name_rus"/>
           <div class="d-flex items-align-center justify-content-end">
             <button class="btn btn-success" @click="createLinesOfInquiry">Добавить</button>
             <button class="btn btn-secondary ms-2" @click="createFormHide">Отмена</button>
@@ -82,6 +82,13 @@ const defaultLinesOfInquiry = {
   key_concept: {},
 }
 const newLinesOfInquiry = ref({ ...defaultLinesOfInquiry })
+
+const filteredPypKeyConcepts = computed(() => {
+  return unitPypStore.pypKeyConcepts.filter((item) => {
+    return props.unit.key_concepts.map(i => i.id).includes(item.id)
+  })
+})
+
 
 // ***** Работа с формой по созданию записи *****
 

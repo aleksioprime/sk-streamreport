@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-items-center wrapper">
-    <simple-dropdown :title="title" v-model="value" :propItems="propItems" :showName="showName" @select="handleSelect" />
+    <simple-dropdown :title="title" v-model="value" :propItems="propItems" :showName="showName" @select="handleSelect" :disabled="disabled"/>
   </div>
 </template>
 
@@ -31,6 +31,10 @@ const props = defineProps({
     type: String,
     default: '-',
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 // Определяем в emit событие сохранение поля

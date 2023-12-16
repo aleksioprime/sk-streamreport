@@ -8,25 +8,25 @@
             <th scope="col" style="width: 40%;">Название</th>
             <th scope="col" style="min-width: 120px;">Даты</th>
             <th scope="col" style="width: 60%;">Результат</th>
-            <th style="min-width: 30px;"></th>
+            <th style="min-width: 30px;" v-if="allowedMode"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="event in report.student.student_events" :key="event.id">
             <td>
-              <editable-text-cell :propData="event.title" propName="title" @save="handleSave($event, event.id)" />
+              <editable-text-cell :propData="event.title" propName="title" @save="handleSave($event, event.id)" :allowedMode="allowedMode"/>
             </td>
             <td>
               <div class="d-flex flex-column">
                 <editable-date-cell :propDate="event.date_start" propName="date_start"
-                  @save="handleSave($event, event.id)" />
-                <editable-date-cell :propDate="event.date_end" propName="date_end" @save="handleSave($event, event.id)" />
+                  @save="handleSave($event, event.id)" :allowedMode="allowedMode"/>
+                <editable-date-cell :propDate="event.date_end" propName="date_end" @save="handleSave($event, event.id)" :allowedMode="allowedMode"/>
               </div>
             </td>
             <td>
-              <editable-textarea-cell :propData="event.result" propName="result" @save="handleSave($event, event.id)" />
+              <editable-textarea-cell :propData="event.result" propName="result" @save="handleSave($event, event.id)" :allowedMode="allowedMode"/>
             </td>
-            <td>
+            <td v-if="allowedMode">
               <i class="bi bi-dash-square inline-button" @click="showConfirmationModal(event)"></i>
               <confirmation-modal v-if="event.id == currentEventParticipation.id"
                 :nameModal="`confirmationDeleteEvent${event.id}`" @confirm="removeEventParticipation"
@@ -37,14 +37,14 @@
           </tr>
         </tbody>
       </table>
-      <a href="javascript:void(0)" @click.prevent="createFormShow">Добавить</a>
+      <a href="javascript:void(0)" @click.prevent="createFormShow" v-if="allowedMode">Добавить</a>
     </div>
 
     <div class="card" v-else>
       <div class="card-body">
         <div class="d-flex flex-column align-items-center">
           <div>У студента нет участий в мероприятиях</div>
-          <a href="javascript:void(0)" @click.prevent="createFormShow">Добавить</a>
+          <a href="javascript:void(0)" @click.prevent="createFormShow" v-if="allowedMode">Добавить</a>
         </div>
       </div>
     </div>
@@ -113,6 +113,10 @@ const props = defineProps({
     type: Object,
     default: {}
   },
+  allowedMode: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 const setEmptyValidations = () => ({

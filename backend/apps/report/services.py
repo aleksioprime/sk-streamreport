@@ -1,4 +1,17 @@
 from django.db.models import Prefetch
+from datetime import datetime
+
+from docx import Document
+from docxtpl import DocxTemplate, RichText
+from django.http.response import StreamingHttpResponse
+import os
+from io import BytesIO
+from django.conf import settings
+from bs4 import BeautifulSoup
+
+from htmldocx import HtmlToDocx
+parser = HtmlToDocx()
+from docx import Document
 
 from apps.report.models import (
     ReportPeriod,
@@ -229,10 +242,15 @@ def get_user_report_mentor_queryset(group=None, period=None):
                     'group',
                     'group__year_academic',
                     'group__year_study',
+                    
                     ).prefetch_related(
                         'student__student_events',
                         'profiles',
                         'profiles__profile',
+                        'reportmentorprimary__pyp_units',
+                        'reportmentorprimary__pyp_units__unit',
+                        'reportmentorprimary__pyp_units__unit__teachers',
+                        'reportmentorprimary__pyp_units__unit__year',
                     ), 
             ),
         Prefetch(
@@ -282,6 +300,147 @@ def get_user_report_mentor_queryset(group=None, period=None):
                 'reportextra_student_reports', 
                 queryset=ReportExtra.objects.filter(group=group, period=period).select_related(
                     'author',
+                ).prefetch_related(
+                    'criterion_achievements',
                 )
             ),
         )
+
+# Функция для экспорта репортов наставника начальной школы
+def export_report_noo_msword(student, period_id):
+    document = DocxTemplate(os.path.join(settings.BASE_DIR, 'documents', 'reports', 'temp_report_pyp.docx'))
+    period = ReportPeriod.objects.filter(id=period_id).first()
+    report_period = {
+        'name': period.name.capitalize(),
+        'year': period.year
+    }
+    report_mentor = student.reportmentor_student_reports.first()
+    report_teachers = []
+    if (student.filtered_teacher_primary_reports):
+        report_teachers = student.filtered_teacher_primary_reports
+    for report in report_teachers:
+        report.comment = parsing_html(report.comment)
+    report_extras = student.reportextra_student_reports.all()
+    for report in report_extras:
+        report.comment = parsing_html(report.comment)
+    report_units = report_mentor.reportmentorprimary.pyp_units.all()
+    for report in report_units:
+        report.unit.central_idea = parsing_html(report.unit.central_idea)
+        report.unit.ongoing_assessment = report.unit.ongoing_assessment or ''
+        report.unit.action = report.unit.action or ''
+        report.unit.learning_goals = report.unit.learning_goals or ''
+        report.comment = report.comment or ''
+    document.render({
+        'report_period': report_period,
+        'date_created_at': report_mentor.created_at.strftime("%d.%m.%Y"),
+        'report_mentor': report_mentor,
+        'report_teachers': report_teachers,
+        'report_extras': report_extras,
+        'report_units': report_units,
+    })
+    buffer = BytesIO()
+    document.save(buffer)
+    buffer.seek(0)
+    response = StreamingHttpResponse(
+        streaming_content=buffer,  # use the stream's content
+        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Disposition'] = f'attachment;filename=test.docx'
+    response["Content-Encoding"] = 'UTF-8'
+    return response
+
+# Функция для экспорта репортов наставника средней школы
+def export_report_ooo_msword(student, period_id):
+    document = DocxTemplate(os.path.join(settings.BASE_DIR, 'documents', 'reports', 'temp_report_myp.docx'))
+    period = ReportPeriod.objects.filter(id=period_id).first()
+    report_period = {
+        'name': period.name.capitalize(),
+        'year': period.year
+    }
+    report_mentor = student.reportmentor_student_reports.first()
+    if report_mentor.comment:
+        report_mentor.comment = parsing_html(report_mentor.comment)
+    report_extras = student.reportextra_student_reports.all()
+    for report in report_extras:
+        report.comment = parsing_html(report.comment)
+    report_teachers = []
+    if (student.filtered_teacher_secondary_reports):
+        report_teachers = student.filtered_teacher_secondary_reports
+    for report in report_teachers:
+        report.comment = parsing_html(report.comment)
+        report.summ = sum(cm.mark for cm in report.criterion_marks.all())
+        report.full = len(report.criterion_marks.all()) * 8
+    document.render({
+        'report_period': report_period,
+        'report_mentor': report_mentor,
+        'report_extras': report_extras,
+        'report_teachers': report_teachers,
+    })
+    buffer = BytesIO()
+    document.save(buffer)
+    buffer.seek(0)
+    response = StreamingHttpResponse(
+        streaming_content=buffer,  # use the stream's content
+        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Disposition'] = f'attachment;filename=test.docx'
+    response["Content-Encoding"] = 'UTF-8'
+    return response
+
+def export_report_soo_msword(student, period_id):
+    document = DocxTemplate(os.path.join(settings.BASE_DIR, 'documents', 'reports', 'temp_report_dp.docx'))
+    period = ReportPeriod.objects.filter(id=period_id).first()
+    report_period = {
+        'name': period.name.capitalize(),
+        'year': period.year
+    }
+    report_mentor = student.reportmentor_student_reports.first()
+    document.render({
+        'report_period': report_period,
+        'report_mentor': report_mentor,
+    })
+    buffer = BytesIO()
+    document.save(buffer)
+    buffer.seek(0)
+    response = StreamingHttpResponse(
+        streaming_content=buffer,  # use the stream's content
+        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Disposition'] = f'attachment;filename=test.docx'
+    response["Content-Encoding"] = 'UTF-8'
+    return response
+
+
+def rgb_to_hex(rgb_str):
+    # Функция для преобразования значения RGB в HEX (примерный код)
+    rgb = rgb_str.replace('rgb', '').replace('(', '').replace(')', '').split(',')
+    return '#{:02x}{:02x}{:02x}'.format(int(rgb[0]), int(rgb[1]), int(rgb[2]))
+
+def parsing_html(html_text):
+    # Парсинг HTML и преобразование в RichText
+    soup = BeautifulSoup(html_text, 'html.parser')
+    rich_text = RichText()
+
+    for index, p in enumerate(soup.find_all('p')):
+        for content in p.contents:
+            if content.name == 'a':
+                # Обработка гиперссылок
+                url = content.get('href', '')
+                text = content.text
+                rich_text.add_hyperlink(url, text, color='0000FF', underline=True)
+            else:
+                text_style = {}
+                if content.name == 'strong':
+                    text_style['bold'] = True
+                elif content.name == 'em':
+                    text_style['italic'] = True
+                elif content.name == 'span':
+                    style = content.attrs.get('style', '')
+                    if 'color' in style:
+                        color = style.split('color:')[1].strip().replace(';', '')
+                        text_style['color'] = rgb_to_hex(color)
+                if content.string:
+                    rich_text.add(content.string, **text_style)
+
+        # Добавление переноса строки для каждого нового параграфа
+        if index != len(soup.find_all('p')) - 1:
+            rich_text.add('\n')
+
+    return rich_text

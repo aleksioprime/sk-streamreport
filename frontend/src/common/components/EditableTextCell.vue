@@ -1,9 +1,14 @@
 <template>
   <div class="d-flex align-items-center wrapper">
-    <div v-if="!editMode" class="cell-text" @click="enableEditMode">{{ text || "Нажмите, чтобы что-то написать" }}
+    <div v-if="allowedMode">
+      <div v-if="!editMode" class="cell-text" @click="enableEditMode">{{ text || "Нажмите, чтобы что-то написать" }}
+      </div>
+      <input v-else id="cell-input" ref="inputRef" type="text" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"
+        class="form-control">
     </div>
-    <input v-else id="cell-input" ref="inputRef" type="text" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"
-      class="form-control">
+    <div v-else>
+      {{ text }}
+    </div>
   </div>
 </template>
 
@@ -19,6 +24,10 @@ const props = defineProps({
   propName: {
     type: String,
     default: ''
+  },
+  allowedMode: {
+    type: Boolean,
+    default: true,
   }
 });
 

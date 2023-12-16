@@ -12,9 +12,9 @@
             <small class="text-danger">{{ validations.title.error }}</small>
           </div>
           <div class="my-2">
-            <label for="hours" class="form-label">Кол-во часов</label>
-            <input v-model="newPypUnit.hours" type="number" class="form-control" id="hours" placeholder="Кол-во часов">
-            <small class="text-danger">{{ validations.hours.error }}</small>
+            <label for="order" class="form-label">Номер</label>
+            <input v-model="newPypUnit.order" type="number" class="form-control" id="order" placeholder="Номер модуля">
+            <small class="text-danger">{{ validations.order.error }}</small>
           </div>
           <div class="my-2">
             <label for="description" class="form-label">Описание юнита</label>
@@ -43,7 +43,7 @@
             <div class="d-flex align-items-center">
               <label for="year" class="form-label mb-0 me-2">Трансдисциплинарная тема: </label>
               <simple-dropdown title="Выберите тему" v-model="newPypUnit.transdisciplinary_theme"
-                :propItems="unitPypStore.transdisciplinaryThemes" showName="name" />
+                :propItems="unitPypStore.transdisciplinaryThemes" showName="name_rus" />
             </div>
             <small class="text-danger">{{ validations.transdisciplinary_theme.error }}</small>
           </div>
@@ -57,6 +57,7 @@
             <div class="d-flex align-items-center">
               <h5 class="mb-0">
                 <router-link :to="{ name: 'unitPypDetail', params: { id: unit.id } }" class="dropdown-item">
+                  Модуль {{ unit.order }}.
                   {{ unit.title }}</router-link>
               </h5>
               <div class="ms-auto">
@@ -108,7 +109,7 @@ const currentPypUnit = ref({})
 
 const defaultPypUnit = {
   title: null,
-  hours: null,
+  order: null,
   description: null,
   teachers: [],
   transdisciplinary_theme: {},
@@ -122,7 +123,7 @@ const setEmptyValidations = () => ({
     error: '',
     rules: ['required']
   },
-  hours: {
+  order: {
     error: '',
     rules: ['required']
   },
@@ -170,7 +171,7 @@ const confirmUnitPypCreateModal = () => {
   if (!validateFields(
     {
       title: newPypUnit.value.title,
-      hours: newPypUnit.value.hours,
+      order: newPypUnit.value.order,
       teachers: newPypUnit.value.teachers,
       transdisciplinary_theme: newPypUnit.value.transdisciplinary_theme,
       year: newPypUnit.value.year,

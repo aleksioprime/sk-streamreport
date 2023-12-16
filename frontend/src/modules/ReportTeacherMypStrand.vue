@@ -23,10 +23,12 @@
               <div v-for="strand in objectives" :key="strand.id">
                 <div v-if="strand.level_strand">
                   <div class="d-flex align-items-center mb-2">
-                    <i class="bi bi-dash-square dot-menu me-2" v-if="strand.level_strand.report"
-                      @click="removeReportSecondaryLevel(strand.level_strand.report.id)"></i>
-                    <i class="bi bi-plus-square dot-menu me-2" v-else
-                      @click="createReportSecondaryLevel(strand.level_strand.id)"></i>
+                    <div v-if="allowedMode">
+                      <i class="bi bi-dash-square dot-menu me-2" v-if="strand.level_strand.report"
+                        @click="removeReportSecondaryLevel(strand.level_strand.report.id)"></i>
+                      <i class="bi bi-plus-square dot-menu me-2" v-else
+                        @click="createReportSecondaryLevel(strand.level_strand.id)"></i>
+                    </div>
                     <span :class="{ 'select': strand.level_strand.report }">{{ strand.letter_name }}. Students should be
                       able to
                       {{ strand.level_strand.name }}
@@ -35,21 +37,36 @@
                       <b v-if="strand.level_strand.report && !strand.level_strand.report.level"> - 0</b>
                     </span>
                   </div>
-                  <ul v-if="strand.level_strand.report">
-                    <li>
-                      <div class="pointer" :class="{ 'select': !strand.level_strand.report.level }"
-                        @click="updateReportSecondaryLevel(null, strand.level_strand.report.id)">
-                        The student does not reach a standard described by any of the descriptors below
-                      </div>
-                    </li>
-                    <li v-for="achieve in strand.level_strand.report.strand.achieve_levels" :key="achieve.id"
-                      @click="updateReportSecondaryLevel(achieve.id, strand.level_strand.report.id)">
-                      <div class="pointer"
-                        :class="{ 'select': strand.level_strand.report.level && achieve.id == strand.level_strand.report.level.id }">
-                        The student {{ achieve.name }} ({{ achieve.point - 1 }}-{{ achieve.point }})
-                      </div>
-                    </li>
-                  </ul>
+                  <div v-if="strand.level_strand.report">
+                    <ul v-if="allowedMode">
+                      <li>
+                        <div class="pointer" :class="{ 'select': !strand.level_strand.report.level }"
+                          @click="updateReportSecondaryLevel(null, strand.level_strand.report.id)">
+                          The student does not reach a standard described by any of the descriptors below
+                        </div>
+                      </li>
+                      <li v-for="achieve in strand.level_strand.report.strand.achieve_levels" :key="achieve.id"
+                        @click="updateReportSecondaryLevel(achieve.id, strand.level_strand.report.id)">
+                        <div class="pointer"
+                          :class="{ 'select': strand.level_strand.report.level && achieve.id == strand.level_strand.report.level.id }">
+                          The student {{ achieve.name }} ({{ achieve.point - 1 }}-{{ achieve.point }})
+                        </div>
+                      </li>
+                    </ul>
+                    <ul v-else>
+                      <li>
+                        <div :class="{ 'select': !strand.level_strand.report.level }">
+                          The student does not reach a standard described by any of the descriptors below
+                        </div>
+                      </li>
+                      <li v-for="achieve in strand.level_strand.report.strand.achieve_levels" :key="achieve.id">
+                        <div
+                          :class="{ 'select': strand.level_strand.report.level && achieve.id == strand.level_strand.report.level.id }">
+                          The student {{ achieve.name }} ({{ achieve.point - 1 }}-{{ achieve.point }})
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -72,6 +89,10 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  allowedMode: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 const unitMypStore = useUnitMypStore();

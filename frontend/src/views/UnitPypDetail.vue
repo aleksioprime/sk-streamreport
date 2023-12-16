@@ -41,9 +41,9 @@
           </div>
           <hr>
           <div class="my-2 d-flex align-items-center">
-            <div class="me-2">Кол-во часов: </div>
+            <div class="me-2">Номер модуля: </div>
             <div class="flex-grow-1">
-              <editable-text v-model="unitPypStore.pypUnit.hours" propName="hourse"
+              <editable-text v-model="unitPypStore.pypUnit.order" propName="order"
                 @save="handleSave($event, unitPypStore.pypUnit.id)" />
             </div>
           </div>
@@ -70,7 +70,7 @@
             <div class="me-2">Трансдицсиплинарная тема: </div>
             <div class="flex-grow-1">
               <simple-dropdown title="Выберите тему" v-model="unitPypStore.pypUnit.transdisciplinary_theme"
-                :propItems="unitPypStore.transdisciplinaryThemes" showName="name" propName="transdisciplinary_theme"
+                :propItems="unitPypStore.transdisciplinaryThemes" showName="name_rus" propName="transdisciplinary_theme"
                 @select="handleSave($event, unitPypStore.pypUnit.id)" />
             </div>
           </div>
@@ -103,7 +103,7 @@
               связей между предметами и за их пределами?
             </small>
             <editable-checkbox v-model="unitPypStore.pypUnit.key_concepts" :propItems="unitPypStore.pypKeyConcepts"
-              propName="key_concepts" showName="name" @select="handleSave($event, unitPypStore.pypUnit.id)" />
+              propName="key_concepts" showName="name_rus" @select="handleSave($event, unitPypStore.pypUnit.id)" />
           </div>
           <div class="my-3">
             <h5 id="related_concepts">Сопутствующие концепции</h5>
@@ -174,7 +174,7 @@
             </div>
           </div>
           <div class="my-3">
-            <h5 id="conncetions">Связи: трансдисциплинарные и прошлые</h5>
+            <h5 id="connections">Связи: трансдисциплинарные и прошлые</h5>
             <small>
               Связи с прошлым и будущим опытом/учением, внутри и вне программы исследования
               Какие существуют связи с обучением внутри и вне темы исследования?
@@ -185,7 +185,7 @@
             </small>
             <div class="card">
               <div class="card-body">
-                <editable-area-tiny :propData="unitPypStore.pypUnit.conncetions" propName="conncetions"
+                <editable-area-tiny :propData="unitPypStore.pypUnit.connections" propName="connections"
                   @save="handleSave($event, unitPypStore.pypUnit.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
               </div>
             </div>

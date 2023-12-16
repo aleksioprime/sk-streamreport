@@ -1,8 +1,8 @@
 <template>
-  <div class="my-2">
+  <div class="my-3">
     <div class="d-flex align-items-center mb-2">
       <h5>Достижения в исследовательской деятельности</h5>
-      <div class="ms-auto">
+      <div class="ms-auto" v-if="allowedMode">
         <i class="bi bi-three-dots dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="javascript:void(0)" @click.prevent="showUnitImportModal(report)">Добавить юниты</a></li>
@@ -14,7 +14,7 @@
         <div class="card card-body">
           <div class="d-flex align-items-center" >
             <div><b>{{ unit.unit.title }}</b> ({{ unit.unit.year.number }} классы)</div>
-            <i class="bi bi-dash-square dot-menu ms-auto" @click="showConfirmationModal(unit)"></i>
+            <i class="bi bi-dash-square dot-menu ms-auto" v-if="allowedMode" @click="showConfirmationModal(unit)"></i>
           </div>
           <div class="my-2">
               <i class="bi bi-person me-1"></i>
@@ -22,7 +22,7 @@
             </div>
           <hr>
           <div class="my-2">
-            <editable-area v-model="unit.comment" propName="comment" @save="handleSave($event, unit.id)" />
+            <editable-area v-model="unit.comment" propName="comment" @save="handleSave($event, unit.id)" :allowedMode="allowedMode"/>
           </div>
           <div>
             <confirmation-modal v-if="unit.id == currentPrimaryUnit.id" :nameModal="`confirmationDeleteUnit${unit.id}`"
@@ -71,6 +71,10 @@ const props = defineProps({
     type: Object,
     default: {}
   },
+  allowedMode: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 import { useReportStore } from "@/stores/report";

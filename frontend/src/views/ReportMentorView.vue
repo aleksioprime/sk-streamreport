@@ -35,19 +35,22 @@
         </h5>
       </div>
       <div v-if="reportStore.studentMentorReports.length" class="row">
-        <div class="col-md-3">
+        <div class="col-md-auto">
           <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student">
             <div v-if="!isEmpty(currentGroup)">
               <h5>{{ currentGroup.name }} класс</h5>
               <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
               <hr />
             </div>
-            <div v-for="student in reportStore.studentMentorReports" :key="student.id">
-              <div class="d-flex align-items-center my-1">
-                <img :src="student.photo ? student.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
-                <a class="select" :href="`#st-${student.id}`">
-                  {{ student.short_name }}
-                </a>
+            <div class="d-flex flex-md-column flex-wrap flex-md-nowrap">
+              <div v-for="student in reportStore.studentMentorReports" :key="student.id">
+                <div class="d-flex align-items-center my-1 me-2">
+                  <img :src="student.photo ? student.photo : imageStudent" alt="" width="20"
+                    class="me-2 rounded-circle" />
+                  <a class="select" :href="`#st-${student.id}`">
+                    {{ student.short_name }}
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -65,15 +68,18 @@
                   <i class="bi bi-file-earmark-word dot-menu" @click="exportReportToWord(student)"
                     v-if="student.report"></i>
                 </div>
-                <div class="ms-2">
-                  <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                <div class="ms-2" v-if="isMentor()">
+                  <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"
+                    v-if="isAuthor(student.report)"></i>
                   <ul class="dropdown-menu">
                     <li v-if="!student.report">
-                      <a class="dropdown-item" href="javascript:void(0)" @click.prevent="createStudentMentorReport(student.id)">Добавить репорт
+                      <a class="dropdown-item" href="javascript:void(0)"
+                        @click.prevent="createStudentMentorReport(student.id)">Добавить репорт
                         руководителя</a>
                     </li>
                     <li v-else>
-                      <a class="dropdown-item" href="javascript:void(0)" @click.prevent="showConfirmationModal(student)">Удалить репорт
+                      <a class="dropdown-item" href="javascript:void(0)"
+                        @click.prevent="showConfirmationModal(student)">Удалить репорт
                         руководителя</a>
                     </li>
                   </ul>
@@ -93,19 +99,22 @@
                   :aria-labelledby="`heading-${student.id}`">
                   <div class="accordion-body">
                     <div class="my-2">
-                      <report-mentor-ib-profile :report="student.report" v-if="currentStudyYear.level == 'noo'" />
+                      <report-mentor-ib-profile :report="student.report" v-if="currentStudyYear.level == 'noo'"
+                        :allowedMode="isAuthor(student.report)" />
                     </div>
                     <div class="my-2">
-                      <report-mentor-primary-unit :report="student.report" v-if="currentStudyYear.level == 'noo'" />
+                      <report-mentor-primary-unit :report="student.report" v-if="currentStudyYear.level == 'noo'"
+                        :allowedMode="isAuthor(student.report)" />
                     </div>
                     <hr />
                     <div class="my-2">
                       <editable-area-tiny class="text-muted" :propData="student.report.comment" propName="comment"
-                        @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" />
+                        @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit"
+                        :allowedMode="isAuthor(student.report)" />
                     </div>
                     <hr />
                     <div class="my-2">
-                      <event-participation :report="student.report" />
+                      <event-participation :report="student.report" :allowedMode="isAuthor(student.report)" />
                     </div>
                     <hr />
                     <div class="d-flex align-items-center">
@@ -135,6 +144,34 @@
                   <div class="accordion-body">
                     <div v-if="student.report_extras.length">
                       <div v-for="extra in student.report_extras" :key="extra.id">
+                        <div>
+                          <table class="table table-sm table-bordered">
+                            <thead>
+                              <tr>
+                                <th scope="col" style="width: 100%;">Критерий</th>
+                                <th scope="col" style="min-width: 120px;">Результат</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <template v-for="achievement in extra.criterion_achievements" :key="achievement.id">
+                                <tr>
+                                  <td>
+                                    <span class="me-2">{{ achievement.criterion_name }}</span>
+                                  </td>
+                                  <td>
+                                    <span class="me-2">{{ achievement.achievement_name }}</span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2">
+                                    <div>{{ achievement.achievement_description }}</div>
+                                  </td>
+                                </tr>
+                              </template>
+                            </tbody>
+                          </table>
+                        </div>
+                        <hr />
                         <div class="my-2" v-html="extra.comment" v-if="extra.comment"></div>
                         <div v-else>Нет информации</div>
                         <hr />
@@ -148,7 +185,6 @@
                           </div>
                         </div>
                       </div>
-
                     </div>
                     <div v-else>
                       Репорта не найдено!
@@ -208,8 +244,8 @@
                                   </b>
                                 </div>
                                 <div class="ms-3">
-                                  The student {{ objective.level_name || 
-                                  'does not reach a standard described by any of thedescriptors below' }}
+                                  The student {{ objective.level_name ||
+                                    'does not reach a standard described by any of thedescriptors below' }}
                                 </div>
                               </div>
                             </div>
@@ -307,6 +343,22 @@ let confirmationModal = null;
 const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };
+
+// Вспомогательная функция для проверки разрешения редактирования репорта только автору
+const isAuthor = (report) => {
+  if (authStore.user) {
+    return !report || report && report.author.id == authStore.user.id
+  }
+  return false
+}
+
+// Вспомогательная функция для проверки разрешения редактирования только ментору
+const isMentor = () => {
+  if (authStore.user) {
+    return authStore.user.mentor_classes.some(item => item.id == currentGroup.value.id)
+  }
+  return false
+}
 
 const currentReportType = computed(() => {
   if (currentStudyYear.value.level == 'noo') {
@@ -587,9 +639,9 @@ const exportReportToWord = (student) => {
   let config = {
     responseType: 'blob',
     params: {
-        report_period: currentReportPeriod.value.id,
-        report_group: currentGroup.value.id,
-      }
+      report_period: currentReportPeriod.value.id,
+      report_group: currentGroup.value.id,
+    }
   }
   if (currentStudyYear.value.level == 'noo') {
     config.params.level = 'noo';
@@ -599,9 +651,9 @@ const exportReportToWord = (student) => {
     config.params.level = 'soo';
   }
   reportStore.exportStudentMentorReport(student.id, config).then((result) => {
-      console.log(result);
-      resolveBlob(result);
-    });
+    console.log(result);
+    resolveBlob(result);
+  });
 
 }
 
@@ -633,9 +685,8 @@ const exportReportToWord = (student) => {
   }
 
   50% {
-    background-color: rgb(205, 254, 238);
+    background-color: #59C5C5;
   }
 
   /* Промежуточный цвет фона для мигания */
-}
-</style>
+}</style>
