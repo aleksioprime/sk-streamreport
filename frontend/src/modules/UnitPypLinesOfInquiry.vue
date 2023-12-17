@@ -111,6 +111,7 @@ const createLinesOfInquiry = () => {
     unit: props.unit.id
   };
   unitPypStore.createPypLinesOfInquiry(createdObject).then((result) => {
+    authStore.showMessageSuccess('Линия исследования добавлена');
     getLinesOfInquiries();
   }
   );
@@ -143,6 +144,7 @@ const cancelLinesOfInquiry = () => {
 const removeLinesOfInquiry = () => {
   // console.log('Запрос на удаление участия в мероприятии: ', currentPrimaryTopic.value);
   unitPypStore.removePypLinesOfInquiry(currentLinesOfInquiry.value.id).then(() => {
+    authStore.showMessageSuccess('Линия исследования удалена');
     getLinesOfInquiries();
   })
   confirmationModal.hide();
@@ -167,6 +169,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   unitPypStore.updatePypLinesOfInquiry(updatingData).then((result) => {
+    authStore.showMessageSuccess('Сохранено');
     unitPypStore.pypUnit.inquiry_lines = unitPypStore.pypUnit.inquiry_lines.map(item => item.id === result.data.id ? { ...result.data } : item);
   })
 };

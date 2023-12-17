@@ -95,6 +95,9 @@ const props = defineProps({
   }
 });
 
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
+
 const unitMypStore = useUnitMypStore();
 const reportStore = useReportStore();
 
@@ -207,6 +210,7 @@ const updateReportSecondaryLevel = async (value, id) => {
     level: value,
   }
   reportStore.updateReportSecondaryLevel(updatingData).then((result) => {
+    authStore.showMessageSuccess('Сохранено');
     const index = reportStore.reportTeachers.findIndex(item => item.id === props.report.id);
     if (index != -1) {
       reportStore.reportTeachers[index].objective_levels = reportStore.reportTeachers[index].objective_levels.map(item => item.id === result.data.id ? { ...result.data } : item);
@@ -220,6 +224,7 @@ const createReportSecondaryLevel = (id) => {
     strand: id,
   };
   reportStore.createReportSecondaryLevel(data).then((result) => {
+    authStore.showMessageSuccess('Предметный стрэнд добавлен');
     getReportSecondaryLevels();
   });
 };
@@ -227,6 +232,7 @@ const createReportSecondaryLevel = (id) => {
 // Функция запроса на удаление выбранного критерия из оценки репорта
 const removeReportSecondaryLevel = (id) => {
   reportStore.removeReportSecondaryLevel(id).then(() => {
+    authStore.showMessageSuccess('Предметный стрэнд удалён');
     getReportSecondaryLevels();
   });
 };

@@ -306,7 +306,7 @@ const createStudentExtraReport = (id) => {
         role: authStore.user.group_roles.find(i => i.group.id == currentGroup.value.id).role
       })
       .then((result) => {
-        // console.log('Репорт успешно добавлен: ', result)
+        authStore.showMessageSuccess('Репорт службы сопровождения добавлен');
         getStudentExtraReports();
       });
   }
@@ -331,7 +331,7 @@ const removeStudentExtraReport = () => {
   reportStore
     .removeReportExtra(currentReport.value.id)
     .then((result) => {
-      // console.log('Репорт успешно удалён: ', result);
+      authStore.showMessageSuccess('Репорт службы сопровождения удалён');
       getStudentExtraReports();
     });
   confirmationModal.hide();
@@ -352,7 +352,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   };
   reportStore.updateReportExtra(updatedObject).then((result) => {
-    // console.log('Репорт успешно обновлён: ', result)
+    authStore.showMessageSuccess('Сохранено');
     getStudentExtraReports();
   });
 };

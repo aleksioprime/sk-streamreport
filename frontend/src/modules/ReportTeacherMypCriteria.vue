@@ -52,6 +52,9 @@ const props = defineProps({
   }
 });
 
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
+
 const reportStore = useReportStore();
 const unitMypStore = useUnitMypStore();
 const emit = defineEmits(["save"]);
@@ -82,6 +85,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   reportStore.updateReportSecondaryCriterion(updatingData).then((result) => {
+    authStore.showMessageSuccess('Сохранено');
     const index = reportStore.reportTeachers.findIndex(item => item.id === props.report.id);
     if (index != -1) {
       reportStore.reportTeachers[index].criterion_marks = reportStore.reportTeachers[index].criterion_marks.map(item => item.id === result.data.id ? { ...result.data } : item);
@@ -95,6 +99,7 @@ const createReportSecondaryCriterion = (id) => {
     criterion: id,
   };
   reportStore.createReportSecondaryCriterion(data).then((result) => {
+    authStore.showMessageSuccess('Критерий для выставления баллов добавлен');
     getReportSecondaryCriteria();
   });
 };
@@ -102,6 +107,7 @@ const createReportSecondaryCriterion = (id) => {
 // Функция запроса на удаление выбранного критерия из оценки репорта
 const removeReportSecondaryCriterion = (id) => {
   reportStore.removeReportSecondaryCriterion(id).then(() => {
+    authStore.showMessageSuccess('Критерий для выставления баллов удалён');
     getReportSecondaryCriteria();
   });
 };

@@ -187,6 +187,7 @@ const confirmUnitPypCreateModal = () => {
     .then((res) => {
       if (res.__state === "success") {
         unitPypStore.loadPypUnitPlanners();
+        authStore.showMessageSuccess('Юнит PYP создан');
       } else {
         console.log(res)
       }
@@ -206,7 +207,7 @@ const removeUnitPypPlanner = () => {
   unitPypStore
     .removePypUnitPlanner(currentPypUnit.value.id)
     .then((result) => {
-      // console.log('Юнит успешно удалён: ', result);
+      authStore.showMessageSuccess('Юнит PYP удалён');
       unitPypStore.loadPypUnitPlanners();
     });
   confirmationModal.hide();
@@ -219,7 +220,6 @@ const cancelRemoveUnitPypPlanner = () => {
 
 onMounted(() => {
   unitPypStore.loadPypUnitPlanners();
-
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
   unitPypCreateModal = new Modal("#unitPypCreateModal", { backdrop: "static" });
 });

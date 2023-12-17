@@ -131,6 +131,7 @@ const confirmUnitImportModal = () => {
     report: props.report.id
   }));
   reportStore.createReportMentorPrimaryUnit(creatingData).then((result) => {
+    authStore.showMessageSuccess('Данные юнита добавлены');
     getReportPrimaryUnits();
   })
   choiceUnits.value = [];
@@ -159,6 +160,7 @@ const cancelRemovePrimaryUnit = () => {
 const removePrimaryUnit = () => {
   // console.log('Запрос на удаление достижения по теме: ', currentPrimaryTopic.value);
   reportStore.removeReportMentorPrimaryUnit(currentPrimaryUnit.value.id).then(() => {
+    authStore.showMessageSuccess('Достижения в исследовательской деятельности удалены');
     getReportPrimaryUnits();
   })
   confirmationModal.hide();
@@ -174,7 +176,7 @@ const handleSave = async (editData, id) => {
   reportStore.updateReportMentorPrimaryUnit(updatingData).then((result) => {
     // console.log('Результаты прохождения учебных тем успешно обновлены: ', result);
     // Перезапись отредактированного объекта в report
-    authStore.showMessageSuccess(`Академические успехи студента успешно сохранены!`);
+    authStore.showMessageSuccess('Достижения в исследовательской деятельности успешно записаны');
     const index = reportStore.studentMentorReports.findIndex(item => item.report.id === props.report.id);
     if (index != -1) {
       reportStore.studentMentorReports[index].report.pyp_units = reportStore.studentMentorReports[index].report.pyp_units.map(item => item.id === result.data.id ? { ...result.data } : item);

@@ -542,7 +542,7 @@ const createStudentMentorReport = (id) => {
         group: currentGroup.value.id,
       })
       .then((result) => {
-        // console.log('Репорт успешно добавлен: ', result)
+        authStore.showMessageSuccess('Репорт наставника начальной школы создан');
         getStudentMentorReports();
       });
   } else {
@@ -554,7 +554,7 @@ const createStudentMentorReport = (id) => {
         group: currentGroup.value.id,
       })
       .then((result) => {
-        // console.log('Репорт успешно добавлен: ', result)
+        authStore.showMessageSuccess('Репорт наставника создан');
         getStudentMentorReports();
       });
   }
@@ -580,14 +580,14 @@ const removeStudentMentorReport = () => {
     reportStore
       .removeReportMentorPrimary(currentStudent.value.report.id)
       .then((result) => {
-        // console.log('Репорт успешно удалён: ', result);
+        authStore.showMessageSuccess('Репорт наставника начальной школы удалён');
         getStudentMentorReports();
       });
   } else {
     reportStore
       .removeReportMentor(currentStudent.value.report.id)
       .then((result) => {
-        // console.log('Репорт успешно удалён: ', result);
+        authStore.showMessageSuccess('Репорт наставника удалён');
         getStudentMentorReports();
       });
   }
@@ -604,12 +604,12 @@ const handleSave = async (editData, id) => {
   };
   if (currentGroup.value.curriculum.level == "noo") {
     reportStore.updateReportMentorPrimary(updatedObject).then((result) => {
-      // console.log('Репорт успешно обновлён: ', result)
+      authStore.showMessageSuccess('Сохранено');
       getStudentMentorReports();
     });
   } else {
     reportStore.updateReportMentor(updatedObject).then((result) => {
-      // console.log('Репорт успешно обновлён: ', result)
+      authStore.showMessageSuccess('Сохранено');
       getStudentMentorReports();
     });
   }

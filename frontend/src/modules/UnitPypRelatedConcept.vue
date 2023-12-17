@@ -95,6 +95,7 @@
       unit: props.unit.id
     };
     unitPypStore.createPypRelatedConcept(createdObject).then((result) => {
+      authStore.showMessageSuccess('Сопутствующее понятие добавлено');
       getPypRelatedConcepts();
     }
     );
@@ -127,6 +128,7 @@
   const removePypRelatedConcept = () => {
     // console.log('Запрос на удаление участия в мероприятии: ', currentPrimaryTopic.value);
     unitPypStore.removePypRelatedConcept(currentPypRelatedConcept.value.id).then(() => {
+      authStore.showMessageSuccess('Сопутствующее понятие удалено');
       getPypRelatedConcepts();
     })
     confirmationModal.hide();
@@ -151,6 +153,7 @@
       [editData.propName]: editData.value,
     }
     unitPypStore.updatePypRelatedConcept(updatingData).then((result) => {
+      authStore.showMessageSuccess('Сохранено');
       unitPypStore.pypUnit.related_concepts = unitPypStore.pypUnit.related_concepts.map(item => item.id === result.data.id ? { ...result.data } : item);
     })
   };

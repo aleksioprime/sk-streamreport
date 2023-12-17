@@ -175,6 +175,7 @@ const createAtlDevelop = () => {
     unit: props.unit.id
   };
   unitPypStore.createPypAtlDevelop(createdObject).then((result) => {
+    authStore.showMessageSuccess('Навык ATL добавлен');
     getAtlDevelops();
   }
   );
@@ -209,6 +210,7 @@ const cancelAtlDevelop = () => {
 const removeAtlDevelop = () => {
   // console.log('Запрос на удаление участия в мероприятии: ', currentPrimaryTopic.value);
   unitPypStore.removePypAtlDevelop(currentAtlDevelop.value.id).then(() => {
+    authStore.showMessageSuccess('Навык ATL удалён');
     getAtlDevelops();
   })
   confirmationModal.hide();
@@ -233,6 +235,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   unitPypStore.updatePypAtlDevelop(updatingData).then((result) => {
+    authStore.showMessageSuccess('Сохранено');
     unitPypStore.pypUnit.atl_develops = unitPypStore.pypUnit.atl_develops.map(item => item.id === result.data.id ? { ...result.data } : item);
   })
 };

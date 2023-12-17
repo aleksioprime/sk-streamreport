@@ -285,7 +285,7 @@ const createTeachingLoad = () => {
   };
   console.log(createdObject)
   curriculumStore.createTeachingLoad(createdObject).then((result) => {
-    authStore.showMessageSuccess('Нагрузка успешно добавлена');
+    authStore.showMessageSuccess('Нагрузка добавлена');
     getTeachingLoads();
   }
   );
@@ -317,7 +317,7 @@ const cancelTeachingLoad = () => {
 const removeTeachingLoad = () => {
   // console.log('Запрос на удаление участия в мероприятии: ', currentPrimaryTopic.value);
   curriculumStore.removeTeachingLoad(currentTeachingLoad.value.id).then(() => {
-    authStore.showMessageSuccess('Нагрузка успешно удалена');
+    authStore.showMessageSuccess('Нагрузка удалена');
     getTeachingLoads();
   })
   confirmationModal.hide();

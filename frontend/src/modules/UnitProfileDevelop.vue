@@ -107,6 +107,7 @@ const createIbProfileDevelop = () => {
     unit: props.unit.id
   };
   iboStore.createIbProfileDevelop(createdObject).then((result) => {
+    authStore.showMessageSuccess('Профиль студента добавлен');
     getIbProfileDevelops();
   }
   );
@@ -138,6 +139,7 @@ const cancelIbProfileDevelop = () => {
 const removeIbProfileDevelop = () => {
   // console.log('Запрос на удаление участия в мероприятии: ', currentPrimaryTopic.value);
   iboStore.removeIbProfileDevelop(currentIbProfileDevelop.value.id).then(() => {
+    authStore.showMessageSuccess('Профиль студента удалён');
     getIbProfileDevelops();
   })
   confirmationModal.hide();
@@ -162,6 +164,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   iboStore.updateIbProfileDevelop(updatingData).then((result) => {
+    authStore.showMessageSuccess('Сохранено');
     unitPypStore.pypUnit.ibprofiles = unitPypStore.pypUnit.ibprofiles.map(item => item.id === result.data.id ? { ...result.data } : item);
   })
 };

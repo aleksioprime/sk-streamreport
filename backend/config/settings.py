@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -253,3 +255,14 @@ DEBUG_TOOLBAR_CONFIG = {
 # Данные для API сервиса Дневник.ру
 SCHOOL_ID = os.environ.get("SCHOOL_ID")
 CLIENT_ID = os.environ.get("CLIENT_ID")
+
+sentry_sdk.init(
+    dsn="https://57d83b15ae45feb6c98f02dd38eaf7d6@o4505232867655680.ingest.sentry.io/4506412520046592",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)

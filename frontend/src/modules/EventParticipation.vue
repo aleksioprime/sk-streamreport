@@ -197,6 +197,7 @@ const createEventParticipation = () => {
   portfolioStore.createEventParticipation(createdObject).then((res) => {
     if (res.__state === "success") {
       getEventParticipations();
+      authStore.showMessageSuccess('Данные об участии студента в мероприятии созданы');
     } else {
       console.log(res)
     }
@@ -227,6 +228,7 @@ const cancelEventParticipation = () => {
 const removeEventParticipation = () => {
   // console.log('Запрос на удаление участия в мероприятии: ', currentPrimaryTopic.value);
   portfolioStore.removeEventParticipation(currentEventParticipation.value.id).then(() => {
+    authStore.showMessageSuccess('Данные об участии студента в мероприятии удалены');
     getEventParticipations();
   })
   confirmationModal.hide();
@@ -254,7 +256,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   portfolioStore.updateEventParticipation(updatingData).then((result) => {
-    console.log('Результаты участия в мероприятии успешно обновлены: ', result);
+    authStore.showMessageSuccess('Сохранено');
     // Перезапись отредактированного объекта в report
     props.report.student.student_events = props.report.student.student_events.map(item => item.id === result.data.id ? { ...result.data } : item);
   })

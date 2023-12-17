@@ -68,6 +68,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   reportStore.updateReportMentorIbProfile(updatingData).then((result) => {
+    authStore.showMessageSuccess('Сохранено');
     const index = reportStore.studentMentorReports.findIndex(item => item.report.id === props.report.id);
     if (index != -1) {
       reportStore.studentMentorReports[index].report.profiles = reportStore.studentMentorReports[index].report.profiles.map(item => item.id === result.data.id ? { ...result.data } : item);
@@ -82,6 +83,7 @@ const createReportMentorIbProfile = (id) => {
     profile: id,
   };
   reportStore.createReportMentorIbProfile(data).then((result) => {
+    authStore.showMessageSuccess('Профиль IB-студента для оценки добавлен');
     getReportMentorIbProfiles();
   });
 };
@@ -89,6 +91,7 @@ const createReportMentorIbProfile = (id) => {
 // Функция запроса на удаление выбранного достижения профиля из репорта
 const removeReportMentorIbProfile = (id) => {
   reportStore.removeReportMentorIbProfile(id).then(() => {
+    authStore.showMessageSuccess('Профиль IB-студента для оценки удалён');
     getReportMentorIbProfiles();
   });
 };

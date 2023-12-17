@@ -23,6 +23,9 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
@@ -36,6 +39,7 @@ urlpatterns = [
     path('api/', include('apps.ibo.urls')),
     path('api/', include('apps.syllabus.urls')),
     path('api/', include('apps.portfolio.urls')),
+    path('sentry-debug/', trigger_error),
 ]
 
 if bool(settings.DEBUG):

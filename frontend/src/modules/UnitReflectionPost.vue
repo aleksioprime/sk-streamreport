@@ -121,6 +121,7 @@ const createUnitReflectionPost = () => {
   };
   console.log(createdObject)
   iboStore.createUnitReflectionPost(createdObject).then((result) => {
+    authStore.showMessageSuccess('Пост рефлексии добавлен');
     getUnitReflectionPosts();
   }
   );
@@ -152,6 +153,7 @@ const cancelUnitReflectionPost = () => {
 const removeUnitReflectionPost = () => {
   // console.log('Запрос на удаление участия в мероприятии: ', currentPrimaryTopic.value);
   iboStore.removeUnitReflectionPost(currentUnitReflectionPost.value.id).then(() => {
+    authStore.showMessageSuccess('Пост рефлексии удалён');
     getUnitReflectionPosts();
   })
   confirmationModal.hide();
@@ -182,6 +184,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   iboStore.updateUnitReflectionPost(updatingData).then((result) => {
+    authStore.showMessageSuccess('Сохранено');
     if (props.program == 'pyp') {
       unitPypStore.pypUnit.reflection_posts = unitPypStore.pypUnit.reflection_posts.map(item => item.id === result.data.id ? { ...result.data } : item);
     } else if (props.program == 'myp') {

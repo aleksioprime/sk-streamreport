@@ -167,6 +167,7 @@ const confirmTopicImportModal = () => {
     report: props.report.id
   }));
   reportStore.createReportPrimaryTopic(creatingData).then((result) => {
+    authStore.showMessageSuccess('Темы успешно добавлены');
     getReportPrimaryTopics();
   })
   choiceTopics.value = [];
@@ -205,6 +206,7 @@ const cancelRemovePrimaryTopic = () => {
 const removePrimaryTopic = () => {
   // console.log('Запрос на удаление достижения по теме: ', currentPrimaryTopic.value);
   reportStore.removeReportPrimaryTopic(currentPrimaryTopic.value.id).then(() => {
+    authStore.showMessageSuccess('Тема успешно удалена');
     getReportPrimaryTopics();
   })
   confirmationModal.hide();
@@ -220,7 +222,7 @@ const handleSave = async (editData, id) => {
   reportStore.updateReportPrimaryTopic(updatingData).then((result) => {
     // console.log('Результаты прохождения учебных тем успешно обновлены: ', result);
     // Перезапись отредактированного объекта в report
-    authStore.showMessageSuccess(`Академические успехи студента ${props.report.student.short_name} успешно сохранены!`);
+    authStore.showMessageSuccess(`Сохранено`);
     const index = reportStore.reportTeachers.findIndex(item => item.id === props.report.id);
     if (index != -1) {
       reportStore.reportTeachers[index].topic_achievements = reportStore.reportTeachers[index].topic_achievements.map(item => item.id === result.data.id ? { ...result.data } : item);

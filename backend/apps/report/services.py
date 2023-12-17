@@ -112,7 +112,6 @@ def get_report_secondary_level_queryset():
         )
 
 def get_report_teacher_secondary_queryset(group, student):
-    print(f'Параметры запроса: {group}, {student}')
     return ReportTeacherSecondary.objects.select_related(
         'student',
         'author',

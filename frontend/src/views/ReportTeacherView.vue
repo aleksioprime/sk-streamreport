@@ -451,21 +451,21 @@ const createTeacherReport = (id) => {
     // console.log('Запрос на создание репорта для студента начальной школы')
     reportStore.createReportTeacherPrimary(data).then((result) => {
       // console.log('Репорт начальной школы успешно добавлен: ', result)
-      authStore.showMessageSuccess('Репорт начальной школы успешно добавлен');
+      authStore.showMessageSuccess('Репорт учителя начальной школы добавлен');
       getTeacherReports();
     });
   } else if (currentGroup.value.year_study.level == "ooo") {
     // console.log('Запрос на создание репорта для студента средней школы')
     reportStore.createReportTeacherSecondary(data).then((result) => {
       // console.log('Репорт средней школы успешно добавлен: ', result)
-      authStore.showMessageSuccess('Репорт средней школы успешно добавлен');
+      authStore.showMessageSuccess('Репорт учителя средней школы добавлен');
       getTeacherReports();
     });
   } else if (currentGroup.value.year_study.level == "soo") {
     // console.log('Запрос на создание репорта для студента старшей школы')
     reportStore.createReportTeacherHigh(data).then((result) => {
       // console.log('Репорт старшей школы успешно добавлен: ', result)
-      authStore.showMessageSuccess('Репорт старшей школы успешно добавлен');
+      authStore.showMessageSuccess('Репорт учителя старшей школы добавлен');
       getTeacherReports();
     });
   } else {
@@ -493,20 +493,20 @@ const removeTeacherReport = () => {
   if (currentGroup.value.year_study.level == "noo") {
     // console.log('Запрос на удаление репорта для студента начальной школы')
     reportStore.removeReportTeacherPrimary(id).then((result) => {
-      authStore.showMessageSuccess('Репорт начальной школы успешно удалён');
+      authStore.showMessageSuccess('Репорт учителя начальной школы удалён');
       getTeacherReports();
     });
   } else if (currentGroup.value.year_study.level == "ooo") {
     // console.log('Запрос на удаление репорта для студента средней школы')
     reportStore.removeReportTeacherSecondary(id).then((result) => {
-      authStore.showMessageSuccess('Репорт средней школы успешно удалён');
+      authStore.showMessageSuccess('Репорт учителя средней школы удалён');
       getTeacherReports();
     });
   } else if (currentGroup.value.year_study.level == "soo") {
     // console.log('Запрос на удаление репорта для студента старшей школы')
     reportStore.removeReportTeacherHigh(id).then((result) => {
       // console.log('Репорт старшей школы успешно удалён: ', result)
-      authStore.showMessageSuccess('Репорт старшей школы успешно удалён');
+      authStore.showMessageSuccess('Репорт учителя старшей школы удалён');
       getTeacherReports();
     });
   } else {
@@ -542,17 +542,17 @@ const handleSave = async (editData, id) => {
   };
   if (currentGroup.value.year_study.level == "noo") {
     reportStore.updateReportTeacherPrimary(updatingData).then((result) => {
-      authStore.showMessageSuccess('Репорт начальной школы изменён');
+      authStore.showMessageSuccess('Сохранено');
       replaceReportTeacher(result.data);
     });
   } else if (currentGroup.value.year_study.level == "ooo") {
     reportStore.updateReportTeacherSecondary(updatingData).then((result) => {
-      authStore.showMessageSuccess('Репорт средней школы изменён');
+      authStore.showMessageSuccess('Сохранено');
       replaceReportTeacher(result.data);
     });
   } else if (currentGroup.value.year_study.level == "soo") {
     reportStore.updateReportTeacherHigh(updatingData).then((result) => {
-      authStore.showMessageSuccess('Репорт старшей школы изменён');
+      authStore.showMessageSuccess('Сохранено');
       replaceReportTeacher(result.data);
     });
   } else {

@@ -210,7 +210,7 @@ const confirmCriterionImportModal = () => {
     return config
   });
   reportStore.createReportAchievement(creatingData).then((result) => {
-    // console.log(result)
+    authStore.showMessageSuccess('Выбранные критерии добавлены');
     getReportAchievements();
   })
   choiceCriteria.value = [];
@@ -265,6 +265,7 @@ const cancelRemoveCriterion = () => {
 const removeCriterion = () => {
   // console.log('Запрос на удаление достижения по теме: ', currentCriterion.value);
   reportStore.removeReportAchievement(currentCriterion.value.id).then(() => {
+    authStore.showMessageSuccess('Результаты по выбранному критерию удалёны');
     getReportAchievements();
   })
   confirmationModal.hide();
@@ -278,7 +279,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   reportStore.updateReportAchievement(updatingData).then((result) => {
-    // console.log('Результаты критерия успешно обновлены: ', result);
+    authStore.showMessageSuccess('Сохранено');
     // Перезапись отредактированного объекта в report
     console.log(result)
     authStore.showMessageSuccess(`Результаты по критерию у студента успешно сохранены!`);

@@ -419,7 +419,7 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   }
   unitPypStore.updatePypUnitPlanner(updatingData).then((result) => {
-    console.log('Результаты участия в мероприятии успешно обновлены: ', result);
+    authStore.showMessageSuccess('Сохранено');
   })
 };
 
