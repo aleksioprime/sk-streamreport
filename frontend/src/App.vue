@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- TODO: Настроить всплывающие сообщения -->
-    <div v-show="authStore.alertSuccess" class="alert alert-success animate__animated block" :class="authStore.animationClass">
-      {{ authStore.alertSuccessMessage }}
-    </div>
     <!-- TODO: Настроить шаблонизатор -->
     <!-- <app-layout v-if="isLoaded">
       <router-view />

@@ -1,4 +1,4 @@
-from django.contrib.admin import register, ModelAdmin
+from django.contrib.admin import register, ModelAdmin, StackedInline
 from import_export.admin import ImportExportModelAdmin
 
 from apps.curriculum.filters import SubjectAdminFilter
@@ -14,8 +14,19 @@ from apps.curriculum.models import (
     TeachingLoad
 )
 
+class TeachingInline(StackedInline):  # StackedInline, TabularInline
+    autocomplete_fields = (
+        'teacher',
+    )
+    filter_horizontal = (
+        'groups',
+    )
+    model = TeachingLoad
+    extra = 1
+
 @register(Subject)
 class SubjectModelAdmin(ImportExportModelAdmin):
+    inlines = [TeachingInline]
     list_display = (
         "id",
         "level",

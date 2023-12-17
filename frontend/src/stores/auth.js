@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import resources from "@/services/resources";
 import jwtService from "@/services/jwt/jwt.service";
 import JwtService from "@/services/jwt/jwt.service";
+import { toast } from 'vue3-toastify';
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -53,21 +54,13 @@ export const useAuthStore = defineStore("auth", {
       jwtService.destroyTokens();
       resources.auth.setAuthHeader("");
     },
-
+    
+    // https://vue3-toastify.js-bridge.com/
     showMessageSuccess(message) {
-      this.animationClass = 'animate__fadeInDown';
-      this.alertSuccessMessage = message
-      this.alertSuccess = true;
-      // Скрыть сообщение через 3 секунды
-      setTimeout(() => {
-        this.animationClass = 'animate__fadeOutUp';
-        setTimeout(() => {
-          this.alertSuccess = false;
-          this.alertSuccessMessage = null
-        }, 1000)
-        
-      }, 3000);
-      
+      toast.success(message, {
+        autoClose: 2000,
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });     
     }
   },
 });

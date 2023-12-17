@@ -18,6 +18,8 @@ CONTAINER_NAME=$(shell $(DC) ps -q backend)
 
 # Удаление, сборка с запуском проекта
 build:
+	$(DC) up -d --build
+rebuild:
 	$(DC) down -v
 	$(DC) up -d --build
 # Загрузка фикстур

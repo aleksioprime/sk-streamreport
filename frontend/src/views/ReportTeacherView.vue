@@ -451,18 +451,21 @@ const createTeacherReport = (id) => {
     // console.log('Запрос на создание репорта для студента начальной школы')
     reportStore.createReportTeacherPrimary(data).then((result) => {
       // console.log('Репорт начальной школы успешно добавлен: ', result)
+      authStore.showMessageSuccess('Репорт начальной школы успешно добавлен');
       getTeacherReports();
     });
   } else if (currentGroup.value.year_study.level == "ooo") {
     // console.log('Запрос на создание репорта для студента средней школы')
     reportStore.createReportTeacherSecondary(data).then((result) => {
       // console.log('Репорт средней школы успешно добавлен: ', result)
+      authStore.showMessageSuccess('Репорт средней школы успешно добавлен');
       getTeacherReports();
     });
   } else if (currentGroup.value.year_study.level == "soo") {
     // console.log('Запрос на создание репорта для студента старшей школы')
     reportStore.createReportTeacherHigh(data).then((result) => {
       // console.log('Репорт старшей школы успешно добавлен: ', result)
+      authStore.showMessageSuccess('Репорт старшей школы успешно добавлен');
       getTeacherReports();
     });
   } else {
@@ -490,19 +493,20 @@ const removeTeacherReport = () => {
   if (currentGroup.value.year_study.level == "noo") {
     // console.log('Запрос на удаление репорта для студента начальной школы')
     reportStore.removeReportTeacherPrimary(id).then((result) => {
-      // console.log('Репорт начальной школы успешно удалён: ', result)
+      authStore.showMessageSuccess('Репорт начальной школы успешно удалён');
       getTeacherReports();
     });
   } else if (currentGroup.value.year_study.level == "ooo") {
     // console.log('Запрос на удаление репорта для студента средней школы')
     reportStore.removeReportTeacherSecondary(id).then((result) => {
-      // console.log('Репорт средней школы успешно удалён: ', result)
+      authStore.showMessageSuccess('Репорт средней школы успешно удалён');
       getTeacherReports();
     });
   } else if (currentGroup.value.year_study.level == "soo") {
     // console.log('Запрос на удаление репорта для студента старшей школы')
     reportStore.removeReportTeacherHigh(id).then((result) => {
       // console.log('Репорт старшей школы успешно удалён: ', result)
+      authStore.showMessageSuccess('Репорт старшей школы успешно удалён');
       getTeacherReports();
     });
   } else {
@@ -537,22 +541,22 @@ const handleSave = async (editData, id) => {
     [editData.propName]: editData.value,
   };
   if (currentGroup.value.year_study.level == "noo") {
-    // console.log('Запрос на удаление репорта для студента начальной школы')
     reportStore.updateReportTeacherPrimary(updatingData).then((result) => {
+      authStore.showMessageSuccess('Репорт начальной школы изменён');
       replaceReportTeacher(result.data);
     });
   } else if (currentGroup.value.year_study.level == "ooo") {
-    // console.log('Запрос на удаление репорта для студента средней школы')
     reportStore.updateReportTeacherSecondary(updatingData).then((result) => {
+      authStore.showMessageSuccess('Репорт средней школы изменён');
       replaceReportTeacher(result.data);
     });
   } else if (currentGroup.value.year_study.level == "soo") {
-    // console.log('Запрос на удаление репорта для студента старшей школы')
     reportStore.updateReportTeacherHigh(updatingData).then((result) => {
+      authStore.showMessageSuccess('Репорт старшей школы изменён');
       replaceReportTeacher(result.data);
     });
   } else {
-    // console.log('Не выбран уровень')
+    console.log('Не определён уровень')
   }
 };
 

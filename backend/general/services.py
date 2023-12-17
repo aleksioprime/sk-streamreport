@@ -11,7 +11,7 @@ def get_user_queryset():
             "departments",
             "group_roles",
             "mentor_classes",
-            "mentor_classes__year",
+            "mentor_classes__year_study",
             "teaching_loads",
             "teaching_loads__groups",
             "teaching_loads__subject",
