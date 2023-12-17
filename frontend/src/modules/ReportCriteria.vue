@@ -165,6 +165,11 @@ const getReportCriteria = () => {
       subjects: props.report.subject ? props.report.subject.id : null,
     }
   }
+  if (props.typeReport == 'teacher') {
+    config.params.type = 'teacher'
+  } else if (props.typeReport == 'extra') {
+    config.params.type = 'extra'
+  }
   reportStore.loadReportCriteria(config);
 }
 

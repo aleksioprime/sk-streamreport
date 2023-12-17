@@ -128,9 +128,6 @@ const currentLevel = computed(() => {
   }
 )
 
-
-
-
 const calculatedObjectives = computed(() => {
   return groupedByCategory(unitMypStore.objectives.filter(i => i.group.id == props.report.subject.group_ib).map((item) => {
     const levels = props.report.objective_levels.filter(i => i.strand.objective == item.id).length;

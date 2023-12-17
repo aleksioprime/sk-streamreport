@@ -79,6 +79,7 @@ def get_report_teacher_primary_queryset(group):
         'group__year_study',
         'subject',
         ).prefetch_related(
+            'extra_subjects',
             'criterion_achievements',
             'criterion_achievements__achievement',
             'criterion_achievements__criterion',
@@ -122,6 +123,7 @@ def get_report_teacher_secondary_queryset(group, student):
         'group__year_study',
         'subject',
         ).prefetch_related(
+            'extra_subjects',
             'criterion_achievements',
             'criterion_achievements__achievement',
             'criterion_achievements__criterion',
@@ -154,6 +156,7 @@ def get_report_teacher_high_queryset(group):
         'group__year_study',
         'subject',
         ).prefetch_related(
+            'extra_subjects',
             'criterion_achievements',
             'criterion_achievements__criterion',
             Prefetch(
@@ -259,6 +262,7 @@ def get_user_report_mentor_queryset(group=None, period=None):
                     'author',
                     'subject',
                     ).prefetch_related(
+                        'extra_subjects',
                         'criterion_achievements',
                         'criterion_achievements__achievement',
                         'criterion_achievements__criterion',
@@ -273,6 +277,7 @@ def get_user_report_mentor_queryset(group=None, period=None):
                     'author',
                     'subject',
                     ).prefetch_related(
+                        'extra_subjects',
                         'criterion_achievements',
                         'criterion_achievements__achievement',
                         'criterion_achievements__criterion',
@@ -290,6 +295,7 @@ def get_user_report_mentor_queryset(group=None, period=None):
                     'author',
                     'subject',
                     ).prefetch_related(
+                        'extra_subjects',
                         'criterion_achievements',
                         'criterion_achievements__criterion',
                         'criterion_achievements__achievement',
@@ -318,8 +324,8 @@ def export_report_noo_msword(student, period_id):
     report_teachers = []
     if (student.filtered_teacher_primary_reports):
         report_teachers = student.filtered_teacher_primary_reports
-    for report in report_teachers:
-        report.comment = parsing_html(report.comment)
+        for report in report_teachers:
+            report.comment = parsing_html(report.comment)
     report_extras = student.reportextra_student_reports.all()
     for report in report_extras:
         report.comment = parsing_html(report.comment)
@@ -365,10 +371,11 @@ def export_report_ooo_msword(student, period_id):
     report_teachers = []
     if (student.filtered_teacher_secondary_reports):
         report_teachers = student.filtered_teacher_secondary_reports
-    for report in report_teachers:
-        report.comment = parsing_html(report.comment)
-        report.summ = sum(cm.mark for cm in report.criterion_marks.all())
-        report.full = len(report.criterion_marks.all()) * 8
+        for report in report_teachers:
+            report.comment = parsing_html(report.comment)
+            report.summ = sum(cm.mark for cm in report.criterion_marks.all())
+            report.count = len(report.criterion_marks.all())
+            report.mark = calculate_criterion(report.count, report.summ)
     document.render({
         'report_period': report_period,
         'report_mentor': report_mentor,
@@ -387,16 +394,32 @@ def export_report_ooo_msword(student, period_id):
 
 def export_report_soo_msword(student, period_id):
     document = DocxTemplate(os.path.join(settings.BASE_DIR, 'documents', 'reports', 'temp_report_dp.docx'))
+    context = {}
+
     period = ReportPeriod.objects.filter(id=period_id).first()
     report_period = {
         'name': period.name.capitalize(),
         'year': period.year
     }
+    context['report_period'] = report_period
+
     report_mentor = student.reportmentor_student_reports.first()
-    document.render({
-        'report_period': report_period,
-        'report_mentor': report_mentor,
-    })
+    if report_mentor.comment:
+        report_mentor.comment = parsing_html(report_mentor.comment)
+    context['report_mentor'] = report_mentor
+
+    report_extras = student.reportextra_student_reports.all()
+    for report in report_extras:
+        report.comment = parsing_html(report.comment)
+    
+    context['report_extras'] = report_extras
+    if (student.filtered_teacher_high_reports):
+        report_teachers = student.filtered_teacher_high_reports
+        for report in report_teachers:
+            report.comment = parsing_html(report.comment)
+        context['report_teachers'] = report_teachers
+            
+    document.render(context)
     buffer = BytesIO()
     document.save(buffer)
     buffer.seek(0)
@@ -414,10 +437,11 @@ def rgb_to_hex(rgb_str):
     return '#{:02x}{:02x}{:02x}'.format(int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
 def parsing_html(html_text):
+    if html_text is None:
+        return ''
     # Парсинг HTML и преобразование в RichText
     soup = BeautifulSoup(html_text, 'html.parser')
     rich_text = RichText()
-
     for index, p in enumerate(soup.find_all('p')):
         for content in p.contents:
             if content.name == 'a':
@@ -444,3 +468,18 @@ def parsing_html(html_text):
             rich_text.add('\n')
 
     return rich_text
+
+def calculate_criterion(count, summ):
+    GRADES = { 1: [3, 5, 7], 2: [6, 10, 14], 3: [8, 14, 20], 4: [11, 19, 28] }
+    if count not in GRADES:
+        return "N/A"
+    if summ >= GRADES[count][2]:
+        return 5
+    elif summ < GRADES[count][2] and summ >= GRADES[count][1]:
+        return 4
+    elif summ < GRADES[count][1] and summ >= GRADES[count][0]:
+        return 3
+    elif summ < GRADES[count][0] and summ > 0:
+        return 2
+    else:
+        return '-'

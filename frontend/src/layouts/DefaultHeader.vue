@@ -39,7 +39,7 @@
           </li> -->
         </ul>
         <div class="navbar-text d-flex align-items-center dropdown ms-2" v-if="authStore.isAuthenticated">
-          <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link" href="javascript:void(0)" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="navbar-user">
               <img :src='authStore.user.photo ? authStore.user.photo : imageTeacher' alt="" width="35" class="me-2 user-photo rounded-circle">
               <div class="navbar-user-name">
@@ -52,7 +52,7 @@
           </a>
           <div class="dropdown-menu">
             <router-link :to="{ name: 'profile' }" class="dropdown-item">Профиль</router-link>
-            <router-link :to="'#'" @click="logout" class="dropdown-item">Выход</router-link>
+            <a href="javascript:void(0)" @click="logout" class="dropdown-item">Выход</a>
           </div>
         </div>
       </div>
@@ -70,8 +70,9 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 const logout = async () => {
+  
+  await router.push({ name: "login" });
   await authStore.logout();
-  await router.replace({ name: "login" });
 };
 </script>
   

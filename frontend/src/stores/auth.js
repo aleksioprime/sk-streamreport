@@ -49,9 +49,9 @@ export const useAuthStore = defineStore("auth", {
 
     async logout() {
       // await resources.auth.logout();
+      this.user = null;
       jwtService.destroyTokens();
       resources.auth.setAuthHeader("");
-      this.user = null;
     },
 
     showMessageSuccess(message) {

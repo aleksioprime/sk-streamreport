@@ -9,6 +9,13 @@ def get_user_queryset():
     return User.objects.all().prefetch_related(
             "groups",
             "departments",
+            "group_roles",
+            "mentor_classes",
+            "mentor_classes__year",
+            "teaching_loads",
+            "teaching_loads__groups",
+            "teaching_loads__subject",
+            "teaching_loads__year",
         )
 
 def get_group_queryset():
@@ -17,6 +24,7 @@ def get_group_queryset():
             "year_study",
             "year_study__ib",
             "mentor",
+            "curriculum",
         )
 
 def load_file_excel():

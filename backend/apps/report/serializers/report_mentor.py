@@ -298,18 +298,22 @@ class ReportCriterionAchievementSerializer(serializers.ModelSerializer):
 
 class ReportSecondaryCriterionSerializer(serializers.ModelSerializer):
     criterion_name = serializers.CharField(source='criterion.name', read_only=True)
+    criterion_letter = serializers.CharField(source='criterion.letter', read_only=True)
     class Meta:
         model = ReportSecondaryCriterion
         fields = (
             "id",
             "report",
             "criterion_name",
+            "criterion_letter",
             "mark"
             )
 
 class ReportSecondaryLevelSerializer(serializers.ModelSerializer):
     level_name = serializers.CharField(source='level.name', read_only=True)
     strand_name = serializers.CharField(source='strand.name', read_only=True)
+    strand_letter = serializers.CharField(source='strand.strand.get_letter_display', read_only=True)
+    objective_letter = serializers.CharField(source='strand.strand.objective.letter', read_only=True)
     class Meta:
         model = ReportSecondaryLevel
         fields = (
@@ -317,11 +321,14 @@ class ReportSecondaryLevelSerializer(serializers.ModelSerializer):
             "report",
             "level_name",
             "strand_name",
+            "strand_letter",
+            "objective_letter",
             )
 
 class ReportTeacherSerializer(serializers.ModelSerializer):
     author = UserReportSerializer()
     subject = SubjectReportSerializer()
+    extra_subjects = SubjectReportSerializer(many=True)
     criterion_achievements = ReportCriterionAchievementSerializer(many=True)
     class Meta:
         model = ReportTeacher
@@ -332,6 +339,7 @@ class ReportTeacherSerializer(serializers.ModelSerializer):
             "period",
             "group",
             "subject",
+            "extra_subjects",
             "comment",
             "created_at",
             "updated_at",

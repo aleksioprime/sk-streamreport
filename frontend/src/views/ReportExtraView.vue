@@ -11,18 +11,14 @@
           <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
             showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
         </div>
-        <div class="m-2">
-          <simple-dropdown title="Выберите параллель" v-model="currentStudyYear" :propItems="generalStore.studyYears"
-            showName="name" @select="selectStudyYear" />
-        </div>
-        <div class="m-2">
-          <simple-dropdown title="Выберите класс" v-model="currentGroup" :propItems="filteredGroup" showName="full_name"
-            :disabled="isEmpty(currentAcademicYear) || isEmpty(currentStudyYear)
-              " @select="selectGroup" />
-        </div>
         <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
           Сброс
         </button>
+      </div>
+      <div class="d-flex flex-wrap">
+        <div class="m-2">
+          <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
+        </div>
       </div>
       <button type="button" class="btn btn-primary m-2" @click="getStudentExtraReports"
         :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
@@ -153,6 +149,7 @@ import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
 import ReportCriteria from "@/modules/ReportCriteria.vue";
 
+import GroupClasses from "@/modules/GroupClasses.vue";
 import EventParticipation from "@/modules/EventParticipation.vue";
 
 import { useGeneralStore } from "@/stores/general";
@@ -162,7 +159,6 @@ import { useAuthStore } from "@/stores/auth";
 import { formatDate } from "@/common/helpers/date";
 
 const currentAcademicYear = ref({});
-const currentStudyYear = ref({});
 const currentReportPeriod = ref({});
 const currentGroup = ref({});
 const currentReport = ref({});
@@ -202,12 +198,6 @@ const filteredReportPeriod = computed(() => {
   );
 });
 
-// Фильтр списка классов по выбранной параллели
-const filteredGroup = computed(() => {
-  return generalStore.groups.filter(
-    (item) => item.year_study.id == currentStudyYear.value.id
-  );
-});
 
 // Событие выбора учебного года из выпадающего списка
 // запись в localstorage, сброс всех выбранных опций с очисткой списка студентов
@@ -217,17 +207,6 @@ const selectAcademicYear = () => {
     JSON.stringify(currentAcademicYear.value)
   );
   resetSelectedOptions();
-};
-
-// Событие выбора учебной параллели из выпадающего списка:
-// запись в localstorage, получение классов, очистка списка студентов, сброс выбранного класса
-const selectStudyYear = () => {
-  localStorage.setItem(
-    "selectedStudyYearReportExtra",
-    JSON.stringify(currentStudyYear.value)
-  );
-  resetSelectedGroup();
-  resetStudents();
 };
 
 // Событие выбора периода репортов из выпадающего списка:
@@ -252,16 +231,9 @@ const selectGroup = () => {
 
 // Сброс всех выбранных опций с очисткой списка студентов
 const resetSelectedOptions = () => {
-  resetSelectedStudyYear();
   resetSelectedReportPeriod();
   resetSelectedGroup();
   resetStudents();
-};
-
-// Сброс выбранной учебной параллели
-const resetSelectedStudyYear = () => {
-  currentStudyYear.value = {};
-  localStorage.removeItem("selectedStudyYearReportExtra");
 };
 
 // Сброс выбранного периода репрорта
@@ -284,7 +256,7 @@ const resetStudents = () => {
 // Запрос на получение списка групп (срабатывает, если выбран текущий учебный год и параллель)
 const getGroups = () => {
   if (
-    !(isEmpty(currentStudyYear.value) && isEmpty(currentAcademicYear.value))
+    !(isEmpty(currentAcademicYear.value))
   ) {
     generalStore.loadGroups({
       params: {
@@ -300,7 +272,6 @@ const getStudentExtraReports = () => {
   // console.log('Запрос студентов с репортами')
   if (
     !(
-      isEmpty(currentStudyYear.value) &&
       isEmpty(currentAcademicYear.value) &&
       isEmpty(currentGroup.value)
     )
@@ -388,12 +359,6 @@ const handleSave = async (editData, id) => {
 
 // Функция восстановления текущих значений периода, параллели и класса из LocalStorage
 const recoveryOptions = () => {
-  const savedSelectionStudyYear = JSON.parse(
-    localStorage.getItem("selectedStudyYearReportExtra")
-  );
-  if (savedSelectionStudyYear) {
-    currentStudyYear.value = savedSelectionStudyYear;
-  }
   const savedSelectionReportPeriod = JSON.parse(
     localStorage.getItem("selectedReportPeriodReportExtra")
   );
@@ -422,9 +387,6 @@ onMounted(() => {
   } else {
     currentAcademicYear.value = generalStore.relevantYear;
     getStudentExtraReports();
-  }
-  if (!generalStore.isStudyYearsLoaded) {
-    generalStore.loadStudyYears();
   }
   if (!reportStore.isReportPeriodsLoaded) {
     reportStore.loadReportPeriods();

@@ -13,7 +13,8 @@ from general.models import (
 
 from apps.curriculum.models import (
     TeachingLoad,
-    Subject
+    Subject,
+    Curriculum
 )
 
 # Кастомный сериализатор для ответа при JWT-аутентификации (неактивен)
@@ -146,12 +147,27 @@ class StudyYearListGeneralSerializer(serializers.ModelSerializer):
             "name",
             )
     
+# Вывод списка учебных планов
+class CurriculumListSerializer(serializers.ModelSerializer):
+    level_name = serializers.CharField(source='get_level_display', read_only=True)
+    class Meta:
+        model = Curriculum
+        fields = (
+            "id",
+            "year",
+            "name",
+            "name_short",
+            "level",
+            "level_name",
+            "ib",
+            )
 
 # Список групп
 class ClassGroupListGeneralSerializer(serializers.ModelSerializer):
     year_academic = AcademicYearListGeneralSerializer()
     year_study = StudyYearListGeneralSerializer()
     mentor = UserListGeneralSerializer()
+    curriculum = CurriculumListSerializer()
     class Meta:
         model = ClassGroup
         fields = (
@@ -264,4 +280,5 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
             "group_roles",
             "dnevnik_id",
             "dnevnik_user_id",
+            "is_online",
         )

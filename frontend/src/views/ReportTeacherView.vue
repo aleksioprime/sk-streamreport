@@ -12,19 +12,13 @@
             showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
         </div>
         <div class="m-2">
-          <simple-dropdown title="Выберите учебный план" v-model="currentCurriculum"
-            :propItems="curriculumStore.curriculums" showName="name" @select="selectCurriculum" />
+          <search-dropdown title="Выберите предмет" v-model="currentSubject" :propItems="curriculumStore.subjects"
+            showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup)" />
         </div>
       </div>
       <div class="d-flex flex-wrap">
         <div class="m-2">
-          <simple-dropdown title="Выберите класс" v-model="currentGroup" :propItems="filteredGroup" showName="full_name"
-            :disabled="isEmpty(currentAcademicYear) || isEmpty(currentCurriculum)
-              " @select="selectGroup" />
-        </div>
-        <div class="m-2">
-          <search-dropdown title="Выберите предмет" v-model="currentSubject" :propItems="curriculumStore.subjects"
-            showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup) || isEmpty(currentCurriculum)" />
+          <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
         </div>
       </div>
       <button type="button" class="btn btn-primary m-2" @click="getTeacherReports"
@@ -36,7 +30,7 @@
       </button>
       <hr class="hr" />
       <div class="text-bg-light p-2 rounded">
-        <h5 v-if="!isEmpty(currentCurriculum)" class="my-2">
+        <h5 v-if="!isEmpty(currentGroup)" class="my-2">
           Тип репорта: {{ currentReportType.name }}
         </h5>
         <h5 v-if="!isEmpty(currentSubject)" class="my-2">
@@ -111,6 +105,11 @@
                   <div :id="`collapse-${report.id}`" class="accordion-collapse collapse"
                     :aria-labelledby="`heading-${report.id}`">
                     <div class="accordion-body">
+                      <div class="my-1 d-flex align-items-center">
+                        <div class="me-2"><b>Дополнительный предмет:</b></div>
+                        <search-dropdown-multiple class="my-2" title="Не выбрано" v-model="report.extra_subjects"
+                          :propItems="curriculumStore.subjects" showName="name" propName="extra_subjects" @select="handleSave($event, report.id)" :disabled="!isAuthor(report)"/>
+                      </div>
                       <div class="my-3">
                         <report-teacher-myp-strand :report="report" v-if="currentReportType.value == 'ooo'" :allowedMode="isAuthor(report)"/>
                       </div>
@@ -196,12 +195,14 @@ import { Modal } from "bootstrap";
 import imageStudent from "@/assets/img/student.svg";
 import { MARK5, MARK7, REPORT_TYPES } from "@/common/constants";
 
+import SearchDropdownMultiple from "@/common/components/SearchDropdownMultiple.vue";
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
 import SearchDropdown from "@/common/components/SearchDropdown.vue";
 import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
 import ScaleRadio from "@/common/components/ScaleRadio.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
 
+import GroupClasses from "@/modules/GroupClasses.vue";
 import ReportTeacherTopic from "@/modules/ReportTeacherTopic.vue";
 import ReportCriteria from "@/modules/ReportCriteria.vue";
 import ReportTeacherMypCriteria from "@/modules/ReportTeacherMypCriteria.vue";
@@ -221,7 +222,6 @@ const currentReportPeriod = ref({});
 const currentGroup = ref({});
 const currentReport = ref({});
 const currentSubject = ref({});
-const currentCurriculum = ref({});
 
 const generalStore = useGeneralStore();
 const reportStore = useReportStore();
@@ -234,13 +234,16 @@ let confirmationModal = null;
 
 const currentReportType = computed(() => {
   const emptyType = { value: null, name: '-' }
-  if (currentCurriculum.value.level == 'noo') {
+  if (isEmpty(currentGroup.value)) {
+    return emptyType
+  }
+  if (currentGroup.value.curriculum.level == 'noo') {
     return REPORT_TYPES.find(i => i.value == 'noo') || emptyType
-  } else if (currentCurriculum.value.level == 'ooo') {
+  } else if (currentGroup.value.curriculum.level == 'ooo') {
     return REPORT_TYPES.find(i => i.value == 'ooo') || emptyType
-  } else if (currentCurriculum.value.level == 'soo' && currentCurriculum.value.ib == true) {
+  } else if (currentGroup.value.curriculum.level == 'soo' && currentGroup.value.curriculum.ib == true) {
     return REPORT_TYPES.find(i => i.value == 'dp') || emptyType
-  } else if (currentCurriculum.value.level == 'soo' && currentCurriculum.value.ib == false) {
+  } else if (currentGroup.value.curriculum.level == 'soo' && currentGroup.value.curriculum.ib == false) {
     return REPORT_TYPES.find(i => i.value == 'soo') || emptyType
   } else {
     return emptyType
@@ -280,13 +283,6 @@ const filteredReportPeriod = computed(() => {
   );
 });
 
-// Фильтр списка классов по выбранному учебному плану
-const filteredGroup = computed(() => {
-  return generalStore.groups.filter(
-    (item) => item.curriculum == currentCurriculum.value.id
-  );
-});
-
 // Событие выбора учебного года из выпадающего списка
 // запись в localstorage, сброс всех выбранных опций с очисткой списка студентов
 const selectAcademicYear = () => {
@@ -307,19 +303,6 @@ const selectReportPeriod = () => {
   resetStudents();
 };
 
-// Событие выбора учебного плана из выпадающего списка:
-// запись в localstorage, очистка списка студентов
-const selectCurriculum = () => {
-  localStorage.setItem(
-    "selectedCurriculumReportTeacher",
-    JSON.stringify(currentCurriculum.value)
-  );
-  resetSelectedGroup();
-  resetSelectedSubject();
-  resetStudents();
-  getSubjects();
-};
-
 // Событие выбора класса из выпадающего списка
 // запись в localstorage, очистка списка студентов
 const selectGroup = () => {
@@ -327,7 +310,6 @@ const selectGroup = () => {
     "selectedGroupReportTeacher",
     JSON.stringify(currentGroup.value)
   );
-  resetSelectedSubject();
   resetStudents();
   getSubjects();
 };
@@ -347,7 +329,6 @@ const selectSubject = () => {
 // Сброс всех выбранных опций с очисткой списка студентов
 const resetSelectedOptions = () => {
   resetSelectedReportPeriod();
-  resetSelectedCurriculum();
   resetSelectedGroup();
   resetSelectedSubject();
   resetStudents();
@@ -357,12 +338,6 @@ const resetSelectedOptions = () => {
 const resetSelectedReportPeriod = () => {
   currentReportPeriod.value = {};
   localStorage.removeItem("selectedReportPeriodReportTeacher");
-};
-
-// Сброс выбранного учебного плана
-const resetSelectedCurriculum = () => {
-  currentCurriculum.value = {};
-  localStorage.removeItem("selectedCurriculumReportTeacher");
 };
 
 // Сброс выбранного класса
@@ -394,25 +369,16 @@ const getGroups = () => {
   }
 };
 
-// Запрос на получение списка учебных планов (срабатывает, если выбран текущий учебный год)
-const getCurriculums = () => {
-  if (!isEmpty(currentAcademicYear.value)) {
-    curriculumStore.loadCurriculums({
-      params: {
-        year: currentAcademicYear.value.id,
-      },
-    });
-  }
-};
-
 // Запрос на получение списка учебных планов (срабатывает, если выбран учебный план и групппа)
 const getSubjects = () => {
-  if (!(isEmpty(currentCurriculum.value) && isEmpty(currentGroup.value))) {
+  if (!isEmpty(currentGroup.value)) {
     curriculumStore.loadSubjects({
       params: {
-        curriculum_loads__curriculum: currentCurriculum.value.id,
         curriculum_loads__years__classes: currentGroup.value.id,
       },
+    }).then((result) => {
+      if (!curriculumStore.subjects.map(i => i.id).includes(currentSubject.value.id))
+        resetSelectedSubject();
     });
   }
 };
@@ -435,9 +401,9 @@ const getTeacherReports = () => {
   // console.log('Запрос репортов')
   if (
     !(
-      isEmpty(currentCurriculum.value) &&
       isEmpty(currentAcademicYear.value) &&
-      isEmpty(currentGroup.value)
+      isEmpty(currentGroup.value) &&
+      isEmpty(currentSubject.value)
     )
   ) {
     const config = {
@@ -448,15 +414,15 @@ const getTeacherReports = () => {
         event_group: currentGroup.value.id,
       },
     };
-    if (currentCurriculum.value.level == "noo") {
+    if (currentGroup.value.year_study.level == "noo") {
       reportStore.loadReportTeachersPrimary(config).then(() => {
         // console.log(reportStore.reportTeachers);
       });
-    } else if (currentCurriculum.value.level == "ooo") {
+    } else if (currentGroup.value.year_study.level == "ooo") {
       reportStore.loadReportTeachersSecondary(config).then(() => {
         // console.log(reportStore.reportTeachers);
       });
-    } else if (currentCurriculum.value.level == "soo") {
+    } else if (currentGroup.value.year_study.level == "soo") {
       reportStore.loadReportTeachersHigh(config).then(() => {
         // console.log(reportStore.reportTeachers);
       });
@@ -481,19 +447,19 @@ const createTeacherReport = (id) => {
     group: currentGroup.value.id,
     subject: currentSubject.value.id,
   };
-  if (currentCurriculum.value.level == "noo") {
+  if (currentGroup.value.year_study.level == "noo") {
     // console.log('Запрос на создание репорта для студента начальной школы')
     reportStore.createReportTeacherPrimary(data).then((result) => {
       // console.log('Репорт начальной школы успешно добавлен: ', result)
       getTeacherReports();
     });
-  } else if (currentCurriculum.value.level == "ooo") {
+  } else if (currentGroup.value.year_study.level == "ooo") {
     // console.log('Запрос на создание репорта для студента средней школы')
     reportStore.createReportTeacherSecondary(data).then((result) => {
       // console.log('Репорт средней школы успешно добавлен: ', result)
       getTeacherReports();
     });
-  } else if (currentCurriculum.value.level == "soo") {
+  } else if (currentGroup.value.year_study.level == "soo") {
     // console.log('Запрос на создание репорта для студента старшей школы')
     reportStore.createReportTeacherHigh(data).then((result) => {
       // console.log('Репорт старшей школы успешно добавлен: ', result)
@@ -521,19 +487,19 @@ const cancelRemoveTeacherReport = () => {
 const removeTeacherReport = () => {
   // console.log('Запрос на удаление репорта студенту: ', currentReport.value);
   const id = currentReport.value.id;
-  if (currentCurriculum.value.level == "noo") {
+  if (currentGroup.value.year_study.level == "noo") {
     // console.log('Запрос на удаление репорта для студента начальной школы')
     reportStore.removeReportTeacherPrimary(id).then((result) => {
       // console.log('Репорт начальной школы успешно удалён: ', result)
       getTeacherReports();
     });
-  } else if (currentCurriculum.value.level == "ooo") {
+  } else if (currentGroup.value.year_study.level == "ooo") {
     // console.log('Запрос на удаление репорта для студента средней школы')
     reportStore.removeReportTeacherSecondary(id).then((result) => {
       // console.log('Репорт средней школы успешно удалён: ', result)
       getTeacherReports();
     });
-  } else if (currentCurriculum.value.level == "soo") {
+  } else if (currentGroup.value.year_study.level == "soo") {
     // console.log('Запрос на удаление репорта для студента старшей школы')
     reportStore.removeReportTeacherHigh(id).then((result) => {
       // console.log('Репорт старшей школы успешно удалён: ', result)
@@ -565,22 +531,22 @@ const replaceReportTeacher = (data) => {
 // Запрос на сохранение данных из компонента редактирования
 // После успешного ответа происходит повторный запрос на обновление списка студентов
 const handleSave = async (editData, id) => {
-  // console.log(`Сохраняемое значение для ${editData.propName}: ${editData.value} для репорта с ID: ${id}`);
+  console.log(`Сохраняемое значение для ${editData.propName}: ${editData.value} для репорта с ID: ${id}`);
   const updatingData = {
     id: id,
     [editData.propName]: editData.value,
   };
-  if (currentCurriculum.value.level == "noo") {
+  if (currentGroup.value.year_study.level == "noo") {
     // console.log('Запрос на удаление репорта для студента начальной школы')
     reportStore.updateReportTeacherPrimary(updatingData).then((result) => {
       replaceReportTeacher(result.data);
     });
-  } else if (currentCurriculum.value.level == "ooo") {
+  } else if (currentGroup.value.year_study.level == "ooo") {
     // console.log('Запрос на удаление репорта для студента средней школы')
     reportStore.updateReportTeacherSecondary(updatingData).then((result) => {
       replaceReportTeacher(result.data);
     });
-  } else if (currentCurriculum.value.level == "soo") {
+  } else if (currentGroup.value.year_study.level == "soo") {
     // console.log('Запрос на удаление репорта для студента старшей школы')
     reportStore.updateReportTeacherHigh(updatingData).then((result) => {
       replaceReportTeacher(result.data);
@@ -597,12 +563,6 @@ const recoveryOptions = () => {
   );
   if (savedSelectionReportPeriod) {
     currentReportPeriod.value = savedSelectionReportPeriod;
-  }
-  const savedSelectionCurriculum = JSON.parse(
-    localStorage.getItem("selectedCurriculumReportTeacher")
-  );
-  if (savedSelectionCurriculum) {
-    currentCurriculum.value = savedSelectionCurriculum;
   }
   const savedSelectionGroup = JSON.parse(
     localStorage.getItem("selectedGroupReportTeacher")
@@ -645,12 +605,10 @@ onMounted(() => {
     generalStore.loadAcademicYears().then(() => {
       currentAcademicYear.value = generalStore.relevantYear;
       getGroups();
-      getCurriculums();
     });
   } else {
     currentAcademicYear.value = generalStore.relevantYear;
     getGroups();
-    getCurriculums();
   }
   if (!reportStore.isReportPeriodsLoaded) {
     reportStore.loadReportPeriods();

@@ -4,14 +4,14 @@
       <div class="d-flex flex-wrap" v-if="selectedItems.length">
         <div v-for="item in selectedItems" :key="item.id" class="d-flex me-2 align-items-center">
           <div class="me-2">{{ item[showName] }}</div>
-          <i class="bi bi-dash-square dot-menu" @click="removeItem(item)"></i>
+          <i class="bi bi-dash-square dot-menu" @click="removeItem(item)" v-if="!disabled"></i>
         </div>
       </div>
       <div v-else>{{ title }}</div>
     </div>
     <div class="dropdown">
       <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuModule" data-bs-toggle="dropdown"
-        aria-expanded="false" data-bs-auto-close="true">Добавить</button>
+        aria-expanded="false" data-bs-auto-close="true" :disabled="disabled">Добавить</button>
       <ul class="dropdown-menu pt-0" aria-labelledby="dropdownMenuModule">
         <li class="px-2 pt-2 sticky-top bg-light">
           <input type="text" class="form-control" placeholder="Поиск..." v-model="searchQuery">
@@ -50,6 +50,10 @@ const props = defineProps({
   title: {
     type: String,
     default: '',
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   }
 });
 

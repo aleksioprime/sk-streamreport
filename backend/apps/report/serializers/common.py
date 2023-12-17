@@ -45,6 +45,7 @@ class UserReportSerializer(serializers.ModelSerializer):
             "last_name",
             "middle_name",
             "short_name",
+            "is_online",
             )
         
 # Список студентов

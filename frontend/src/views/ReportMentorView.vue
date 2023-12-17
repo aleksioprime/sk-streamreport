@@ -11,18 +11,14 @@
           <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
             showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
         </div>
-        <div class="m-2">
-          <simple-dropdown title="Выберите параллель" v-model="currentStudyYear" :propItems="generalStore.studyYears"
-            showName="name" @select="selectStudyYear" />
-        </div>
-        <div class="m-2">
-          <simple-dropdown title="Выберите класс" v-model="currentGroup" :propItems="filteredGroup" showName="full_name"
-            :disabled="isEmpty(currentAcademicYear) || isEmpty(currentStudyYear)
-              " @select="selectGroup" />
-        </div>
         <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
           Сброс
         </button>
+      </div>
+      <div class="d-flex flex-wrap">
+        <div class="m-2">
+          <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
+        </div>
       </div>
       <button type="button" class="btn btn-primary m-2" @click="getStudentMentorReports"
         :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
@@ -30,7 +26,7 @@
       </button>
       <hr class="hr" />
       <div class="text-bg-light p-2 rounded">
-        <h5 v-if="!isEmpty(currentStudyYear)" class="mb-2">
+        <h5 v-if="!isEmpty(currentGroup)" class="mb-2">
           Тип репорта: {{ currentReportType.name }}
         </h5>
       </div>
@@ -99,11 +95,11 @@
                   :aria-labelledby="`heading-${student.id}`">
                   <div class="accordion-body">
                     <div class="my-2">
-                      <report-mentor-ib-profile :report="student.report" v-if="currentStudyYear.level == 'noo'"
+                      <report-mentor-ib-profile :report="student.report" v-if="currentGroup.curriculum.level == 'noo'"
                         :allowedMode="isAuthor(student.report)" />
                     </div>
                     <div class="my-2">
-                      <report-mentor-primary-unit :report="student.report" v-if="currentStudyYear.level == 'noo'"
+                      <report-mentor-primary-unit :report="student.report" v-if="currentGroup.curriculum.level == 'noo'"
                         :allowedMode="isAuthor(student.report)" />
                     </div>
                     <hr />
@@ -143,8 +139,10 @@
                   :aria-labelledby="`headingExtra-${student.id}`">
                   <div class="accordion-body">
                     <div v-if="student.report_extras.length">
-                      <div v-for="extra in student.report_extras" :key="extra.id">
+                      <div v-for="extra in student.report_extras" :key="extra.id" class="card card-body my-2">
                         <div>
+                          <div class="my-2"><b>{{ extra.role }}</b></div>
+                          <div class="my-2">Результаты по критериям</div>
                           <table class="table table-sm table-bordered">
                             <thead>
                               <tr>
@@ -162,7 +160,7 @@
                                     <span class="me-2">{{ achievement.achievement_name }}</span>
                                   </td>
                                 </tr>
-                                <tr>
+                                <tr v-if="achievement.achievement_description">
                                   <td colspan="2">
                                     <div>{{ achievement.achievement_description }}</div>
                                   </td>
@@ -186,8 +184,8 @@
                         </div>
                       </div>
                     </div>
-                    <div v-else>
-                      Репорта не найдено!
+                    <div v-else cla>
+                      Репортов не найдено!
                     </div>
                   </div>
                 </div>
@@ -208,69 +206,123 @@
                   <div class="accordion-body">
                     <div v-if="student.report_teachers && student.report_teachers.length">
                       <div v-for="teacher in student.report_teachers" :key="teacher.id" class="my-2">
-                        <div class="card">
-                          <div class="card-body">
-                            <div><strong>{{ teacher.subject.name }}</strong></div>
-                            <div class="my-2"
-                              v-if="teacher.criterion_achievements && teacher.criterion_achievements.length">
-                              <div v-for="cr in teacher.criterion_achievements" :key="cr.id">
-                                {{ cr.criterion_name }}: <b>{{ cr.achievement_name || 'Нет оценки' }}</b>
-                              </div>
-                            </div>
-                            <div class="my-2" v-if="teacher.topic_achievements && teacher.topic_achievements.length">
-                              <table class="table table-sm table-bordered">
-                                <thead>
-                                  <tr>
-                                    <th scope="col" style="width: 50%;">Тема</th>
-                                    <th scope="col" style="min-width: 60px;">Кр.</th>
-                                    <th scope="col" style="width: 50%;">Комментарий</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr v-for="achieve in teacher.topic_achievements" :key="achieve.id">
-                                    <td>{{ achieve.topic.name }}</td>
-                                    <td><span v-if="achieve.level">{{ achieve.level.toUpperCase() || '-' }}</span></td>
-                                    <td>{{ achieve.comment }}</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                            <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
-                              <div class="my-2">Уровень Objective:</div>
-                              <div v-for="objective in teacher.objective_levels" :key="objective.id">
-                                <div>
-                                  <b>
-                                    Students should be able to {{ objective.strand_name }}
-                                  </b>
+                        <div class="accordion" :id="`accordionTeacher-${student.id}-${teacher.id}`">
+                          <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button p-2 collapsed" type="button" data-bs-toggle="collapse"
+                                :data-bs-target="`#collapseTeacher-${student.id}-${teacher.id}`" aria-expanded="true"
+                                :aria-controls="`collapseTeacher-${student.id}-${teacher.id}`">
+                                <b>{{ teacher.subject.name }}</b>
+                                <span v-if="teacher.extra_subjects.length">,&nbsp;<span v-for="sb, index in teacher.extra_subjects" :key="sb.id">{{ sb.name }}<span v-if="index + 1 != teacher.extra_subjects.length">, </span></span></span>
+                                &nbsp;({{ teacher.author.short_name }})
+                              </button>
+                            </h2>
+                            <div :id="`collapseTeacher-${student.id}-${teacher.id}`"
+                              class="accordion-collapse collapse"
+                              :data-bs-parent="`#accordionTeacher-${student.id}-${teacher.id}`">
+                              <div class="accordion-body">
+                                <div class="my-1 d-flex align-items-center" v-if="teacher.extra_subjects.length">
+                                  <div class="me-2">Дополнительные предметы:</div>
+                                  <div><span v-for="sb, index in teacher.extra_subjects" :key="sb.id">{{ sb.name }}<span v-if="index + 1 != teacher.extra_subjects.length">, </span></span></div>
                                 </div>
-                                <div class="ms-3">
-                                  The student {{ objective.level_name ||
-                                    'does not reach a standard described by any of thedescriptors below' }}
+                                <div class="my-2"
+                                  v-if="teacher.criterion_achievements && teacher.criterion_achievements.length">
+                                  <div class="my-2"><b>Результаты по критериям</b></div>
+                                  <table class="table table-sm table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <td>Критерий</td>
+                                        <td>Результат</td>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr v-for="cr in teacher.criterion_achievements" :key="cr.id">
+                                        <td>{{ cr.criterion_name }}</td>
+                                        <td><b>{{ cr.achievement_name || 'Нет оценки' }}</b></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="my-2" v-if="teacher.criterion_marks && teacher.criterion_marks.length">
-                              <div class="my-2">Оценки по критериям</div>
-                              <div v-for="cr in teacher.criterion_marks" :key="cr.id">
-                                {{ cr.criterion_name }}: <b>{{ cr.mark }}</b>
-                              </div>
-                            </div>
-                            <div class="my-2" v-if="teacher.final_grade_ib">
-                              Итоговая оценка IB: <b>{{ teacher.final_grade_ib }}</b>
-                            </div>
-                            <div class="my-2" v-if="teacher.final_grade">Итоговая оценка: <b>{{ teacher.final_grade }}</b>
-                            </div>
-                            <hr />
-                            <div class="my-2 text-muted" v-html="teacher.comment" v-if="teacher.comment"></div>
-                            <div v-else>Нет информации</div>
-                            <hr />
-                            <div class="d-flex align-items-center">
-                              <i class="bi bi-person"></i>
-                              <div class="ms-1">
-                                {{ teacher.author.short_name }}
-                              </div>
-                              <div class="ms-2">
-                                {{ formatDate(teacher.updated_at) }}
+                                <div class="my-2" v-if="teacher.topic_achievements && teacher.topic_achievements.length">
+                                  <div class="my-2"><b>Результаты по темам</b></div>
+                                  <table class="table table-sm table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col" style="width: 50%;">Тема</th>
+                                        <th scope="col" style="min-width: 60px;">Кр.</th>
+                                        <th scope="col" style="width: 50%;">Комментарий</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr v-for="achieve in teacher.topic_achievements" :key="achieve.id">
+                                        <td>{{ achieve.topic.name }}</td>
+                                        <td><span v-if="achieve.level">{{ achieve.level.toUpperCase() || '-' }}</span>
+                                        </td>
+                                        <td>{{ achieve.comment || 'Нет комментариев' }}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
+                                  <div class="my-2"><b>Уровни достижений по MYP</b></div>
+                                  <div v-for="objective in teacher.objective_levels" :key="objective.id">
+                                    <div>
+                                      {{ objective.objective_letter.toUpperCase() }}{{ objective.strand_letter }}.
+                                      Students
+                                      should be able to {{ objective.strand_name }}
+                                    </div>
+                                    <div class="ms-3">
+                                      The student {{ objective.level_name ||
+                                        'does not reach a standard described by any of thedescriptors below' }}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="my-2" v-if="teacher.criterion_marks && teacher.criterion_marks.length">
+                                  <div class="my-2"><b>Оценки по критериям MYP</b></div>
+                                  <table class="table table-sm table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <td>Критерий</td>
+                                        <td>Балл</td>
+                                        <td>Сумма</td>
+                                        <td>Оценка</td>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr v-for="cr, index in teacher.criterion_marks" :key="cr.id">
+                                        <td>{{ cr.criterion_letter.toUpperCase() }}. {{ cr.criterion_name }}</td>
+                                        <td><b>{{ cr.mark }}</b></td>
+                                        <template v-if="index == 0">
+                                          <td :rowspan="teacher.criterion_marks.length">
+                                            {{ calculateSumMark(teacher.criterion_marks).summ }} / {{ teacher.criterion_marks.length * 8 }}
+                                          </td>
+                                          <td :rowspan="teacher.criterion_marks.length">
+                                            {{ calculateSumMark(teacher.criterion_marks).mark }}
+                                          </td>
+                                        </template>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <div class="my-2" v-if="teacher.final_grade_ib">
+                                  Итоговая оценка IB: <b>{{ teacher.final_grade_ib }}</b>
+                                </div>
+                                <div class="my-2" v-if="teacher.final_grade">Итоговая оценка: <b>{{
+                                  teacher.final_grade }}</b>
+                                </div>
+                                <hr />
+                                <div class="my-2 text-muted" v-html="teacher.comment" v-if="teacher.comment"></div>
+                                <div v-else>Нет информации</div>
+                                <hr />
+                                <div class="d-flex align-items-center">
+                                  <i class="bi bi-person"></i>
+                                  <div class="ms-1">
+                                    {{ teacher.author.short_name }}
+                                  </div>
+                                  <div class="ms-2">
+                                    {{ formatDate(teacher.updated_at) }}
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -308,13 +360,14 @@ import { ref, computed, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import imageStudent from "@/assets/img/student.svg";
 import { resolveBlob } from "@/common/helpers/download";
-
+import { calculateSumMark } from "@/common/helpers/criteria";
 import { formatDate } from "@/common/helpers/date";
 
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
 import ConfirmationModal from "@/common/components/ConfirmationModal.vue";
 import EditableAreaTiny from "@/common/components/EditableAreaTiny.vue";
 
+import GroupClasses from "@/modules/GroupClasses.vue";
 import ReportMentorIbProfile from "@/modules/ReportMentorIbProfile.vue";
 import ReportMentorPrimaryUnit from "@/modules/ReportMentorPrimaryUnit.vue";
 import EventParticipation from "@/modules/EventParticipation.vue";
@@ -326,7 +379,6 @@ import { useIboStore } from "@/stores/ibo";
 
 
 const currentAcademicYear = ref({});
-const currentStudyYear = ref({});
 const currentReportPeriod = ref({});
 const currentGroup = ref({});
 const currentStudent = ref({});
@@ -361,7 +413,7 @@ const isMentor = () => {
 }
 
 const currentReportType = computed(() => {
-  if (currentStudyYear.value.level == 'noo') {
+  if (currentGroup.value.curriculum.level == 'noo') {
     return { value: 'noo', name: 'Репорт начальной школы' }
   } else {
     return { value: 'ooo', name: 'Репорт средней или старшей школы' }
@@ -378,7 +430,7 @@ const filteredReportPeriod = computed(() => {
 // Фильтр списка классов по выбранной параллели
 const filteredGroup = computed(() => {
   return generalStore.groups.filter(
-    (item) => item.year_study.id == currentStudyYear.value.id
+    (item) => item.year_study.id == currentGroup.value.curriculum.id
   );
 });
 
@@ -390,17 +442,6 @@ const selectAcademicYear = () => {
     JSON.stringify(currentAcademicYear.value)
   );
   resetSelectedOptions();
-};
-
-// Событие выбора учебной параллели из выпадающего списка:
-// запись в localstorage, получение классов, очистка списка студентов, сброс выбранного класса
-const selectStudyYear = () => {
-  localStorage.setItem(
-    "selectedStudyYearReportMentor",
-    JSON.stringify(currentStudyYear.value)
-  );
-  resetSelectedGroup();
-  resetStudents();
 };
 
 // Событие выбора периода репортов из выпадающего списка:
@@ -425,16 +466,9 @@ const selectGroup = () => {
 
 // Сброс всех выбранных опций с очисткой списка студентов
 const resetSelectedOptions = () => {
-  resetSelectedStudyYear();
   resetSelectedReportPeriod();
   resetSelectedGroup();
   resetStudents();
-};
-
-// Сброс выбранной учебной параллели
-const resetSelectedStudyYear = () => {
-  currentStudyYear.value = {};
-  localStorage.removeItem("selectedStudyYearReportMentor");
 };
 
 // Сброс выбранного периода репрорта
@@ -472,7 +506,6 @@ const getGroups = () => {
 const getStudentMentorReports = () => {
   // console.log('Запрос студентов с репортами')
   if (
-    isEmpty(currentStudyYear.value) ||
     isEmpty(currentAcademicYear.value) ||
     isEmpty(currentGroup.value)
   ) {
@@ -500,7 +533,7 @@ const createStudentMentorReport = (id) => {
   if (isEmpty(currentReportPeriod.value) || isEmpty(currentGroup.value)) {
     return null;
   }
-  if (currentStudyYear.value.level == "noo") {
+  if (currentGroup.value.curriculum.level == "noo") {
     reportStore
       .createReportMentorPrimary({
         student: id,
@@ -543,7 +576,7 @@ const cancelRemoveStudentMentorReport = () => {
 // После успешного ответа происходит повторный запрос на обновление списка студентов
 const removeStudentMentorReport = () => {
   // console.log('Запрос на удаление репорта студенту: ', currentStudent.value);
-  if (currentStudyYear.value.level == "noo") {
+  if (currentGroup.value.curriculum.level == "noo") {
     reportStore
       .removeReportMentorPrimary(currentStudent.value.report.id)
       .then((result) => {
@@ -569,7 +602,7 @@ const handleSave = async (editData, id) => {
     id: id,
     [editData.propName]: editData.value,
   };
-  if (currentStudyYear.value.level == "noo") {
+  if (currentGroup.value.curriculum.level == "noo") {
     reportStore.updateReportMentorPrimary(updatedObject).then((result) => {
       // console.log('Репорт успешно обновлён: ', result)
       getStudentMentorReports();
@@ -590,12 +623,6 @@ const toggleEdit = (state) => {
 
 // Функция восстановления текущих значений периода, параллели и класса из LocalStorage
 const recoveryOptions = () => {
-  const savedSelectionStudyYear = JSON.parse(
-    localStorage.getItem("selectedStudyYearReportMentor")
-  );
-  if (savedSelectionStudyYear) {
-    currentStudyYear.value = savedSelectionStudyYear;
-  }
   const savedSelectionReportPeriod = JSON.parse(
     localStorage.getItem("selectedReportPeriodReportMentor")
   );
@@ -623,9 +650,6 @@ onMounted(() => {
     getGroups();
     getStudentMentorReports();
   }
-  if (!generalStore.isStudyYearsLoaded) {
-    generalStore.loadStudyYears();
-  }
   if (!reportStore.isReportPeriodsLoaded) {
     reportStore.loadReportPeriods();
   }
@@ -643,11 +667,11 @@ const exportReportToWord = (student) => {
       report_group: currentGroup.value.id,
     }
   }
-  if (currentStudyYear.value.level == 'noo') {
+  if (currentGroup.value.curriculum.level == 'noo') {
     config.params.level = 'noo';
-  } else if (currentStudyYear.value.level == 'ooo') {
+  } else if (currentGroup.value.curriculum.level == 'ooo') {
     config.params.level = 'ooo';
-  } else if (currentStudyYear.value.level == 'soo') {
+  } else if (currentGroup.value.curriculum.level == 'soo') {
     config.params.level = 'soo';
   }
   reportStore.exportStudentMentorReport(student.id, config).then((result) => {
@@ -689,4 +713,5 @@ const exportReportToWord = (student) => {
   }
 
   /* Промежуточный цвет фона для мигания */
-}</style>
+}
+</style>

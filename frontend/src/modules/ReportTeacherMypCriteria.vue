@@ -19,6 +19,14 @@
           </div>
           <div v-else class="ms-auto">Критерий не оценивается</div>
         </div>
+        <div class="d-flex align-items-center">
+          <div>Сумма баллов:</div> 
+          <div class="ms-auto">{{ calculateSumMark(report.criterion_marks).summ }} / {{ report.criterion_marks.length * 8 }}</div>
+        </div>
+        <div class="d-flex align-items-center">
+          <div>Оценка:</div> 
+          <div class="ms-auto">{{ calculateSumMark(report.criterion_marks).mark  }}</div>
+        </div>
       </div>
     </div>
 
@@ -28,6 +36,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import ScaleRadio from "@/common/components/ScaleRadio.vue";
+import { calculateSumMark } from "@/common/helpers/criteria";
 import { useUnitMypStore } from "@/stores/unitMyp";
 import { useReportStore } from "@/stores/report";
 import { MARK8 } from "@/common/constants";

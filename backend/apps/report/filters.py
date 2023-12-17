@@ -1,5 +1,6 @@
 import django_filters
 from django.db.models import Q
+from django.contrib.postgres.fields import ArrayField
 
 from apps.report.models import (
     ReportPeriod,
@@ -28,21 +29,38 @@ class ReportPeriodFilter(django_filters.FilterSet):
         model = ReportPeriod
         fields = {'year'}
 
+class ArrayFilter(django_filters.filters.Filter):
+    def filter(self, qs, value):
+        if not value:
+            return qs
+        return qs.filter(**{
+            f'{self.field_name}__contains': [value]
+        })
+
 class ReportCriterionFilter(django_filters.FilterSet):
     class Meta:
         model = ReportCriterion
-        fields = {'subjects', 'years'}
+        fields = {'subjects', 'years', 'type'}
+        filter_overrides = {
+            ArrayField: {
+                'filter_class': ArrayFilter
+            }
+        }
     def filter_queryset(self, queryset):
         subjects = self.request.query_params.get('subjects', None)
         years = self.request.query_params.get('years', None)
+        type_report = self.request.query_params.get('type', None)
         # queryset = super(ReportCriterionFilter, self).filter_queryset(queryset)
         if years is not None:
             queryset = queryset.filter(years=years)
+        if type_report is not None:
+            queryset = queryset.filter(type__contains=[type_report])
         if subjects is not None:
             queryset = queryset.filter(Q(subjects=subjects) | Q(subjects__isnull=True))
         else:
             queryset = queryset.filter(subjects__isnull=True)
         return queryset
+    
 
 # class ReportCriterionLevelFilter(django_filters.FilterSet):
 #     class Meta:

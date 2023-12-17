@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 
 from django.utils.translation import gettext_lazy as _
@@ -60,6 +61,11 @@ class User(AbstractUser, PermissionsMixin):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         ordering = ['last_name', 'first_name', 'is_active']
+    @property
+    def is_online(self):
+        now = timezone.now()
+        time_difference = now - self.last_activity
+        return time_difference.total_seconds() < 180
     def get_full_name(self):
         if not self.middle_name:
             full_name = f"{self.last_name} {self.first_name}"

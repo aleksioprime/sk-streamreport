@@ -79,6 +79,7 @@ class ReportTeacherPrimaryListSerializer(serializers.ModelSerializer):
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     subject = SubjectReportSerializer()
+    extra_subjects = SubjectReportSerializer(many=True)
     topic_achievements = ReportPrimaryTopicListSerializer(many=True)
     criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
@@ -90,6 +91,7 @@ class ReportTeacherPrimaryListSerializer(serializers.ModelSerializer):
             "period",
             "group",
             "subject",
+            'extra_subjects',
             "comment",
             "created_at",
             "updated_at",
@@ -104,6 +106,7 @@ class ReportTeacherPrimaryRetrieveSerializer(serializers.ModelSerializer):
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     subject = SubjectReportSerializer()
+    extra_subjects = SubjectReportSerializer(many=True)
     topic_achievements = ReportPrimaryTopicListSerializer(many=True)
     criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
@@ -115,6 +118,7 @@ class ReportTeacherPrimaryRetrieveSerializer(serializers.ModelSerializer):
             "period",
             "group",
             "subject",
+            "extra_subjects",
             "comment",
             "created_at",
             "updated_at",
@@ -220,6 +224,7 @@ class ReportTeacherSecondaryListSerializer(serializers.ModelSerializer):
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     subject = SubjectReportSerializer()
+    extra_subjects = SubjectReportSerializer(many=True)
     criterion_marks = ReportSecondaryCriterionListSerializer(many=True)
     objective_levels = ReportSecondaryLevelListSerializer(many=True)
     criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
@@ -232,6 +237,7 @@ class ReportTeacherSecondaryListSerializer(serializers.ModelSerializer):
             "period",
             "group",
             "subject",
+            "extra_subjects",
             "comment",
             "created_at",
             "updated_at",
@@ -248,6 +254,7 @@ class ReportTeacherSecondaryRetrieveSerializer(serializers.ModelSerializer):
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     subject = SubjectReportSerializer()
+    extra_subjects = SubjectReportSerializer(many=True)
     criterion_marks = ReportSecondaryCriterionListSerializer(many=True)
     objective_levels = ReportSecondaryLevelListSerializer(many=True)
     criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
@@ -260,6 +267,7 @@ class ReportTeacherSecondaryRetrieveSerializer(serializers.ModelSerializer):
             "period",
             "group",
             "subject",
+            "extra_subjects",
             "comment",
             "created_at",
             "updated_at",
@@ -287,6 +295,7 @@ class ReportTeacherHighListSerializer(serializers.ModelSerializer):
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     subject = SubjectReportSerializer()
+    extra_subjects = SubjectReportSerializer(many=True)
     criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
         model = ReportTeacherHigh
@@ -297,6 +306,7 @@ class ReportTeacherHighListSerializer(serializers.ModelSerializer):
             "period",
             "group",
             "subject",
+            "extra_subjects",
             "comment",
             "created_at",
             "updated_at",
@@ -312,6 +322,7 @@ class ReportTeacherHighRetrieveSerializer(serializers.ModelSerializer):
     group = ClassGroupReportSerializer()
     period = ReportPeriodListSerializer()
     subject = SubjectReportSerializer()
+    extra_subjects = SubjectReportSerializer(many=True)
     criterion_achievements = ReportCriterionAchievementListSerializer(many=True)
     class Meta:
         model = ReportTeacherHigh
@@ -322,6 +333,7 @@ class ReportTeacherHighRetrieveSerializer(serializers.ModelSerializer):
             "period",
             "group",
             "subject",
+            "extra_subjects",
             "comment",
             "created_at",
             "updated_at",
