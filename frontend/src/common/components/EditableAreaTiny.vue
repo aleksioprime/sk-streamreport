@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-items-center">
+  <div class="d-flex">
     <div class="flex-grow-1">
       <div v-if="!editMode">
         <div v-if="text" v-html="text" class="custom-style"></div>
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div v-if="allowedMode">
+    <div v-if="allowedMode" class="border-start ms-2">
       <div v-if="!editMode">
         <button type="button" class="btn btn-link text-muted small" v-if="!isEditing"
           @click="enableEditMode">Изменить</button>

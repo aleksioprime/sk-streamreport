@@ -159,14 +159,14 @@ AUTH_USER_MODEL = 'general.User'
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-CELERY_BROKER_URL = "redis://redis:6379/0"
-CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+CELERY_BROKER_URL = f"{os.environ.get('REDIS_URL', 'redis://redis:6379')}/0"
+CELERY_RESULT_BACKEND = f"{os.environ.get('REDIS_URL', 'redis://redis:6379')}/0"
 
 # Конфигурация redis-cache
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://redis:6379/1",
+        "LOCATION": f"{os.environ.get('REDIS_URL', 'redis://redis:6379')}/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },

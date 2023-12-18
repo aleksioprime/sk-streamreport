@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <div class="w-100">
-      <span v-if="!editMode">{{ text || 'Нет информации' }}</span>
+      <span v-if="!editMode" v-html="replaceText(text)"></span>
       <textarea v-else ref="inputRef" class="form-control bottom-border-only" rows="1" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"></textarea>
     </div>
     <div class="me-0 ms-2 text-muted small" v-if="allowedMode">
@@ -41,6 +41,15 @@ const editMode = ref(false);
 const text = ref(props.modelValue);
 const originalText = ref(props.modelValue);
 const inputRef = ref(null);
+
+
+const replaceText = (text) => {
+  if (text) {
+    return text.replace(/\n/g, '<br>')
+  } else {
+    return 'Нет информации'
+  }
+}
 
 // Следим за изменениями modelValue, чтобы обновлять локальное состояние
 watch(() => props.modelValue, (newVal) => {

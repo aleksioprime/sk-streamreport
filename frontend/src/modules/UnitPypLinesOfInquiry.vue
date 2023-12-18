@@ -67,6 +67,9 @@ import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
 import { useUnitPypStore } from "@/stores/unitPyp";
 const unitPypStore = useUnitPypStore();
 
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
+
 const props = defineProps({
   unit: {
     type: Object,

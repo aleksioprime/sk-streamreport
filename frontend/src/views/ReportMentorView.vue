@@ -32,7 +32,7 @@
       </div>
       <div v-if="reportStore.studentMentorReports.length" class="row">
         <div class="col-md-auto">
-          <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student">
+          <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student pb-3">
             <div v-if="!isEmpty(currentGroup)">
               <h5>{{ currentGroup.name }} класс</h5>
               <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
@@ -55,7 +55,7 @@
           <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3"
             :id="`st-${student.id}`">
             <div class="card card-student my-1 anchor-student">
-              <div class="card-body d-flex align-items-center">
+              <div class="card-body d-flex align-items-center ">
                 <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
                 <h4 class="m-0">
                   {{ student.last_name }} {{ student.first_name }}
@@ -95,11 +95,11 @@
                   :aria-labelledby="`heading-${student.id}`">
                   <div class="accordion-body">
                     <div class="my-2">
-                      <report-mentor-ib-profile :report="student.report" v-if="currentGroup.curriculum.level == 'noo'"
+                      <report-mentor-ib-profile :report="student.report" v-if="currentGroup.curriculum && currentGroup.curriculum.level == 'noo'"
                         :allowedMode="isAuthor(student.report)" />
                     </div>
                     <div class="my-2">
-                      <report-mentor-primary-unit :report="student.report" v-if="currentGroup.curriculum.level == 'noo'"
+                      <report-mentor-primary-unit :report="student.report" v-if="currentGroup.curriculum && currentGroup.curriculum.level == 'noo'"
                         :allowedMode="isAuthor(student.report)" />
                     </div>
                     <hr />
@@ -686,6 +686,13 @@ const exportReportToWord = (student) => {
 <style scoped>
 .list-right-student {
   top: 10px;
+  max-height: 100vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+.list-right-student::-webkit-scrollbar {
+  display: none;
 }
 
 :target::before {

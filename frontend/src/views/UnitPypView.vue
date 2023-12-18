@@ -69,7 +69,7 @@
                 </ul>
               </div>
             </div>
-            <div>{{ unit.year.name }}</div>
+            <div>{{ unit.year.name }} | {{ unit.transdisciplinary_theme.name_rus }}</div>
             <div class="my-2">
               <i class="bi bi-person me-1"></i>
               <span v-for="teacher, index in unit.teachers" :key="teacher.id">{{ teacher.short_name }}<span v-if="unit.teachers.length != index + 1">, </span></span>
@@ -105,6 +105,9 @@ const unitPypStore = useUnitPypStore();
 import { useGeneralStore } from "@/stores/general";
 const generalStore = useGeneralStore();
 
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
+
 const currentPypUnit = ref({})
 
 const defaultPypUnit = {
@@ -115,6 +118,8 @@ const defaultPypUnit = {
   transdisciplinary_theme: {},
   year: {},
 }
+
+
 
 const newPypUnit = ref({ ...defaultPypUnit })
 

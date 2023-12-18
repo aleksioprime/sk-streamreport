@@ -98,6 +98,9 @@ const unitPypStore = useUnitPypStore();
 import { useIboStore } from "@/stores/ibo";
 const iboStore = useIboStore();
 
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
+
 const props = defineProps({
   unit: {
     type: Object,

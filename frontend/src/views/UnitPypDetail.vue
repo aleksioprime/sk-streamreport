@@ -1,15 +1,16 @@
 <template>
   <div>
     <h1>PYP: Просмотр и редактирование юнита</h1>
+    <small><router-link :to="{ name: 'unitPyp' }">Вернуться к списку юнитов</router-link></small>
     <div class="row">
       <div class="col-md-3">
         <div class="d-flex flex-column list-menu pt-3 ps-4">
-          <a href="#base">Основная информация</a>
+          <a href="#base" :class="checkBaseFields()">Основная информация</a>
           <a href="#central_idea" :class="checkField('central_idea')">Центральная идея</a>
           <a href="#key_concepts" :class="checkField('key_concepts')">Ключевые концепты</a>
           <a href="#related_concepts" :class="checkField('related_concepts')">Сопутствующие концепты</a>
           <a href="#ibprofiles" :class="checkField('ibprofiles')">Качества портрета студента</a>
-          <a href="#lines_inquiry" :class="checkField('lines_inquiry')">Линии исследования</a>
+          <a href="#inquiry_lines" :class="checkField('inquiry_lines')">Линии исследования</a>
           <a href="#atl_develops" :class="checkField('atl_develops')">Навыки ATL</a>
           <a href="#action" :class="checkField('action')">Действия</a>
           <a href="#reflections_initial" :class="checkField('reflections_initial')">Начальная рефлексия</a>
@@ -120,7 +121,7 @@
             <unit-profile-develop :unit="unitPypStore.pypUnit" />
           </div>
           <div class="my-3">
-            <h5 id="lines_inquiry">Линии исследования</h5>
+            <h5 id="inquiry_lines">Линии исследования</h5>
             <small>Какие вопросы учителя и провокации будут формировать линии исследования?<br>
               Линии исследования:
               <ul>
@@ -402,6 +403,9 @@ const generalStore = useGeneralStore();
 import { useIboStore } from "@/stores/ibo";
 const iboStore = useIboStore();
 
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
+
 const route = useRoute()
 
 const isEditing = ref(false);
@@ -410,6 +414,10 @@ const toggleEdit = (state) => {
 };
 
 const isLoadedUnitPyp = ref(false)
+
+const checkBaseFields = () => {
+  return checkField('title') && checkField('order') && checkField('teachers') && checkField('year') && checkField('transdisciplinary_theme')
+}
 
 // Функция редактирования конкретного поля
 const handleSave = async (editData, id) => {

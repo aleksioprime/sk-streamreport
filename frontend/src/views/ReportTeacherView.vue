@@ -43,7 +43,7 @@
       <div class="row" v-if="generalStore.users.length">
         <!-- Список студентов -->
         <div class="col-md-auto">
-          <div class="d-flex flex-column align-items-start justify-content-start m-2 list-menu list-right-student">
+          <div class="d-flex flex-column align-items-start justify-content-start m-2 list-menu list-right-student pb-3">
             <div v-if="!isEmpty(currentGroup)">
               <h5>{{ currentGroup.name }} класс</h5>
               <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
@@ -648,8 +648,14 @@ onMounted(() => {
 
 .list-right-student {
   top: 10px;
+  max-height: 100vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
 }
-
+.list-right-student::-webkit-scrollbar {
+  display: none;
+}
 :target::before {
   content: "";
   display: block;

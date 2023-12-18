@@ -1,8 +1,7 @@
 <template>
   <div class="d-flex align-items-center wrapper">
     <div v-if="allowedMode">
-      <div v-if="!editMode" class="cell-text" @click="enableEditMode">{{ text || "Нажмите, чтобы написать комментарий" }}
-      </div>
+      <div v-if="!editMode" class="cell-text" @click="enableEditMode" v-html=replaceText(text)></div>
       <textarea v-else id="cell-input" ref="inputRef" type="text" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"
         class="form-control"></textarea>
     </div>
@@ -30,6 +29,14 @@ const props = defineProps({
     default: true,
   }
 });
+
+const replaceText = (text) => {
+  if (text) {
+    return text.replace(/\n/g, '<br>')
+  } else {
+    return 'Нажмите, чтобы написать комментарий'
+  }
+}
 
 // Определяем в emit событие сохранение поля
 const emit = defineEmits(['save']);
