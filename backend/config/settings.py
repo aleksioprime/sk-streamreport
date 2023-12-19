@@ -257,7 +257,7 @@ SCHOOL_ID = os.environ.get("SCHOOL_ID")
 CLIENT_ID = os.environ.get("CLIENT_ID")
 
 sentry_sdk.init(
-    dsn="https://57d83b15ae45feb6c98f02dd38eaf7d6@o4505232867655680.ingest.sentry.io/4506412520046592",
+    dsn=os.environ.get("SENTRY_DSN"),
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     traces_sample_rate=1.0,

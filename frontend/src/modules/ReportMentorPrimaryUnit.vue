@@ -49,7 +49,7 @@
             <input class="form-check-input" type="checkbox" :value="unit.id" :id="`check-${unit.id}`"
               v-model="choiceUnits" :disabled="checkDisableUnit(unit.id)">
             <label class="form-check-label" :for="`check-${unit.id}`">
-              {{ unit.title }}
+              {{ unit.year.name }}: {{ unit.order }}. {{ unit.title }} 
             </label>
           </div>
         </div>

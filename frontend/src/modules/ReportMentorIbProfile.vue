@@ -40,6 +40,9 @@ const props = defineProps({
   }
 });
 
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
+
 const emit = defineEmits(["save"]);
 
 const iboStore = useIboStore();

@@ -331,9 +331,9 @@ def export_report_noo_msword(student, period_id):
     report_units = report_mentor.reportmentorprimary.pyp_units.all()
     for report in report_units:
         report.unit.central_idea = parsing_html(report.unit.central_idea)
-        report.unit.ongoing_assessment = report.unit.ongoing_assessment or ''
-        report.unit.action = report.unit.action or ''
-        report.unit.learning_goals = report.unit.learning_goals or ''
+        report.unit.ongoing_assessment = parsing_html(report.unit.ongoing_assessment) or ''
+        report.unit.action = parsing_html(report.unit.action) or ''
+        report.unit.learning_goals = parsing_html(report.unit.learning_goals) or ''
         report.comment = report.comment or ''
     document.render({
         'report_period': report_period,
