@@ -32,8 +32,12 @@ SECRET_KEY = os.environ.get("SECRET_KEY", default='Hello, StreamReport!')
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
 # ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*").split(" ")
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*").split(" ")
 # CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
+if os.getenv('ALLOWED_HOSTS', False):
+    ALLOWED_HOSTS = [x.strip() for x in os.getenv('ALLOWED_HOSTS').split(',')]
+else:
+    ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
