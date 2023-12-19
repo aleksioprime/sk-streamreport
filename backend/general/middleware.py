@@ -15,7 +15,7 @@ class LastActivityMiddleware:
         # Проверяем, что пользователь аутентифицирован
         if request.user.is_authenticated:
             # Устанавливаем или обновляем время последней активности пользователя в кеше
-            cache.set(f'last_activity_{request.user.id}', timezone.now(), 3600) # срок жизни в 1 час, например
+            # cache.set(f'last_activity_{request.user.id}', timezone.now(), 3600) # срок жизни в 1 час, например
             # print('Записан cache: ', cache.get(f'last_activity_{request.user.id}'))
             logger.info(f'Записан cache: { cache.get(f"last_activity_{request.user.id}")}')
         return response
