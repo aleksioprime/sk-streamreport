@@ -18,6 +18,9 @@ export default defineConfig({
         target: "http://backend:8000",
         // rewrite: (path) => path.replace(/^\/api/, ""),
       },
+      "/admin": {
+        target: "http://backend:8000",
+      },
       "/media": {
         target: "http://backend:8000",
       },
