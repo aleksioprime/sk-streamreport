@@ -106,7 +106,7 @@ import { useAuthStore } from "@/stores/auth";
 import { usePortfolioStore } from "@/stores/portfolio";
 
 import { formatToYYYYMMDD, formatDateToReadable } from "@/common/helpers/date.js";
-import { validateFields, clearValidationErrors } from '@/common/validator'
+import { validateFields, clearValidationErrors } from '@/common/validator';
 
 const props = defineProps({
   report: {

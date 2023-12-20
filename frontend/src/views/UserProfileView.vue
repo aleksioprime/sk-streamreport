@@ -135,6 +135,7 @@
                         <search-dropdown class="my-2" title="Предмет не выбран" v-model="newTeachingLoad.subject"
                           :propItems="curriculumStore.subjects" showName="name_level" propName="subject" />
                       </div>
+                      <small class="text-danger">{{ validations.subject.error }}</small>
                     </div>
                     <div class="row d-flex align-items-center">
                       <div class="col-md-4">Выберите классы</div>
@@ -142,6 +143,7 @@
                         <search-dropdown-multiple class="my-2" title="Не выбрано" v-model="newTeachingLoad.groups"
                           :propItems="generalStore.groups" showName="name" propName="groups" />
                       </div>
+                      <small class="text-danger">{{ validations.groups.error }}</small>
                     </div>
                     <div class="row d-flex align-items-center">
                       <div class="col-md-4">Укажите часы</div>
@@ -199,6 +201,21 @@ import SearchDropdownMultiple from "@/common/components/SearchDropdownMultiple.v
 import EditableText from "@/common/components/EditableText.vue";
 import EditableArea from "@/common/components/EditableArea.vue";
 import ConfirmationModal from '@/common/components/ConfirmationModal.vue';
+
+import { validateFields, clearValidationErrors } from '@/common/validator';
+
+const setEmptyValidations = () => ({
+  subject: {
+    error: '',
+    rules: ['required']
+  },
+  groups: {
+    error: '',
+    rules: ['required']
+  },
+})
+
+const validations = ref(setEmptyValidations())
 
 const selectedPhoto = ref(null);
 const handleFileChange = (event) => {
@@ -272,10 +289,20 @@ const createFormShow = () => {
 const createFormHide = () => {
   createMode.value = false;
   newTeachingLoad.value = { ...defaultTeachingLoad }
+  clearValidationErrors(validations.value);
 }
 
 // Подтверждение создания записи и выполнение запроса
 const createTeachingLoad = () => {
+  if (!validateFields(
+    {
+      subject: newTeachingLoad.value.subject,
+      groups: newTeachingLoad.value.groups,
+    },
+    validations.value
+  )) {
+    return
+  }
   const createdObject = {
     subject: newTeachingLoad.value.subject.id,
     groups: newTeachingLoad.value.groups.map(i => i.id),

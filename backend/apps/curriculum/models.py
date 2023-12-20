@@ -102,10 +102,10 @@ class CurriculumLoad(models.Model):
     
 class TeachingLoad(models.Model):
     """ Преподавательская нагрузка """
-    year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="teaching_loads")
-    teacher = models.ForeignKey('general.User', verbose_name=_("Учитель"), on_delete=models.CASCADE, null=True, related_name="teaching_loads")
-    subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"), on_delete=models.CASCADE, null=True, related_name="teaching_loads")
-    groups = models.ManyToManyField('general.ClassGroup', verbose_name=_("Классы"), blank=True, related_name="teaching_loads")
+    year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, related_name="teaching_loads")
+    teacher = models.ForeignKey('general.User', verbose_name=_("Учитель"), on_delete=models.CASCADE, related_name="teaching_loads")
+    subject = models.ForeignKey('curriculum.Subject', verbose_name=_("Предмет"), on_delete=models.CASCADE, related_name="teaching_loads")
+    groups = models.ManyToManyField('general.ClassGroup', verbose_name=_("Классы"), related_name="teaching_loads")
     hours = models.PositiveSmallIntegerField(verbose_name=_("Часы"), default=1)
     class Meta:
         verbose_name = 'Рабочая нагрузка учителя'
