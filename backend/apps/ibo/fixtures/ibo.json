@@ -1,1 +1,1249 @@
-[{"model": "ibo.learnerprofile", "pk": 1, "fields": {"name": "Inquirers", "name_rus": "Любознательный", "description": "We nurture our curiosity, developing skills for inquiry and research. We know how to learn independently and with others. We learn with enthusiasm and sustain our love of learning throughout life.", "description_rus": "Развивает свое любопытство, навыки поиска информации и исследования. Знает, как учиться самостоятельно и вместе с другими. Учится с энтузиазмом и поддерживает свой интерес к обучению на протяжении всей жизни"}}, {"model": "ibo.learnerprofile", "pk": 2, "fields": {"name": "Knowledgeable", "name_rus": "Знающий", "description": "We develop and use conceptual understanding, exploring knowledge across a range of disciplines. We engage with issues and ideas that have local and global significance.", "description_rus": "Развивает и использует концептуальное понимание, исследуя знания по целому ряду дисциплин. Изучает вопросы и идеи, которые имеют как местное, так и глобальное, мировое значение"}}, {"model": "ibo.learnerprofile", "pk": 3, "fields": {"name": "Thinkers", "name_rus": "Думающий", "description": "We use critical and creative thinking skills to analyse and take responsible action on complex problems. We exercise initiative in making reasoned, ethical decisions.", "description_rus": "Использует навыки критического и творческого мышления для анализа и принятия ответственных мер по решению сложных проблем. Проявляет инициативу в принятии обоснованных и этичных решений"}}, {"model": "ibo.learnerprofile", "pk": 4, "fields": {"name": "Communicators", "name_rus": "Общительный", "description": "We express ourselves confidently and creatively in more than one language and in many ways. We collaborate effectively, listening carefully to the perspectives of other individuals and groups", "description_rus": "Уверенно и творчески может выразить себя более чем на одном языке используя разные способы коммуникации. Эффективно сотрудничает, внимательно прислушиваясь к мнению других людей"}}, {"model": "ibo.learnerprofile", "pk": 5, "fields": {"name": "Principled", "name_rus": "Принципиальный", "description": "We act with integrity and honesty, with a strong sense of fairness and justice, and with respect for the dignity and rights of people everywhere. We take responsibility for our actions and their consequences.", "description_rus": "Действует честно и добросовестно, выраженным чувством справедливости, а также с уважением к достоинству и правам людей во всем мире. Берет на себя ответственность за свои действия и их последствия"}}, {"model": "ibo.learnerprofile", "pk": 6, "fields": {"name": "Open-Minded", "name_rus": "Широкомыслящий", "description": "We critically appreciate our own cultures and personal histories, as well as the values and traditions of others. We seek and evaluate a range of points of view, and we are willing to grow from the experience", "description_rus": "Критически оценивает собственную свою культуру и личную историю, а также ценности других людей. Принимает во внимание и учитывает различные точки зрения, а также готов развиваться на основе этого опыта"}}, {"model": "ibo.learnerprofile", "pk": 7, "fields": {"name": "Caring", "name_rus": "Заботливый", "description": "We show empathy, compassion and respect. We have a commitment to service, and we act to make a positive difference in the lives of others and in the world around us.", "description_rus": "Проявляет сочувствие, сострадание и уважение. У студентов есть обязательство приносить пользу обществу, поэтому они действуют, чтобы внести позитивные изменения в жизнь других людей и в окружающий их мир"}}, {"model": "ibo.learnerprofile", "pk": 8, "fields": {"name": "Risk-Takers", "name_rus": "Решительный", "description": "We approach uncertainty with forethought and determination; we work independently and cooperatively to explore new ideas and innovative strategies. We are resourceful and resilient in the face of challenges and change.", "description_rus": "Подходит к неопределенности с предусмотрительностью и решимостью; может работать независимо и совместно в другими, чтобы исследовать новые идеи и инновационные стратегии. Находчив и устойчив перед возникающими вызовами и переменами."}}, {"model": "ibo.learnerprofile", "pk": 9, "fields": {"name": "Balanced", "name_rus": "Гармонично-развитый", "description": "We understand the importance of balancing different aspects of our lives - intellectual, physical, and emotional - to achieve well-being for ourselves and others. We recognize our interdependence with other people and with the world in which we live.", "description_rus": "Понимает важность баланса различных аспектов своей жизни - интеллектуальных, физических и эмоциональных - для достижения благополучия благополучия своего и других людей. Осознает свою взаимозависимость с другими людьми и с миром, в котором мы живем"}}, {"model": "ibo.learnerprofile", "pk": 10, "fields": {"name": "Reflective", "name_rus": "Рефлексирующий", "description": "We thoughtfully consider the world and our own ideas and experience. We work to understand our strengths and weaknesses in order to support our learning and personal development.", "description_rus": "Вдумчиво рассматривает окружающий мир, свои собственные идеи и опыт. Работает над тем, чтобы понять свои сильные и слабые стороны, чтобы поддержать свое обучение и личностное развитие"}}, {"model": "ibo.atlcategory", "pk": 1, "fields": {"name": "Communication", "name_rus": "Коммуникация"}}, {"model": "ibo.atlcategory", "pk": 2, "fields": {"name": "Social", "name_rus": "Социальность"}}, {"model": "ibo.atlcategory", "pk": 3, "fields": {"name": "Self-management", "name_rus": "Самоуправление"}}, {"model": "ibo.atlcategory", "pk": 4, "fields": {"name": "Research", "name_rus": "Исследование"}}, {"model": "ibo.atlcategory", "pk": 5, "fields": {"name": "Thinking", "name_rus": "Мышление"}}, {"model": "ibo.atlcluster", "pk": 1, "fields": {"name": "Communication", "name_rus": "Коммуникативные навыки", "category": 1}}, {"model": "ibo.atlcluster", "pk": 2, "fields": {"name": "Collaboration", "name_rus": "Социальные навыки", "category": 2}}, {"model": "ibo.atlcluster", "pk": 3, "fields": {"name": "Affective skills", "name_rus": "Эмоциональные навыки", "category": 3}}, {"model": "ibo.atlcluster", "pk": 4, "fields": {"name": "Organization skills", "name_rus": "Организационные навыки", "category": 3}}, {"model": "ibo.atlcluster", "pk": 5, "fields": {"name": "Information literacy and academic honesty", "name_rus": "Информационная грамотность и академическая честность", "category": 4}}, {"model": "ibo.atlcluster", "pk": 6, "fields": {"name": "Cognitive and metacognitive thinking", "name_rus": "Когнитивное и метакогнитивное мышление", "category": 5}}, {"model": "ibo.atlcluster", "pk": 7, "fields": {"name": "Reflection", "name_rus": "Рефлексия", "category": 5}}, {"model": "ibo.atlcluster", "pk": 8, "fields": {"name": "Critical thinking and higher-order thinking", "name_rus": "Критическое мышление и мышление высшего порядка", "category": 5}}, {"model": "ibo.unitplanerbasemodel", "pk": 1, "fields": {"title": "Мы - СТУДЕНТЫ гимназии Сколково", "order": 1, "year": 1, "hours": 18, "description": null, "created_at": "2023-12-15T08:54:44.713Z", "updated_at": "2023-12-15T09:24:11.014Z", "teachers": [30, 88, 126]}}, {"model": "ibo.unitplanerbasemodel", "pk": 2, "fields": {"title": "Я - студент-исследователь", "order": 2, "year": 1, "hours": 18, "description": null, "created_at": "2023-12-15T09:05:12.372Z", "updated_at": "2023-12-15T09:24:23.680Z", "teachers": [30, 88, 126]}}, {"model": "ibo.unitplanerbasemodel", "pk": 3, "fields": {"title": "Я учусь создавать праздник", "order": 3, "year": 1, "hours": 0, "description": null, "created_at": "2023-12-15T09:25:57.989Z", "updated_at": "2023-12-15T09:27:52.792Z", "teachers": [30, 88, 126]}}, {"model": "ibo.unitplanerbasemodel", "pk": 4, "fields": {"title": "Наше здоровье в наших руках", "order": 4, "year": 1, "hours": 0, "description": null, "created_at": "2023-12-15T09:37:03.557Z", "updated_at": "2023-12-15T09:37:34.224Z", "teachers": [30, 88, 126]}}, {"model": "ibo.unitplanerbasemodel", "pk": 5, "fields": {"title": "Наш город вчера, сегодня и завтра", "order": 5, "year": 1, "hours": 0, "description": null, "created_at": "2023-12-15T09:43:47.680Z", "updated_at": "2023-12-15T09:44:37.455Z", "teachers": [30, 88, 126]}}, {"model": "ibo.unitplanerbasemodel", "pk": 6, "fields": {"title": "Живые обитатели Планеты", "order": 6, "year": 1, "hours": 0, "description": null, "created_at": "2023-12-15T09:48:35.659Z", "updated_at": "2023-12-15T09:49:01.860Z", "teachers": [30, 88, 126]}}, {"model": "ibo.ibprofiledevelop", "pk": 1, "fields": {"profile": 4, "description": null, "unit": 1}}, {"model": "ibo.ibprofiledevelop", "pk": 2, "fields": {"profile": 7, "description": null, "unit": 1}}, {"model": "ibo.ibprofiledevelop", "pk": 3, "fields": {"profile": 10, "description": null, "unit": 1}}, {"model": "ibo.ibprofiledevelop", "pk": 4, "fields": {"profile": 1, "description": null, "unit": 2}}, {"model": "ibo.ibprofiledevelop", "pk": 5, "fields": {"profile": 3, "description": null, "unit": 2}}, {"model": "ibo.ibprofiledevelop", "pk": 6, "fields": {"profile": 10, "description": null, "unit": 2}}, {"model": "ibo.ibprofiledevelop", "pk": 7, "fields": {"profile": 6, "description": null, "unit": 3}}, {"model": "ibo.ibprofiledevelop", "pk": 8, "fields": {"profile": 7, "description": null, "unit": 3}}, {"model": "ibo.ibprofiledevelop", "pk": 9, "fields": {"profile": 2, "description": null, "unit": 4}}, {"model": "ibo.ibprofiledevelop", "pk": 10, "fields": {"profile": 5, "description": null, "unit": 4}}, {"model": "ibo.ibprofiledevelop", "pk": 11, "fields": {"profile": 9, "description": null, "unit": 4}}, {"model": "ibo.ibprofiledevelop", "pk": 12, "fields": {"profile": 8, "description": null, "unit": 5}}, {"model": "ibo.ibprofiledevelop", "pk": 13, "fields": {"profile": 2, "description": null, "unit": 5}}, {"model": "ibo.ibprofiledevelop", "pk": 14, "fields": {"profile": 5, "description": null, "unit": 5}}, {"model": "ibo.ibprofiledevelop", "pk": 15, "fields": {"profile": 2, "description": null, "unit": 6}}, {"model": "ibo.ibprofiledevelop", "pk": 16, "fields": {"profile": 7, "description": null, "unit": 6}}, {"model": "ibo.ibprofiledevelop", "pk": 17, "fields": {"profile": 3, "description": null, "unit": 6}}]
+[
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 1,
+        "fields": {
+            "name": "Inquirers",
+            "name_rus": "Любознательный",
+            "description": "We nurture our curiosity, developing skills for inquiry and research. We know how to learn independently and with others. We learn with enthusiasm and sustain our love of learning throughout life.",
+            "description_rus": "Развивает свое любопытство, навыки поиска информации и исследования. Знает, как учиться самостоятельно и вместе с другими. Учится с энтузиазмом и поддерживает свой интерес к обучению на протяжении всей жизни"
+        }
+    },
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 2,
+        "fields": {
+            "name": "Knowledgeable",
+            "name_rus": "Знающий",
+            "description": "We develop and use conceptual understanding, exploring knowledge across a range of disciplines. We engage with issues and ideas that have local and global significance.",
+            "description_rus": "Развивает и использует концептуальное понимание, исследуя знания по целому ряду дисциплин. Изучает вопросы и идеи, которые имеют как местное, так и глобальное, мировое значение"
+        }
+    },
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 3,
+        "fields": {
+            "name": "Thinkers",
+            "name_rus": "Думающий",
+            "description": "We use critical and creative thinking skills to analyse and take responsible action on complex problems. We exercise initiative in making reasoned, ethical decisions.",
+            "description_rus": "Использует навыки критического и творческого мышления для анализа и принятия ответственных мер по решению сложных проблем. Проявляет инициативу в принятии обоснованных и этичных решений"
+        }
+    },
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 4,
+        "fields": {
+            "name": "Communicators",
+            "name_rus": "Общительный",
+            "description": "We express ourselves confidently and creatively in more than one language and in many ways. We collaborate effectively, listening carefully to the perspectives of other individuals and groups",
+            "description_rus": "Уверенно и творчески может выразить себя более чем на одном языке используя разные способы коммуникации. Эффективно сотрудничает, внимательно прислушиваясь к мнению других людей"
+        }
+    },
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 5,
+        "fields": {
+            "name": "Principled",
+            "name_rus": "Принципиальный",
+            "description": "We act with integrity and honesty, with a strong sense of fairness and justice, and with respect for the dignity and rights of people everywhere. We take responsibility for our actions and their consequences.",
+            "description_rus": "Действует честно и добросовестно, выраженным чувством справедливости, а также с уважением к достоинству и правам людей во всем мире. Берет на себя ответственность за свои действия и их последствия"
+        }
+    },
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 6,
+        "fields": {
+            "name": "Open-Minded",
+            "name_rus": "Широкомыслящий",
+            "description": "We critically appreciate our own cultures and personal histories, as well as the values and traditions of others. We seek and evaluate a range of points of view, and we are willing to grow from the experience",
+            "description_rus": "Критически оценивает собственную свою культуру и личную историю, а также ценности других людей. Принимает во внимание и учитывает различные точки зрения, а также готов развиваться на основе этого опыта"
+        }
+    },
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 7,
+        "fields": {
+            "name": "Caring",
+            "name_rus": "Заботливый",
+            "description": "We show empathy, compassion and respect. We have a commitment to service, and we act to make a positive difference in the lives of others and in the world around us.",
+            "description_rus": "Проявляет сочувствие, сострадание и уважение. У студентов есть обязательство приносить пользу обществу, поэтому они действуют, чтобы внести позитивные изменения в жизнь других людей и в окружающий их мир"
+        }
+    },
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 8,
+        "fields": {
+            "name": "Risk-Takers",
+            "name_rus": "Решительный",
+            "description": "We approach uncertainty with forethought and determination; we work independently and cooperatively to explore new ideas and innovative strategies. We are resourceful and resilient in the face of challenges and change.",
+            "description_rus": "Подходит к неопределенности с предусмотрительностью и решимостью; может работать независимо и совместно в другими, чтобы исследовать новые идеи и инновационные стратегии. Находчив и устойчив перед возникающими вызовами и переменами."
+        }
+    },
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 9,
+        "fields": {
+            "name": "Balanced",
+            "name_rus": "Гармонично-развитый",
+            "description": "We understand the importance of balancing different aspects of our lives - intellectual, physical, and emotional - to achieve well-being for ourselves and others. We recognize our interdependence with other people and with the world in which we live.",
+            "description_rus": "Понимает важность баланса различных аспектов своей жизни - интеллектуальных, физических и эмоциональных - для достижения благополучия благополучия своего и других людей. Осознает свою взаимозависимость с другими людьми и с миром, в котором мы живем"
+        }
+    },
+    {
+        "model": "ibo.learnerprofile",
+        "pk": 10,
+        "fields": {
+            "name": "Reflective",
+            "name_rus": "Рефлексирующий",
+            "description": "We thoughtfully consider the world and our own ideas and experience. We work to understand our strengths and weaknesses in order to support our learning and personal development.",
+            "description_rus": "Вдумчиво рассматривает окружающий мир, свои собственные идеи и опыт. Работает над тем, чтобы понять свои сильные и слабые стороны, чтобы поддержать свое обучение и личностное развитие"
+        }
+    },
+    {
+        "model": "ibo.atlcategory",
+        "pk": 1,
+        "fields": {
+            "name": "Communication",
+            "name_rus": "Коммуникация"
+        }
+    },
+    {
+        "model": "ibo.atlcategory",
+        "pk": 2,
+        "fields": {
+            "name": "Social",
+            "name_rus": "Социальность"
+        }
+    },
+    {
+        "model": "ibo.atlcategory",
+        "pk": 3,
+        "fields": {
+            "name": "Self-management",
+            "name_rus": "Самоуправление"
+        }
+    },
+    {
+        "model": "ibo.atlcategory",
+        "pk": 4,
+        "fields": {
+            "name": "Research",
+            "name_rus": "Исследование"
+        }
+    },
+    {
+        "model": "ibo.atlcategory",
+        "pk": 5,
+        "fields": {
+            "name": "Thinking",
+            "name_rus": "Мышление"
+        }
+    },
+    {
+        "model": "ibo.atlcluster",
+        "pk": 1,
+        "fields": {
+            "name": "Communication",
+            "name_rus": "Коммуникативные навыки",
+            "category": 1
+        }
+    },
+    {
+        "model": "ibo.atlcluster",
+        "pk": 2,
+        "fields": {
+            "name": "Collaboration",
+            "name_rus": "Социальные навыки",
+            "category": 2
+        }
+    },
+    {
+        "model": "ibo.atlcluster",
+        "pk": 3,
+        "fields": {
+            "name": "Affective skills",
+            "name_rus": "Эмоциональные навыки",
+            "category": 3
+        }
+    },
+    {
+        "model": "ibo.atlcluster",
+        "pk": 4,
+        "fields": {
+            "name": "Organization skills",
+            "name_rus": "Организационные навыки",
+            "category": 3
+        }
+    },
+    {
+        "model": "ibo.atlcluster",
+        "pk": 5,
+        "fields": {
+            "name": "Information literacy and academic honesty",
+            "name_rus": "Информационная грамотность и академическая честность",
+            "category": 4
+        }
+    },
+    {
+        "model": "ibo.atlcluster",
+        "pk": 6,
+        "fields": {
+            "name": "Cognitive and metacognitive thinking",
+            "name_rus": "Когнитивное и метакогнитивное мышление",
+            "category": 5
+        }
+    },
+    {
+        "model": "ibo.atlcluster",
+        "pk": 7,
+        "fields": {
+            "name": "Reflection",
+            "name_rus": "Рефлексия",
+            "category": 5
+        }
+    },
+    {
+        "model": "ibo.atlcluster",
+        "pk": 8,
+        "fields": {
+            "name": "Critical thinking and higher-order thinking",
+            "name_rus": "Критическое мышление и мышление высшего порядка",
+            "category": 5
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 1,
+        "fields": {
+            "title": "Мы - СТУДЕНТЫ гимназии Сколково",
+            "order": 1,
+            "year": 1,
+            "hours": 18,
+            "description": null,
+            "created_at": "2023-12-15T08:54:44.713Z",
+            "updated_at": "2023-12-15T09:24:11.014Z",
+            "teachers": [
+                30,
+                88,
+                126
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 2,
+        "fields": {
+            "title": "Я - студент-исследователь",
+            "order": 2,
+            "year": 1,
+            "hours": 18,
+            "description": null,
+            "created_at": "2023-12-15T09:05:12.372Z",
+            "updated_at": "2023-12-18T13:44:50.223Z",
+            "teachers": [
+                30,
+                88,
+                126
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 3,
+        "fields": {
+            "title": "Я учусь создавать праздник",
+            "order": 3,
+            "year": 1,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-15T09:25:57.989Z",
+            "updated_at": "2023-12-15T09:27:52.792Z",
+            "teachers": [
+                30,
+                88,
+                126
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 4,
+        "fields": {
+            "title": "Наше здоровье в наших руках",
+            "order": 4,
+            "year": 1,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-15T09:37:03.557Z",
+            "updated_at": "2023-12-15T09:37:34.224Z",
+            "teachers": [
+                30,
+                88,
+                126
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 5,
+        "fields": {
+            "title": "Наш город вчера, сегодня и завтра",
+            "order": 5,
+            "year": 1,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-15T09:43:47.680Z",
+            "updated_at": "2023-12-15T09:44:37.455Z",
+            "teachers": [
+                30,
+                88,
+                126
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 6,
+        "fields": {
+            "title": "Живые обитатели Планеты",
+            "order": 6,
+            "year": 1,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-15T09:48:35.659Z",
+            "updated_at": "2023-12-15T09:49:01.860Z",
+            "teachers": [
+                30,
+                88,
+                126
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 7,
+        "fields": {
+            "title": "Учеба - это открытие своих возможностей",
+            "order": 1,
+            "year": 2,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T08:04:29.893Z",
+            "updated_at": "2023-12-18T08:06:24.221Z",
+            "teachers": [
+                35,
+                40,
+                117
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 8,
+        "fields": {
+            "title": "Какое влияние оказывает климат на жизнь человека?",
+            "order": 2,
+            "year": 2,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T08:14:53.623Z",
+            "updated_at": "2023-12-18T08:15:24.102Z",
+            "teachers": [
+                35,
+                40,
+                117
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 9,
+        "fields": {
+            "title": "Сказка - один из самых древних видов искусства",
+            "order": 3,
+            "year": 2,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T08:21:51.347Z",
+            "updated_at": "2023-12-18T08:22:20.611Z",
+            "teachers": [
+                35,
+                40,
+                117
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 10,
+        "fields": {
+            "title": "Многообразие форм живой природы",
+            "order": 4,
+            "year": 2,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T08:26:31.249Z",
+            "updated_at": "2023-12-18T08:27:00.235Z",
+            "teachers": [
+                35,
+                40,
+                117
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 11,
+        "fields": {
+            "title": "Деньги",
+            "order": 5,
+            "year": 2,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T08:30:05.098Z",
+            "updated_at": "2023-12-18T08:30:25.352Z",
+            "teachers": [
+                35,
+                40,
+                117
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 12,
+        "fields": {
+            "title": "Путешествие - способ познания окружающего мира",
+            "order": 6,
+            "year": 2,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T08:37:52.883Z",
+            "updated_at": "2023-12-18T08:49:33.400Z",
+            "teachers": [
+                35,
+                40,
+                117
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 13,
+        "fields": {
+            "title": "Безопасность",
+            "order": 1,
+            "year": 3,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T08:45:36.984Z",
+            "updated_at": "2023-12-18T08:52:05.175Z",
+            "teachers": [
+                90,
+                139,
+                140
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 14,
+        "fields": {
+            "title": "Азбука правил хорошего тона",
+            "order": 2,
+            "year": 3,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T08:47:30.878Z",
+            "updated_at": "2023-12-18T08:54:44.784Z",
+            "teachers": [
+                90,
+                139,
+                140
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 15,
+        "fields": {
+            "title": "Путешествие в мир искусства",
+            "order": 3,
+            "year": 3,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T08:57:47.222Z",
+            "updated_at": "2023-12-18T08:58:07.868Z",
+            "teachers": [
+                90,
+                139,
+                140
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 16,
+        "fields": {
+            "title": "Воспитывая тело – воспитываем душу",
+            "order": 4,
+            "year": 3,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T09:02:41.981Z",
+            "updated_at": "2023-12-18T09:03:01.100Z",
+            "teachers": [
+                90,
+                139,
+                140
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 17,
+        "fields": {
+            "title": "Великие ученые, открытия и изобретения",
+            "order": 5,
+            "year": 3,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T09:05:08.980Z",
+            "updated_at": "2023-12-18T09:05:28.278Z",
+            "teachers": [
+                90,
+                139,
+                140
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 18,
+        "fields": {
+            "title": "Природные сообщества",
+            "order": 6,
+            "year": 3,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T09:08:07.051Z",
+            "updated_at": "2023-12-18T09:09:18.736Z",
+            "teachers": [
+                90,
+                139,
+                140
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 19,
+        "fields": {
+            "title": "Космос",
+            "order": 1,
+            "year": 4,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T09:12:02.385Z",
+            "updated_at": "2023-12-18T10:38:27.034Z",
+            "teachers": [
+                80,
+                131,
+                137
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 20,
+        "fields": {
+            "title": "Убеждения и ценности",
+            "order": 2,
+            "year": 4,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T09:16:53.878Z",
+            "updated_at": "2023-12-18T10:52:42.384Z",
+            "teachers": [
+                80,
+                131,
+                137
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 21,
+        "fields": {
+            "title": "История",
+            "order": 3,
+            "year": 4,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T09:19:39.336Z",
+            "updated_at": "2023-12-18T09:19:58.683Z",
+            "teachers": [
+                80,
+                131,
+                137
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 22,
+        "fields": {
+            "title": "Государство",
+            "order": 4,
+            "year": 4,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T09:22:35.301Z",
+            "updated_at": "2023-12-18T09:24:52.929Z",
+            "teachers": [
+                80,
+                131,
+                137
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 23,
+        "fields": {
+            "title": "Реклама",
+            "order": 5,
+            "year": 4,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T09:33:50.055Z",
+            "updated_at": "2023-12-18T09:34:12.086Z",
+            "teachers": [
+                80,
+                131,
+                137
+            ]
+        }
+    },
+    {
+        "model": "ibo.unitplanerbasemodel",
+        "pk": 24,
+        "fields": {
+            "title": "Выставка",
+            "order": 6,
+            "year": 4,
+            "hours": 0,
+            "description": null,
+            "created_at": "2023-12-18T09:36:33.655Z",
+            "updated_at": "2023-12-18T09:36:46.855Z",
+            "teachers": [
+                80,
+                131,
+                137
+            ]
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 1,
+        "fields": {
+            "profile": 4,
+            "description": null,
+            "unit": 1
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 2,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 1
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 3,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 1
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 4,
+        "fields": {
+            "profile": 1,
+            "description": null,
+            "unit": 2
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 5,
+        "fields": {
+            "profile": 3,
+            "description": null,
+            "unit": 2
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 6,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 2
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 7,
+        "fields": {
+            "profile": 6,
+            "description": null,
+            "unit": 3
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 8,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 3
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 9,
+        "fields": {
+            "profile": 2,
+            "description": null,
+            "unit": 4
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 10,
+        "fields": {
+            "profile": 5,
+            "description": null,
+            "unit": 4
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 11,
+        "fields": {
+            "profile": 9,
+            "description": null,
+            "unit": 4
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 12,
+        "fields": {
+            "profile": 8,
+            "description": null,
+            "unit": 5
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 13,
+        "fields": {
+            "profile": 2,
+            "description": null,
+            "unit": 5
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 14,
+        "fields": {
+            "profile": 5,
+            "description": null,
+            "unit": 5
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 15,
+        "fields": {
+            "profile": 2,
+            "description": null,
+            "unit": 6
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 16,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 6
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 17,
+        "fields": {
+            "profile": 3,
+            "description": null,
+            "unit": 6
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 18,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 7
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 19,
+        "fields": {
+            "profile": 5,
+            "description": null,
+            "unit": 7
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 20,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 7
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 21,
+        "fields": {
+            "profile": 2,
+            "description": null,
+            "unit": 8
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 22,
+        "fields": {
+            "profile": 3,
+            "description": null,
+            "unit": 8
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 23,
+        "fields": {
+            "profile": 8,
+            "description": null,
+            "unit": 8
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 24,
+        "fields": {
+            "profile": 5,
+            "description": null,
+            "unit": 9
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 25,
+        "fields": {
+            "profile": 9,
+            "description": null,
+            "unit": 9
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 26,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 9
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 27,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 10
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 28,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 10
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 29,
+        "fields": {
+            "profile": 3,
+            "description": null,
+            "unit": 10
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 30,
+        "fields": {
+            "profile": 2,
+            "description": null,
+            "unit": 11
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 31,
+        "fields": {
+            "profile": 9,
+            "description": null,
+            "unit": 11
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 32,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 11
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 33,
+        "fields": {
+            "profile": 1,
+            "description": null,
+            "unit": 12
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 34,
+        "fields": {
+            "profile": 6,
+            "description": null,
+            "unit": 12
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 35,
+        "fields": {
+            "profile": 3,
+            "description": null,
+            "unit": 13
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 36,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 13
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 37,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 13
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 38,
+        "fields": {
+            "profile": 5,
+            "description": null,
+            "unit": 14
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 39,
+        "fields": {
+            "profile": 9,
+            "description": null,
+            "unit": 14
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 40,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 14
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 41,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 15
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 42,
+        "fields": {
+            "profile": 6,
+            "description": null,
+            "unit": 15
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 43,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 15
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 44,
+        "fields": {
+            "profile": 9,
+            "description": null,
+            "unit": 16
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 45,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 16
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 46,
+        "fields": {
+            "profile": 5,
+            "description": null,
+            "unit": 16
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 47,
+        "fields": {
+            "profile": 1,
+            "description": null,
+            "unit": 17
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 48,
+        "fields": {
+            "profile": 6,
+            "description": null,
+            "unit": 17
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 49,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 18
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 50,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 18
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 51,
+        "fields": {
+            "profile": 3,
+            "description": null,
+            "unit": 18
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 52,
+        "fields": {
+            "profile": 1,
+            "description": null,
+            "unit": 19
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 53,
+        "fields": {
+            "profile": 2,
+            "description": null,
+            "unit": 19
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 54,
+        "fields": {
+            "profile": 4,
+            "description": null,
+            "unit": 19
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 55,
+        "fields": {
+            "profile": 3,
+            "description": null,
+            "unit": 20
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 56,
+        "fields": {
+            "profile": 4,
+            "description": null,
+            "unit": 20
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 57,
+        "fields": {
+            "profile": 9,
+            "description": null,
+            "unit": 20
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 58,
+        "fields": {
+            "profile": 2,
+            "description": null,
+            "unit": 21
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 59,
+        "fields": {
+            "profile": 10,
+            "description": null,
+            "unit": 21
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 60,
+        "fields": {
+            "profile": 5,
+            "description": null,
+            "unit": 22
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 61,
+        "fields": {
+            "profile": 7,
+            "description": null,
+            "unit": 22
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 62,
+        "fields": {
+            "profile": 6,
+            "description": null,
+            "unit": 23
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 63,
+        "fields": {
+            "profile": 8,
+            "description": null,
+            "unit": 23
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 64,
+        "fields": {
+            "profile": 4,
+            "description": null,
+            "unit": 23
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 65,
+        "fields": {
+            "profile": 1,
+            "description": null,
+            "unit": 24
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 66,
+        "fields": {
+            "profile": 2,
+            "description": null,
+            "unit": 24
+        }
+    },
+    {
+        "model": "ibo.ibprofiledevelop",
+        "pk": 67,
+        "fields": {
+            "profile": 4,
+            "description": null,
+            "unit": 24
+        }
+    }
+]
