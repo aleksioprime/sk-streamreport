@@ -6,14 +6,14 @@ from general.models import (
 )
 
 def get_user_queryset():
-    return User.objects.all().prefetch_related(
+    return User.objects.prefetch_related(
             "groups",
             "departments",
-            "group_roles",
+            "group_roles__group",
+            "group_roles__group__year_study",
             "mentor_classes",
-            "mentor_classes__year_study",
             "teaching_loads",
-            "teaching_loads__groups",
+            "teaching_loads__groups__year_study",
             "teaching_loads__subject",
             "teaching_loads__year",
         )

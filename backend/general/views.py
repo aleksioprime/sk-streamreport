@@ -124,7 +124,7 @@ class UserViewSet(ModelViewSet):
     
     @action(detail=False, methods=["get"], url_path="me")
     def me(self, request):
-        instance = self.request.user
+        instance = get_user_queryset().filter(pk=self.request.user.id).first()
         serializer = self.get_serializer(instance)
         # Получаем заголовок Authorization
         auth_header = request.META.get('HTTP_AUTHORIZATION')

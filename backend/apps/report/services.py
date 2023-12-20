@@ -219,6 +219,10 @@ def get_user_report_extra_queryset(group=None, period=None):
                     'criterion_achievements',
                     'criterion_achievements__achievement',
                     'criterion_achievements__criterion',
+                    'criterion_achievements__criterion__author',
+                    'criterion_achievements__criterion__levels',
+                    'criterion_achievements__criterion__subjects',
+                    'criterion_achievements__criterion__years',
                 ), 
             ),
         )

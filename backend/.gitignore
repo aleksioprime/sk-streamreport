@@ -8,7 +8,7 @@ celerybeat-schedule*
 logs/
 
 # Ignore the staticfiles directory
-staticfiles/
+# staticfiles/
 
 # Ignore the media directory
 mediafiles/
