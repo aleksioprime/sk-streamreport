@@ -2,34 +2,39 @@
   <div>
     <h1>Репорты руководителя класса</h1>
     <div class="py-2">
-      <div class="d-flex flex-wrap">
-        <div class="m-2">
-          <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
-            :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+      <transition>
+      <div v-if="isLoadedFilters">
+        <div class="d-flex flex-wrap">
+          <div class="m-2">
+            <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+              :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+          </div>
+          <div class="m-2">
+            <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+              showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+          </div>
+          <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
+            Сброс
+          </button>
         </div>
-        <div class="m-2">
-          <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
-            showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+        <div class="d-flex flex-wrap">
+          <div class="m-2">
+            <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
+          </div>
         </div>
-        <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
-          Сброс
+        <button type="button" class="btn btn-primary m-2" @click="getStudentMentorReports"
+          :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
+          Показать студентов
         </button>
-      </div>
-      <div class="d-flex flex-wrap">
-        <div class="m-2">
-          <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
-        </div>
-      </div>
-      <button type="button" class="btn btn-primary m-2" @click="getStudentMentorReports"
-        :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
-        Показать студентов
-      </button>
-      <hr class="hr" />
-      <div class="text-bg-light p-2 rounded">
+        <hr class="hr" />
+      <!-- <div class="text-bg-light p-2 rounded">
         <h5 v-if="!isEmpty(currentGroup)" class="mb-2">
           Тип репорта: {{ currentReportType.name }}
         </h5>
+      </div> -->
       </div>
+      </transition>
+      <transition>
       <div v-if="reportStore.studentMentorReports.length" class="row">
         <div class="col-md-auto">
           <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student pb-3">
@@ -51,7 +56,7 @@
             </div>
           </div>
         </div>
-        <div class="col pe-3">
+        <div class="col pe-3">  
           <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3"
             :id="`st-${student.id}`">
             <div class="card card-student my-1 anchor-student">
@@ -82,6 +87,7 @@
                 </div>
               </div>
             </div>
+            <transition name="card">
             <div class="accordion my-1" :id="`accordionStudent-${student.id}`" v-if="student.report">
               <div class="accordion-item">
                 <h2 class="accordion-header" :id="`heading-${student.id}`">
@@ -126,6 +132,7 @@
                 </div>
               </div>
             </div>
+            </transition>
             <div class="accordion my-1" :id="`accordionStudentExtra-${student.id}`" v-if="student.report_extras.length">
               <div class="accordion-item">
                 <h2 class="accordion-header" :id="`headingExtra-${student.id}`">
@@ -346,6 +353,7 @@
           </div>
         </div>
       </div>
+    </transition>
     </div>
     <!-- Подключение модального окна -->
     <confirmation-modal @confirm="removeStudentMentorReport" @cancel="cancelRemoveStudentMentorReport">
@@ -390,21 +398,26 @@ const iboStore = useIboStore();
 
 const isEditing = ref(false);
 let confirmationModal = null;
+const isLoadedReport = ref(false)
 
 // Вспомогательная функция для проверки объекта на пустое содержимое
 const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };
 
-// Вспомогательная функция для проверки разрешения редактирования репорта только автору
+const isLoadedFilters = computed(() => {
+  return reportStore.reportPeriods.length && generalStore.groups.length && generalStore.academicYears.length
+})
+
+// Вспомогательная функция для проверки разрешения редактирования репорта только автору или воспитателю этого класса
 const isAuthor = (report) => {
   if (authStore.user) {
-    return !report || report && report.author.id == authStore.user.id
+    return !report || report && report.author.id == authStore.user.id || authStore.user.group_roles.some(item => item.group.id == currentGroup.value.id && item.role == 'Воспитатель')
   }
   return false
 }
 
-// Вспомогательная функция для проверки разрешения редактирования только ментору
+// Вспомогательная функция для проверки разрешения создания репорта только ментору
 const isMentor = () => {
   if (authStore.user) {
     return authStore.user.mentor_classes.some(item => item.id == currentGroup.value.id)
@@ -503,7 +516,7 @@ const getGroups = () => {
 
 // Запрос на получение списка студентов
 // Нужно выбрать текущий учебный год, параллель и класс
-const getStudentMentorReports = () => {
+const getStudentMentorReports = async () => {
   // console.log('Запрос студентов с репортами')
   if (
     isEmpty(currentAcademicYear.value) ||
@@ -511,7 +524,8 @@ const getStudentMentorReports = () => {
   ) {
     return null;
   }
-  reportStore
+  isLoadedReport.value = true;
+  await reportStore
     .loadStudentMentorReports({
       params: {
         groups: 3,
@@ -519,10 +533,8 @@ const getStudentMentorReports = () => {
         report_period: currentReportPeriod.value.id,
         report_group: currentGroup.value.id,
       },
-    })
-    .then(() => {
-      console.log(reportStore.studentMentorReports);
     });
+  isLoadedReport.value = false;
 };
 
 // Запрос на создание репорта для студента:
@@ -637,25 +649,16 @@ const recoveryOptions = () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   recoveryOptions();
   if (!generalStore.isAcademicYearsLoaded) {
-    generalStore.loadAcademicYears().then(() => {
-      currentAcademicYear.value = generalStore.relevantYear;
-      getGroups();
-      getStudentMentorReports();
-    });
-  } else {
-    currentAcademicYear.value = generalStore.relevantYear;
-    getGroups();
-    getStudentMentorReports();
-  }
-  if (!reportStore.isReportPeriodsLoaded) {
-    reportStore.loadReportPeriods();
-  }
-  if (!iboStore.isLearnerProfileLoaded) {
-    iboStore.loadLearnerProfiles();
-  }
+    await generalStore.loadAcademicYears();
+  } 
+  currentAcademicYear.value = generalStore.relevantYear;
+  getGroups();
+  getStudentMentorReports();
+  reportStore.loadReportPeriods();
+  iboStore.loadLearnerProfiles();
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });
 
@@ -720,5 +723,21 @@ const exportReportToWord = (student) => {
   }
 
   /* Промежуточный цвет фона для мигания */
+}
+
+.v-enter-active {
+  transition: opacity 0.5s ease;
+}
+.v-enter-from {
+  opacity: 0;
+}
+.card-enter-active,
+.card-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.card-enter-from,
+.card-leave-to {
+  opacity: 0;
 }
 </style>

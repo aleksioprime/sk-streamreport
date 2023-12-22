@@ -19,7 +19,7 @@
             "dnevnik_id": null,
             "dnevnik_user_id": null,
             "position": null,
-            "last_activity": "2023-11-30T12:00:00.122Z",
+            "last_activity": "2023-12-03T13:25:00.083Z",
             "groups": [
                 1
             ],
@@ -2783,7 +2783,7 @@
             "dnevnik_id": "1000013826395",
             "dnevnik_user_id": "1000007184348",
             "position": "Заведующий кафедрой дизайна и технологии, учитель информатики и программирования",
-            "last_activity": "2023-11-30T11:42:00.200Z",
+            "last_activity": "2023-12-03T12:59:00.203Z",
             "groups": [
                 1,
                 2
@@ -20934,7 +20934,7 @@
             "curriculum": 5,
             "letter": "A",
             "dnevnik_id": "2101624423747326840",
-            "mentor": null,
+            "mentor": 88,
             "students": [
                 146,
                 147,
@@ -20969,7 +20969,7 @@
             "curriculum": 5,
             "letter": "B",
             "dnevnik_id": "2101624591251051385",
-            "mentor": null,
+            "mentor": 126,
             "students": [
                 166,
                 167,
@@ -21004,7 +21004,7 @@
             "curriculum": 5,
             "letter": "C",
             "dnevnik_id": "2101624793114514298",
-            "mentor": null,
+            "mentor": 30,
             "students": [
                 186,
                 187,
@@ -21038,7 +21038,7 @@
             "curriculum": 5,
             "letter": "A",
             "dnevnik_id": "2101620919054013274",
-            "mentor": null,
+            "mentor": 35,
             "students": [
                 205,
                 206,
@@ -21072,7 +21072,7 @@
             "curriculum": 5,
             "letter": "B",
             "dnevnik_id": "2101622250493875043",
-            "mentor": null,
+            "mentor": 117,
             "students": [
                 224,
                 225,
@@ -21108,7 +21108,7 @@
             "curriculum": 5,
             "letter": "C",
             "dnevnik_id": "2101622830314460013",
-            "mentor": null,
+            "mentor": 40,
             "students": [
                 245,
                 246,
@@ -21140,7 +21140,7 @@
             "curriculum": 5,
             "letter": "A",
             "dnevnik_id": "2101653238682915717",
-            "mentor": null,
+            "mentor": 90,
             "students": [
                 262,
                 263,
@@ -21174,7 +21174,7 @@
             "curriculum": 5,
             "letter": "B",
             "dnevnik_id": "2101654870770488207",
-            "mentor": null,
+            "mentor": 139,
             "students": [
                 281,
                 282,
@@ -21210,7 +21210,7 @@
             "curriculum": 5,
             "letter": "C",
             "dnevnik_id": "2101658491427918745",
-            "mentor": null,
+            "mentor": 140,
             "students": [
                 302,
                 303,
@@ -21245,7 +21245,7 @@
             "curriculum": 5,
             "letter": "A",
             "dnevnik_id": "2101660544422286242",
-            "mentor": null,
+            "mentor": 80,
             "students": [
                 322,
                 323,
@@ -21277,7 +21277,7 @@
             "curriculum": 5,
             "letter": "B",
             "dnevnik_id": "2101661553739600817",
-            "mentor": null,
+            "mentor": 131,
             "students": [
                 339,
                 340,
@@ -21313,7 +21313,7 @@
             "curriculum": 5,
             "letter": "C",
             "dnevnik_id": "2101664177964618688",
-            "mentor": null,
+            "mentor": 137,
             "students": [
                 360,
                 361,
@@ -21348,7 +21348,7 @@
             "curriculum": 6,
             "letter": "A",
             "dnevnik_id": "2114958467545348728",
-            "mentor": null,
+            "mentor": 79,
             "students": [
                 380,
                 381,
@@ -21384,7 +21384,7 @@
             "curriculum": 6,
             "letter": "B",
             "dnevnik_id": "2114958875567241849",
-            "mentor": null,
+            "mentor": 95,
             "students": [
                 401,
                 402,
@@ -21420,7 +21420,7 @@
             "curriculum": 6,
             "letter": "C",
             "dnevnik_id": "2114962869886827148",
-            "mentor": null,
+            "mentor": 31,
             "students": [
                 422,
                 423,
@@ -21456,7 +21456,7 @@
             "curriculum": 6,
             "letter": "D",
             "dnevnik_id": "2114963054570420891",
-            "mentor": null,
+            "mentor": 78,
             "students": [
                 443,
                 444,
@@ -21492,7 +21492,7 @@
             "curriculum": 6,
             "letter": "A",
             "dnevnik_id": "2101676706384221137",
-            "mentor": null,
+            "mentor": 138,
             "students": [
                 464,
                 465,
@@ -21530,7 +21530,7 @@
             "curriculum": 6,
             "letter": "B",
             "dnevnik_id": "2101680322746684400",
-            "mentor": null,
+            "mentor": 109,
             "students": [
                 487,
                 488,
@@ -21568,7 +21568,7 @@
             "curriculum": 6,
             "letter": "C",
             "dnevnik_id": "2101681151675372558",
-            "mentor": null,
+            "mentor": 116,
             "students": [
                 510,
                 511,
@@ -21607,7 +21607,7 @@
             "curriculum": 6,
             "letter": "A",
             "dnevnik_id": "2106824933358084871",
-            "mentor": null,
+            "mentor": 127,
             "students": [
                 534,
                 535,
@@ -21642,7 +21642,7 @@
             "curriculum": 6,
             "letter": "B",
             "dnevnik_id": "2106825513178669868",
-            "mentor": null,
+            "mentor": 37,
             "students": [
                 554,
                 555,
@@ -21676,7 +21676,7 @@
             "curriculum": 6,
             "letter": "C",
             "dnevnik_id": "2106826329222456147",
-            "mentor": null,
+            "mentor": 70,
             "students": [
                 573,
                 574,
@@ -21710,7 +21710,7 @@
             "curriculum": 6,
             "letter": "A",
             "dnevnik_id": "2106826780194022264",
-            "mentor": null,
+            "mentor": 121,
             "students": [
                 614,
                 615,
@@ -21746,7 +21746,7 @@
             "curriculum": 6,
             "letter": "B",
             "dnevnik_id": "2106827682137154464",
-            "mentor": null,
+            "mentor": 83,
             "students": [
                 592,
                 593,
@@ -21783,7 +21783,7 @@
             "curriculum": 6,
             "letter": "A",
             "dnevnik_id": "2106828648504796102",
-            "mentor": null,
+            "mentor": 120,
             "students": [
                 635,
                 636,
@@ -21812,7 +21812,7 @@
             "curriculum": 6,
             "letter": "K",
             "dnevnik_id": "2106829078001525741",
-            "mentor": null,
+            "mentor": 91,
             "students": [
                 649,
                 650,
@@ -21841,7 +21841,7 @@
             "curriculum": 6,
             "letter": "S",
             "dnevnik_id": "2106829700771783701",
-            "mentor": null,
+            "mentor": 51,
             "students": [
                 663,
                 664,
@@ -21870,7 +21870,7 @@
             "curriculum": 7,
             "letter": "A",
             "dnevnik_id": "2114967263638370987",
-            "mentor": null,
+            "mentor": 105,
             "students": [
                 677,
                 678,
@@ -21903,7 +21903,7 @@
             "curriculum": 8,
             "letter": "B",
             "dnevnik_id": "2114967379602488017",
-            "mentor": null,
+            "mentor": 44,
             "students": [
                 695,
                 696,
@@ -21929,7 +21929,7 @@
             "curriculum": 7,
             "letter": "A",
             "dnevnik_id": "2101696806831166508",
-            "mentor": null,
+            "mentor": 108,
             "students": [
                 706,
                 707,
@@ -21969,7 +21969,7 @@
             "curriculum": 8,
             "letter": "B",
             "dnevnik_id": "2101696918500316242",
-            "mentor": null,
+            "mentor": 115,
             "students": [
                 731,
                 732,
@@ -21982,6 +21982,285 @@
                 739,
                 740
             ]
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 1,
+        "fields": {
+            "user": 93,
+            "group": 32,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 2,
+        "fields": {
+            "user": 136,
+            "group": 33,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 3,
+        "fields": {
+            "user": 52,
+            "group": 34,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 4,
+        "fields": {
+            "user": 96,
+            "group": 35,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 5,
+        "fields": {
+            "user": 112,
+            "group": 36,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 6,
+        "fields": {
+            "user": 39,
+            "group": 37,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 7,
+        "fields": {
+            "user": 4,
+            "group": 38,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 8,
+        "fields": {
+            "user": 14,
+            "group": 39,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 9,
+        "fields": {
+            "user": 34,
+            "group": 40,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 10,
+        "fields": {
+            "user": 80,
+            "group": 41,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 11,
+        "fields": {
+            "user": 45,
+            "group": 42,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 12,
+        "fields": {
+            "user": 82,
+            "group": 43,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 13,
+        "fields": {
+            "user": 78,
+            "group": 44,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 14,
+        "fields": {
+            "user": 78,
+            "group": 45,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 15,
+        "fields": {
+            "user": 78,
+            "group": 46,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 16,
+        "fields": {
+            "user": 78,
+            "group": 47,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 17,
+        "fields": {
+            "user": 70,
+            "group": 48,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 18,
+        "fields": {
+            "user": 70,
+            "group": 49,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 19,
+        "fields": {
+            "user": 70,
+            "group": 50,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 20,
+        "fields": {
+            "user": 70,
+            "group": 51,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 21,
+        "fields": {
+            "user": 70,
+            "group": 52,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 22,
+        "fields": {
+            "user": 70,
+            "group": 53,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 23,
+        "fields": {
+            "user": 70,
+            "group": 54,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 24,
+        "fields": {
+            "user": 70,
+            "group": 55,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 25,
+        "fields": {
+            "user": 56,
+            "group": 56,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 26,
+        "fields": {
+            "user": 56,
+            "group": 57,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 27,
+        "fields": {
+            "user": 56,
+            "group": 58,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 28,
+        "fields": {
+            "user": 56,
+            "group": 59,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 29,
+        "fields": {
+            "user": 56,
+            "group": 60,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 30,
+        "fields": {
+            "user": 56,
+            "group": 61,
+            "role": "Психолог"
+        }
+    },
+    {
+        "model": "general.classgrouprole",
+        "pk": 31,
+        "fields": {
+            "user": 56,
+            "group": 62,
+            "role": "Психолог"
         }
     },
     {

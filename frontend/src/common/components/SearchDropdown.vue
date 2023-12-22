@@ -52,7 +52,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'select']);
 
 const searchQuery = ref('');
-const selectedItem = ref({});
+const selectedItem = ref(props.modelValue || {});
 const showNumber = ref(BASE_NUMBER);
 
 const loadItems = () => {

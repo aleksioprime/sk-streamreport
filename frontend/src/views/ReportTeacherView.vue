@@ -2,44 +2,49 @@
   <div>
     <h1>Репорты учителя по предмету</h1>
     <div class="py-2">
-      <div class="d-flex flex-wrap">
-        <div class="m-2">
-          <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
-            :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+      <transition>
+      <div v-if="isLoadedFilters">
+        <div class="d-flex flex-wrap">
+          <div class="m-2">
+            <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+              :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+          </div>
+          <div class="m-2">
+            <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+              showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+          </div>
+          <div class="m-2">
+            <search-dropdown title="Выберите предмет" v-model="currentSubject" :propItems="curriculumStore.subjects"
+              showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup)" />
+          </div>
         </div>
-        <div class="m-2">
-          <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
-            showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+        <div class="d-flex flex-wrap">
+          <div class="m-2">
+            <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
+          </div>
         </div>
-        <div class="m-2">
-          <search-dropdown title="Выберите предмет" v-model="currentSubject" :propItems="curriculumStore.subjects"
-            showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup)" />
-        </div>
+        <button type="button" class="btn btn-primary m-2" @click="getTeacherReports"
+          :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
+          Показать студентов
+        </button>
+        <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
+          Сброс
+        </button>
+        <hr class="hr" />
+        <!-- <div class="text-bg-light p-2 rounded">
+          <h5 v-if="!isEmpty(currentGroup)" class="my-2">
+            Тип репорта: {{ currentReportType.name }}
+          </h5>
+          <h5 v-if="!isEmpty(currentSubject)" class="my-2">
+            {{ currentSubject.name }}
+            <span v-if="currentSubject.group_ib">
+              ({{ currentSubject.group_ib.name }}
+              {{ currentSubject.group_ib.program.toUpperCase() }})</span>
+          </h5>
+        </div> -->
       </div>
-      <div class="d-flex flex-wrap">
-        <div class="m-2">
-          <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
-        </div>
-      </div>
-      <button type="button" class="btn btn-primary m-2" @click="getTeacherReports"
-        :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
-        Показать студентов
-      </button>
-      <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
-        Сброс
-      </button>
-      <hr class="hr" />
-      <div class="text-bg-light p-2 rounded">
-        <h5 v-if="!isEmpty(currentGroup)" class="my-2">
-          Тип репорта: {{ currentReportType.name }}
-        </h5>
-        <h5 v-if="!isEmpty(currentSubject)" class="my-2">
-          {{ currentSubject.name }}
-          <span v-if="currentSubject.group_ib">
-            ({{ currentSubject.group_ib.name }}
-            {{ currentSubject.group_ib.program.toUpperCase() }})</span>
-        </h5>
-      </div>
+    </transition>
+    <transition>
       <div class="row" v-if="generalStore.users.length">
         <!-- Список студентов -->
         <div class="col-md-auto">
@@ -72,7 +77,9 @@
         </div>
         <!-- Список репортов -->
         <div class="col">
+          <div class="loader-spin" v-if="isLoadedReport"></div>
           <div v-if="reportStore.reportTeachers.length">
+            <transition-group name="card">
             <div v-for="report in reportStore.reportTeachers" :key="report.id" class="my-3"
               :id="`st-${report.student.id}`">
               <div class="card card-student my-1">
@@ -164,6 +171,7 @@
                 </div>
               </div>
             </div>
+          </transition-group>
           </div>
           <div class="card my-2" v-else>
             <div class="card-body">
@@ -174,6 +182,7 @@
           </div>
         </div>
       </div>
+      
       <div class="card my-2" v-else>
         <div class="card-body">
           <div class="d-flex justify-content-center">
@@ -181,6 +190,7 @@
           </div>
         </div>
       </div>
+    </transition>
     </div>
     <!-- Подключение модального окна -->
     <confirmation-modal @confirm="removeTeacherReport" @cancel="cancelRemoveTeacherReport">
@@ -231,6 +241,7 @@ const unitMypStore = useUnitMypStore();
 
 const isEditing = ref(false);
 let confirmationModal = null;
+const isLoadedReport = ref(false);
 
 const currentReportType = computed(() => {
   const emptyType = { value: null, name: '-' }
@@ -248,6 +259,10 @@ const currentReportType = computed(() => {
   } else {
     return emptyType
   }
+})
+
+const isLoadedFilters = computed(() => {
+  return reportStore.reportPeriods.length && generalStore.groups.length && generalStore.academicYears.length
 })
 
 // Вспомогательная функция для проверки разрешения редактирования только автору
@@ -388,7 +403,7 @@ const getStudents = () => {
   if (!isEmpty(currentGroup.value)) {
     generalStore.loadUsers({
       params: {
-        groups: 3,
+        groups: [3],
         classes: currentGroup.value.id,
       },
     });
@@ -397,15 +412,14 @@ const getStudents = () => {
 
 // Запрос на получение списка студентов
 // Нужно выбрать текущий учебный год, параллель и класс
-const getTeacherReports = () => {
+const getTeacherReports = async () => {
   // console.log('Запрос репортов')
   if (
-    !(
-      isEmpty(currentAcademicYear.value) &&
-      isEmpty(currentGroup.value) &&
-      isEmpty(currentSubject.value)
-    )
+      !isEmpty(currentAcademicYear.value) &&
+      !isEmpty(currentGroup.value) &&
+      !isEmpty(currentSubject.value)
   ) {
+    isLoadedReport.value = true;
     const config = {
       params: {
         group: currentGroup.value.id,
@@ -415,20 +429,15 @@ const getTeacherReports = () => {
       },
     };
     if (currentGroup.value.year_study.level == "noo") {
-      reportStore.loadReportTeachersPrimary(config).then(() => {
-        // console.log(reportStore.reportTeachers);
-      });
+      await reportStore.loadReportTeachersPrimary(config);
     } else if (currentGroup.value.year_study.level == "ooo") {
-      reportStore.loadReportTeachersSecondary(config).then(() => {
-        // console.log(reportStore.reportTeachers);
-      });
+      await reportStore.loadReportTeachersSecondary(config);
     } else if (currentGroup.value.year_study.level == "soo") {
-      reportStore.loadReportTeachersHigh(config).then(() => {
-        // console.log(reportStore.reportTeachers);
-      });
+      await reportStore.loadReportTeachersHigh(config);
     } else {
-      // console.log('Не выбран уровень')
+      console.log('Не выбран уровень')
     }
+    isLoadedReport.value = false;
     getStudents();
   }
 };
@@ -603,22 +612,15 @@ const getObjective = () => {
 // Запросы и установки при монтировании компонента:
 // Восстановление опций из LocalStorage, загрузка данных в соответствии с опциями (если они не загружены)
 // Создание объекта модального окна из компонента
-onMounted(() => {
+onMounted(async () => {
+  generalStore.users = [];
   recoveryOptions();
   if (!generalStore.isAcademicYearsLoaded) {
-    generalStore.loadAcademicYears().then(() => {
-      currentAcademicYear.value = generalStore.relevantYear;
-      getGroups();
-    });
-  } else {
-    currentAcademicYear.value = generalStore.relevantYear;
-    getGroups();
+    await generalStore.loadAcademicYears()
   }
-  if (!reportStore.isReportPeriodsLoaded) {
-    reportStore.loadReportPeriods();
-  }
-  if (!generalStore.isGroupsLoaded) {
-  }
+  currentAcademicYear.value = generalStore.relevantYear;
+  getGroups();
+  reportStore.loadReportPeriods();
   getSubjects();
   getObjective();
   getStrands();
@@ -681,5 +683,23 @@ onMounted(() => {
   }
 
   /* Промежуточный цвет фона для мигания */
+}
+.v-enter-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from {
+  opacity: 0;
+}
+
+.card-enter-active,
+.card-leave-active {
+  transition: all 0.5s ease;
+}
+
+.card-enter-from,
+.card-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>

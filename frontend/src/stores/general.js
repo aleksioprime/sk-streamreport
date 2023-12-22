@@ -50,8 +50,8 @@ export const useGeneralStore = defineStore("general", {
     }
   },
   actions: {
-    async loadStudyYears() {
-      const res = await resources.studyYear.getStudyYears();
+    async loadStudyYears(config) {
+      const res = await resources.studyYear.getStudyYears(config);
       if (res.__state === "success") {
         this.studyYears = res.data.map(item => {
           return {

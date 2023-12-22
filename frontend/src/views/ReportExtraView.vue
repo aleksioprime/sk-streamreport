@@ -1,33 +1,39 @@
 <template>
   <div>
     <h1>Репорты службы сопровождения</h1>
+    
     <div class="py-2">
-      <div class="d-flex flex-wrap">
-        <div class="m-2">
-          <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
-            :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+      <transition>
+      <div v-if="isLoadedFilters">
+        <div class="d-flex flex-wrap">
+          <div class="m-2">
+            <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+              :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+          </div>
+          <div class="m-2">
+            <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+              showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+          </div>
+          <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
+            Сброс
+          </button>
         </div>
-        <div class="m-2">
-          <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
-            showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+        <div class="d-flex flex-wrap">
+          <div class="m-2">
+            <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
+          </div>
         </div>
-        <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
-          Сброс
-        </button>
-      </div>
-      <div class="d-flex flex-wrap">
-        <div class="m-2">
-          <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
-        </div>
-      </div>
-      <button type="button" class="btn btn-primary m-2" @click="getStudentExtraReports"
-        :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
-        Показать студентов
-      </button>
-      <hr class="hr" />
-      <div class="text-bg-light p-2 rounded">
+        <button type="button" class="btn btn-primary m-2" @click="getStudentExtraReports"
+          :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
+          Показать студентов
+        </button> 
+        <hr class="hr" />
+      </div> 
+      <!-- <div class="text-bg-light p-2 rounded">
         <h5 class="my-2">Тип репорта: репорт службы сопровождения</h5>
-      </div>
+      </div> -->
+      </transition>
+      <transition>
       <div v-if="reportStore.studentExtraReports.length" class="row">
         <div class="col-md-auto">
           <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student pb-3">
@@ -49,6 +55,7 @@
           </div>
         </div>
         <div class="col pe-3">
+          
           <div v-for="student in reportStore.studentExtraReports" :key="student.id" class="my-3" :id="`st-${student.id}`">
             <div class="card card-student my-1">
               <div class="card-body d-flex align-items-center">
@@ -67,6 +74,7 @@
                 </div>
               </div>
             </div>
+            <transition-group name="card">
             <div v-for="report in student.reports" :key="report.id" class="my-1">
               <div class="accordion" :id="`accordionStudent-${report.id}`">
                 <div class="accordion-item">
@@ -116,10 +124,10 @@
                   </div>
                 </div>
               </div>
-
             </div>
-
+          </transition-group>
           </div>
+        
         </div>
       </div>
       <div class="card my-2" v-else>
@@ -129,6 +137,7 @@
           </div>
         </div>
       </div>
+      </transition>
     </div>
     <!-- Подключение модального окна -->
     <confirmation-modal @confirm="removeStudentExtraReport" @cancel="cancelRemoveStudentExtraReport">
@@ -169,11 +178,16 @@ const authStore = useAuthStore();
 
 const isEditing = ref(false);
 let confirmationModal = null;
+const isLoadedReport = ref(false);
 
 // Вспомогательная функция для проверки объекта на пустое содержимое
 const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };
+
+const isLoadedFilters = computed(() => {
+  return reportStore.reportPeriods.length && generalStore.groups.length && generalStore.academicYears.length
+})
 
 // Вспомогательная функция для проверки разрешения редактирования только автору
 const isAuthor = (report) => {
@@ -268,7 +282,7 @@ const getGroups = () => {
 
 // Запрос на получение списка студентов
 // Нужно выбрать текущий учебный год, параллель и класс
-const getStudentExtraReports = () => {
+const getStudentExtraReports = async () => {
   // console.log('Запрос студентов с репортами')
   if (
     !(
@@ -276,7 +290,8 @@ const getStudentExtraReports = () => {
       isEmpty(currentGroup.value)
     )
   ) {
-    reportStore
+    isLoadedReport.value = true;
+    await reportStore
       .loadStudentExtraReports({
         params: {
           groups: 3,
@@ -284,10 +299,8 @@ const getStudentExtraReports = () => {
           report_period: currentReportPeriod.value.id,
           report_group: currentGroup.value.id,
         },
-      })
-      .then(() => {
-        console.log(reportStore.studentExtraReports)
       });
+    isLoadedReport.value = false;
   }
 };
 
@@ -376,24 +389,15 @@ const recoveryOptions = () => {
 // Запросы и установки при монтировании компонента:
 // Восстановление опций из LocalStorage, загрузка данных в соответствии с опциями (если они не загружены)
 // Создание объекта модального окна из компонента
-onMounted(() => {
+onMounted(async () => {
   recoveryOptions();
   if (!generalStore.isAcademicYearsLoaded) {
-    generalStore.loadAcademicYears().then(() => {
-      currentAcademicYear.value = generalStore.relevantYear;
-      getGroups();
-      getStudentExtraReports();
-    });
-  } else {
-    currentAcademicYear.value = generalStore.relevantYear;
-    getStudentExtraReports();
-  }
-  if (!reportStore.isReportPeriodsLoaded) {
-    reportStore.loadReportPeriods();
-  }
-  if (!generalStore.isGroupsLoaded) {
-    generalStore.groups = [];
-  }
+    await generalStore.loadAcademicYears();
+  } 
+  currentAcademicYear.value = generalStore.relevantYear;
+  getGroups();
+  getStudentExtraReports();
+  reportStore.loadReportPeriods();
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });
 </script>
@@ -439,4 +443,22 @@ onMounted(() => {
   }
 
   /* Промежуточный цвет фона для мигания */
-}</style>
+}
+
+.v-enter-active {
+  transition: opacity 0.5s ease;
+}
+.v-enter-from {
+  opacity: 0;
+}
+.card-enter-active,
+.card-leave-active {
+  transition: all 0.5s ease;
+}
+
+.card-enter-from,
+.card-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+</style>

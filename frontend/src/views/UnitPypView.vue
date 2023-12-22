@@ -2,7 +2,13 @@
   <div>
     <h1>Юниты в PYP</h1>
     <div class="py-2">
-      <button type="button" class="btn btn-outline-primary" @click="showUnitPypCreateModal">Создать</button>
+      <div class="d-flex align-items-center">
+        <div class="m-2">
+        <simple-dropdown title="Выберите класс" v-model="currentStudyYear" :propItems="generalStore.studyYears"
+          showName="name" />
+        </div>
+        <button type="button" class="btn btn-outline-primary" @click="showUnitPypCreateModal">Создать</button>
+      </div>
       <simple-modal nameModal="unitPypCreateModal" titleConfirm="Создать" titleModal="Создание юнита PYP"
         @confirm="confirmUnitPypCreateModal" @cancel="cancelUnitPypCreateModal">
         <div>
@@ -51,7 +57,8 @@
       </simple-modal>
     </div>
     <div>
-      <div v-for="unit in unitPypStore.pypUnits" :key="unit.id">
+      <transition-group name="card">
+      <div v-for="unit in filteredPypUnits" :key="unit.id">
         <div class="card my-1">
           <div class="card-body">
             <div class="d-flex align-items-center">
@@ -64,7 +71,8 @@
                 <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
                 <ul class="dropdown-menu">
                   <li>
-                    <a class="dropdown-item" href="javascript:void(0)" @click.prevent="showConfirmationModal(unit)">Удалить юнит</a>
+                    <a class="dropdown-item" href="javascript:void(0)"
+                      @click.prevent="showConfirmationModal(unit)">Удалить юнит</a>
                   </li>
                 </ul>
               </div>
@@ -72,11 +80,13 @@
             <div>{{ unit.year.name }} | {{ unit.transdisciplinary_theme.name_rus }}</div>
             <div class="my-2">
               <i class="bi bi-person me-1"></i>
-              <span v-for="teacher, index in unit.teachers" :key="teacher.id">{{ teacher.short_name }}<span v-if="unit.teachers.length != index + 1">, </span></span>
+              <span v-for="teacher, index in unit.teachers" :key="teacher.id">{{ teacher.short_name }}<span
+                  v-if="unit.teachers.length != index + 1">, </span></span>
             </div>
           </div>
         </div>
       </div>
+      </transition-group>
     </div>
     <!-- Подключение модального окна -->
     <confirmation-modal @confirm="removeUnitPypPlanner" @cancel="cancelRemoveUnitPypPlanner">
@@ -109,6 +119,14 @@ import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
 
 const currentPypUnit = ref({})
+const currentStudyYear = ref({})
+
+const filteredPypUnits = computed(() => {
+  if (currentStudyYear.value.id) {
+    return unitPypStore.pypUnits.filter(i => i.year.id == currentStudyYear.value.id)
+  }
+  return unitPypStore.pypUnits
+})
 
 const defaultPypUnit = {
   title: null,
@@ -118,8 +136,6 @@ const defaultPypUnit = {
   transdisciplinary_theme: {},
   year: {},
 }
-
-
 
 const newPypUnit = ref({ ...defaultPypUnit })
 
@@ -152,7 +168,11 @@ const validations = ref(setEmptyValidations())
 
 // Создать и показать модальное окно для создания юнита PYP
 const showUnitPypCreateModal = () => {
-  generalStore.loadStudyYears();
+  generalStore.loadStudyYears({
+    params: {
+      level: 'noo'
+    }
+  });
   generalStore.loadUsers(
     {
       params: {
@@ -167,6 +187,7 @@ const showUnitPypCreateModal = () => {
 // Отменить создание юнита и закрыть модальное окно
 const cancelUnitPypCreateModal = () => {
   unitPypCreateModal.hide();
+  generalStore.users = [];
   newPypUnit.value = { ...defaultPypUnit };
   clearValidationErrors(validations.value);
 }
@@ -225,8 +246,28 @@ const cancelRemoveUnitPypPlanner = () => {
 
 onMounted(() => {
   unitPypStore.loadPypUnitPlanners();
+  generalStore.loadStudyYears({
+    params: {
+      level: 'noo'
+    }
+  });
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
   unitPypCreateModal = new Modal("#unitPypCreateModal", { backdrop: "static" });
 });
 
 </script>
+
+<style scoped>
+.card-enter-active,
+.card-leave-active {
+  transition: all 0.5s ease;
+}
+.card-move {
+  transition: transform 0.8s ease;
+}
+.card-enter-from,
+.card-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+</style>

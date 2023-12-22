@@ -5,7 +5,7 @@ export class StudyYearResource extends CrudService {
     super("/api/year/study");
   }
 
-  getStudyYears() {
-    return this.get();
+  getStudyYears(config) {
+    return this.get(config);
   }
 }

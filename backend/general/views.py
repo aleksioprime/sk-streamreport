@@ -43,7 +43,8 @@ from general.services import (
 
 from general.filters import (
     ClassGroupFilter,
-    UserFilter
+    UserFilter,
+    StudyYearFilter
 )
 
 @extend_schema_view(post=extend_schema(summary='Получение токена', tags=['База: Аутентификация']))
@@ -287,6 +288,7 @@ class AcademicYearViewSet(ListModelMixin, GenericViewSet):
 class StudyYearViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [IsAuthenticated]
     pagination_class = None
+    filterset_class = StudyYearFilter
 
     def get_queryset(self):
         return get_study_year_queryset()

@@ -36,7 +36,7 @@ start:
 # Остановка всех контейнеров проекта
 stop:
 	$(DC) stop
-# подключение к БД PostgreSQL при помощи консольного клиента pgSQL
+# подключение к БД PostgreSQL при помощи консольного клиента psql
 db:
 	export PGPASSWORD=${POSTGRES_PASSWORD}; docker exec -it database psql -U $(POSTGRES_USER) ${POSTGRES_DB}
 # подключение к bash-консоли любого контейнера с явно указанным именем (make b c=backend)

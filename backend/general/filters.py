@@ -2,7 +2,8 @@ import django_filters
 
 from general.models import (
     ClassGroup,
-    User
+    User,
+    StudyYear,
 )
 
 class ClassGroupFilter(django_filters.FilterSet):
@@ -21,4 +22,11 @@ class UserFilter(django_filters.FilterSet):
         fields = {
             'groups',
             'classes'
+        }
+
+class StudyYearFilter(django_filters.FilterSet):
+    class Meta:
+        model = StudyYear
+        fields = {
+            'level',
         }

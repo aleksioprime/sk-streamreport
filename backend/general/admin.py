@@ -1,6 +1,6 @@
 from django.contrib.admin import register, site, ModelAdmin, TabularInline, StackedInline
 from django.contrib.auth.models import Group
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportModelAdmin, ImportExportMixin
 
 from general.models import (
     User,
@@ -37,17 +37,17 @@ class CustomUserChangeForm(UserChangeForm):
 
 site.unregister(Group)
 
-class TeachingInline(StackedInline):  # StackedInline, TabularInline
+class TeachingInline(TabularInline):  # StackedInline, TabularInline
     autocomplete_fields = (
         'subject',
     )
-    filter_horizontal = (
-        'groups',
-    )
+    # filter_horizontal = (
+    #     'groups',
+    # )
     model = TeachingLoad
     extra = 1
 
-class CustomUserAdmin(BaseUserAdmin):
+class CustomUserAdmin(BaseUserAdmin, ImportExportModelAdmin):
     inlines = [TeachingInline]
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm

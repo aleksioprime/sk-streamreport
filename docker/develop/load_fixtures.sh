@@ -24,9 +24,7 @@ check_migrations() {
 # Загрузка фикстур
 load_fixtures() {
     echo "Loading fixtures..."
-    python manage.py loaddata group.json
-    python manage.py loaddata general.json
-    python manage.py loaddata curriculum.json
+    python manage.py loaddata group.json curriculum.json general.json
     python manage.py loaddata ibo.json
     python manage.py loaddata myp.json
     python manage.py loaddata report.json

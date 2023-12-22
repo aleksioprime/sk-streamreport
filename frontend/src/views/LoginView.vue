@@ -15,14 +15,15 @@
           <label for="floatingPassword">Пароль</label>
         </div>
         <div class="alert alert-danger" v-if="validations.password.error">{{ validations.password.error }}</div>
-        <div class="checkbox mb-3">
+        <!-- <div class="checkbox mb-3">
           <label for="rememberMe">
             <input id="rememberMe" type="checkbox" value="remember-me"> Запомнить меня
           </label>
-        </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
-        <div class="alert alert-danger" v-if="errorMessage">{{ errorMessage }}</div>
-        <p class="mt-5 mb-3 text-muted">&copy; ОЧУ МГ Сколково 2022</p>
+        </div> -->
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button> 
+        <div v-if="isLoadedRequest" class="loader-line"></div>
+        <div class="alert alert-danger mt-2" v-if="errorMessage">{{ errorMessage }}</div>
+        <p class="mt-5 mb-3 text-muted">&copy; ОЧУ МГ Сколково 2023</p>
       </form>
     </div>
   </div>
@@ -55,6 +56,8 @@ const password = ref("");
 const validations = ref(resetValidations());
 const errorMessage = ref(null);
 
+const isLoadedRequest = ref(false)
+
 const watchField = (field) => () => {
   if (errorMessage.value) {
     errorMessage.value = null;
@@ -69,6 +72,7 @@ watch(email, watchField("email"));
 watch(password, watchField("password"));
 
 const login = async () => {
+  isLoadedRequest.value = true;
   const isValid = validateFields(
     { email: email.value, password: password.value },
     validations.value
@@ -79,16 +83,18 @@ const login = async () => {
   }
 
   const resMsg = await authStore.login({
-    email: email.value,
+    email: email.value.toLocaleLowerCase(),
     password: password.value,
   });
-
+  
   if (resMsg === "success") {
     await authStore.whoami();
     await router.push({ name: "home" });
+    
   } else {
     errorMessage.value = resMsg;
   }
+  isLoadedRequest.value = false;
 };
 </script>
   

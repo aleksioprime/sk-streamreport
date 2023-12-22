@@ -13,7 +13,45 @@
       <div v-for="unit in report.pyp_units" :key="unit.id" class="d-flex align-items-center my-2">
         <div class="card card-body">
           <div class="d-flex align-items-center" >
-            <div><b>{{ unit.unit.title }}</b> ({{ unit.unit.year.number }} классы)</div>
+            <a href="javascript:void(0)" @click="showUnitModal(unit.unit)"><b>{{ unit.unit.title }}</b> ({{ unit.unit.year.number }} классы)</a>
+            <simple-modal v-if="unit.unit.id == currentUnit.id" :nameModal="`unitShowModal${unit.unit.id}`" 
+              titleModal="Просмотр юнита" @cancel="cancelUnitShowModal">
+              <div>
+                <div class="my-1"><b>Название:</b> {{ unitPypStore.pypUnit.title }}</div>
+                <div class="my-1" v-if="unitPypStore.pypUnit.transdisciplinary_theme"><b>Трансдисциплинарная тема:</b> {{ unitPypStore.pypUnit.transdisciplinary_theme.name_rus }}</div>
+                <div class="my-1"><b>Тема исследования:</b>
+                  <div v-html="unitPypStore.pypUnit.central_idea"></div>
+                </div>
+                <div class="my-1"><b>Линии исследования:</b><br>
+                  <div v-for="line in unitPypStore.pypUnit.inquiry_lines" :key="line.id">
+                    {{ line.key_concept.name_rus }}: {{ line.name }}
+                  </div>
+                </div>
+                <div class="my-1"><b>Навыки ATL:</b><br>
+                  <div v-for="atl in unitPypStore.pypUnit.atl_develops" :key="atl.id">
+                    <div>{{ atl.category.name }}<span v-if="atl.cluster">: {{ atl.cluster.name_rus }} </span><span v-if="atl.skill">{{ atl.skill.name_rus }}</span></div>
+                    <div v-if="atl.action">{{ atl.action }}</div>
+                  </div>
+                </div>
+                <div class="my-1"><b>Профили студента IB:</b><br>
+                  <div v-for="pr in unitPypStore.pypUnit.ibprofiles" :key="pr.id">
+                    {{ pr.profile.name_rus }}<span v-if="pr.description"> ({{ pr.description }})</span>
+                  </div>
+                </div>
+                <div class="my-1">
+                  <div><b>Текущее оценивание:</b></div>
+                  <div v-html="unitPypStore.pypUnit.ongoing_assessment"></div>
+                </div>
+                <div class="my-1">
+                  <div><b>Итоговое оценивание:</b></div>
+                  <div v-html="unitPypStore.pypUnit.action "></div>
+                </div>
+                <div class="my-1">
+                  <div><b>Цели обучения и критерии успеха:</b></div>
+                  <div v-html="unitPypStore.pypUnit.learning_goals"></div>
+                </div>
+              </div>
+            </simple-modal>
             <i class="bi bi-dash-square dot-menu ms-auto" v-if="allowedMode" @click="showConfirmationModal(unit)"></i>
           </div>
           <div class="my-2">
@@ -27,7 +65,7 @@
           <div>
             <confirmation-modal v-if="unit.id == currentPrimaryUnit.id" :nameModal="`confirmationDeleteUnit${unit.id}`"
               @confirm="removePrimaryUnit" @cancel="cancelRemovePrimaryUnit">
-              Вы действитель хотите удалить этот юнит?
+              Вы действительно хотите удалить этот юнит?
             </confirmation-modal>
           </div>
         </div>
@@ -56,6 +94,7 @@
         <div v-else class="my-2">Учебных тем для импорта не найдено</div>
       </div>
     </simple-modal>
+    
   </div>
 </template>
 
@@ -88,14 +127,30 @@ const unitPypStore = useUnitPypStore();
 
 let confirmationModal = null
 let unitImportModal = null
+let unitShowModal = null
 
 const currentPrimaryUnit = ref({})
 const currentReport = ref({})
+const currentUnit = ref({})
 const choiceUnits = ref([])
 
 // Условие отключения чекбокса для темы, которая уже была добавлена в репорт
 const checkDisableUnit = (id) => {
   return props.report.pyp_units.some(item => item.unit.id == id)
+}
+
+const showUnitModal = (unit) => {
+  currentUnit.value = unit
+  nextTick(() => {
+    unitShowModal = new Modal(`#unitShowModal${unit.id}`, { backdrop: 'static' });
+    unitShowModal.show();
+  });
+  unitPypStore.loadPypUnitPlannerDetail(currentUnit.value.id);
+}
+
+const cancelUnitShowModal = () => {
+  unitShowModal.hide();
+  currentUnit.value = {};
 }
 
 // ************ Модальное окно для добавления юнитов в репорт ************
@@ -110,6 +165,7 @@ const showUnitImportModal = (report) => {
   });
   unitPypStore.loadPypUnitPlanners({
     params: {
+      year: props.report.group.year_study.id
     }
   })
 }

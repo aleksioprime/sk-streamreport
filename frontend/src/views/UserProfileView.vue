@@ -100,7 +100,7 @@
             <div class="card mb-4">
               <div class="card-body">
                 <div class="mb-2 d-flex align-items-center">
-                  <span class="text-primary me-1">Нагрузка</span>
+                  <span class="text-primary me-1">Преподавательская нагрузка</span>
                   <div class="ms-auto">
                     <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
                       :propItems="generalStore.academicYears" showName="name" />
@@ -162,7 +162,7 @@
             </div>
             <div class="card mb-4">
               <div class="card-body">
-                <p class="mb-2"><span class="text-primary font-italic me-1">Наставничество</span></p>
+                <p class="mb-2"><span class="text-primary font-italic me-1">Служба сопровождения</span></p>
                 <div v-if="authStore.user.mentor_classes.length">Вы являетесь наставником в классах:
                   <strong>
                     <span v-for="group, index in authStore.user.mentor_classes" :key="group.id">{{ group.name }}
