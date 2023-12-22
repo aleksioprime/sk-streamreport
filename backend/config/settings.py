@@ -33,7 +33,7 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 
 # ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*").split(" ")
-# CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
+CSRF_TRUSTED_ORIGINS = ["https://skolstream.sk.ru"]
 if os.getenv('ALLOWED_HOSTS', False):
     ALLOWED_HOSTS = [x.strip() for x in os.getenv('ALLOWED_HOSTS').split(',')]
 else:
