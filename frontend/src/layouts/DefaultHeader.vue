@@ -16,7 +16,7 @@
               Учебные планы
             </a>
             <div class="dropdown-menu">
-              <router-link :to="{ name: 'unitPyp' }" class="dropdown-item">Юниты PYP</router-link>
+              <router-link :to="{ name: 'unitPyp' }" v-if="authStore.isTeacherPyp || authStore.isAdmin"  class="dropdown-item">Юниты PYP</router-link>
             </div>
           </li>
           <li class="nav-item dropdown">
@@ -24,9 +24,9 @@
               Репорты
             </a>
             <div class="dropdown-menu">
-              <router-link :to="{ name: 'reportTeacher' }" class="dropdown-item">Репорты учителя по предмету</router-link>
-              <router-link :to="{ name: 'reportExtra' }" class="dropdown-item">Репорты службы сопровождения</router-link>
-              <router-link :to="{ name: 'reportMentor' }" class="dropdown-item">Репорты руководителя класса</router-link>
+              <router-link :to="{ name: 'reportTeacher' }" v-if="authStore.isTeacher || authStore.isAdmin" class="dropdown-item">Репорты учителя по предмету</router-link>
+              <router-link :to="{ name: 'reportExtra' }" v-if="authStore.isRole || authStore.isAdmin" class="dropdown-item">Репорты службы сопровождения</router-link>
+              <router-link :to="{ name: 'reportMentor' }" v-if="authStore.isMentor || authStore.isAdmin" class="dropdown-item">Репорты руководителя класса</router-link>
             </div>
           </li>
           <!-- <li class="nav-item dropdown">

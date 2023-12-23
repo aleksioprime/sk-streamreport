@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-items-center wrapper">
-    <div v-if="allowedMode">
+    <div v-if="allowedMode" class="w-100">
       <div v-if="!editMode" class="cell-text" @click="enableEditMode">{{ text || "Нажмите, чтобы что-то написать" }}
       </div>
       <input v-else id="cell-input" ref="inputRef" type="text" v-model="text" @blur="toggleEditMode" @keydown="handleKeyup"
@@ -17,10 +17,7 @@ import { ref, nextTick } from 'vue';
 
 // Определяем в props текущее значение поля и название этого поля
 const props = defineProps({
-  propData: {
-    type: String,
-    default: ''
-  },
+  propData: [ String, Number ],
   propName: {
     type: String,
     default: ''

@@ -107,19 +107,37 @@
                   </div>
                 </div>
                 <div>
-                  <div v-for="load in authStore.user.teaching_loads" :key="load.id" class="d-flex align-items-center">
-                    <div>{{ load.subject.name }}:
-                      <span v-for="group, index in load.groups" :key="group.id">{{ group.name }}<span
-                          v-if="load.groups.length != index + 1">, </span></span>
-                      - <span>{{ load.hours }} час</span>
-                    </div>
-                    <i class="bi bi-dash-square inline-button ms-2" @click="showConfirmationModal(load)"></i>
-                    <confirmation-modal v-if="load.id == currentTeachingLoad.id"
-                      :nameModal="`confirmationDeleteTeachingLoad${load.id}`" @confirm="removeTeachingLoad"
-                      @cancel="cancelTeachingLoad">
-                      Вы действитель хотите удалить эту запись?
-                    </confirmation-modal>
-                  </div>
+                  <table class="table table-sm table-bordered" v-if="authStore.user.teaching_loads.length">
+                    <thead>
+                      <tr>
+                        <th scope="col" style="width: 100%;">Предмет</th>
+                        <th scope="col" style="min-width: 60px;">Классы</th>
+                        <th scope="col" style="min-width: 60px;">Часы</th>
+                        <th scope="col" style="min-width: 30px;"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="load in authStore.user.teaching_loads" :key="load.id">
+                        <td>{{ load.subject.name }}</td>
+                        <td>
+                          <span v-for="group, index in load.groups" :key="group.id">{{ group.name }}<span
+                              v-if="load.groups.length != index + 1">, </span></span>
+                        </td>
+                        <td>
+                          <editable-text-cell :propData="load.hours" propName="hours"
+                            @save="handleTeachingSave($event, load.id)" />
+                        </td>
+                        <td>
+                          <i class="bi bi-dash-square inline-button" @click="showConfirmationModal(load)"></i>
+                          <confirmation-modal v-if="load.id == currentTeachingLoad.id"
+                            :nameModal="`confirmationDeleteTeachingLoad${load.id}`" @confirm="removeTeachingLoad"
+                            @cancel="cancelTeachingLoad">
+                            Вы действитель хотите удалить эту запись?
+                          </confirmation-modal>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <div class="mt-3">
                     <a href="javascript:void(0)" @click.prevent="createFormShow" v-if="!createMode">Добавить</a>
                   </div>
@@ -171,14 +189,14 @@
                   </strong>
                 </div>
                 <div v-else>Вы не являетесь наставником</div>
-                <div v-if="authStore.user.group_roles.length">Вы связаны с классом в следующих ролях:
+                <div v-if="authStore.user.group_roles.length">Вы связаны с классами следующими ролями:
                   <ul>
                     <li v-for="gr in authStore.user.group_roles" :key="gr.id">
                       <div><b>{{ gr.group.name }}</b>: {{ gr.role }}</div>
                     </li>
                   </ul>
                 </div>
-                <div v-else>Вы не связаны ни с каким классом</div>
+                <div v-else>Вы не являетесь психологом</div>
               </div>
             </div>
           </div>
@@ -192,7 +210,7 @@
 import { ref, nextTick, onMounted } from 'vue';
 import { Modal } from 'bootstrap';
 
-
+import EditableTextCell from "@/common/components/EditableTextCell.vue";
 import imageTeacher from '@/assets/img/teacher.svg'
 import resources from "@/services/resources";
 import SimpleDropdown from "@/common/components/SimpleDropdown.vue";
@@ -290,6 +308,16 @@ const createFormHide = () => {
   createMode.value = false;
   newTeachingLoad.value = { ...defaultTeachingLoad }
   clearValidationErrors(validations.value);
+}
+
+
+const handleTeachingSave = async (editData, load_id) => {
+  const updatedObject = {
+    id: load_id,
+    [editData.propName]: editData.value
+  }
+  const res = await curriculumStore.updateTeachingLoad(updatedObject);
+  getTeachingLoads();
 }
 
 // Подтверждение создания записи и выполнение запроса

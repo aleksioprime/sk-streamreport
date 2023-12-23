@@ -14,8 +14,8 @@
               showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
           </div>
           <div class="m-2">
-            <search-dropdown title="Выберите предмет" v-model="currentSubject" :propItems="curriculumStore.subjects"
-              showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup)" />
+            <search-dropdown :title="curriculumStore.subjects.length ? 'Выберите предмет' :'Добавьте предметы выбранного класса в нагрузку'" v-model="currentSubject" :propItems="curriculumStore.subjects"
+              showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup) || !curriculumStore.subjects.length" />
           </div>
         </div>
         <div class="d-flex flex-wrap">
@@ -387,11 +387,16 @@ const getGroups = () => {
 // Запрос на получение списка учебных планов (срабатывает, если выбран учебный план и групппа)
 const getSubjects = () => {
   if (!isEmpty(currentGroup.value)) {
-    curriculumStore.loadSubjects({
+    let config = {
       params: {
         curriculum_loads__years__classes: currentGroup.value.id,
-      },
-    }).then((result) => {
+      }
+    }
+    if (!authStore.isAdmin) {
+      config.params.teaching_loads__teacher = authStore.user.id;
+      config.params.teaching_loads__groups = [...new Set(authStore.user.teaching_loads.flatMap(obj => obj.groups.map(group => group.id)))];
+    }
+    curriculumStore.loadSubjects(config).then((result) => {
       if (!curriculumStore.subjects.map(i => i.id).includes(currentSubject.value.id))
         resetSelectedSubject();
     });

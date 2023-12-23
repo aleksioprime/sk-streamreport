@@ -15,6 +15,27 @@ export const useAuthStore = defineStore("auth", {
     isAuthenticated() {
       return !!this.user;
     },
+    isAdmin() {
+      return !!this.user && this.user.groups.some(i => i.name == 'admin')
+    },
+    isEmployee() {
+      return !!this.user && this.user.groups.some(i => i.name == 'employee')
+    },
+    isMentor() {
+      return !!this.user && this.user.mentor_classes.length
+    },
+    isTeacher() {
+      return this.isEmployee && this.user.teaching_loads.length
+    },
+    isRole() {
+      return this.isEmployee && this.user.group_roles.length
+    },
+    isTeacherPyp() {
+      return this.isEmployee && this.user.teaching_loads.length && this.user.teaching_loads.some(i => i.subject.level == 'noo')
+    },
+    isStudent() {
+      return !!this.user && this.user.groups.some(i => i.name == 'student')
+    },
   },
   actions: {
     setUser(user) {
