@@ -6,7 +6,7 @@
     <div class="alert alert-info mt-3" role="alert">
       Внимание! Система находится в режиме тестирования и доработки. Если у вас есть вопросы или замечания по
       функционалу, оставьте, пожалуйста, сообщение <b>Алексею Семочкину</b>
-      на почту <a href="malto:asemochkin@sk.ru">asemochkin@sk.ru</a>, в <a href="https://t.me/aleksioprime"
+      на почту <a href="mailto:asemochkin@sk.ru">asemochkin@sk.ru</a>, в <a href="https://t.me/aleksioprime"
         target="_blank">Telegram</a> или свяжитесь по номеру телефона <a href="tel:+79169246203">+79169246203</a>.
     </div>
     <div class="row">
