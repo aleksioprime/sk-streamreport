@@ -17,6 +17,12 @@ from apps.curriculum.models import (
     Curriculum
 )
 
+from apps.report.models import (
+    ReportTeacher,
+    ReportExtra,
+    ReportMentor
+)
+
 # Кастомный сериализатор для ответа при JWT-аутентификации (неактивен)
 # class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 #     def validate(self, attrs):
@@ -262,6 +268,10 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source='get_full_name', read_only=True)
     group_roles = ClassGroupRoleSerializer(many=True)
     mentor_classes = ClassGroupSerializer(many=True)
+    my_reports_count = serializers.SerializerMethodField()
+    all_teacherreports_count = serializers.SerializerMethodField()
+    all_extrareports_count = serializers.SerializerMethodField()
+    all_mentorreports_count = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = (
@@ -282,6 +292,10 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
             "dnevnik_id",
             "dnevnik_user_id",
             "is_online",
+            "my_reports_count",
+            "all_teacherreports_count",
+            "all_extrareports_count",
+            "all_mentorreports_count",
         )
     def get_teaching_loads(self, obj):
         teaching_loads = obj.teaching_loads.select_related(
@@ -292,3 +306,11 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
             
             ).order_by('groups__year_study', 'groups__letter')
         return TeachingLoadSerializer(teaching_loads, many=True).data
+    def get_my_reports_count(self, obj):
+        return obj.reportteacher_author_reports.count() + obj.reportextra_author_reports.count() + obj.reportmentor_author_reports.count()
+    def get_all_teacherreports_count(self, obj):
+        return ReportTeacher.objects.count()
+    def get_all_extrareports_count(self, obj):
+        return ReportExtra.objects.count()
+    def get_all_mentorreports_count(self, obj):
+        return ReportMentor.objects.count()

@@ -93,7 +93,6 @@ class ReportTeacher(ReportBaseModel):
         verbose_name = 'Репорт учителя'
         verbose_name_plural = 'Репорты учителя'
 
-# TODO: Изменить имена базы (убрать Teacher)
 class ReportCriterionAchievement(models.Model):
     criterion = models.ForeignKey('report.ReportCriterion', verbose_name=_("Чеклист"), on_delete=models.SET_NULL, null=True, related_name="reports")
     achievement = models.ForeignKey('report.ReportCriterionLevel', verbose_name=_("Достижение по критерию"), on_delete=models.SET_NULL, null=True, blank=True, related_name="reports")

@@ -62,6 +62,21 @@
               </div>
             </div>
           </div>
+          <div class="my-2">
+            <h5>Репорты</h5>
+            <div class="mb-2">
+              Всего мной создано: <b>{{ authStore.user.my_reports_count }}</b> {{ pluralizeRu(authStore.user.my_reports_count, ['репорт', 'репорта', 'репортов']) }}
+            </div>
+            <div>
+              Всего учителями создано: <b>{{ authStore.user.all_teacherreports_count }}</b> {{ pluralizeRu(authStore.user.all_teacherreports_count, ['репорт', 'репорта', 'репортов']) }}
+            </div>
+            <div>
+              Всего службой сопровождения создано: <b>{{ authStore.user.all_extrareports_count }}</b> {{ pluralizeRu(authStore.user.all_extrareports_count, ['репорт', 'репорта', 'репортов']) }}
+            </div>
+            <div>
+              Всего наставниками создано: <b>{{ authStore.user.all_mentorreports_count }}</b> {{ pluralizeRu(authStore.user.all_mentorreports_count, ['репорт', 'репорта', 'репортов']) }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-md card m-2">
