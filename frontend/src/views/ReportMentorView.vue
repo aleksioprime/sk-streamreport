@@ -3,359 +3,378 @@
     <h1>Репорты руководителя класса</h1>
     <div class="py-2">
       <transition>
-      <div v-if="isLoadedFilters">
-        <div class="d-flex flex-wrap">
-          <div class="m-2">
-            <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
-              :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+        <div v-if="isLoadedFilters">
+          <div class="d-flex flex-wrap">
+            <div class="m-2">
+              <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+                :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+            </div>
+            <div class="m-2">
+              <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+                showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+            </div>
+            <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
+              Сброс
+            </button>
           </div>
-          <div class="m-2">
-            <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
-              showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+          <div class="d-flex flex-wrap">
+            <div class="m-2">
+              <group-classes :propItems="generalStore.groups" v-model="currentGroup"
+                :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
+            </div>
           </div>
-          <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
-            Сброс
+          <button type="button" class="btn btn-primary m-2" @click="getStudentMentorReports"
+            :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
+            Показать студентов
           </button>
-        </div>
-        <div class="d-flex flex-wrap">
-          <div class="m-2">
-            <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
-          </div>
-        </div>
-        <button type="button" class="btn btn-primary m-2" @click="getStudentMentorReports"
-          :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
-          Показать студентов
-        </button>
-        <hr class="hr" />
-      <!-- <div class="text-bg-light p-2 rounded">
+          <hr class="hr" />
+          <!-- <div class="text-bg-light p-2 rounded">
         <h5 v-if="!isEmpty(currentGroup)" class="mb-2">
           Тип репорта: {{ currentReportType.name }}
         </h5>
       </div> -->
-      </div>
-      </transition>
-      <transition>
-      <div v-if="reportStore.studentMentorReports.length" class="row">
-        <div class="col-md-auto">
-          <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student pb-3">
-            <div v-if="!isEmpty(currentGroup)">
-              <h5>{{ currentGroup.name }} класс</h5>
-              <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
-              <hr />
-            </div>
-            <div class="d-flex flex-md-column flex-wrap flex-md-nowrap">
-              <div v-for="student in reportStore.studentMentorReports" :key="student.id">
-                <div class="d-flex align-items-center my-1 me-2">
-                  <img :src="student.photo ? student.photo : imageStudent" alt="" width="20"
-                    class="me-2 rounded-circle" />
-                  <a class="select" :href="`#st-${student.id}`" :class="{'no-report': !student.report }">
-                    {{ student.short_name }}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="col pe-3">  
-          <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3"
-            :id="`st-${student.id}`">
-            <div class="card card-student my-1 anchor-student">
-              <div class="card-body d-flex align-items-center ">
-                <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
-                <h4 class="m-0">
-                  {{ student.last_name }} {{ student.first_name }}
-                </h4>
-                <div class="ms-auto">
-                  <i class="bi bi-file-earmark-word dot-menu" @click="exportReportToWord(student)"
-                    v-if="student.report"></i>
+      </transition>
+      <div v-if="reportStore.studentExtraReports.length || isLoadedFilters">
+        <transition>
+          <div v-if="reportStore.studentMentorReports.length" class="row">
+            <div class="col-md-auto">
+              <div
+                class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student pb-3">
+                <div v-if="!isEmpty(currentGroup)">
+                  <h5>{{ currentGroup.name }} класс</h5>
+                  <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
+                  <hr />
                 </div>
-                <div class="ms-2" v-if="isMentor()">
-                  <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"
-                    v-if="isAuthor(student.report)"></i>
-                  <ul class="dropdown-menu">
-                    <li v-if="!student.report">
-                      <a class="dropdown-item" href="javascript:void(0)"
-                        @click.prevent="createStudentMentorReport(student.id)">Добавить репорт
-                        руководителя</a>
-                    </li>
-                    <li v-else>
-                      <a class="dropdown-item" href="javascript:void(0)"
-                        @click.prevent="showConfirmationModal(student)">Удалить репорт
-                        руководителя</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <transition name="card">
-            <div class="accordion my-1" :id="`accordionStudent-${student.id}`" v-if="student.report">
-              <div class="accordion-item">
-                <h2 class="accordion-header" :id="`heading-${student.id}`">
-                  <button class="accordion-button collapsed p-2" :class="{ 'report-complete': checkReportComplete(student.report) }"
-                    type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${student.id}`"
-                    aria-expanded="true" :aria-controls="`collapse-${student.id}`">
-                    Репорт руководителя класса
-                  </button>
-                </h2>
-                <div :id="`collapse-${student.id}`" class="accordion-collapse collapse"
-                  :aria-labelledby="`heading-${student.id}`">
-                  <div class="accordion-body">
-                    <div class="my-2">
-                      <report-mentor-ib-profile :report="student.report" v-if="currentGroup.curriculum && currentGroup.curriculum.level == 'noo'"
-                        :allowedMode="isAuthor(student.report)" />
-                    </div>
-                    <div class="my-2">
-                      <report-mentor-primary-unit :report="student.report" v-if="currentGroup.curriculum && currentGroup.curriculum.level == 'noo'"
-                        :allowedMode="isAuthor(student.report)" />
-                    </div>
-                    <hr />
-                    <div class="my-2">
-                      <editable-area-tiny class="text-muted" :propData="student.report.comment" propName="comment"
-                        @save="handleSave($event, student.report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit"
-                        :allowedMode="isAuthor(student.report)" />
-                    </div>
-                    <hr />
-                    <div class="my-2">
-                      <event-participation :report="student.report" :allowedMode="isAuthor(student.report)" />
-                    </div>
-                    <hr />
-                    <div class="d-flex align-items-center">
-                      <i class="bi bi-person"></i>
-                      <div class="ms-1">
-                        {{ student.report.author.short_name }}
-                      </div>
-                      <div class="ms-2">
-                        {{ formatDate(student.report.updated_at) }}
-                      </div>
+                <div class="d-flex flex-md-column flex-wrap flex-md-nowrap">
+                  <div v-for="student in reportStore.studentMentorReports" :key="student.id">
+                    <div class="d-flex align-items-center my-1 me-2">
+                      <img :src="student.photo ? student.photo : imageStudent" alt="" width="20"
+                        class="me-2 rounded-circle" />
+                      <a class="select" :href="`#st-${student.id}`" :class="{ 'no-report': !student.report }">
+                        {{ student.short_name }}
+                      </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            </transition>
-            <div class="accordion my-1" :id="`accordionStudentExtra-${student.id}`" v-if="student.report_extras.length">
-              <div class="accordion-item">
-                <h2 class="accordion-header" :id="`headingExtra-${student.id}`">
-                  <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse"
-                    :data-bs-target="`#collapseExtra-${student.id}`" aria-expanded="true"
-                    :aria-controls="`collapseExtra-${student.id}`">
-                    Репорты службы сопровождения
-                  </button>
-                </h2>
-                <div :id="`collapseExtra-${student.id}`" class="accordion-collapse collapse"
-                  :aria-labelledby="`headingExtra-${student.id}`">
-                  <div class="accordion-body">
-                    <div v-if="student.report_extras.length">
-                      <div v-for="extra in student.report_extras" :key="extra.id" class="card card-body my-2">
-                        <div>
-                          <div class="my-2"><b>{{ extra.role }}</b></div>
-                          <div class="my-2">Результаты по критериям</div>
-                          <table class="table table-sm table-bordered">
-                            <thead>
-                              <tr>
-                                <th scope="col" style="width: 100%;">Критерий</th>
-                                <th scope="col" style="min-width: 120px;">Результат</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <template v-for="achievement in extra.criterion_achievements" :key="achievement.id">
-                                <tr>
-                                  <td>
-                                    <span class="me-2">{{ achievement.criterion_name }}</span>
-                                  </td>
-                                  <td>
-                                    <span class="me-2">{{ achievement.achievement_name }}</span>
-                                  </td>
-                                </tr>
-                                <tr v-if="achievement.achievement_description">
-                                  <td colspan="2">
-                                    <div>{{ achievement.achievement_description }}</div>
-                                  </td>
-                                </tr>
-                              </template>
-                            </tbody>
-                          </table>
-                        </div>
-                        <hr />
-                        <div class="my-2" v-html="extra.comment" v-if="extra.comment"></div>
-                        <div v-else>Нет информации</div>
-                        <hr />
-                        <div class="d-flex align-items-center">
-                          <i class="bi bi-person"></i>
-                          <div class="ms-1">
-                            {{ extra.author.short_name }}
+            <div class="col pe-3">
+              <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3"
+                :id="`st-${student.id}`">
+                <div class="card card-student my-1 anchor-student">
+                  <div class="card-body d-flex align-items-center ">
+                    <img :src="student.photo ? student.photo : imageStudent" alt="" width="50"
+                      class="me-2 rounded-circle" />
+                    <h4 class="m-0">
+                      {{ student.last_name }} {{ student.first_name }}
+                    </h4>
+                    <div class="ms-auto">
+                      <i class="bi bi-file-earmark-word dot-menu" @click="exportReportToWord(student)"
+                        v-if="student.report"></i>
+                    </div>
+                    <div class="ms-2" v-if="isMentor()">
+                      <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"
+                        v-if="isAuthor(student.report)"></i>
+                      <ul class="dropdown-menu">
+                        <li v-if="!student.report">
+                          <a class="dropdown-item" href="javascript:void(0)"
+                            @click.prevent="createStudentMentorReport(student.id)">Добавить репорт
+                            руководителя</a>
+                        </li>
+                        <li v-else>
+                          <a class="dropdown-item" href="javascript:void(0)"
+                            @click.prevent="showConfirmationModal(student)">Удалить репорт
+                            руководителя</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <transition name="card">
+                  <div class="accordion my-1" :id="`accordionStudent-${student.id}`" v-if="student.report">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" :id="`heading-${student.id}`">
+                        <button class="accordion-button collapsed p-2"
+                          :class="{ 'report-complete': checkReportComplete(student.report) }" type="button"
+                          data-bs-toggle="collapse" :data-bs-target="`#collapse-${student.id}`" aria-expanded="true"
+                          :aria-controls="`collapse-${student.id}`">
+                          Репорт руководителя класса
+                        </button>
+                      </h2>
+                      <div :id="`collapse-${student.id}`" class="accordion-collapse collapse"
+                        :aria-labelledby="`heading-${student.id}`">
+                        <div class="accordion-body">
+                          <div class="my-2">
+                            <report-mentor-ib-profile :report="student.report"
+                              v-if="currentGroup.curriculum && currentGroup.curriculum.level == 'noo'"
+                              :allowedMode="isAuthor(student.report)" />
                           </div>
-                          <div class="ms-2">
-                            {{ formatDate(extra.updated_at) }}
+                          <div class="my-2">
+                            <report-mentor-primary-unit :report="student.report"
+                              v-if="currentGroup.curriculum && currentGroup.curriculum.level == 'noo'"
+                              :allowedMode="isAuthor(student.report)" />
+                          </div>
+                          <hr />
+                          <div class="my-2">
+                            <editable-area-tiny class="text-muted" :propData="student.report.comment" propName="comment"
+                              @save="handleSave($event, student.report.id)" :isEditing="isEditing"
+                              @toggleEdit="toggleEdit" :allowedMode="isAuthor(student.report)" />
+                          </div>
+                          <hr />
+                          <div class="my-2">
+                            <event-participation :report="student.report" :allowedMode="isAuthor(student.report)" />
+                          </div>
+                          <hr />
+                          <div class="d-flex align-items-center">
+                            <i class="bi bi-person"></i>
+                            <div class="ms-1">
+                              {{ student.report.author.short_name }}
+                            </div>
+                            <div class="ms-2">
+                              {{ formatDate(student.report.updated_at) }}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div v-else cla>
-                      Репортов не найдено!
+                  </div>
+                </transition>
+                <div class="accordion my-1" :id="`accordionStudentExtra-${student.id}`"
+                  v-if="student.report_extras.length">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" :id="`headingExtra-${student.id}`">
+                      <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse"
+                        :data-bs-target="`#collapseExtra-${student.id}`" aria-expanded="true"
+                        :aria-controls="`collapseExtra-${student.id}`">
+                        Репорты службы сопровождения
+                      </button>
+                    </h2>
+                    <div :id="`collapseExtra-${student.id}`" class="accordion-collapse collapse"
+                      :aria-labelledby="`headingExtra-${student.id}`">
+                      <div class="accordion-body">
+                        <div v-if="student.report_extras.length">
+                          <div v-for="extra in student.report_extras" :key="extra.id" class="card card-body my-2">
+                            <div>
+                              <div class="my-2"><b>{{ extra.role }}</b></div>
+                              <div class="my-2">Результаты по критериям</div>
+                              <table class="table table-sm table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th scope="col" style="width: 100%;">Критерий</th>
+                                    <th scope="col" style="min-width: 120px;">Результат</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <template v-for="achievement in extra.criterion_achievements" :key="achievement.id">
+                                    <tr>
+                                      <td>
+                                        <span class="me-2">{{ achievement.criterion_name }}</span>
+                                      </td>
+                                      <td>
+                                        <span class="me-2">{{ achievement.achievement_name }}</span>
+                                      </td>
+                                    </tr>
+                                    <tr v-if="achievement.achievement_description">
+                                      <td colspan="2">
+                                        <div>{{ achievement.achievement_description }}</div>
+                                      </td>
+                                    </tr>
+                                  </template>
+                                </tbody>
+                              </table>
+                            </div>
+                            <hr />
+                            <div class="my-2" v-html="extra.comment" v-if="extra.comment"></div>
+                            <div v-else>Нет информации</div>
+                            <hr />
+                            <div class="d-flex align-items-center">
+                              <i class="bi bi-person"></i>
+                              <div class="ms-1">
+                                {{ extra.author.short_name }}
+                              </div>
+                              <div class="ms-2">
+                                {{ formatDate(extra.updated_at) }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div v-else cla>
+                          Репортов не найдено!
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="accordion my-1" :id="`accordionStudentTeacher-${student.id}`"
-              v-if="student.report_teachers.length">
-              <div class="accordion-item">
-                <h2 class="accordion-header" :id="`headingTeacher-${student.id}`">
-                  <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse"
-                    :data-bs-target="`#collapseTeacher-${student.id}`" aria-expanded="true"
-                    :aria-controls="`collapseTeacher-${student.id}`">
-                    Репорты учителей
-                  </button>
-                </h2>
-                <div :id="`collapseTeacher-${student.id}`" class="accordion-collapse collapse"
-                  :aria-labelledby="`headingTeacher-${student.id}`">
-                  <div class="accordion-body">
-                    <div v-if="student.report_teachers && student.report_teachers.length">
-                      <div v-for="teacher in student.report_teachers" :key="teacher.id" class="my-2">
-                        <div class="accordion" :id="`accordionTeacher-${student.id}-${teacher.id}`">
-                          <div class="accordion-item">
-                            <h2 class="accordion-header">
-                              <button class="accordion-button p-2 collapsed" type="button" data-bs-toggle="collapse"
-                                :data-bs-target="`#collapseTeacher-${student.id}-${teacher.id}`" aria-expanded="true"
-                                :aria-controls="`collapseTeacher-${student.id}-${teacher.id}`">
-                                <b>{{ teacher.subject.name }}</b>
-                                <span v-if="teacher.extra_subjects.length">,&nbsp;<span v-for="sb, index in teacher.extra_subjects" :key="sb.id">{{ sb.name }}<span v-if="index + 1 != teacher.extra_subjects.length">, </span></span></span>
-                                &nbsp;({{ teacher.author.short_name }})
-                              </button>
-                            </h2>
-                            <div :id="`collapseTeacher-${student.id}-${teacher.id}`"
-                              class="accordion-collapse collapse"
-                              :data-bs-parent="`#accordionTeacher-${student.id}-${teacher.id}`">
-                              <div class="accordion-body">
-                                <div class="my-1 d-flex align-items-center" v-if="teacher.extra_subjects.length">
-                                  <div class="me-2">Дополнительные предметы:</div>
-                                  <div><span v-for="sb, index in teacher.extra_subjects" :key="sb.id">{{ sb.name }}<span v-if="index + 1 != teacher.extra_subjects.length">, </span></span></div>
-                                </div>
-                                <div class="my-2"
-                                  v-if="teacher.criterion_achievements && teacher.criterion_achievements.length">
-                                  <div class="my-2"><b>Результаты по критериям</b></div>
-                                  <table class="table table-sm table-bordered">
-                                    <thead>
-                                      <tr>
-                                        <td>Критерий</td>
-                                        <td>Результат</td>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr v-for="cr in teacher.criterion_achievements" :key="cr.id">
-                                        <td>{{ cr.criterion_name }}</td>
-                                        <td><b>{{ cr.achievement_name || 'Нет оценки' }}</b></td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-                                <div class="my-2" v-if="teacher.topic_achievements && teacher.topic_achievements.length">
-                                  <div class="my-2"><b>Результаты по темам</b></div>
-                                  <table class="table table-sm table-bordered">
-                                    <thead>
-                                      <tr>
-                                        <th scope="col" style="width: 50%;">Тема</th>
-                                        <th scope="col" style="min-width: 60px;">Кр.</th>
-                                        <th scope="col" style="width: 50%;">Комментарий</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr v-for="achieve in teacher.topic_achievements" :key="achieve.id">
-                                        <td>{{ achieve.topic.name }}</td>
-                                        <td><span v-if="achieve.level">{{ achieve.level.toUpperCase() || '-' }}</span>
-                                        </td>
-                                        <td>{{ achieve.comment || 'Нет комментариев' }}</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-                                <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
-                                  <div class="my-2"><b>Уровни достижений по MYP</b></div>
-                                  <div v-for="objective in teacher.objective_levels" :key="objective.id">
-                                    <div>
-                                      {{ objective.objective_letter.toUpperCase() }}{{ objective.strand_letter }}.
-                                      Students
-                                      should be able to {{ objective.strand_name }}:
+                <div class="accordion my-1" :id="`accordionStudentTeacher-${student.id}`"
+                  v-if="student.report_teachers.length">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" :id="`headingTeacher-${student.id}`">
+                      <button class="accordion-button collapsed p-2" type="button" data-bs-toggle="collapse"
+                        :data-bs-target="`#collapseTeacher-${student.id}`" aria-expanded="true"
+                        :aria-controls="`collapseTeacher-${student.id}`">
+                        Репорты учителей
+                      </button>
+                    </h2>
+                    <div :id="`collapseTeacher-${student.id}`" class="accordion-collapse collapse"
+                      :aria-labelledby="`headingTeacher-${student.id}`">
+                      <div class="accordion-body">
+                        <div v-if="student.report_teachers && student.report_teachers.length">
+                          <div v-for="teacher in student.report_teachers" :key="teacher.id" class="my-2">
+                            <div class="accordion" :id="`accordionTeacher-${student.id}-${teacher.id}`">
+                              <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                  <button class="accordion-button p-2 collapsed" type="button" data-bs-toggle="collapse"
+                                    :data-bs-target="`#collapseTeacher-${student.id}-${teacher.id}`" aria-expanded="true"
+                                    :aria-controls="`collapseTeacher-${student.id}-${teacher.id}`">
+                                    <b>{{ teacher.subject.name }}</b>
+                                    <span v-if="teacher.extra_subjects.length">,&nbsp;<span
+                                        v-for="sb, index in teacher.extra_subjects" :key="sb.id">{{ sb.name }}<span
+                                          v-if="index + 1 != teacher.extra_subjects.length">, </span></span></span>
+                                    &nbsp;({{ teacher.author.short_name }})
+                                  </button>
+                                </h2>
+                                <div :id="`collapseTeacher-${student.id}-${teacher.id}`"
+                                  class="accordion-collapse collapse"
+                                  :data-bs-parent="`#accordionTeacher-${student.id}-${teacher.id}`">
+                                  <div class="accordion-body">
+                                    <div class="my-1 d-flex align-items-center" v-if="teacher.extra_subjects.length">
+                                      <div class="me-2">Дополнительные предметы:</div>
+                                      <div><span v-for="sb, index in teacher.extra_subjects" :key="sb.id">{{ sb.name
+                                      }}<span v-if="index + 1 != teacher.extra_subjects.length">, </span></span></div>
                                     </div>
-                                    <div class="ms-3">
-                                      <em>
-                                      The student {{ objective.level_name ||
-                                        'does not reach a standard described by any of thedescriptors below' }}
-                                        </em>
+                                    <div class="my-2"
+                                      v-if="teacher.criterion_achievements && teacher.criterion_achievements.length">
+                                      <div class="my-2"><b>Результаты по критериям</b></div>
+                                      <table class="table table-sm table-bordered">
+                                        <thead>
+                                          <tr>
+                                            <td>Критерий</td>
+                                            <td>Результат</td>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr v-for="cr in teacher.criterion_achievements" :key="cr.id">
+                                            <td>{{ cr.criterion_name }}</td>
+                                            <td><b>{{ cr.achievement_name || 'Нет оценки' }}</b></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
                                     </div>
-                                  </div>
-                                </div>
-                                <div class="my-2" v-if="teacher.criterion_marks && teacher.criterion_marks.length">
-                                  <div class="my-2"><b>Оценки по критериям MYP</b></div>
-                                  <table class="table table-sm table-bordered">
-                                    <thead>
-                                      <tr>
-                                        <td>Критерий</td>
-                                        <td>Балл</td>
-                                        <td>Сумма</td>
-                                        <td>Оценка</td>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr v-for="cr, index in teacher.criterion_marks" :key="cr.id">
-                                        <td>{{ cr.criterion_letter.toUpperCase() }}. {{ cr.criterion_name }}</td>
-                                        <td><b>{{ cr.mark }}</b></td>
-                                        <template v-if="index == 0">
-                                          <td :rowspan="teacher.criterion_marks.length">
-                                            {{ calculateSumMark(teacher.criterion_marks).summ }} / {{ teacher.criterion_marks.length * 8 }}
-                                          </td>
-                                          <td :rowspan="teacher.criterion_marks.length">
-                                            {{ calculateSumMark(teacher.criterion_marks).mark }}
-                                          </td>
-                                        </template>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-                                <div class="my-2" v-if="teacher.final_grade_ib">
-                                  Итоговая оценка IB: <b>{{ teacher.final_grade_ib }}</b>
-                                </div>
-                                <div class="my-2" v-if="teacher.final_grade">Итоговая оценка: <b>{{
-                                  teacher.final_grade }}</b>
-                                </div>
-                                <hr />
-                                <div class="my-2 text-muted" v-html="teacher.comment" v-if="teacher.comment"></div>
-                                <div v-else>Нет информации</div>
-                                <hr />
-                                <div class="d-flex align-items-center">
-                                  <i class="bi bi-person"></i>
-                                  <div class="ms-1">
-                                    {{ teacher.author.short_name }}
-                                  </div>
-                                  <div class="ms-2">
-                                    {{ formatDate(teacher.updated_at) }}
+                                    <div class="my-2"
+                                      v-if="teacher.topic_achievements && teacher.topic_achievements.length">
+                                      <div class="my-2"><b>Результаты по темам</b></div>
+                                      <table class="table table-sm table-bordered">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col" style="width: 50%;">Тема</th>
+                                            <th scope="col" style="min-width: 60px;">Кр.</th>
+                                            <th scope="col" style="width: 50%;">Комментарий</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr v-for="achieve in teacher.topic_achievements" :key="achieve.id">
+                                            <td>{{ achieve.topic.name }}</td>
+                                            <td><span v-if="achieve.level">{{ achieve.level.toUpperCase() || '-' }}</span>
+                                            </td>
+                                            <td>{{ achieve.comment || 'Нет комментариев' }}</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="my-2" v-if="teacher.objective_levels && teacher.objective_levels.length">
+                                      <div class="my-2"><b>Уровни достижений по MYP</b></div>
+                                      <div v-for="objective in teacher.objective_levels" :key="objective.id">
+                                        <div>
+                                          {{ objective.objective_letter.toUpperCase() }}{{ objective.strand_letter }}.
+                                          Students
+                                          should be able to {{ objective.strand_name }}:
+                                        </div>
+                                        <div class="ms-3">
+                                          <em>
+                                            The student {{ objective.level_name ||
+                                              'does not reach a standard described by any of thedescriptors below' }}
+                                          </em>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="my-2" v-if="teacher.criterion_marks && teacher.criterion_marks.length">
+                                      <div class="my-2"><b>Оценки по критериям MYP</b></div>
+                                      <table class="table table-sm table-bordered">
+                                        <thead>
+                                          <tr>
+                                            <td>Критерий</td>
+                                            <td>Балл</td>
+                                            <td>Сумма</td>
+                                            <td>Оценка</td>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr v-for="cr, index in teacher.criterion_marks" :key="cr.id">
+                                            <td>{{ cr.criterion_letter.toUpperCase() }}. {{ cr.criterion_name }}</td>
+                                            <td><b>{{ cr.mark }}</b></td>
+                                            <template v-if="index == 0">
+                                              <td :rowspan="teacher.criterion_marks.length">
+                                                {{ calculateSumMark(teacher.criterion_marks).summ }} / {{
+                                                  teacher.criterion_marks.length * 8 }}
+                                              </td>
+                                              <td :rowspan="teacher.criterion_marks.length">
+                                                {{ calculateSumMark(teacher.criterion_marks).mark }}
+                                              </td>
+                                            </template>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="my-2" v-if="teacher.final_grade_ib">
+                                      Итоговая оценка IB: <b>{{ teacher.final_grade_ib }}</b>
+                                    </div>
+                                    <div class="my-2" v-if="teacher.final_grade">Итоговая оценка: <b>{{
+                                      teacher.final_grade }}</b>
+                                    </div>
+                                    <hr />
+                                    <div class="my-2 text-muted" v-html="teacher.comment" v-if="teacher.comment"></div>
+                                    <div v-else>Нет информации</div>
+                                    <hr />
+                                    <div class="d-flex align-items-center">
+                                      <i class="bi bi-person"></i>
+                                      <div class="ms-1">
+                                        {{ teacher.author.short_name }}
+                                      </div>
+                                      <div class="ms-2">
+                                        {{ formatDate(teacher.updated_at) }}
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
+                        <div v-else>
+                          Репортов не найдено!
+                        </div>
                       </div>
-                    </div>
-                    <div v-else>
-                      Репортов не найдено!
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="card my-2" v-else>
-        <div class="card-body">
-          <div class="d-flex justify-content-center">
-            Выберите необходимые параметры для отображения карточек студентов
+          <div class="card my-2" v-else>
+            <div class="card-body">
+              <div class="d-flex justify-content-center">
+                Выберите необходимые параметры для отображения карточек студентов
+              </div>
+            </div>
           </div>
-        </div>
+        </transition>
       </div>
-    </transition>
+      <!-- <div v-else>
+        <div class="alert alert-danger" role="alert">
+          Ошибка! Данные не обнаружены
+        </div>
+      </div> -->
     </div>
     <!-- Подключение модального окна -->
     <confirmation-modal @confirm="removeStudentMentorReport" @cancel="cancelRemoveStudentMentorReport">
@@ -404,7 +423,10 @@ const isLoadedReport = ref(false)
 
 // Вспомогательная функция для проверки объекта на пустое содержимое
 const isEmpty = (obj) => {
-  return Object.keys(obj).length === 0;
+  if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).length === 0;
+  }
+  return true
 };
 
 const isLoadedFilters = computed(() => {
@@ -438,8 +460,8 @@ const checkReportComplete = (report) => {
   if (currentGroup.value.curriculum.level == "noo") {
     return report.comment && report.profiles.length && isPropertyFilledInEveryObject(report.profiles, 'level') && report.pyp_units.length && isPropertyFilledInEveryObject(report.pyp_units, 'comment')
   } else {
-    return report.comment 
-  } 
+    return report.comment
+  }
 }
 
 const currentReportType = computed(() => {
@@ -679,7 +701,7 @@ onMounted(async () => {
   recoveryOptions();
   if (!generalStore.isAcademicYearsLoaded) {
     await generalStore.loadAcademicYears();
-  } 
+  }
   currentAcademicYear.value = generalStore.relevantYear;
   getGroups();
   getStudentMentorReports();
@@ -717,18 +739,21 @@ const exportReportToWord = (student) => {
 
 <style scoped>
 .no-report {
-  color: grey!important;
+  color: grey !important;
 }
+
 .report-complete {
   background-color: #b0e4af;
 }
+
 .list-right-student {
   top: 10px;
   max-height: 100vh;
   overflow-y: scroll;
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
+
 .list-right-student::-webkit-scrollbar {
   display: none;
 }
@@ -763,9 +788,11 @@ const exportReportToWord = (student) => {
 .v-enter-active {
   transition: opacity 0.5s ease;
 }
+
 .v-enter-from {
   opacity: 0;
 }
+
 .card-enter-active,
 .card-leave-active {
   transition: opacity 0.5s ease;
@@ -774,5 +801,4 @@ const exportReportToWord = (student) => {
 .card-enter-from,
 .card-leave-to {
   opacity: 0;
-}
-</style>
+}</style>

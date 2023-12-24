@@ -103,7 +103,7 @@
                   <span class="text-primary me-1">Преподавательская нагрузка</span>
                   <div class="ms-auto">
                     <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
-                      :propItems="generalStore.academicYears" showName="name" />
+                      :propItems="generalStore.academicYears" showName="name" v-if="!isEmpty(currentAcademicYear)"/>
                   </div>
                 </div>
                 <div>
@@ -139,7 +139,7 @@
                     </tbody>
                   </table>
                   <div class="mt-3">
-                    <a href="javascript:void(0)" @click.prevent="createFormShow" v-if="!createMode">Добавить</a>
+                    <a href="javascript:void(0)" @click.prevent="createFormShow" v-if="!createMode && !isEmpty(currentAcademicYear)">Добавить</a>
                   </div>
                 </div>
                 <div v-if="createMode">
@@ -221,6 +221,14 @@ import EditableArea from "@/common/components/EditableArea.vue";
 import ConfirmationModal from '@/common/components/ConfirmationModal.vue';
 
 import { validateFields, clearValidationErrors } from '@/common/validator';
+
+// Вспомогательная функция для проверки объекта на пустое содержимое
+const isEmpty = (obj) => {
+  if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).length === 0;
+  }
+  return true
+};
 
 const setEmptyValidations = () => ({
   subject: {
@@ -394,11 +402,13 @@ const getTeachingLoads = () => {
 onMounted(() => {
   generalStore.loadAcademicYears().then(() => {
     currentAcademicYear.value = generalStore.relevantYear;
-    generalStore.loadGroups({
-      params: {
-        year_academic: currentAcademicYear.value.id,
-      },
-    });
+    if (!isEmpty(currentAcademicYear.value)) {
+      generalStore.loadGroups({
+        params: {
+          year_academic: currentAcademicYear.value.id,
+        },
+      });
+    }
   });
 });
 </script>

@@ -1,10 +1,12 @@
 include backend/.env/.env
+.PHONY: backup
 # Название проекта
 PROJECT_NAME = streamreport
 # Данные БД
 POSTGRES_USER = admin
 POSTGRES_PASSWORD = 123456
 POSTGRES_DB = igskolkovo
+DATE=$(shell date +%Y%m%d%m%H%M%S)
 # Файл docker-compose
 DOCKER_COMPOSE_FILE = ./docker-compose.yml
 
@@ -22,6 +24,8 @@ build:
 rebuild:
 	$(DC) down -v
 	$(DC) up -d --build
+destroy:
+	$(DC) down -v
 # Загрузка фикстур
 load_fixtures:
 	docker cp $(HOST_SCRIPT_PATH) $(CONTAINER_NAME):$(CONTAINER_SCRIPT_PATH)
@@ -39,6 +43,10 @@ stop:
 # подключение к БД PostgreSQL при помощи консольного клиента psql
 db:
 	export PGPASSWORD=${POSTGRES_PASSWORD}; docker exec -it database psql -U $(POSTGRES_USER) ${POSTGRES_DB}
+backup:
+	$(DC) exec database pg_dump -U ${POSTGRES_USER} -d ${POSTGRES_DB} -F c -b -v -f "/tmp/db_backup_${DATE}.backup"
+	$(DC) cp database:/tmp/db_backup_${DATE}.backup backup/db_backup_${DATE}.backup
+	$(DC) exec database rm /tmp/db_backup_${DATE}.backup
 # подключение к bash-консоли любого контейнера с явно указанным именем (make b c=backend)
 b:
 	docker exec -it $(c) /bin/bash

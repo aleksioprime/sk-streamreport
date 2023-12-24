@@ -3,35 +3,38 @@
     <h1>Репорты учителя по предмету</h1>
     <div class="py-2">
       <transition>
-      <div v-if="isLoadedFilters">
-        <div class="d-flex flex-wrap">
-          <div class="m-2">
-            <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
-              :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+        <div v-if="isLoadedFilters">
+          <div class="d-flex flex-wrap">
+            <div class="m-2">
+              <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+                :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+            </div>
+            <div class="m-2">
+              <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+                showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+            </div>
+            <div class="m-2">
+              <search-dropdown
+                :title="curriculumStore.subjects.length ? 'Выберите предмет' : 'Добавьте предметы выбранного класса в нагрузку'"
+                v-model="currentSubject" :propItems="curriculumStore.subjects" showName="name" @select="selectSubject"
+                :disabled="isEmpty(currentGroup) || !curriculumStore.subjects.length" />
+            </div>
           </div>
-          <div class="m-2">
-            <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
-              showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+          <div class="d-flex flex-wrap">
+            <div class="m-2">
+              <group-classes :propItems="generalStore.groups" v-model="currentGroup"
+                :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
+            </div>
           </div>
-          <div class="m-2">
-            <search-dropdown :title="curriculumStore.subjects.length ? 'Выберите предмет' :'Добавьте предметы выбранного класса в нагрузку'" v-model="currentSubject" :propItems="curriculumStore.subjects"
-              showName="name" @select="selectSubject" :disabled="isEmpty(currentGroup) || !curriculumStore.subjects.length" />
-          </div>
-        </div>
-        <div class="d-flex flex-wrap">
-          <div class="m-2">
-            <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
-          </div>
-        </div>
-        <button type="button" class="btn btn-primary m-2" @click="getTeacherReports"
-          :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
-          Показать студентов
-        </button>
-        <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
-          Сброс
-        </button>
-        <hr class="hr" />
-        <!-- <div class="text-bg-light p-2 rounded">
+          <button type="button" class="btn btn-primary m-2" @click="getTeacherReports"
+            :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
+            Показать студентов
+          </button>
+          <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
+            Сброс
+          </button>
+          <hr class="hr" />
+          <!-- <div class="text-bg-light p-2 rounded">
           <h5 v-if="!isEmpty(currentGroup)" class="my-2">
             Тип репорта: {{ currentReportType.name }}
           </h5>
@@ -42,155 +45,174 @@
               {{ currentSubject.group_ib.program.toUpperCase() }})</span>
           </h5>
         </div> -->
-      </div>
-    </transition>
-    <transition>
-      <div class="row" v-if="generalStore.users.length">
-        <!-- Список студентов -->
-        <div class="col-md-auto">
-          <div class="d-flex flex-column align-items-start justify-content-start m-2 list-menu list-right-student pb-3">
-            <div v-if="!isEmpty(currentGroup)">
-              <h5>{{ currentGroup.name }} класс</h5>
-              <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
-              <hr />
-            </div>
-            <div class="d-flex flex-md-column flex-wrap flex-md-nowrap">
-              <div v-for="user in generalStore.users" :key="user.id">
-                <div class="d-flex align-items-center me-2">
-                  <img :src="user.photo ? user.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
-                  <div class="flex-shrink-0">
-                    <div v-if="!checkStudentWithReport(user.id)" class="me-2">
-                      {{ user.short_name }}
-                    </div>
-                    <a v-else class="select" :class="{'select-teacher': !isAuthor(reportStore.reportTeachers.find((item) => item.student.id == user.id)) }" :href="`#st-${user.id}`">
-                      {{ user.short_name }}
-                    </a>
-                  </div>
-                  <div class="ms-auto" v-if="isTeacher()">
-                    <i class="bi bi-plus-square dot-menu" @click="createTeacherReport(user.id)"
-                      v-if="!checkStudentWithReport(user.id)"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        <!-- Список репортов -->
-        <div class="col">
-          <div class="loader-spin" v-if="isLoadedReport"></div>
-          <div v-if="reportStore.reportTeachers.length">
-            <transition-group name="card">
-            <div v-for="report in reportStore.reportTeachers" :key="report.id" class="my-3"
-              :id="`st-${report.student.id}`">
-              <div class="card card-student my-1">
-                <div class="card-body d-flex align-items-center">
-                  <img :src="report.student.photo ? report.student.photo : imageStudent
-                    " alt="" width="50" class="me-2 rounded-circle" />
-                  <h4 class="m-0">
-                    {{ report.student.last_name }}
-                    {{ report.student.first_name }}
-                  </h4>
-                  <div class="ms-auto" v-if="isAuthor(report)">
-                    <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <a class="dropdown-item" href="javascript:void(0)" @click.prevent="showConfirmationModal(report)">Удалить репорт</a>
-                      </li>
-                    </ul>
-                  </div>
+      </transition>
+      <div v-if="reportStore.studentExtraReports.length || isLoadedFilters">
+        <transition>
+          <div class="row" v-if="generalStore.users.length">
+            <!-- Список студентов -->
+            <div class="col-md-auto">
+              <div
+                class="d-flex flex-column align-items-start justify-content-start m-2 list-menu list-right-student pb-3">
+                <div v-if="!isEmpty(currentGroup)">
+                  <h5>{{ currentGroup.name }} класс</h5>
+                  <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
+                  <hr />
                 </div>
-              </div>
-              <div class="accordion" :id="`accordionStudent-${report.id}`">
-                <div class="accordion-item">
-                  <h2 class="accordion-header" :id="`heading-${report.id}`">
-                    <button class="accordion-button collapsed p-2" :class="{ 'report-complete' : checkReportComplete(report) }"
-                      type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${report.id}`"
-                      aria-expanded="true" :aria-controls="`collapse-${report.id}`">
-                      Репорт учителя по предмету: {{ currentSubject.name }}
-                    </button>
-                  </h2>
-                  <div :id="`collapse-${report.id}`" class="accordion-collapse collapse"
-                    :aria-labelledby="`heading-${report.id}`">
-                    <div class="accordion-body">
-                      <div class="my-1 d-flex align-items-center">
-                        <div class="me-2"><b>Дополнительный предмет:</b></div>
-                        <search-dropdown-multiple class="my-2" title="Не выбрано" v-model="report.extra_subjects"
-                          :propItems="curriculumStore.subjects" showName="name" propName="extra_subjects" @select="handleSave($event, report.id)" :disabled="!isAuthor(report)"/>
-                      </div>
-                      <div class="my-3">
-                        <report-teacher-myp-strand :report="report" v-if="currentReportType.value == 'ooo'" :allowedMode="isAuthor(report)"/>
-                      </div>
-                      <div class="my-3">
-                        <report-teacher-myp-criteria :report="report" v-if="currentReportType.value == 'ooo'" :allowedMode="isAuthor(report)"/>
-                      </div>
-                      <div class="my-3" v-if="['ooo', 'soo', 'dp'].includes(currentReportType.value)">
-                        <div class="d-flex align-items-center">
-                          <h5 class="mb-0">Итоговая оценка</h5>
-                          <div class="ms-auto" v-if="isAuthor(report)">
-                            <scale-radio :elementId="String(report.id) + 'grade'" :data="MARK5" :propValue="report.final_grade"
-                              propName="final_grade" @save="handleSave($event, report.id)" />
-                          </div>
-                          <div v-else class="ms-auto">{{ report.final_grade || 'Нет оценки' }}</div>
+                <div class="d-flex flex-md-column flex-wrap flex-md-nowrap">
+                  <div v-for="user in generalStore.users" :key="user.id">
+                    <div class="d-flex align-items-center me-2">
+                      <img :src="user.photo ? user.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
+                      <div class="flex-shrink-0">
+                        <div v-if="!checkStudentWithReport(user.id)" class="me-2">
+                          {{ user.short_name }}
                         </div>
+                        <a v-else class="select"
+                          :class="{ 'select-teacher': !isAuthor(reportStore.reportTeachers.find((item) => item.student.id == user.id)) }"
+                          :href="`#st-${user.id}`">
+                          {{ user.short_name }}
+                        </a>
                       </div>
-                      <div class="my-3" v-if="currentReportType.value == 'dp'">
-                        <div class="d-flex align-items-center">
-                          <h5 class="mb-0">Итоговая оценка IB</h5>
-                          <div class="ms-auto" v-if="isAuthor(report)">
-                            <scale-radio :elementId="String(report.id) + 'grade_ib'" :data="MARK7" :propValue="report.final_grade_ib"
-                              propName="final_grade_ib" @save="handleSave($event, report.id)" />
-                          </div>
-                          <div v-else class="ms-auto">{{ report.final_grade_ib }}</div>
-                        </div>
-                      </div>
-                      <div class="my-3">
-                        <report-criteria :report="report" typeReport="teacher" v-if="currentReportType.value != 'noo'" :allowedMode="isAuthor(report)"/>
-                      </div>
-                      <div class="my-2">
-                        <report-teacher-topic :report="report" v-if="currentReportType.value == 'noo'" :allowedMode="isAuthor(report)"/>
-                      </div>
-                      <hr />
-                      <div class="my-2">
-                        <editable-area-tiny class="text-muted" :propData="report.comment" propName="comment"
-                          @save="handleSave($event, report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" :allowedMode="isAuthor(report)"/>
-                      </div>
-                      <hr />
-                      <div class="my-2">
-                        <event-participation :report="report" :allowedMode="isAuthor(report)"/>
-                      </div>
-                      <hr />
-                      <div class="d-flex align-items-center">
-                        <i class="bi bi-person"></i>
-                        <div class="ms-1">{{ report.author.short_name }}</div>
-                        <div class="ms-2">
-                          {{ formatDate(report.updated_at) }}
-                        </div>
+                      <div class="ms-auto" v-if="isTeacher()">
+                        <i class="bi bi-plus-square dot-menu" @click="createTeacherReport(user.id)"
+                          v-if="!checkStudentWithReport(user.id)"></i>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </transition-group>
+            <!-- Список репортов -->
+            <div class="col">
+              <div class="loader-spin" v-if="isLoadedReport"></div>
+              <div v-if="reportStore.reportTeachers.length">
+                <transition-group name="card">
+                  <div v-for="report in reportStore.reportTeachers" :key="report.id" class="my-3"
+                    :id="`st-${report.student.id}`">
+                    <div class="card card-student my-1">
+                      <div class="card-body d-flex align-items-center">
+                        <img :src="report.student.photo ? report.student.photo : imageStudent
+                          " alt="" width="50" class="me-2 rounded-circle" />
+                        <h4 class="m-0">
+                          {{ report.student.last_name }}
+                          {{ report.student.first_name }}
+                        </h4>
+                        <div class="ms-auto" v-if="isAuthor(report)">
+                          <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                          <ul class="dropdown-menu">
+                            <li>
+                              <a class="dropdown-item" href="javascript:void(0)"
+                                @click.prevent="showConfirmationModal(report)">Удалить репорт</a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion" :id="`accordionStudent-${report.id}`">
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" :id="`heading-${report.id}`">
+                          <button class="accordion-button collapsed p-2"
+                            :class="{ 'report-complete': checkReportComplete(report) }" type="button"
+                            data-bs-toggle="collapse" :data-bs-target="`#collapse-${report.id}`" aria-expanded="true"
+                            :aria-controls="`collapse-${report.id}`">
+                            Репорт учителя по предмету: {{ currentSubject.name }}
+                          </button>
+                        </h2>
+                        <div :id="`collapse-${report.id}`" class="accordion-collapse collapse"
+                          :aria-labelledby="`heading-${report.id}`">
+                          <div class="accordion-body">
+                            <div class="my-1 d-flex align-items-center">
+                              <div class="me-2"><b>Дополнительный предмет:</b></div>
+                              <search-dropdown-multiple class="my-2" title="Не выбрано" v-model="report.extra_subjects"
+                                :propItems="curriculumStore.subjects" showName="name" propName="extra_subjects"
+                                @select="handleSave($event, report.id)" :disabled="!isAuthor(report)" />
+                            </div>
+                            <div class="my-3">
+                              <report-teacher-myp-strand :report="report" v-if="currentReportType.value == 'ooo'"
+                                :allowedMode="isAuthor(report)" />
+                            </div>
+                            <div class="my-3">
+                              <report-teacher-myp-criteria :report="report" v-if="currentReportType.value == 'ooo'"
+                                :allowedMode="isAuthor(report)" />
+                            </div>
+                            <div class="my-3" v-if="['ooo', 'soo', 'dp'].includes(currentReportType.value)">
+                              <div class="d-flex align-items-center">
+                                <h5 class="mb-0">Итоговая оценка</h5>
+                                <div class="ms-auto" v-if="isAuthor(report)">
+                                  <scale-radio :elementId="String(report.id) + 'grade'" :data="MARK5"
+                                    :propValue="report.final_grade" propName="final_grade"
+                                    @save="handleSave($event, report.id)" />
+                                </div>
+                                <div v-else class="ms-auto">{{ report.final_grade || 'Нет оценки' }}</div>
+                              </div>
+                            </div>
+                            <div class="my-3" v-if="currentReportType.value == 'dp'">
+                              <div class="d-flex align-items-center">
+                                <h5 class="mb-0">Итоговая оценка IB</h5>
+                                <div class="ms-auto" v-if="isAuthor(report)">
+                                  <scale-radio :elementId="String(report.id) + 'grade_ib'" :data="MARK7"
+                                    :propValue="report.final_grade_ib" propName="final_grade_ib"
+                                    @save="handleSave($event, report.id)" />
+                                </div>
+                                <div v-else class="ms-auto">{{ report.final_grade_ib }}</div>
+                              </div>
+                            </div>
+                            <div class="my-3">
+                              <report-criteria :report="report" typeReport="teacher"
+                                v-if="currentReportType.value != 'noo'" :allowedMode="isAuthor(report)" />
+                            </div>
+                            <div class="my-2">
+                              <report-teacher-topic :report="report" v-if="currentReportType.value == 'noo'"
+                                :allowedMode="isAuthor(report)" />
+                            </div>
+                            <hr />
+                            <div class="my-2">
+                              <editable-area-tiny class="text-muted" :propData="report.comment" propName="comment"
+                                @save="handleSave($event, report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit"
+                                :allowedMode="isAuthor(report)" />
+                            </div>
+                            <hr />
+                            <div class="my-2">
+                              <event-participation :report="report" :allowedMode="isAuthor(report)" />
+                            </div>
+                            <hr />
+                            <div class="d-flex align-items-center">
+                              <i class="bi bi-person"></i>
+                              <div class="ms-1">{{ report.author.short_name }}</div>
+                              <div class="ms-2">
+                                {{ formatDate(report.updated_at) }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </transition-group>
+              </div>
+              <div class="card my-2" v-else>
+                <div class="card-body">
+                  <div class="d-flex justify-content-center">
+                    Репортов в текущем классе пока нет
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="card my-2" v-else>
             <div class="card-body">
               <div class="d-flex justify-content-center">
-                Репортов в текущем классе пока нет
+                Выберите необходимые параметры для отображения карточек студентов
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
-      
-      <div class="card my-2" v-else>
-        <div class="card-body">
-          <div class="d-flex justify-content-center">
-            Выберите необходимые параметры для отображения карточек студентов
-          </div>
+      <!-- <div v-else>
+        <div class="alert alert-danger" role="alert">
+          Ошибка! Данные не обнаружены
         </div>
-      </div>
-    </transition>
+      </div> -->
     </div>
     <!-- Подключение модального окна -->
     <confirmation-modal @confirm="removeTeacherReport" @cancel="cancelRemoveTeacherReport">
@@ -292,21 +314,24 @@ function isPropertyFilledInEveryObject(array, propertyName) {
 
 const checkReportComplete = (report) => {
   if (currentReportType.value.value == 'noo') {
-    return report.comment && report.topic_achievements.length && isPropertyFilledInEveryObject(report.topic_achievements, 'level') 
+    return report.comment && report.topic_achievements.length && isPropertyFilledInEveryObject(report.topic_achievements, 'level')
   } else if (currentReportType.value.value == 'ooo') {
-    return report.comment && report.final_grade && report.criterion_marks.length && isPropertyFilledInEveryObject(report.criterion_marks, 'mark') 
+    return report.comment && report.final_grade && report.criterion_marks.length && isPropertyFilledInEveryObject(report.criterion_marks, 'mark')
   } else if (currentReportType.value.value == 'soo') {
     return report.comment && report.final_grade
   } else if (currentReportType.value.value == 'dp') {
     return report.comment && report.final_grade && report.final_grade_ib
   } else {
-    return report.comment 
+    return report.comment
   }
 }
 
 // Вспомогательная функция для проверки объекта на пустое содержимое
 const isEmpty = (obj) => {
-  return Object.keys(obj).length === 0;
+  if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).length === 0;
+  }
+  return true
 };
 
 // Фильтр списка периодов репорта по выбранному учебному году
@@ -438,9 +463,9 @@ const getStudents = () => {
 const getTeacherReports = async () => {
   // console.log('Запрос репортов')
   if (
-      !isEmpty(currentAcademicYear.value) &&
-      !isEmpty(currentGroup.value) &&
-      !isEmpty(currentSubject.value)
+    !isEmpty(currentAcademicYear.value) &&
+    !isEmpty(currentGroup.value) &&
+    !isEmpty(currentSubject.value)
   ) {
     isLoadedReport.value = true;
     const config = {
@@ -656,6 +681,7 @@ onMounted(async () => {
 .report-complete {
   background-color: #b0e4af;
 }
+
 .list-menu {
   position: -webkit-sticky;
   position: sticky;
@@ -671,7 +697,7 @@ onMounted(async () => {
 }
 
 .select-teacher {
-  color: grey!important;
+  color: grey !important;
 }
 
 .list-right-student {
@@ -679,11 +705,13 @@ onMounted(async () => {
   max-height: 100vh;
   overflow-y: scroll;
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
+
 .list-right-student::-webkit-scrollbar {
   display: none;
 }
+
 :target::before {
   content: "";
   display: block;
@@ -710,6 +738,7 @@ onMounted(async () => {
 
   /* Промежуточный цвет фона для мигания */
 }
+
 .v-enter-active {
   transition: opacity 0.5s ease;
 }
@@ -727,5 +756,4 @@ onMounted(async () => {
 .card-leave-to {
   opacity: 0;
   transform: translateY(30px);
-}
-</style>
+}</style>

@@ -1,141 +1,157 @@
 <template>
   <div>
     <h1>Репорты службы сопровождения</h1>
-    
+
     <div class="py-2">
       <transition>
-      <div v-if="isLoadedFilters">
-        <div class="d-flex flex-wrap">
-          <div class="m-2">
-            <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
-              :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+        <div v-if="isLoadedFilters">
+          <div class="d-flex flex-wrap">
+            <div class="m-2">
+              <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+                :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
+            </div>
+            <div class="m-2">
+              <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+                showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+            </div>
+            <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
+              Сброс
+            </button>
           </div>
-          <div class="m-2">
-            <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
-              showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
+          <div class="d-flex flex-wrap">
+            <div class="m-2">
+              <group-classes :propItems="generalStore.groups" v-model="currentGroup"
+                :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
+            </div>
           </div>
-          <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
-            Сброс
+          <button type="button" class="btn btn-primary m-2" @click="getStudentExtraReports"
+            :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
+            Показать студентов
           </button>
+          <hr class="hr" />
         </div>
-        <div class="d-flex flex-wrap">
-          <div class="m-2">
-            <group-classes :propItems="generalStore.groups" v-model="currentGroup" :disabled="isEmpty(currentAcademicYear)" @select="selectGroup"/>
-          </div>
-        </div>
-        <button type="button" class="btn btn-primary m-2" @click="getStudentExtraReports"
-          :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
-          Показать студентов
-        </button> 
-        <hr class="hr" />
-      </div> 
-      <!-- <div class="text-bg-light p-2 rounded">
+        <!-- <div class="text-bg-light p-2 rounded">
         <h5 class="my-2">Тип репорта: репорт службы сопровождения</h5>
       </div> -->
       </transition>
-      <transition>
-      <div v-if="reportStore.studentExtraReports.length" class="row">
-        <div class="col-md-auto">
-          <div class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student pb-3">
-            <div v-if="!isEmpty(currentGroup)">
-              <h5>{{ currentGroup.name }} класс</h5>
-              <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
-              <hr />
-            </div>
-            <div class="d-flex flex-md-column flex-wrap flex-md-nowrap">
-              <div v-for="student in reportStore.studentExtraReports" :key="student.id">
-                <div class="d-flex align-items-center my-1 me-2">
-                  <img :src="student.photo ? student.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
-                  <a class="select" :href="`#st-${student.id}`" :class="{'no-report': !student.reports.length }">
-                    {{ student.short_name }}
-                  </a>
+      <div v-if="reportStore.studentExtraReports.length || isLoadedFilters">
+        <transition>
+          <div v-if="reportStore.studentExtraReports.length" class="row">
+            <div class="col-md-auto">
+              <div
+                class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student pb-3">
+                <div v-if="!isEmpty(currentGroup)">
+                  <h5>{{ currentGroup.name }} класс</h5>
+                  <div v-if="currentGroup.mentor">{{ currentGroup.mentor.short_name }}</div>
+                  <hr />
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col pe-3">
-          <div v-for="student in reportStore.studentExtraReports" :key="student.id" class="my-3" :id="`st-${student.id}`">
-            <div class="card card-student my-1">
-              <div class="card-body d-flex align-items-center">
-                <img :src="student.photo ? student.photo : imageStudent" alt="" width="50" class="me-2 rounded-circle" />
-                <h4 class="m-0">
-                  {{ student.last_name }} {{ student.first_name }}
-                </h4>
-                <div class="ms-auto" v-if="isExtra()">
-                  <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <a class="dropdown-item" href="javascript:void(0)"
-                        @click.prevent="createStudentExtraReport(student.id)">Добавить репорт</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <transition-group name="card">
-            <div v-for="report in student.reports" :key="report.id" class="my-1">
-              <div class="accordion" :id="`accordionStudent-${report.id}`">
-                <div class="accordion-item">
-                  <h2 class="accordion-header" :id="`heading-${report.id}`">
-                    <button class="accordion-button collapsed p-2" :class="{ 'report-complete': checkReportComplete(report) }"
-                      type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${report.id}`"
-                      aria-expanded="true" :aria-controls="`collapse-${report.id}`">
-                      <div>Репорт службы сопровождения ({{ report.role }})</div>
-                    </button>
-                  </h2>
-                  <div :id="`collapse-${report.id}`" class="accordion-collapse collapse"
-                    :aria-labelledby="`heading-${report.id}`">
-                    <div class="accordion-body">
-                      <div class="d-flex">
-                        <div class="d-flex align-items-center">
-                          <div class="me-2">Роль автора репорта: </div>
-                          <editable-text class="text-muted" v-model="report.role" propName="role" @save="handleSave($event, report.id)" :allowedMode="isAuthor(report)"/>
-                        </div>
-                        <div class="ms-auto" v-if="isAuthor(report)">
-                          <a href="javascript:void(0)" class="text-danger"
-                            @click.prevent="showConfirmationModal(report)">Удалить репорт</a>
-                        </div>
-                      </div>
-                      <div class="my-3">
-                        <report-criteria :report="report" typeReport="extra" :allowedMode="isAuthor(report)"/>
-                      </div>
-                      <hr />
-                      <div class="my-2">
-                        <editable-area-tiny class="text-muted" :propData="report.comment" propName="comment"
-                          @save="handleSave($event, report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit" :allowedMode="isAuthor(report)"/>
-                      </div>
-                      <hr />
-                      <div class="my-2">
-                        <event-participation :report="report" :allowedMode="isAuthor(report)"/>
-                      </div>
-                      <hr />
-                      <div class="d-flex align-items-center">
-                        <i class="bi bi-person"></i>
-                        <div class="ms-1">
-                          {{ report.author.short_name }}
-                        </div>
-                        <div class="ms-2">
-                          {{ formatDate(report.updated_at) }}
-                        </div>
-                      </div>
+                <div class="d-flex flex-md-column flex-wrap flex-md-nowrap">
+                  <div v-for="student in reportStore.studentExtraReports" :key="student.id">
+                    <div class="d-flex align-items-center my-1 me-2">
+                      <img :src="student.photo ? student.photo : imageStudent" alt="" width="20"
+                        class="me-2 rounded-circle" />
+                      <a class="select" :href="`#st-${student.id}`" :class="{ 'no-report': !student.reports.length }">
+                        {{ student.short_name }}
+                      </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </transition-group>
+            <div class="col pe-3">
+              <div v-for="student in reportStore.studentExtraReports" :key="student.id" class="my-3"
+                :id="`st-${student.id}`">
+                <div class="card card-student my-1">
+                  <div class="card-body d-flex align-items-center">
+                    <img :src="student.photo ? student.photo : imageStudent" alt="" width="50"
+                      class="me-2 rounded-circle" />
+                    <h4 class="m-0">
+                      {{ student.last_name }} {{ student.first_name }}
+                    </h4>
+                    <div class="ms-auto" v-if="isExtra()">
+                      <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a class="dropdown-item" href="javascript:void(0)"
+                            @click.prevent="createStudentExtraReport(student.id)">Добавить репорт</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <transition-group name="card">
+                  <div v-for="report in student.reports" :key="report.id" class="my-1">
+                    <div class="accordion" :id="`accordionStudent-${report.id}`">
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" :id="`heading-${report.id}`">
+                          <button class="accordion-button collapsed p-2"
+                            :class="{ 'report-complete': checkReportComplete(report) }" type="button"
+                            data-bs-toggle="collapse" :data-bs-target="`#collapse-${report.id}`" aria-expanded="true"
+                            :aria-controls="`collapse-${report.id}`">
+                            <div>Репорт службы сопровождения ({{ report.role }})</div>
+                          </button>
+                        </h2>
+                        <div :id="`collapse-${report.id}`" class="accordion-collapse collapse"
+                          :aria-labelledby="`heading-${report.id}`">
+                          <div class="accordion-body">
+                            <div class="d-flex">
+                              <div class="d-flex align-items-center">
+                                <div class="me-2">Роль автора репорта: </div>
+                                <editable-text class="text-muted" v-model="report.role" propName="role"
+                                  @save="handleSave($event, report.id)" :allowedMode="isAuthor(report)" />
+                              </div>
+                              <div class="ms-auto" v-if="isAuthor(report)">
+                                <a href="javascript:void(0)" class="text-danger"
+                                  @click.prevent="showConfirmationModal(report)">Удалить репорт</a>
+                              </div>
+                            </div>
+                            <div class="my-3">
+                              <report-criteria :report="report" typeReport="extra" :allowedMode="isAuthor(report)" />
+                            </div>
+                            <hr />
+                            <div class="my-2">
+                              <editable-area-tiny class="text-muted" :propData="report.comment" propName="comment"
+                                @save="handleSave($event, report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit"
+                                :allowedMode="isAuthor(report)" />
+                            </div>
+                            <hr />
+                            <div class="my-2">
+                              <event-participation :report="report" :allowedMode="isAuthor(report)" />
+                            </div>
+                            <hr />
+                            <div class="d-flex align-items-center">
+                              <i class="bi bi-person"></i>
+                              <div class="ms-1">
+                                {{ report.author.short_name }}
+                              </div>
+                              <div class="ms-2">
+                                {{ formatDate(report.updated_at) }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </transition-group>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="card my-2" v-else>
-        <div class="card-body">
-          <div class="d-flex justify-content-center">
-            Выберите необходимые параметры для отображения карточек студентов
+          <div class="card my-2" v-else>
+            <div class="card-body">
+              <div class="d-flex justify-content-center">
+                Выберите необходимые параметры для отображения карточек студентов
+              </div>
+            </div>
           </div>
-        </div>
+        </transition>
       </div>
-      </transition>
+      <!-- <div v-else>
+        <div class="alert alert-danger" role="alert">
+          Ошибка! Данные не обнаружены
+        </div>
+      </div> -->
+
     </div>
     <!-- Подключение модального окна -->
     <confirmation-modal @confirm="removeStudentExtraReport" @cancel="cancelRemoveStudentExtraReport">
@@ -180,7 +196,10 @@ const isLoadedReport = ref(false);
 
 // Вспомогательная функция для проверки объекта на пустое содержимое
 const isEmpty = (obj) => {
-  return Object.keys(obj).length === 0;
+  if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).length === 0;
+  }
+  return true
 };
 
 const isLoadedFilters = computed(() => {
@@ -204,7 +223,7 @@ const isExtra = () => {
 }
 
 const checkReportComplete = (report) => {
-    return report.comment 
+  return report.comment
 }
 
 // Фильтр списка периодов репорта по выбранному учебному году
@@ -395,7 +414,7 @@ onMounted(async () => {
   recoveryOptions();
   if (!generalStore.isAcademicYearsLoaded) {
     await generalStore.loadAcademicYears();
-  } 
+  }
   currentAcademicYear.value = generalStore.relevantYear;
   getGroups();
   getStudentExtraReports();
@@ -406,11 +425,13 @@ onMounted(async () => {
 
 <style scoped>
 .no-report {
-  color: grey!important;
+  color: grey !important;
 }
+
 .report-complete {
   background-color: #b0e4af;
 }
+
 .report-success {
   background-color: rgb(174, 232, 232);
 }
@@ -420,8 +441,9 @@ onMounted(async () => {
   max-height: 100vh;
   overflow-y: scroll;
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
+
 .list-right-student::-webkit-scrollbar {
   display: none;
 }
@@ -456,9 +478,11 @@ onMounted(async () => {
 .v-enter-active {
   transition: opacity 0.5s ease;
 }
+
 .v-enter-from {
   opacity: 0;
 }
+
 .card-enter-active,
 .card-leave-active {
   transition: all 0.5s ease;
