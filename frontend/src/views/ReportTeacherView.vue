@@ -103,7 +103,7 @@
               <div class="accordion" :id="`accordionStudent-${report.id}`">
                 <div class="accordion-item">
                   <h2 class="accordion-header" :id="`heading-${report.id}`">
-                    <button class="accordion-button collapsed p-2"
+                    <button class="accordion-button collapsed p-2" :class="{ 'report-complete' : checkReportComplete(report) }"
                       type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${report.id}`"
                       aria-expanded="true" :aria-controls="`collapse-${report.id}`">
                       Репорт учителя по предмету: {{ currentSubject.name }}
@@ -176,7 +176,7 @@
           <div class="card my-2" v-else>
             <div class="card-body">
               <div class="d-flex justify-content-center">
-                Ваших репортов в текущем классе пока нет
+                Репортов в текущем классе пока нет
               </div>
             </div>
           </div>
@@ -285,6 +285,24 @@ const isTeacher = () => {
 const checkStudentWithReport = (id) => {
   return reportStore.reportTeachers.some((item) => item.student.id == id);
 };
+
+function isPropertyFilledInEveryObject(array, propertyName) {
+  return array.every(obj => obj[propertyName] !== undefined && obj[propertyName] !== null && obj[propertyName] !== '');
+}
+
+const checkReportComplete = (report) => {
+  if (currentReportType.value.value == 'noo') {
+    return report.comment && report.topic_achievements.length && isPropertyFilledInEveryObject(report.topic_achievements, 'level') 
+  } else if (currentReportType.value.value == 'ooo') {
+    return report.comment && report.final_grade && report.criterion_marks.length && isPropertyFilledInEveryObject(report.criterion_marks, 'mark') 
+  } else if (currentReportType.value.value == 'soo') {
+    return report.comment && report.final_grade
+  } else if (currentReportType.value.value == 'dp') {
+    return report.comment && report.final_grade && report.final_grade_ib
+  } else {
+    return report.comment 
+  }
+}
 
 // Вспомогательная функция для проверки объекта на пустое содержимое
 const isEmpty = (obj) => {
@@ -635,6 +653,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.report-complete {
+  background-color: #b0e4af;
+}
 .list-menu {
   position: -webkit-sticky;
   position: sticky;

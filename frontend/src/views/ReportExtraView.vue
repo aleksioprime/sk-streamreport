@@ -46,7 +46,7 @@
               <div v-for="student in reportStore.studentExtraReports" :key="student.id">
                 <div class="d-flex align-items-center my-1 me-2">
                   <img :src="student.photo ? student.photo : imageStudent" alt="" width="20" class="me-2 rounded-circle" />
-                  <a class="select" :href="`#st-${student.id}`">
+                  <a class="select" :href="`#st-${student.id}`" :class="{'no-report': !student.reports.length }">
                     {{ student.short_name }}
                   </a>
                 </div>
@@ -55,7 +55,6 @@
           </div>
         </div>
         <div class="col pe-3">
-          
           <div v-for="student in reportStore.studentExtraReports" :key="student.id" class="my-3" :id="`st-${student.id}`">
             <div class="card card-student my-1">
               <div class="card-body d-flex align-items-center">
@@ -79,7 +78,7 @@
               <div class="accordion" :id="`accordionStudent-${report.id}`">
                 <div class="accordion-item">
                   <h2 class="accordion-header" :id="`heading-${report.id}`">
-                    <button class="accordion-button collapsed p-2" :class="{ 'report-success': report.comment }"
+                    <button class="accordion-button collapsed p-2" :class="{ 'report-complete': checkReportComplete(report) }"
                       type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${report.id}`"
                       aria-expanded="true" :aria-controls="`collapse-${report.id}`">
                       <div>Репорт службы сопровождения ({{ report.role }})</div>
@@ -127,7 +126,6 @@
             </div>
           </transition-group>
           </div>
-        
         </div>
       </div>
       <div class="card my-2" v-else>
@@ -203,6 +201,10 @@ const isExtra = () => {
     return authStore.user.group_roles.some(item => item.group.id == currentGroup.value.id)
   }
   return false
+}
+
+const checkReportComplete = (report) => {
+    return report.comment 
 }
 
 // Фильтр списка периодов репорта по выбранному учебному году
@@ -403,6 +405,12 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.no-report {
+  color: grey!important;
+}
+.report-complete {
+  background-color: #b0e4af;
+}
 .report-success {
   background-color: rgb(174, 232, 232);
 }

@@ -48,7 +48,7 @@
                 <div class="d-flex align-items-center my-1 me-2">
                   <img :src="student.photo ? student.photo : imageStudent" alt="" width="20"
                     class="me-2 rounded-circle" />
-                  <a class="select" :href="`#st-${student.id}`">
+                  <a class="select" :href="`#st-${student.id}`" :class="{'no-report': !student.report }">
                     {{ student.short_name }}
                   </a>
                 </div>
@@ -91,7 +91,7 @@
             <div class="accordion my-1" :id="`accordionStudent-${student.id}`" v-if="student.report">
               <div class="accordion-item">
                 <h2 class="accordion-header" :id="`heading-${student.id}`">
-                  <button class="accordion-button collapsed p-2" :class="{ 'report-success': student.report.comment }"
+                  <button class="accordion-button collapsed p-2" :class="{ 'report-complete': checkReportComplete(student.report) }"
                     type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse-${student.id}`"
                     aria-expanded="true" :aria-controls="`collapse-${student.id}`">
                     Репорт руководителя класса
@@ -276,11 +276,13 @@
                                     <div>
                                       {{ objective.objective_letter.toUpperCase() }}{{ objective.strand_letter }}.
                                       Students
-                                      should be able to {{ objective.strand_name }}
+                                      should be able to {{ objective.strand_name }}:
                                     </div>
                                     <div class="ms-3">
+                                      <em>
                                       The student {{ objective.level_name ||
                                         'does not reach a standard described by any of thedescriptors below' }}
+                                        </em>
                                     </div>
                                   </div>
                                 </div>
@@ -425,7 +427,25 @@ const isMentor = () => {
   return false
 }
 
+function isPropertyFilledInEveryObject(array, propertyName) {
+  return array.every(obj => obj[propertyName] !== undefined && obj[propertyName] !== null && obj[propertyName] !== '');
+}
+
+const checkReportComplete = (report) => {
+  if (isEmpty(currentGroup.value)) {
+    return false
+  }
+  if (currentGroup.value.curriculum.level == "noo") {
+    return report.comment && report.profiles.length && isPropertyFilledInEveryObject(report.profiles, 'level') && report.pyp_units.length && isPropertyFilledInEveryObject(report.pyp_units, 'comment')
+  } else {
+    return report.comment 
+  } 
+}
+
 const currentReportType = computed(() => {
+  if (isEmpty(currentGroup.value)) {
+    return
+  }
   if (currentGroup.value.curriculum.level == 'noo') {
     return { value: 'noo', name: 'Репорт начальной школы' }
   } else {
@@ -588,6 +608,9 @@ const cancelRemoveStudentMentorReport = () => {
 // После успешного ответа происходит повторный запрос на обновление списка студентов
 const removeStudentMentorReport = () => {
   // console.log('Запрос на удаление репорта студенту: ', currentStudent.value);
+  if (isEmpty(currentGroup.value)) {
+    return
+  }
   if (currentGroup.value.curriculum.level == "noo") {
     reportStore
       .removeReportMentorPrimary(currentStudent.value.report.id)
@@ -610,6 +633,9 @@ const removeStudentMentorReport = () => {
 // После успешного ответа происходит повторный запрос на обновление списка студентов
 const handleSave = async (editData, id) => {
   // console.log(`Сохраняемое значение для ${editData.propName}: ${editData.value} для репорта с ID: ${id}`);
+  if (isEmpty(currentGroup.value)) {
+    return
+  }
   const updatedObject = {
     id: id,
     [editData.propName]: editData.value,
@@ -663,6 +689,9 @@ onMounted(async () => {
 });
 
 const exportReportToWord = (student) => {
+  if (isEmpty(currentGroup.value)) {
+    return
+  }
   let config = {
     responseType: 'blob',
     params: {
@@ -687,6 +716,12 @@ const exportReportToWord = (student) => {
 </script>
 
 <style scoped>
+.no-report {
+  color: grey!important;
+}
+.report-complete {
+  background-color: #b0e4af;
+}
 .list-right-student {
   top: 10px;
   max-height: 100vh;

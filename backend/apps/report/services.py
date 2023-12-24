@@ -328,10 +328,10 @@ def export_report_noo_msword(student, period_id):
     if (student.filtered_teacher_primary_reports):
         report_teachers = student.filtered_teacher_primary_reports
         for report in report_teachers:
-            report.comment = parsing_html(report.comment)
+            report.comment = parsing_html(report.comment) or ''
     report_extras = student.reportextra_student_reports.all()
     for report in report_extras:
-        report.comment = parsing_html(report.comment)
+        report.comment = parsing_html(report.comment) or ''
     report_units = report_mentor.reportmentorprimary.pyp_units.all()
     for report in report_units:
         report.unit.central_idea = parsing_html(report.unit.central_idea)
@@ -353,7 +353,7 @@ def export_report_noo_msword(student, period_id):
     response = StreamingHttpResponse(
         streaming_content=buffer,  # use the stream's content
         content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    response['Content-Disposition'] = f'attachment;filename=test.docx'
+    response['Content-Disposition'] = f"attachment;filename={report_mentor.student.email.split('@')[0]}_{report_mentor.group.name }_{period.year.number}-{period.year.number + 1}.docx"
     response["Content-Encoding"] = 'UTF-8'
     return response
 
@@ -391,7 +391,7 @@ def export_report_ooo_msword(student, period_id):
     response = StreamingHttpResponse(
         streaming_content=buffer,  # use the stream's content
         content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    response['Content-Disposition'] = f'attachment;filename=test.docx'
+    response['Content-Disposition'] = f"attachment;filename={report_mentor.student.email.split('@')[0]}_{report_mentor.group.name }_{period.year.number}-{period.year.number + 1}.docx"
     response["Content-Encoding"] = 'UTF-8'
     return response
 
@@ -429,7 +429,7 @@ def export_report_soo_msword(student, period_id):
     response = StreamingHttpResponse(
         streaming_content=buffer,  # use the stream's content
         content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    response['Content-Disposition'] = f'attachment;filename=test.docx'
+    response['Content-Disposition'] = f"attachment;filename={report_mentor.student.email.split('@')[0]}_{report_mentor.group.name }_{period.year.number}-{period.year.number + 1}.docx"
     response["Content-Encoding"] = 'UTF-8'
     return response
 

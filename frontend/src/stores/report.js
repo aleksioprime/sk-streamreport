@@ -90,8 +90,8 @@ export const useReportStore = defineStore("report", {
     async loadReportTeachersPrimary(config) {
       const res = await resources.reportTeacherPrimary.getReportTeachersPrimary(config);
       if (res.__state === "success") {
-        // this.reportTeachersPrimary = res.data
         this.reportTeachers = res.data
+        console.log('Получение репортов учителя начальной школы: ', this.reportTeachers)
       }
     },
     async createReportTeacherPrimary(report) {
