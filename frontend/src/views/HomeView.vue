@@ -16,9 +16,12 @@
             <h5>Преподавание</h5>
             <div>
               <ul v-if="teachingLoads.length">
-                <li v-for="tl in teachingLoads" :key="tl.id">
-                  <b>{{ tl.subject.name }}</b>: <span v-for="group, index in tl.groups" :key="group.id">
-                    {{ group.name }}<span v-if="tl.groups.length != index + 1">, </span> класс</span>
+                <li v-for="loads, group in groupByNestedProperty(teachingLoads, 'subject', 'name')" :key="group">
+                  <b>{{ group }}</b>: <span v-for="load,i in loads" :key="load.id">
+                    <span v-for="group, index in load.groups" :key="group.id">
+                    {{ group.name }}<span v-if="load.groups.length != index + 1">, </span></span>
+                    <span v-if="loads.length != i + 1">, </span>
+                  </span> {{ pluralizeRu(loads.length, ['класс', 'классы', 'классы']) }}
                 </li>
               </ul>
               <div v-else>
@@ -95,6 +98,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { pluralizeRu } from '@/common/helpers/text'
 
 import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
@@ -103,7 +107,22 @@ const teachingLoads = computed(() => {
   return authStore.user.teaching_loads
 })
 
+function groupByNestedProperty(items, key, subKey) {
+  return items.reduce((accumulator, item) => {
+    // Получаем ключ для группировки из вложенного свойства текущего элемента
+    const groupKey = item[key][subKey];
 
+    // Если в аккумуляторе еще нет этой группы, создаем ее
+    if (!accumulator[groupKey]) {
+      accumulator[groupKey] = [];
+    }
+
+    // Добавляем текущий элемент в соответствующую группу
+    accumulator[groupKey].push(item);
+
+    return accumulator;
+  }, {}); // Начальное значение аккумулятора - пустой объект
+}
 
 </script>
 
