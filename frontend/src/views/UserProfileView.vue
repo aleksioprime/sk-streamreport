@@ -8,6 +8,7 @@
             <div class="card mb-4">
               <div class="card-body text-center">
                 <img :src='authStore.user.photo ? authStore.user.photo : imageTeacher' alt="avatar"
+                  v-on:error="authStore.user.photo=imageTeacher"
                   class="rounded-circle img-fluid photo">
                 <h5 class="my-3">{{ authStore.user.full_name }}</h5>
                 <div class="d-flex justify-content-center mb-2">
