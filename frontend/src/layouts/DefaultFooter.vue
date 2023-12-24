@@ -1,6 +1,6 @@
 <template>
   <footer class="footer-wrapper container">
-    <p class="col-md-4 mb-0 text-muted">&copy; 2022 ОЧУ МГ Сколково, Inc</p>
+    <p class="col-md-4 mb-0 text-muted">&copy; 2023 ОЧУ МГ Сколково, Inc</p>
     <div class="logo-footer" @click="$router.push('/')"></div>
     <ul class="nav col-md-4 justify-content-end list-unstyled d-flex me-2">
       <li class="ms-3"><img src="@/assets/img/vk.png" class="bi" width="24" height="auto" alt="vk" /></li>

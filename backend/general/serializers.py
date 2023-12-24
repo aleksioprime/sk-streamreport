@@ -257,7 +257,8 @@ class ClassGroupRoleSerializer(serializers.ModelSerializer):
 class UserRetrieveSerializer(serializers.ModelSerializer):
     groups = GroupGeneralSerializer(many=True)
     departments = DepartmentListSerializer(many=True)
-    teaching_loads = TeachingLoadSerializer(many=True)
+    # teaching_loads = TeachingLoadSerializer(many=True)
+    teaching_loads = serializers.SerializerMethodField()
     full_name = serializers.CharField(source='get_full_name', read_only=True)
     group_roles = ClassGroupRoleSerializer(many=True)
     mentor_classes = ClassGroupSerializer(many=True)
@@ -282,3 +283,12 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
             "dnevnik_user_id",
             "is_online",
         )
+    def get_teaching_loads(self, obj):
+        teaching_loads = obj.teaching_loads.select_related(
+                "subject",
+                "year",
+            ).prefetch_related(
+                "groups__year_study",
+            
+            ).order_by('groups__year_study', 'groups__letter')
+        return TeachingLoadSerializer(teaching_loads, many=True).data

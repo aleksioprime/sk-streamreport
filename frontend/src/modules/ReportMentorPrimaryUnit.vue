@@ -79,7 +79,7 @@
       </div>
     </div>
     <simple-modal v-if="report.id == currentReport.id" :nameModal="`unitImportModal${report.id}`"
-      titleConfirm="Добавить темы" titleModal="Добавление юнитов в репорт студента" @confirm="confirmUnitImportModal"
+      titleConfirm="Добавить юниты" titleModal="Добавление юнитов в репорт студента" @confirm="confirmUnitImportModal"
       @cancel="cancelUnitImportModal">
       <div>
         <div v-if="unitPypStore.pypUnits.length">

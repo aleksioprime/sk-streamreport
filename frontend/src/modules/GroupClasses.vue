@@ -6,7 +6,7 @@
         <div class="btn-group-vertical" role="group" aria-label="Базовая группа переключателей радио">
           <template v-for="group in groups" :key="group.id">
             <input type="radio" class="btn-check" :value="group" :id="`group-${group.id}`" autocomplete="off" v-model="selectedItem" @change="selectItem(group)">
-            <label class="btn btn-outline-secondary" :for="`group-${group.id}`">{{ group.name }}</label>
+            <label class="btn btn-outline-secondary" :class="{ 'avalaible': availableItems.includes(group.id)}" :for="`group-${group.id}`">{{ group.name }}</label>
           </template>
         </div>
       </div>
@@ -26,6 +26,10 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  availableItems: {
+    type: Array,
+    default: () => []
+  }
 });
 
 function groupByNestedProperty(items, key, subKey) {
@@ -60,3 +64,10 @@ watch(() => props.modelValue, (newVal) => {
   selectedItem.value = newVal;
 });
 </script>
+
+<style scoped>
+.avalaible {
+  color: #5C2C84;
+  font-weight: bold;
+}
+</style>

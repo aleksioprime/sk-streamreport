@@ -20,7 +20,7 @@
           </div>
           <div class="d-flex flex-wrap">
             <div class="m-2">
-              <group-classes :propItems="generalStore.groups" v-model="currentGroup"
+              <group-classes :propItems="generalStore.groups" v-model="currentGroup" :availableItems="authStore.user.group_roles.map(group => group.id)"
                 :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
             </div>
           </div>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="d-flex flex-md-column flex-wrap flex-md-nowrap">
                   <div v-for="student in reportStore.studentExtraReports" :key="student.id">
-                    <div class="d-flex align-items-center my-1 me-2">
+                    <div class="d-flex align-items-center mt-1 me-2">
                       <img :src="student.photo ? student.photo : imageStudent" alt="" width="20"
                         class="me-2 rounded-circle" />
                       <a class="select" :href="`#st-${student.id}`" :class="{ 'no-report': !student.reports.length }">
@@ -61,7 +61,7 @@
             <div class="col pe-3">
               <div v-for="student in reportStore.studentExtraReports" :key="student.id" class="my-3"
                 :id="`st-${student.id}`">
-                <div class="card card-student my-1">
+                <div class="card card-student my-1" :class="{'bg-light': !student.report}">
                   <div class="card-body d-flex align-items-center">
                     <img :src="student.photo ? student.photo : imageStudent" alt="" width="50"
                       class="me-2 rounded-circle" />
@@ -110,6 +110,7 @@
                             </div>
                             <hr />
                             <div class="my-2">
+                              <h5 class="mb-3">Комментарии</h5>
                               <editable-area-tiny class="text-muted" :propData="report.comment" propName="comment"
                                 @save="handleSave($event, report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit"
                                 :allowedMode="isAuthor(report)" />

@@ -15,14 +15,14 @@
             </div>
             <div class="m-2">
               <search-dropdown
-                :title="curriculumStore.subjects.length ? 'Выберите предмет' : 'Добавьте предметы выбранного класса в нагрузку'"
+                :title="curriculumStore.subjects.length ? 'Выберите предмет' : 'Нет предметов'"
                 v-model="currentSubject" :propItems="curriculumStore.subjects" showName="name" @select="selectSubject"
                 :disabled="isEmpty(currentGroup) || !curriculumStore.subjects.length" />
             </div>
           </div>
           <div class="d-flex flex-wrap">
             <div class="m-2">
-              <group-classes :propItems="generalStore.groups" v-model="currentGroup"
+              <group-classes :propItems="generalStore.groups" v-model="currentGroup" :availableItems="[...new Set(authStore.user.teaching_loads.flatMap(obj => obj.groups.map(group => group.id)))]"
                 :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
             </div>
           </div>
@@ -89,7 +89,7 @@
                 <transition-group name="card">
                   <div v-for="report in reportStore.reportTeachers" :key="report.id" class="my-3"
                     :id="`st-${report.student.id}`">
-                    <div class="card card-student my-1">
+                    <div class="card card-student my-1" :class="{'bg-light': !isAuthor(report)}">
                       <div class="card-body d-flex align-items-center">
                         <img :src="report.student.photo ? report.student.photo : imageStudent
                           " alt="" width="50" class="me-2 rounded-circle" />
@@ -159,7 +159,7 @@
                             </div>
                             <div class="my-3">
                               <report-criteria :report="report" typeReport="teacher"
-                                v-if="currentReportType.value != 'noo'" :allowedMode="isAuthor(report)" />
+                              v-if="['soo', 'dp'].includes(currentReportType.value)" :allowedMode="isAuthor(report)" />
                             </div>
                             <div class="my-2">
                               <report-teacher-topic :report="report" v-if="currentReportType.value == 'noo'"
@@ -167,6 +167,7 @@
                             </div>
                             <hr />
                             <div class="my-2">
+                              <h5 class="mb-3">Комментарии учителя</h5>
                               <editable-area-tiny class="text-muted" :propData="report.comment" propName="comment"
                                 @save="handleSave($event, report.id)" :isEditing="isEditing" @toggleEdit="toggleEdit"
                                 :allowedMode="isAuthor(report)" />
