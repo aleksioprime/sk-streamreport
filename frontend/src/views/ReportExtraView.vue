@@ -20,7 +20,7 @@
           </div>
           <div class="d-flex flex-wrap">
             <div class="m-2">
-              <group-classes :propItems="generalStore.groups" v-model="currentGroup" :availableItems="authStore.user.group_roles.map(group => group.id)"
+              <group-classes :propItems="generalStore.groups" v-model="currentGroup" :availableItems="authStore.user.group_roles.map(i => i.group.id)"
                 :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
             </div>
           </div>
