@@ -462,7 +462,7 @@ def parsing_html(html_text):
                     style = content.attrs.get('style', '')
                     if 'color' in style:
                         color = style.split('color:')[1].strip().replace(';', '')
-                        text_style['color'] = rgb_to_hex(color)
+                        # text_style['color'] = rgb_to_hex(color)
                 if content.string:
                     rich_text.add(content.string, **text_style)
 
