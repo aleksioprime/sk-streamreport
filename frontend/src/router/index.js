@@ -7,6 +7,17 @@ const router = createRouter({
   routes,
 });
 
+// import JwtService from "@/services/jwt/jwt.service";
+// router.beforeEach((to, from, next) => {
+//   if (to.path === '/login') {
+//     console.log('Перенаправление обратно на страницу, с которой пользователь пришёл');
+//     next(from.path); // Перенаправление обратно на страницу, с которой пользователь пришёл
+//   } else {
+//     console.log('Продолжаем нормальный маршрут');
+//     next(); // Продолжить нормальный маршрут
+//   }
+// });
+
 middlewarePipeline(router);
 
 export default router;
