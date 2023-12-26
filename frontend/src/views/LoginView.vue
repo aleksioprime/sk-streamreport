@@ -22,7 +22,9 @@
         </div> -->
         <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button> 
         <div v-if="isLoadedRequest" class="loader-line"></div>
-        <div class="alert alert-danger mt-2" v-if="errorMessage">{{ errorMessage }}</div>
+        <div class="alert alert-danger mt-2" v-if="errorMessage">
+          {{ errorMessageText }}
+        </div>
         <p class="mt-5 mb-3 text-muted">&copy; ОЧУ МГ Сколково 2023</p>
       </form>
     </div>
@@ -30,7 +32,7 @@
 </template>
   
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
 import { clearValidationErrors, validateFields } from "@/common/validator";
@@ -57,6 +59,17 @@ const validations = ref(resetValidations());
 const errorMessage = ref(null);
 
 const isLoadedRequest = ref(false)
+
+const errorMessageText = computed(() => {
+      const errorMessages = {
+        'Request failed with status code 400': 'Неверные учетные данные. Попробуйте снова',
+        'Request failed with status code 500': 'Сервер в данный момент недоступен. Попробуйте позже',
+        // Добавьте здесь другие коды ошибок и сообщения
+      };
+
+      // Возвращаем сообщение об ошибке или общее сообщение для неизвестных ошибок
+      return errorMessages[errorMessage.value] || 'Произошла ошибка. Попробуйте снова позже.';
+    })
 
 const watchField = (field) => () => {
   if (errorMessage.value) {

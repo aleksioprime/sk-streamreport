@@ -323,7 +323,8 @@ def export_report_noo_msword(student, period_id):
         'name': period.name.capitalize(),
         'year': period.year
     }
-    report_mentor = student.reportmentor_student_reports.first()
+    report_mentor = student.reportmentor_student_reports.select_related('student', 'group').first()
+    report_extra_mentor = report_mentor.group.user_roles.filter(role='Воспитатель').first()
     report_teachers = []
     if (student.filtered_teacher_primary_reports):
         report_teachers = student.filtered_teacher_primary_reports
@@ -343,6 +344,7 @@ def export_report_noo_msword(student, period_id):
         'report_period': report_period,
         'date_created_at': report_mentor.created_at.strftime("%d.%m.%Y"),
         'report_mentor': report_mentor,
+        'report_extra_mentor': report_extra_mentor,
         'report_teachers': report_teachers,
         'report_extras': report_extras,
         'report_units': report_units,

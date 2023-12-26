@@ -30,6 +30,9 @@ export const useAuthStore = defineStore("auth", {
     isRole() {
       return this.isEmployee && this.user.group_roles.length
     },
+    isRoleExtraMentor() {
+      return this.isEmployee && this.user.group_roles.length && this.user.group_roles.some(item => item.role == 'Воспитатель')
+    },
     isTeacherPyp() {
       return this.isEmployee && this.user.teaching_loads.length && this.user.teaching_loads.some(i => i.subject.level == 'noo')
     },
@@ -79,8 +82,10 @@ export const useAuthStore = defineStore("auth", {
     // https://vue3-toastify.js-bridge.com/
     showMessageSuccess(message) {
       toast.success(message, {
-        autoClose: 2000,
+        autoClose: 1000,
         position: toast.POSITION.BOTTOM_RIGHT,
+        hideProgressBar: true,
+        pauseOnHover: false,
       });     
     }
   },

@@ -8,9 +8,11 @@
       <div v-else>
         <div v-show="tinyLoading">
           <Editor api-key="j30bef5hr2ipfdbu7b9lww7t4oez2v6f27c94otp9to2j9mk" :init="{
-            plugins: 'lists link wordcount autoresize',
+            plugins: 'paste lists link wordcount autoresize',
             menubar: false,
-            toolbar: 'bold italic | forecolor | bullist numlist | link ',
+            toolbar: 'removeformat | bold italic | forecolor | bullist numlist | link ',
+            contextmenu: false,
+            paste_as_text: true,
             setup: (ed) => {
               ed.on('init', () => { tinyLoading = true });
             }

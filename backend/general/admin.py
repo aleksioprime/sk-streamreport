@@ -38,9 +38,9 @@ class CustomUserChangeForm(UserChangeForm):
 site.unregister(Group)
 
 class TeachingInline(TabularInline):  # StackedInline, TabularInline
-    autocomplete_fields = (
-        'subject',
-    )
+    # autocomplete_fields = (
+    #     'subject',
+    # )
     # filter_horizontal = (
     #     'groups',
     # )
@@ -127,6 +127,7 @@ class CustomUserAdmin(BaseUserAdmin, ImportExportModelAdmin):
                     "is_staff",
                     "is_superuser",
                     "is_active",
+                    "user_permissions",
                 )
             }
         ),
@@ -140,6 +141,7 @@ class CustomUserAdmin(BaseUserAdmin, ImportExportModelAdmin):
             }
         )
     )
+    filter_horizontal = ('user_permissions',)
     search_fields = (
         "last_name",
         "first_name",
@@ -228,7 +230,7 @@ class StudyYearModelAdmin(ImportExportModelAdmin):
 class ClassGroupRoleInline(TabularInline):  # StackedInline, TabularInline
     model = ClassGroupRole
     extra = 1
-    autocomplete_fields = ['user']
+    # autocomplete_fields = ['user']
 
 
 @register(ClassGroup)
@@ -259,7 +261,7 @@ class ClassGroupModelAdmin(ImportExportModelAdmin):
         "students",
         "curriculum",
     )
-    autocomplete_fields = ['mentor']
+    # autocomplete_fields = ['mentor']
     
 
 @register(ClassGroupRole)

@@ -56,6 +56,9 @@ class MultipleCheckboxField(forms.MultipleChoiceField):
 @register(ReportCriterion)
 class ReportCriterionModelAdmin(ImportExportModelAdmin):
     inlines = [ReportCriterionLevelInline]
+    search_fields = (
+        "name",
+    )
     list_display = (
         "id",
         "name",
@@ -69,9 +72,9 @@ class ReportCriterionModelAdmin(ImportExportModelAdmin):
         'subjects',
         'years',
     )
-    autocomplete_fields = (
-        'author',
-    )
+    # autocomplete_fields = (
+    #     'author',
+    # )
     # переопределяем метод: для определённых полей заменяем виджет, иначе вызываем родительскую реализацию
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == "type":
@@ -85,6 +88,9 @@ class ReportCriterionModelAdmin(ImportExportModelAdmin):
 
 @register(ReportCriterionLevel)
 class ReportCriterionLevelModelAdmin(ImportExportModelAdmin):
+    search_fields = (
+        "criterion__name",
+    )
     list_display = (
         "id",
         "criterion",

@@ -36,9 +36,9 @@ class SyllabusModelAdmin(ImportExportModelAdmin):
     search_fields = (
         "subject",
     )
-    autocomplete_fields = (
-        'subject',
-    )
+    # autocomplete_fields = (
+    #     'subject',
+    # )
 
 class CourseChapterInline(TabularInline):  # StackedInline, TabularInline
     model = CourseChapter
@@ -65,9 +65,9 @@ class CourseModelAdmin(ImportExportModelAdmin):
         "syllabus",
         "year"
     )
-    autocomplete_fields = (
-        'syllabus',
-    )
+    # autocomplete_fields = (
+    #     'syllabus',
+    # )
 
 class CourseTopicInline(TabularInline):  # StackedInline, TabularInline
     model = CourseTopic
@@ -95,9 +95,9 @@ class CourseChapterModelAdmin(ImportExportModelAdmin):
     list_display_links = (
         "name",
     )
-    autocomplete_fields = (
-        "course",
-    )
+    # autocomplete_fields = (
+    #     "course",
+    # )
 
 @register(CourseTopic)
 class CourseTopicModelAdmin(ImportExportModelAdmin):
@@ -111,6 +111,6 @@ class CourseTopicModelAdmin(ImportExportModelAdmin):
     list_display_links = (
         "name",
     )
-    autocomplete_fields = (
-        'chapter',
-    )
+    # autocomplete_fields = (
+    #     'chapter',
+    # )

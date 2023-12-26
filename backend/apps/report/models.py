@@ -42,6 +42,7 @@ class ReportPeriod(models.Model):
 class ReportCriterion(models.Model):
     """ Критерии для репорта """
     name = models.CharField(max_length=256, verbose_name=_("Название критерия"), default=None, null=True)
+    name_eng = models.CharField(max_length=256, verbose_name=_("Название критерия на английском"), default=None, null=True, blank=True)
     author = models.ForeignKey('general.User', verbose_name=_("Автор критерия"), on_delete=models.SET_NULL, null=True, related_name="report_criteria")
     years = models.ManyToManyField('general.StudyYear', verbose_name=_("Параллели"), related_name="report_criteria")
     subjects = models.ManyToManyField('curriculum.Subject', verbose_name=_("Предметы"), blank=True, related_name="report_criteria")
@@ -59,7 +60,9 @@ class ReportCriterionLevel(models.Model):
     """ Уровни критериев для репорта """
     criterion = models.ForeignKey('report.ReportCriterion', verbose_name=_("Критерий"), on_delete=models.CASCADE, null=True, related_name="levels")
     name = models.CharField(max_length=128, verbose_name=_("Название уровня"), default=None, null=True)
+    name_eng = models.CharField(max_length=128, verbose_name=_("Название уровня на английском языке"), default=None, null=True, blank=True)
     description = models.TextField(verbose_name=_("Описание результата"), null=True, blank=True)
+    description_eng = models.TextField(verbose_name=_("Описание результата на английском языке"), null=True, blank=True)
     recommendations = models.TextField(verbose_name=_("Рекомендации"), null=True, blank=True)
     point = models.PositiveSmallIntegerField(verbose_name=_("Баллы"), default=1)
     class Meta:
@@ -104,6 +107,7 @@ class ReportCriterionAchievement(models.Model):
     # object_id = models.PositiveIntegerField()
     # content_object = GenericForeignKey('content_type', 'object_id')
     class Meta:
+        ordering = ['criterion']
         verbose_name = 'Репорты: достижение по критерию'
         verbose_name_plural = 'Репорты: достижения по критериям'
 

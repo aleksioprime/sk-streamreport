@@ -9,6 +9,9 @@
       на почту <a href="mailto:asemochkin@sk.ru">asemochkin@sk.ru</a>, в <a href="https://t.me/aleksioprime"
         target="_blank">Telegram</a> или свяжитесь по номеру телефона <a href="tel:+79169246203">+79169246203</a>.
     </div>
+    <div class="alert alert-warning mt-3" role="alert" v-if="isSafari">
+      <strong>Предупреждение</strong>: Вы используете браузер <strong>Safari</strong>. Для стабильной работы в системе используйте браузер <strong>Google Chrome</strong>
+    </div>
     <div class="row">
       <div class="col-md card m-2">
         <div class="card-body">
@@ -82,27 +85,25 @@
       <div class="col-md card m-2">
         <div class="card-body">
           <div class="my-2">
-            <h5>Дедлайны педагогов</h5>
-            <div>
-              <div>Сдача репортов начальной школы: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты по предметам начальной школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
-              <div>Сдача репортов средней школы: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты по предметам средней школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
-              <div>Сдача репортов старшей школы: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты по предметам старшей школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
-            </div>
+            <h5>Дедлайны заполнения репортов</h5>
+            <div>Общий дедлайн: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты по предметам начальной школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
           </div>
           <div class="my-2">
-            <h5>Дедлайны службы сопровождения</h5>
+            <h5>Изменения версии от 27.12.2023:</h5>
             <div>
-              <div>Сдача репортов начальной школы: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты службы сопровождения начальной школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
-              <div>Сдача репортов средней школы: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты службы сопровождения средней школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
-              <div>Сдача репортов старшей школы: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты службы сопровождения старшей школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
-            </div>
-          </div>
-          <div class="my-2">
-            <h5>Дедлайны классных руководителей</h5>
-            <div>
-              <div>Сдача репортов начальной школы: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты классного руководителя начальной школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
-              <div>Сдача репортов средней школы: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты классного руководителя средней школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
-              <div>Сдача репортов старшей школы: <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Дедлайн сдачи репортов&dates=20231229T120000Z/20231229T120000Z&details=Необходимо написать все репорты классного руководителя старшей школы&sf=true&output=xml" target="_blank">29.12.2023</a></div>
+              <ul>
+                <li>Исправлена ошибка автоматической коррекции текста плагинами онлайн-перевода</li>
+                <li>Добавлена возможность редактирования репортов в начальной школе и юнитов PYP воспитателями 1-4 классов</li>
+                <li>Изменена шкала итоговой оценки в средней и старшей школе</li>
+                <li>Скорректированы темы учебных предметов начальной школы</li>
+                <li>Исправлено контекстное меню области ввода форматированного текста и добавлена кнопка сброса формата</li>
+                <li>Добавлена возможность предоставления персонального доступа для редактирования критериев</li>
+                <li>Исправлено поведение всплывающих сообщений</li>
+                <li>Скорректированы названия разделов в юнитах PYP</li>
+                <li>Исправлены шаблоны репортов начальной школы для выгрузки в Word</li>
+                <li>Добавлены англоязычные версии критериев в старшей школе</li>
+                <li>Добавлена возможность редактирования репорта учителя, ведущего занятия в другой подгруппе текущего класса</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -120,6 +121,11 @@ const authStore = useAuthStore();
 
 const teachingLoads = computed(() => {
   return authStore.user.teaching_loads
+})
+
+const isSafari = computed(() => {
+  const userAgent = navigator.userAgent;
+  return /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
 })
 
 function groupByNestedProperty(items, key, subKey) {

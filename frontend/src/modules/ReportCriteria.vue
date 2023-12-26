@@ -23,7 +23,8 @@
           <template v-for="achievement in report.criterion_achievements" :key="achievement.id">
           <tr >
             <td>
-              <span class="me-2">{{ achievement.criterion.name }}</span>
+              <span>{{ achievement.criterion.name }}</span>
+              <span v-if="achievement.criterion.name_eng"> / {{ achievement.criterion.name_eng }}</span>
             </td>
             <td>
               <editable-dropdown-cell :propData="achievement.achievement" :propItems="achievement.criterion.levels"
@@ -41,7 +42,7 @@
           </tr>
           <tr>
             <td colspan="2">
-              <div v-if="achievement.achievement">{{ achievement.achievement.description }}</div>
+              <div v-if="achievement.achievement" class="text-muted"><em>{{ achievement.achievement.description }}</em></div>
             </td>
           </tr>
         </template>
@@ -281,8 +282,6 @@ const handleSave = async (editData, id) => {
   reportStore.updateReportAchievement(updatingData).then((result) => {
     authStore.showMessageSuccess('Сохранено');
     // Перезапись отредактированного объекта в report
-    console.log(result)
-    authStore.showMessageSuccess(`Результаты по критерию у студента успешно сохранены!`);
     if (props.typeReport == 'teacher') {
       const index = reportStore.reportTeachers.findIndex(item => item.id === props.report.id);
       if (index != -1) {

@@ -3,38 +3,38 @@
     <h1>Репорты учителя по предмету</h1>
     <div class="py-2">
       <transition>
-        <div v-if="isLoadedFilters">
-          <div class="d-flex flex-wrap">
-            <div class="m-2">
-              <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
-                :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
-            </div>
-            <div class="m-2">
-              <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
-                showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
-            </div>
-            <div class="m-2">
-              <search-dropdown
-                :title="curriculumStore.subjects.length ? 'Выберите предмет' : 'Нет предметов'"
-                v-model="currentSubject" :propItems="curriculumStore.subjects" showName="name" @select="selectSubject"
-                :disabled="isEmpty(currentGroup) || !curriculumStore.subjects.length" />
-            </div>
+      <div v-if="isLoadedFilters">
+        <div class="d-flex flex-wrap">
+          <div class="m-2">
+            <simple-dropdown title="Выберите учебный год" v-model="currentAcademicYear"
+              :propItems="generalStore.academicYears" showName="name" @select="selectAcademicYear" />
           </div>
-          <div class="d-flex flex-wrap">
-            <div class="m-2">
-              <group-classes :propItems="generalStore.groups" v-model="currentGroup" :availableItems="[...new Set(authStore.user.teaching_loads.flatMap(obj => obj.groups.map(group => group.id)))]"
-                :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
-            </div>
+          <div class="m-2">
+            <simple-dropdown title="Выберите период" v-model="currentReportPeriod" :propItems="filteredReportPeriod"
+              showName="full_name" :disabled="!Boolean(filteredReportPeriod.length)" @select="selectReportPeriod" />
           </div>
-          <button type="button" class="btn btn-primary m-2" @click="getTeacherReports"
-            :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
-            Показать студентов
-          </button>
-          <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
-            Сброс
-          </button>
-          <hr class="hr" />
-          <!-- <div class="text-bg-light p-2 rounded">
+          <div class="m-2">
+            <search-dropdown :title="curriculumStore.subjects.length ? 'Выберите предмет' : 'Нет предметов'"
+              v-model="currentSubject" :propItems="curriculumStore.subjects" showName="name" @select="selectSubject"
+              :disabled="isEmpty(currentGroup) || !curriculumStore.subjects.length" />
+          </div>
+        </div>
+        <div class="d-flex flex-wrap">
+          <div class="m-2">
+            <group-classes :propItems="generalStore.groups" v-model="currentGroup"
+              :availableItems="[...new Set(authStore.user.teaching_loads.flatMap(obj => obj.groups.map(group => group.id)))]"
+              :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary m-2" @click="getTeacherReports"
+          :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
+          Показать студентов
+        </button>
+        <button type="button" class="btn btn-secondary m-2" @click="resetSelectedOptions">
+          Сброс
+        </button>
+        <hr class="hr" />
+        <!-- <div class="text-bg-light p-2 rounded">
           <h5 v-if="!isEmpty(currentGroup)" class="my-2">
             Тип репорта: {{ currentReportType.name }}
           </h5>
@@ -45,9 +45,12 @@
               {{ currentSubject.group_ib.program.toUpperCase() }})</span>
           </h5>
         </div> -->
-        </div>
+      </div>
+      <div v-else class="p-5">
+        <div class="loader-line"></div>
+      </div>
       </transition>
-      <div v-if="reportStore.studentExtraReports.length || isLoadedFilters">
+      <div v-if="isLoadedFilters">
         <transition>
           <div class="row" v-if="generalStore.users.length">
             <!-- Список студентов -->
@@ -89,7 +92,7 @@
                 <transition-group name="card">
                   <div v-for="report in reportStore.reportTeachers" :key="report.id" class="my-3"
                     :id="`st-${report.student.id}`">
-                    <div class="card card-student my-1" :class="{'bg-light': !isAuthor(report)}">
+                    <div class="card card-student my-1" :class="{ 'bg-light': !isAuthor(report) }">
                       <div class="card-body d-flex align-items-center">
                         <img :src="report.student.photo ? report.student.photo : imageStudent
                           " alt="" width="50" class="me-2 rounded-circle" />
@@ -159,7 +162,7 @@
                             </div>
                             <div class="my-3">
                               <report-criteria :report="report" typeReport="teacher"
-                              v-if="['soo', 'dp'].includes(currentReportType.value)" :allowedMode="isAuthor(report)" />
+                                v-if="['soo', 'dp'].includes(currentReportType.value)" :allowedMode="isAuthor(report)" />
                             </div>
                             <div class="my-2">
                               <report-teacher-topic :report="report" v-if="currentReportType.value == 'noo'"
@@ -291,7 +294,7 @@ const isLoadedFilters = computed(() => {
 // Вспомогательная функция для проверки разрешения редактирования только автору
 const isAuthor = (report) => {
   if (authStore.user) {
-    return !report || report && report.author.id == authStore.user.id
+    return !report || report && report.author.id == authStore.user.id || isTeacher()
   }
   return false
 }
@@ -317,11 +320,11 @@ const checkReportComplete = (report) => {
   if (currentReportType.value.value == 'noo') {
     return report.comment && report.topic_achievements.length && isPropertyFilledInEveryObject(report.topic_achievements, 'level')
   } else if (currentReportType.value.value == 'ooo') {
-    return report.comment && report.final_grade && report.criterion_marks.length && isPropertyFilledInEveryObject(report.criterion_marks, 'mark')
+    return report.comment && report.final_grade != null && report.criterion_marks.length && isPropertyFilledInEveryObject(report.criterion_marks, 'mark')
   } else if (currentReportType.value.value == 'soo') {
-    return report.comment && report.final_grade
+    return report.comment && report.final_grade != null
   } else if (currentReportType.value.value == 'dp') {
-    return report.comment && report.final_grade && report.final_grade_ib
+    return report.comment && report.final_grade != null && report.final_grade_ib != null
   } else {
     return report.comment
   }
@@ -438,7 +441,7 @@ const getSubjects = () => {
     }
     if (!authStore.isAdmin) {
       config.params.teaching_loads__teacher = authStore.user.id;
-      config.params.teaching_loads__groups = [...new Set(authStore.user.teaching_loads.flatMap(obj => obj.groups.map(group => group.id)))];
+      // config.params.teaching_loads__groups = [...new Set(authStore.user.teaching_loads.flatMap(obj => obj.groups.map(group => group.id)))];
     }
     curriculumStore.loadSubjects(config).then((result) => {
       if (!curriculumStore.subjects.map(i => i.id).includes(currentSubject.value.id))
@@ -757,4 +760,5 @@ onMounted(async () => {
 .card-leave-to {
   opacity: 0;
   transform: translateY(30px);
-}</style>
+}
+</style>

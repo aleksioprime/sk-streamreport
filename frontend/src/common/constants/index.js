@@ -10,7 +10,8 @@ export const YEAR_LEVELS = [
 ]
 
 export const MARK5 = [
-  { value: null, name: "Н/A" },
+  { value: null, name: "-" },
+  { value: 0, name: "Н/A" },
   { value: 2, name: "2" },
   { value: 3, name: "3" },
   { value: 4, name: "4" },

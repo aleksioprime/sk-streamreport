@@ -20,8 +20,9 @@
           </div>
           <div class="d-flex flex-wrap">
             <div class="m-2">
-              <group-classes :propItems="generalStore.groups" v-model="currentGroup" :availableItems="authStore.user.group_roles.map(i => i.group.id)"
-                :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
+              <group-classes :propItems="generalStore.groups" v-model="currentGroup"
+                :availableItems="authStore.user.group_roles.map(i => i.group.id)" :disabled="isEmpty(currentAcademicYear)"
+                @select="selectGroup" />
             </div>
           </div>
           <button type="button" class="btn btn-primary m-2" @click="getStudentExtraReports"
@@ -29,6 +30,9 @@
             Показать студентов
           </button>
           <hr class="hr" />
+        </div>
+        <div v-else class="p-5">
+          <div class="loader-line"></div>
         </div>
         <!-- <div class="text-bg-light p-2 rounded">
         <h5 class="my-2">Тип репорта: репорт службы сопровождения</h5>
@@ -61,7 +65,7 @@
             <div class="col pe-3">
               <div v-for="student in reportStore.studentExtraReports" :key="student.id" class="my-3"
                 :id="`st-${student.id}`">
-                <div class="card card-student my-1" :class="{'bg-light': !student.report}">
+                <div class="card card-student my-1" :class="{ 'bg-light': !student.report }">
                   <div class="card-body d-flex align-items-center">
                     <img :src="student.photo ? student.photo : imageStudent" alt="" width="50"
                       class="me-2 rounded-circle" />

@@ -19,7 +19,8 @@
           </div>
           <div class="d-flex flex-wrap">
             <div class="m-2">
-              <group-classes :propItems="generalStore.groups" v-model="currentGroup" :availableItems="authStore.user.mentor_classes.map(group => group.id)"
+              <group-classes :propItems="generalStore.groups" v-model="currentGroup"
+                :availableItems="authStore.user.mentor_classes.map(group => group.id)"
                 :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
             </div>
           </div>
@@ -29,10 +30,13 @@
           </button>
           <hr class="hr" />
           <!-- <div class="text-bg-light p-2 rounded">
-        <h5 v-if="!isEmpty(currentGroup)" class="mb-2">
-          Тип репорта: {{ currentReportType.name }}
-        </h5>
-      </div> -->
+            <h5 v-if="!isEmpty(currentGroup)" class="mb-2">
+              Тип репорта: {{ currentReportType.name }}
+            </h5>
+          </div> -->
+        </div>
+        <div v-else class="p-5">
+          <div class="loader-line"></div>
         </div>
       </transition>
       <div v-if="reportStore.studentExtraReports.length || isLoadedFilters">
@@ -62,7 +66,7 @@
             <div class="col pe-3">
               <div v-for="student in reportStore.studentMentorReports" :key="student.id" class="my-3"
                 :id="`st-${student.id}`">
-                <div class="card card-student my-1 anchor-student" :class="{'bg-light': !student.report}">
+                <div class="card card-student my-1 anchor-student" :class="{ 'bg-light': !student.report }">
                   <div class="card-body d-flex align-items-center ">
                     <img :src="student.photo ? student.photo : imageStudent" alt="" width="50"
                       class="me-2 rounded-circle" />
@@ -330,8 +334,8 @@
                                     <div class="my-2" v-if="teacher.final_grade_ib">
                                       Итоговая оценка IB: <b>{{ teacher.final_grade_ib }}</b>
                                     </div>
-                                    <div class="my-2" v-if="teacher.final_grade">Итоговая оценка: <b>{{
-                                      teacher.final_grade }}</b>
+                                    <div class="my-2" v-if="teacher.final_grade != null">Итоговая оценка: <b>{{
+                                      teacher.final_grade || 'Н/А' }}</b>
                                     </div>
                                     <hr />
                                     <div class="my-2 text-muted" v-html="teacher.comment" v-if="teacher.comment"></div>
@@ -802,4 +806,5 @@ const exportReportToWord = (student) => {
 .card-enter-from,
 .card-leave-to {
   opacity: 0;
-}</style>
+}
+</style>

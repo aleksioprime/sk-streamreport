@@ -12,7 +12,7 @@
           <a href="#ibprofiles" :class="checkField('ibprofiles')">Качества портрета студента</a>
           <a href="#inquiry_lines" :class="checkField('inquiry_lines')">Линии исследования</a>
           <a href="#atl_develops" :class="checkField('atl_develops')">Навыки ATL</a>
-          <a href="#action" :class="checkField('action')">Действия</a>
+          <a href="#action" :class="checkField('action')">Действия/Итоговое оценивание</a>
           <a href="#reflections_initial" :class="checkField('reflections_initial')">Начальная рефлексия</a>
           <a href="#prior_learning" :class="checkField('prior_learning')">Предшествующий опыт</a>
           <a href="#connections" :class="checkField('connections')">Связи: трансдисциплинарные и прошлые</a>
@@ -25,7 +25,7 @@
           <a href="#ongoing_assessment" :class="checkField('ongoing_assessment')">Текущее оценивание</a>
           <a href="#resources" :class="checkField('resources')">Гибкое использование ресурсов</a>
           <a href="#peer_self_assessment" :class="checkField('peer_self_assessment')">Самооценка учащихся и отзывы сверстников</a>
-          <a href="#reflections_ongoing" :class="checkField('reflections_ongoing')">Текущее оценивание</a>
+          <a href="#reflections_ongoing" :class="checkField('reflections_ongoing')">Текущая рефлексия для всех учителей</a>
           <a href="#reflections_additional" :class="checkField('reflections_additional')">Дополнительная рефлексия по предметам</a>
           <a href="#reflection_posts" :class="checkField('reflection_posts')">Рефлексия</a>
         </div>
@@ -136,7 +136,7 @@
             <unit-pyp-atl-develop :unit="unitPypStore.pypUnit" />
           </div>
           <div class="my-3">
-            <h5 id="action">Действия</h5>
+            <h5 id="action">Действия/Итоговое оценивание</h5>
             <small>
               Какие существуют возможности для использования предшествующего обучения для поддержки потенциальных
               действий, инициированных учащимися?
@@ -332,7 +332,7 @@
             </div>
           </div>
           <div class="my-3">
-            <h5 id="reflections_ongoing">Текущее оценивание</h5>
+            <h5 id="reflections_ongoing">Текущая рефлексия для всех учителей</h5>
             <small>
               Как мы отвечаем на возникающие вопросы, теории, запросы и интересы студентов на протяжении всего
               исследования?

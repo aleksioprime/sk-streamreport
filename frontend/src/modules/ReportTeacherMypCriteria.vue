@@ -99,7 +99,7 @@ const createReportSecondaryCriterion = (id) => {
     criterion: id,
   };
   reportStore.createReportSecondaryCriterion(data).then((result) => {
-    authStore.showMessageSuccess('Критерий для выставления баллов добавлен');
+    // authStore.showMessageSuccess('Критерий для выставления баллов добавлен');
     getReportSecondaryCriteria();
   });
 };
@@ -107,7 +107,7 @@ const createReportSecondaryCriterion = (id) => {
 // Функция запроса на удаление выбранного критерия из оценки репорта
 const removeReportSecondaryCriterion = (id) => {
   reportStore.removeReportSecondaryCriterion(id).then(() => {
-    authStore.showMessageSuccess('Критерий для выставления баллов удалён');
+    // authStore.showMessageSuccess('Критерий для выставления баллов удалён');
     getReportSecondaryCriteria();
   });
 };

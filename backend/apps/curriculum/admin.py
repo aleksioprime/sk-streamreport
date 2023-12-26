@@ -15,9 +15,9 @@ from apps.curriculum.models import (
 )
 
 class TeachingInline(StackedInline):  # StackedInline, TabularInline
-    autocomplete_fields = (
-        'teacher',
-    )
+    # autocomplete_fields = (
+    #     'teacher',
+    # )
     filter_horizontal = (
         'groups',
     )
@@ -41,10 +41,10 @@ class SubjectModelAdmin(ImportExportModelAdmin):
     search_fields = (
         "name",
     )
-    autocomplete_fields = (
-        'group_fgos',
-        'discipline_ib'
-    )
+    # autocomplete_fields = (
+    #     'group_fgos',
+    #     'discipline_ib'
+    # )
 
 
 @register(FgosSubjectGroup)
@@ -144,9 +144,9 @@ class CurriculumLoadModelAdmin(ImportExportModelAdmin):
         "years",
         "type",
     )
-    autocomplete_fields = (
-        'subject',
-    )
+    # autocomplete_fields = (
+    #     'subject',
+    # )
 
     def display_years(self, obj):
         years = ", ".join([f"{cl.number}" for cl in obj.years.all()])
@@ -172,7 +172,7 @@ class TeachingLoadModelAdmin(ModelAdmin):
     filter_horizontal = (
         'groups',
     )
-    autocomplete_fields = (
-        'subject',
-        'teacher',
-    )
+    # autocomplete_fields = (
+    #     'subject',
+    #     'teacher',
+    # )
