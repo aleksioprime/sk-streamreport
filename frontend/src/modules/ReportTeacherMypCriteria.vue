@@ -52,6 +52,8 @@ const props = defineProps({
   }
 });
 
+const isCreateClicked = ref(false);
+
 import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
 
@@ -94,10 +96,12 @@ const handleSave = async (editData, id) => {
 };
 
 const createReportSecondaryCriterion = (id) => {
+  if (isCreateClicked.value) return;
   const data = {
     report: props.report.id,
     criterion: id,
   };
+  isCreateClicked.value = true;
   reportStore.createReportSecondaryCriterion(data).then((result) => {
     // authStore.showMessageSuccess('Критерий для выставления баллов добавлен');
     getReportSecondaryCriteria();
@@ -125,6 +129,7 @@ const getReportSecondaryCriteria = () => {
       (item) => item.id === props.report.id
     );
     reportStore.reportTeachers[index].criterion_marks = [...result.data];
+    isCreateClicked.value = false;
   });
 };
 
