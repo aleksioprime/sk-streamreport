@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useIboStore } from "@/stores/ibo";
 import { useReportStore } from "@/stores/report";
 import { PROFILE_LEVELS } from "@/common/constants";
@@ -39,6 +39,8 @@ const props = defineProps({
     default: true,
   }
 });
+
+const isCreateClicked = ref(false);
 
 import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
@@ -81,10 +83,12 @@ const handleSave = async (editData, id) => {
 
 // Функция запроса на создание оценки профиля в репорте
 const createReportMentorIbProfile = (id) => {
+  if (isCreateClicked.value) return;
   const data = {
     report: props.report.id,
     profile: id,
   };
+  isCreateClicked.value = true;
   reportStore.createReportMentorIbProfile(data).then((result) => {
     // authStore.showMessageSuccess('Профиль IB-студента для оценки добавлен');
     getReportMentorIbProfiles();
@@ -112,6 +116,7 @@ const getReportMentorIbProfiles = () => {
       (item) => item.report.id === props.report.id
     );
     reportStore.studentMentorReports[index].report.profiles = [ ...result.data ];
+    isCreateClicked.value = false;
   });
 };
 
