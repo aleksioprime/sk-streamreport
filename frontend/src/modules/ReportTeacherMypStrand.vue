@@ -95,6 +95,8 @@ const props = defineProps({
   }
 });
 
+const isCreateClicked = ref(false);
+
 import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
 
@@ -219,10 +221,12 @@ const updateReportSecondaryLevel = async (value, id) => {
 };
 
 const createReportSecondaryLevel = (id) => {
+  if (isCreateClicked.value) return;
   const data = {
     report: props.report.id,
     strand: id,
   };
+  isCreateClicked.value = true;
   reportStore.createReportSecondaryLevel(data).then((result) => {
     authStore.showMessageSuccess('Предметный стрэнд добавлен');
     getReportSecondaryLevels();
@@ -250,6 +254,7 @@ const getReportSecondaryLevels = () => {
       (item) => item.id === props.report.id
     );
     reportStore.reportTeachers[index].objective_levels = [...result.data];
+    isCreateClicked.value = false;
   });
 };
 
