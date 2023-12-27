@@ -202,6 +202,9 @@ class ReportSecondaryLevelModelAdmin(ModelAdmin):
 
 @register(ReportSecondaryCriterion)
 class ReportSecondaryCriterionModelAdmin(ModelAdmin):
+    search_fields = (
+        "report__student__last_name"
+    )
     list_display = (
         "id",
         "report",
