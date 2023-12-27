@@ -15,7 +15,7 @@ export const calculateSumMark = (criteriaMarks) => {
 
 export const calculateCriterion = (count, summ) => {
   const GRADES = { 1: [3, 5, 7], 2: [6, 10, 14], 3: [8, 14, 20], 4: [11, 19, 28] }
-  if (count == 0) {
+  if (GRADES[count] === undefined) {
     return "N/A"
   }
   if (summ >= GRADES[count][2]) {
