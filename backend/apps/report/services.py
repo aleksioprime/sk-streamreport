@@ -405,10 +405,15 @@ def export_report_soo_msword(student, period_id):
     context = {}
 
     period = ReportPeriod.objects.filter(id=period_id).first()
+    
     report_period = {
         'name': period.name.capitalize(),
         'year': period.year
     }
+
+    if period.name_eng:
+        report_period['name_eng'] = period.name_eng.capitalize()
+        
     context['report_period'] = report_period
 
     report_mentor = student.reportmentor_student_reports.first()
