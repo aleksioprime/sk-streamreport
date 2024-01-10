@@ -457,24 +457,25 @@ def parsing_html(html_text):
     rich_text = RichText()
     for index, p in enumerate(soup.find_all('p')):
         for content in p.contents:
-            # if content.name == 'a':
-            #     # Обработка гиперссылок
-            #     url = content.get('href', '')
-            #     text = content.text
-            #     rich_text.add_hyperlink(url, text, color='0000FF', underline=True)
-            # else:
-            text_style = {}
-            if content.name == 'strong':
-                text_style['bold'] = True
-            elif content.name == 'em':
-                text_style['italic'] = True
-            elif content.name == 'span':
-                style = content.attrs.get('style', '')
-                if 'color' in style:
-                    color = style.split('color:')[1].strip().replace(';', '')
-                    # text_style['color'] = rgb_to_hex(color)
-            if content.string:
-                rich_text.add(content.string, **text_style)
+            if content.name == 'a':
+                # Обработка гиперссылок
+                # url = content.get('href', '')
+                text = content.text
+                # rich_text.add_hyperlink(url, text, color='0000FF', underline=True)
+                rich_text.add(content.text)
+            else:
+                text_style = {}
+                if content.name == 'strong':
+                    text_style['bold'] = True
+                elif content.name == 'em':
+                    text_style['italic'] = True
+                elif content.name == 'span':
+                    style = content.attrs.get('style', '')
+                    if 'color' in style:
+                        color = style.split('color:')[1].strip().replace(';', '')
+                        # text_style['color'] = rgb_to_hex(color)
+                if content.string:
+                    rich_text.add(content.string, **text_style)
 
         # Добавление переноса строки для каждого нового параграфа
         if index != len(soup.find_all('p')) - 1:
