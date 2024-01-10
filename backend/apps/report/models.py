@@ -25,6 +25,7 @@ class ReportPeriod(models.Model):
     """ Периоды для заполнения репортов """
     order = models.PositiveSmallIntegerField(verbose_name=_("Номер периода"), default=1)
     name = models.CharField(max_length=128, verbose_name=_("Название периода"), default=None, null=True)
+    name_eng = models.CharField(max_length=128, verbose_name=_("Название периода на англ. языке"), default=None, null=True)
     year = models.ForeignKey('general.AcademicYear', verbose_name=_("Учебный год"), on_delete=models.CASCADE, null=True, related_name="report_period")
     date_start = models.DateField(verbose_name=_("Дата начала"))
     date_end = models.DateField(verbose_name=_("Дата окончания"))
