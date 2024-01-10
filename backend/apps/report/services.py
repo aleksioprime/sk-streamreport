@@ -311,6 +311,8 @@ def get_user_report_mentor_queryset(group=None, period=None):
                     'author',
                 ).prefetch_related(
                     'criterion_achievements',
+                    'criterion_achievements__criterion',
+                    'criterion_achievements__achievement',
                 )
             ),
         )
