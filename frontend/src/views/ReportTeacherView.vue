@@ -26,7 +26,7 @@
               :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
           </div>
         </div>
-        <button type="button" class="btn btn-primary m-2" @click="getTeacherReports"
+        <button type="button" class="btn btn-primary m-2" @click="getTeacherReports(); isLoadedReport = true;"
           :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod) || isEmpty(currentSubject)">
           Показать студентов
         </button>
@@ -51,6 +51,10 @@
       </div>
       </transition>
       <div v-if="isLoadedFilters">
+        <div class="d-flex justify-content-center py-5" v-if="isLoadedReport">
+          <div class="loader-spin"></div>
+        </div>
+        <div v-else>
         <transition>
           <div class="row" v-if="generalStore.users.length">
             <!-- Список студентов -->
@@ -87,7 +91,6 @@
             </div>
             <!-- Список репортов -->
             <div class="col">
-              <div class="loader-spin" v-if="isLoadedReport"></div>
               <div v-if="reportStore.reportTeachers.length">
                 <transition-group name="card">
                   <div v-for="report in reportStore.reportTeachers" :key="report.id" class="my-3"
@@ -209,8 +212,9 @@
                 Выберите необходимые параметры для отображения карточек студентов
               </div>
             </div>
-          </div>
+          </div> 
         </transition>
+      </div>
       </div>
       <!-- <div v-else>
         <div class="alert alert-danger" role="alert">
@@ -294,7 +298,7 @@ const isLoadedFilters = computed(() => {
 // Вспомогательная функция для проверки разрешения редактирования только автору
 const isAuthor = (report) => {
   if (authStore.user) {
-    return !report || report && report.author.id == authStore.user.id || isTeacher()
+    return !report || report && report.author.id == authStore.user.id || isTeacher() || authStore.isAdmin
   }
   return false
 }
@@ -450,16 +454,17 @@ const getSubjects = () => {
   }
 };
 
-const getStudents = () => {
+const getStudents = async () => {
   // console.log('Запрос студентов')
   if (!isEmpty(currentGroup.value)) {
-    generalStore.loadUsers({
+    await generalStore.loadUsers({
       params: {
         groups: [3],
         classes: currentGroup.value.id,
       },
     });
   }
+  isLoadedReport.value = false;
 };
 
 // Запрос на получение списка студентов
@@ -468,10 +473,10 @@ const getTeacherReports = async () => {
   // console.log('Запрос репортов')
   if (
     !isEmpty(currentAcademicYear.value) &&
+    !isEmpty(currentReportPeriod.value) &&
     !isEmpty(currentGroup.value) &&
     !isEmpty(currentSubject.value)
   ) {
-    isLoadedReport.value = true;
     const config = {
       params: {
         group: currentGroup.value.id,
@@ -489,7 +494,6 @@ const getTeacherReports = async () => {
     } else {
       console.log('Не выбран уровень')
     }
-    isLoadedReport.value = false;
     getStudents();
   }
 };
@@ -676,7 +680,7 @@ onMounted(async () => {
   getSubjects();
   getObjective();
   getStrands();
-  getTeacherReports();
+  // getTeacherReports();
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });
 </script>

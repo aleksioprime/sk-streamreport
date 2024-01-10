@@ -24,7 +24,7 @@
                 :disabled="isEmpty(currentAcademicYear)" @select="selectGroup" />
             </div>
           </div>
-          <button type="button" class="btn btn-primary m-2" @click="getStudentMentorReports"
+          <button type="button" class="btn btn-primary m-2" @click="getStudentMentorReports(); isLoadedReport = true;"
             :disabled="isEmpty(currentGroup) || isEmpty(currentReportPeriod)">
             Показать студентов
           </button>
@@ -40,6 +40,10 @@
         </div>
       </transition>
       <div v-if="reportStore.studentExtraReports.length || isLoadedFilters">
+        <div class="d-flex justify-content-center py-5" v-if="isLoadedReport">
+          <div class="loader-spin"></div>
+        </div>
+        <div v-else>
         <transition>
           <div v-if="reportStore.studentMentorReports.length" class="row">
             <div class="col-md-auto">
@@ -75,7 +79,8 @@
                     </h4>
                     <div class="ms-auto">
                       <i class="bi bi-file-earmark-word dot-menu" @click="exportReportToWord(student)"
-                        v-if="student.report"></i>
+                        v-if="student.report && isLoadedDoc != student.id"></i>
+                      <div v-if="isLoadedDoc == student.id" class="loader-mini"></div>
                     </div>
                     <div class="ms-2" v-if="isMentor()">
                       <i class="bi bi-three-dots dot-menu" data-bs-toggle="dropdown" aria-expanded="false"
@@ -374,6 +379,7 @@
             </div>
           </div>
         </transition>
+        </div>
       </div>
       <!-- <div v-else>
         <div class="alert alert-danger" role="alert">
@@ -425,6 +431,7 @@ const iboStore = useIboStore();
 const isEditing = ref(false);
 let confirmationModal = null;
 const isLoadedReport = ref(false)
+const isLoadedDoc = ref(null)
 
 // Вспомогательная функция для проверки объекта на пустое содержимое
 const isEmpty = (obj) => {
@@ -441,7 +448,7 @@ const isLoadedFilters = computed(() => {
 // Вспомогательная функция для проверки разрешения редактирования репорта только автору или воспитателю этого класса
 const isAuthor = (report) => {
   if (authStore.user) {
-    return !report || report && report.author.id == authStore.user.id || authStore.user.group_roles.some(item => item.group.id == currentGroup.value.id && item.role == 'Воспитатель')
+    return !report || report && report.author.id == authStore.user.id || authStore.user.group_roles.some(item => item.group.id == currentGroup.value.id && item.role == 'Воспитатель') || authStore.isAdmin
   }
   return false
 }
@@ -567,11 +574,11 @@ const getStudentMentorReports = async () => {
   // console.log('Запрос студентов с репортами')
   if (
     isEmpty(currentAcademicYear.value) ||
+    isEmpty(currentReportPeriod.value) ||
     isEmpty(currentGroup.value)
   ) {
     return null;
   }
-  isLoadedReport.value = true;
   await reportStore
     .loadStudentMentorReports({
       params: {
@@ -709,7 +716,7 @@ onMounted(async () => {
   }
   currentAcademicYear.value = generalStore.relevantYear;
   getGroups();
-  getStudentMentorReports();
+  // getStudentMentorReports();
   reportStore.loadReportPeriods();
   iboStore.loadLearnerProfiles();
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
@@ -733,9 +740,11 @@ const exportReportToWord = (student) => {
   } else if (currentGroup.value.curriculum.level == 'soo') {
     config.params.level = 'soo';
   }
+  isLoadedDoc.value = student.id;
   reportStore.exportStudentMentorReport(student.id, config).then((result) => {
-    console.log(result);
+    // console.log(result);
     resolveBlob(result);
+    isLoadedDoc.value = null;
   });
 
 }

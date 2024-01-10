@@ -324,7 +324,10 @@ def export_report_noo_msword(student, period_id):
         'year': period.year
     }
     report_mentor = student.reportmentor_student_reports.select_related('student', 'group').first()
-    report_extra_mentor = report_mentor.group.user_roles.filter(role='Воспитатель').first()
+    if report_mentor:
+        report_extra_mentor = report_mentor.group.user_roles.filter(role='Воспитатель').first()
+    else:
+        report_extra_mentor = None
     report_teachers = []
     if (student.filtered_teacher_primary_reports):
         report_teachers = student.filtered_teacher_primary_reports
@@ -449,24 +452,24 @@ def parsing_html(html_text):
     rich_text = RichText()
     for index, p in enumerate(soup.find_all('p')):
         for content in p.contents:
-            if content.name == 'a':
-                # Обработка гиперссылок
-                url = content.get('href', '')
-                text = content.text
-                rich_text.add_hyperlink(url, text, color='0000FF', underline=True)
-            else:
-                text_style = {}
-                if content.name == 'strong':
-                    text_style['bold'] = True
-                elif content.name == 'em':
-                    text_style['italic'] = True
-                elif content.name == 'span':
-                    style = content.attrs.get('style', '')
-                    if 'color' in style:
-                        color = style.split('color:')[1].strip().replace(';', '')
-                        # text_style['color'] = rgb_to_hex(color)
-                if content.string:
-                    rich_text.add(content.string, **text_style)
+            # if content.name == 'a':
+            #     # Обработка гиперссылок
+            #     url = content.get('href', '')
+            #     text = content.text
+            #     rich_text.add_hyperlink(url, text, color='0000FF', underline=True)
+            # else:
+            text_style = {}
+            if content.name == 'strong':
+                text_style['bold'] = True
+            elif content.name == 'em':
+                text_style['italic'] = True
+            elif content.name == 'span':
+                style = content.attrs.get('style', '')
+                if 'color' in style:
+                    color = style.split('color:')[1].strip().replace(';', '')
+                    # text_style['color'] = rgb_to_hex(color)
+            if content.string:
+                rich_text.add(content.string, **text_style)
 
         # Добавление переноса строки для каждого нового параграфа
         if index != len(soup.find_all('p')) - 1:

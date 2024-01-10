@@ -39,6 +39,10 @@
       </div> -->
       </transition>
       <div v-if="reportStore.studentExtraReports.length || isLoadedFilters">
+        <div class="d-flex justify-content-center py-5" v-if="isLoadedReport">
+          <div class="loader-spin"></div>
+        </div>
+        <div v-else>
         <transition>
           <div v-if="reportStore.studentExtraReports.length" class="row">
             <div class="col-md-auto">
@@ -150,6 +154,7 @@
             </div>
           </div>
         </transition>
+        </div>
       </div>
       <!-- <div v-else>
         <div class="alert alert-danger" role="alert">
@@ -214,7 +219,7 @@ const isLoadedFilters = computed(() => {
 // Вспомогательная функция для проверки разрешения редактирования только автору
 const isAuthor = (report) => {
   if (authStore.user) {
-    return !report || report && report.author.id == authStore.user.id
+    return !report || report && report.author.id == authStore.user.id || authStore.isAdmin
   }
   return false
 }
@@ -313,10 +318,10 @@ const getStudentExtraReports = async () => {
   if (
     !(
       isEmpty(currentAcademicYear.value) &&
+      isEmpty(currentReportPeriod.value) &&
       isEmpty(currentGroup.value)
     )
   ) {
-    isLoadedReport.value = true;
     await reportStore
       .loadStudentExtraReports({
         params: {
@@ -422,7 +427,7 @@ onMounted(async () => {
   }
   currentAcademicYear.value = generalStore.relevantYear;
   getGroups();
-  getStudentExtraReports();
+  // getStudentExtraReports();
   reportStore.loadReportPeriods();
   confirmationModal = new Modal("#confirmationModal", { backdrop: "static" });
 });
