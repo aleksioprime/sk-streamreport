@@ -474,8 +474,8 @@ def parsing_html(html_text):
                     if 'color' in style:
                         color = style.split('color:')[1].strip().replace(';', '')
                         # text_style['color'] = rgb_to_hex(color)
-                if content.string:
-                    rich_text.add(content.string, **text_style)
+                if content.text:
+                    rich_text.add(content.text, **text_style)
 
         # Добавление переноса строки для каждого нового параграфа
         if index != len(soup.find_all('p')) - 1:
