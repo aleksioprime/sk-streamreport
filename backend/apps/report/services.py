@@ -457,33 +457,87 @@ def parsing_html(html_text):
     # Парсинг HTML и преобразование в RichText
     soup = BeautifulSoup(html_text, 'html.parser')
     rich_text = RichText()
-    for index, p in enumerate(soup.find_all('p')):
-        for content in p.contents:
-            if content.name == 'a':
-                # Обработка гиперссылок
-                # url = content.get('href', '')
-                text = content.text
-                # rich_text.add_hyperlink(url, text, color='0000FF', underline=True)
-                rich_text.add(content.text)
-            elif content.name == 'br':
-                # Обработка переноса строки
-                rich_text.add('\n')
-            else:
-                text_style = {}
-                if content.name == 'strong':
-                    text_style['bold'] = True
-                elif content.name == 'em':
-                    text_style['italic'] = True
-                elif content.name == 'span':
-                    style = content.attrs.get('style', '')
-                    if 'color' in style:
-                        color = style.split('color:')[1].strip().replace(';', '')
-                        # text_style['color'] = rgb_to_hex(color)
-                if content.text:
-                    rich_text.add(content.text, **text_style)
+    # for index, p in enumerate(soup.find_all('p')):
+    #     for content in p.contents:
+    #         if content.name == 'a':
+    #             # Обработка гиперссылок
+    #             # url = content.get('href', '')
+    #             # text = content.text
+    #             # rich_text.add_hyperlink(url, text, color='0000FF', underline=True)
+    #             rich_text.add(content.text)
+    #         elif content.name == 'br':
+    #             # Обработка переноса строки
+    #             rich_text.add('\n')
+    #         elif content.name in ['ul', 'ol']:
+    #             for li in content.find_all('li'):
+    #                 print(li)
+    #                 for cnt in li.contents:
+    #                     print(cnt)
+    #                     rich_text.add(cnt.text)
+    #                 rich_text.add('\n')
+    #         else:
+    #             text_style = {}
+    #             if content.name == 'strong':
+    #                 text_style['bold'] = True
+    #             elif content.name == 'em':
+    #                 text_style['italic'] = True
+    #             elif content.name == 'span':
+    #                 style = content.attrs.get('style', '')
+    #                 if 'color' in style:
+    #                     color = style.split('color:')[1].strip().replace(';', '')
+    #                     # text_style['color'] = rgb_to_hex(color)
+    #             if content.text:
+    #                 rich_text.add(content.text, **text_style)
 
-        # Добавление переноса строки для каждого нового параграфа
-        if index != len(soup.find_all('p')) - 1:
+    #     # Добавление переноса строки для каждого нового параграфа
+    #     if index != len(soup.find_all('p')) - 1:
+    #         rich_text.add('\n')
+    
+    def handle_content(content):
+        if content.name == 'a':
+            # Обработка гиперссылок
+            # url = content.get('href', '')
+            text = content.text
+            # rich_text.add_hyperlink(url, text, color='0000FF', underline=True)
+            rich_text.add(text)
+        elif content.name == 'br':
+            # Обработка переноса строки
+            rich_text.add('\n')
+        else:
+            text_style = {}
+            if content.name == 'strong':
+                text_style['bold'] = True
+            elif content.name == 'em':
+                text_style['italic'] = True
+            elif content.name == 'span':
+                style = content.attrs.get('style', '')
+                if 'color' in style:
+                    color = style.split('color:')[1].strip().replace(';', '')
+                    # text_style['color'] = rgb_to_hex(color)
+            if hasattr(content, 'text'):
+                rich_text.add(content.text, **text_style)
+
+    for index, tag in enumerate(soup.find_all(['p', 'ul', 'ol'])):
+        if tag.name == 'p':
+            for content in tag.contents:
+                handle_content(content)
+            # rich_text.add('\n')
+        elif tag.name == 'ol':
+            for i, li in enumerate(tag.find_all('li')):
+                rich_text.add(f"{i + 1}. ")
+                for content in li.contents:
+                    handle_content(content)
+                if i != len(tag.find_all('li')) - 1:
+                    rich_text.add('\n')
+        elif tag.name == 'ul':
+            for i, li in enumerate(tag.find_all('li')):
+                rich_text.add(f"- ")
+                for content in li.contents:
+                    handle_content(content)
+                if i != len(tag.find_all('li')) - 1:
+                    rich_text.add('\n')
+
+        if index != len(soup.find_all(['p', 'ul', 'ol'])) - 1:
             rich_text.add('\n')
 
     return rich_text
