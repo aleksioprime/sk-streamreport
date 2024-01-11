@@ -330,6 +330,8 @@ def export_report_noo_msword(student, period_id):
         report_extra_mentor = report_mentor.group.user_roles.filter(role='Воспитатель').first()
     else:
         report_extra_mentor = None
+    if report_mentor.comment:
+        report_mentor.comment = parsing_html(report_mentor.comment)
     report_teachers = []
     if (student.filtered_teacher_primary_reports):
         report_teachers = student.filtered_teacher_primary_reports
