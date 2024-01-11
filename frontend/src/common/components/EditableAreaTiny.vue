@@ -1,11 +1,11 @@
 <template>
   <div class="d-flex">
-    <div class="flex-grow-1">
+    <div class="flex-grow-1 test">
       <div v-if="!editMode">
         <div v-if="text" v-html="text" class="custom-style"></div>
         <div v-else>Нет информации</div>
       </div>
-      <div v-else>
+      <div v-else class="flex-grow-1">
         <div v-show="tinyLoading">
           <Editor api-key="j30bef5hr2ipfdbu7b9lww7t4oez2v6f27c94otp9to2j9mk" :init="{
             plugins: 'paste lists link wordcount autoresize',
@@ -97,5 +97,15 @@ const submitUpdate = (event) => {
 <style scoped>
 .custom-style p {
   margin-bottom: 0px !important;
+  
+}
+.custom-style {
+  overflow-wrap: break-word;
+}
+
+.test {
+  /* white-space: nowrap; */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

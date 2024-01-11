@@ -383,7 +383,7 @@ def export_report_ooo_msword(student, period_id):
         report_teachers = student.filtered_teacher_secondary_reports
         for report in report_teachers:
             report.comment = parsing_html(report.comment)
-            report.summ = sum(cm.mark for cm in report.criterion_marks.all())
+            report.summ = sum(cm.mark for cm in report.criterion_marks.all() if cm.mark)
             report.count = len(report.criterion_marks.all())
             report.mark = calculate_criterion(report.count, report.summ)
     document.render({
@@ -465,6 +465,9 @@ def parsing_html(html_text):
                 text = content.text
                 # rich_text.add_hyperlink(url, text, color='0000FF', underline=True)
                 rich_text.add(content.text)
+            elif content.name == 'br':
+                # Обработка переноса строки
+                rich_text.add('\n')
             else:
                 text_style = {}
                 if content.name == 'strong':

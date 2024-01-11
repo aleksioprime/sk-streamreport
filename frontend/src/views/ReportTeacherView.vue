@@ -56,7 +56,7 @@
         </div>
         <div v-else>
         <transition>
-          <div class="row" v-if="generalStore.users.length">
+          <div class="row flex-md-nowrap" v-if="generalStore.users.length">
             <!-- Список студентов -->
             <div class="col-md-auto">
               <div
@@ -670,6 +670,7 @@ const getObjective = () => {
 // Создание объекта модального окна из компонента
 onMounted(async () => {
   generalStore.users = [];
+  reportStore.reportTeachers = [];
   recoveryOptions();
   if (!generalStore.isAcademicYearsLoaded) {
     await generalStore.loadAcademicYears()

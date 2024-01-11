@@ -44,7 +44,7 @@
         </div>
         <div v-else>
         <transition>
-          <div v-if="reportStore.studentExtraReports.length" class="row">
+          <div v-if="reportStore.studentExtraReports.length" class="row flex-md-nowrap">
             <div class="col-md-auto">
               <div
                 class="d-flex flex-column align-items-start justify-content-start m-2 sticky-top list-right-student pb-3">
@@ -421,6 +421,7 @@ const recoveryOptions = () => {
 // Восстановление опций из LocalStorage, загрузка данных в соответствии с опциями (если они не загружены)
 // Создание объекта модального окна из компонента
 onMounted(async () => {
+  reportStore.studentExtraReports = []
   recoveryOptions();
   if (!generalStore.isAcademicYearsLoaded) {
     await generalStore.loadAcademicYears();

@@ -284,13 +284,17 @@ class ReportMentorSerializer(serializers.ModelSerializer):
 # Вывод списка достижений по критериям для репортов учителя
 class ReportCriterionAchievementSerializer(serializers.ModelSerializer):
     criterion_name = serializers.CharField(source='criterion.name', read_only=True)
+    criterion_name_eng = serializers.CharField(source='criterion.name_eng', read_only=True)
     achievement_name = serializers.CharField(source='achievement.name', read_only=True)
+    achievement_name_eng = serializers.CharField(source='achievement.name_eng', read_only=True)
     achievement_description = serializers.CharField(source='achievement.description', read_only=True)
     class Meta:
         model = ReportCriterionAchievement
         fields = (
             'criterion_name',
+            'criterion_name_eng',
             'achievement_name',
+            'achievement_name_eng',
             'achievement_description',
             'id',
             'report'

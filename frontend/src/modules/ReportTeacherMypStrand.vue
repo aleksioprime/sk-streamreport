@@ -147,7 +147,7 @@ const calculatedObjectives = computed(() => {
       ...item,
       count_level: levels,
       count_point: points,
-      avg_point: points / levels,
+      avg_point: Math.round(points / levels),
     }
   }), 'id')
 })
